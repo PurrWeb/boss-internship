@@ -9,6 +9,14 @@ RSpec.describe 'Update owed hour API endpoint' do
     set_authorization_header(access_token.token)
   end
 
+  around(:each) do |example|
+    travel_to call_time do
+      example.run
+    end
+  end
+
+  let(:now) { Time.now }
+  let(:call_time) { now }
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
@@ -26,7 +34,7 @@ RSpec.describe 'Update owed hour API endpoint' do
     RotaShiftDate.new(old_date).start_time + 40.minutes
   end
   let(:old_payslip_date) do
-    old_date + 1.week
+    call_time.to_date + 1.week
   end
   let(:new_date) do
     (now - 2.week).to_date
@@ -40,9 +48,8 @@ RSpec.describe 'Update owed hour API endpoint' do
     RotaShiftDate.new(new_date).start_time + new_ends_at_offset.minutes
   end
   let(:new_payslip_date) do
-    new_date + 1.week
+    new_date + 1.month
   end
-  let(:now) { Time.current }
   let(:owed_hour) do
     FactoryGirl.create(
       :owed_hour,

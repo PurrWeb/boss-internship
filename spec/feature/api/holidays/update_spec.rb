@@ -32,10 +32,10 @@ RSpec.describe 'Update holiday API endpoint' do
     (now + 2.week).to_date
   end
   let(:invalid_start_date) do
-    (now - 2.week).to_date
+    (now - 2.week + 2.days).to_date
   end
   let(:invalid_end_date) do
-    (now - 2.week + 2.days).to_date
+    (now - 2.week).to_date
   end
   let(:new_end_date) do
     (now + 2.week + 2.days).to_date
@@ -159,8 +159,7 @@ RSpec.describe 'Update holiday API endpoint' do
       json = JSON.parse(response.body)
       expect(json).to eq({
         "errors" => {
-          "startDate" => ["can't be changed to date in the past"],
-          "endDate" => ["can't be changed to date in the past"],
+          "base" => ["Start date cannot be after end date"],
         }
       })
     end
