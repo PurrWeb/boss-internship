@@ -127,19 +127,20 @@ describe AccruedHolidayEstimate do
       week = RotaWeek.new(current_tax_year.start_date + 1.week)
       date = week.start_date
       rota_shift_date = RotaShiftDate.new(date)
+      create_date = date + 2.months
 
-      travel_to(date + 2.months) do
+      travel_to(create_date) do
         while minutes_created < owed_hours_minutes
           minutes_to_create = [1200, owed_hours_minutes - minutes_created].min
 
           OwedHour.create!(
             minutes: minutes_to_create,
-            date: date,
+            date: rota_shift_date.rota_date,
             staff_member: staff_member,
             creator: user,
             starts_at: rota_shift_date.start_time,
             ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
-            payslip_date: rota_shift_date.rota_date + 1.week,
+            payslip_date: create_date + 1.week,
             note: 'Test minutes'
           )
 
@@ -175,8 +176,9 @@ describe AccruedHolidayEstimate do
           week = RotaWeek.new(last_tax_year.start_date)
           date = week.start_date
           rota_shift_date = RotaShiftDate.new(date)
+          create_date = date + 3.months
 
-          travel_to(date + 3.months) do
+          travel_to(create_date) do
             while minutes_created < owed_minutes_previous_year
               minutes_to_create = [1200, owed_minutes_previous_year - minutes_created].min
 
@@ -188,7 +190,7 @@ describe AccruedHolidayEstimate do
                 note: 'Test minutes',
                 starts_at: rota_shift_date.start_time,
                 ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
-                payslip_date: rota_shift_date.rota_date
+                payslip_date: create_date + 1.week
               )
 
               date += 1.day
