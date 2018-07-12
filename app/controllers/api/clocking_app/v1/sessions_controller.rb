@@ -17,7 +17,13 @@ module Api
                 base: ['staff member invalid or inactive']
               }
             }, status: :unprocessable_entity
-          elsif pin_code_from_params.present? && staff_member_from_params.pin_code_valid?(pin_code_from_params)
+          elsif !staff_member_from_params.pin_code_valid?(pin_code_from_params)
+            render json: {
+              errors: {
+                pincode: ['Wrong pincode'],
+              }
+            }, status: :unprocessable_entity
+          else
             access_token = ClockingAppApiAccessToken.new(staff_member: staff_member_from_params, api_key: venue_api_key_from_params).persist!
 
             render json: {
@@ -25,15 +31,8 @@ module Api
               staffMember: {
                 id: staff_member_from_params.id,
                 name: staff_member_from_params.name.full_name,
-                rollbar_guid: staff_member_from_params.rollbar_guid
               }
             }
-          else
-            render json: {
-                errors: {
-                  pincode: ['Wrong pincode'],
-                }
-              }, status: :unprocessable_entity
           end
         end
 
