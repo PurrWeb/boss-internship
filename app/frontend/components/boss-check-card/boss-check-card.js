@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BossCheckCardActions from './boss-check-card-actions';
 import BossCheckRow from './boss-check-row';
+import BossCheckSimpleRow from './boss-check-simple-row';
 import BossCheckCardRow from './boss-check-card-row';
 import BossCheckCardCollapsibleGroup from './boss-check-card-collapsible-group';
 
@@ -18,6 +19,7 @@ class BossCheckCard extends React.PureComponent {
     let children = [];
     let checkRows = [];
     let actionsButtons = null;
+    let simpleRow = null;
 
     React.Children.forEach(this.props.children, (child, i) => {
       if (child.type === BossCheckCardActions) {
@@ -33,6 +35,9 @@ class BossCheckCard extends React.PureComponent {
           key: `row${i}`
         })];
       }
+      if (child.type === BossCheckSimpleRow) {
+        simpleRow = child;
+      }
       if (child.type === BossCheckCardCollapsibleGroup) {
         children = [...children, React.cloneElement(child, {
           key: `collapsibleGroup${i}`
@@ -40,11 +45,11 @@ class BossCheckCard extends React.PureComponent {
       }
     });
 
-    return {children, checkRows, actionsButtons};
+    return {children, checkRows, actionsButtons, simpleRow};
   }
 
   render() {
-    const {children, checkRows, actionsButtons} = this.prepareChildren();
+    const {children, checkRows, actionsButtons, simpleRow} = this.prepareChildren();
     return (
       <div className="boss-check boss-check_role_board">
         <BossCheckRow
@@ -58,6 +63,7 @@ class BossCheckCard extends React.PureComponent {
             { children }
           </div>
         </div>
+        { simpleRow }
         { actionsButtons }
       </div>
     )
