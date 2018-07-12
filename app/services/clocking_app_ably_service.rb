@@ -12,9 +12,9 @@ class ClockingAppAblyService
     })
   end
 
-  def clocking_app_data_update(updates:, deletes:)
+  def clocking_app_data_update(updates:)
     channel = client.channel(venue_api_key)
-    channel.publish("data", {data: {updates: updates, deletes: deletes}})
+    channel.publish("data", {data: {updates: updates}})
   end
 
   private
