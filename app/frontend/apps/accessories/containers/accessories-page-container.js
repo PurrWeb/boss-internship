@@ -12,6 +12,7 @@ import {
   restoreAccessory,
   loadMoreClick,
   filter,
+  updateAccessoryFreeItems,
 } from '../redux/actions';
 
 const mapStateToProps = (state) => {
@@ -31,6 +32,7 @@ const mapDispatchToProps = (dispatch) => {
       restoreAccessory,
       loadMoreClick,
       filter,
+      updateAccessoryFreeItems,
     }, dispatch)
   };
 }

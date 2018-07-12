@@ -6,10 +6,12 @@ import ContentWrapper from '~/components/content-wrapper';
 import {
   BossCheckCard,
   BossCheckCardRow,
-  BossCheckCardActions
+  BossCheckCardActions,
+  BossCheckSimpleRow,
 } from '~/components/boss-check-card';
 
 import * as accessoriesConstants from './constants';
+import AccessoriesInventoryCell from './accessories-inventory-cell';
 
 class AccessoriesList extends React.Component {
   renderEnabledButtons(accessory) {
@@ -51,6 +53,7 @@ class AccessoriesList extends React.Component {
       const isEnabled = oFetch(accessory, 'enabled');
       const pendingRefundCount = oFetch(accessory, 'pendingRefundCount');
       const pendingRequestCount = oFetch(accessory, 'pendingRequestCount');
+      const onEditFreeItems = oFetch(this.props, 'onEditFreeItems');
       return (
         <BossCheckCard
           key={index}
@@ -64,6 +67,42 @@ class AccessoriesList extends React.Component {
           <BossCheckCardRow title="Self requestable" text={oFetch(accessory, 'userRequestable') ? 'Yes' : 'No'} />
           <BossCheckCardRow title="Current requests" text={pendingRequestCount} />
           <BossCheckCardRow title="Current refunds" text={pendingRefundCount} />
+          <BossCheckSimpleRow>
+            <AccessoriesInventoryCell 
+              title="Free Items" 
+              count={oFetch(accessory, 'freeItemsCount')} 
+              actionRenderer={() => {
+                return (
+                  <button 
+                    onClick={() => 
+                      onEditFreeItems(accessory)
+                    } 
+                    className="boss-check__link"
+                  >
+                      <span className="boss-check__text boss-check__text_role_edit boss-check__text_role_link">Edit</span>
+                  </button>
+                )
+              }} 
+            />
+            <AccessoriesInventoryCell 
+              title="Booked Items" 
+              count={oFetch(accessory, 'bookedItemsCount')} 
+              actionRenderer={() => {
+                return <a href="#" className="boss-check__link">
+                          <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">Details</span>
+                      </a>
+              }} 
+            />
+            <AccessoriesInventoryCell 
+            title="Refunds" 
+            count={oFetch(accessory, 'refundsCount')} 
+            actionRenderer={() => {
+                return <a href="#" className="boss-check__link">
+                          <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">Details</span>
+                      </a>
+              }} 
+            />
+          </BossCheckSimpleRow>
           { isEnabled
               ? this.renderEnabledButtons(accessory)
               : this.renderDisabledButtons(accessory)

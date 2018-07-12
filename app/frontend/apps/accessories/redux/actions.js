@@ -9,6 +9,7 @@ import {
   updateAccessoryRequest,
   disableAccessoryRequest,
   restoreAccessoryRequest,
+  updateAccessoryFreeItemsRequest,
 } from '../requests';
 
 export const loadInitialState = createAction(constants.LOAD_INITIAL_STATE);
@@ -35,7 +36,37 @@ export const loadInitialData = () => (dispatch, getState) => {
   }, {});
   return loadInitialDataRequest({venueId: currentVenue, currentPage: currentPage, accessoriesFilter: {...filter}})
     .then(resp => {
-      dispatch(loadInitialAccessories(resp.data));
+      const { accessories, pagination } = resp.data;
+      // HARDCODED, MUST BE REMOVED AFTER BACKEND INTEGRATION
+      dispatch(loadInitialAccessories({ 
+        accessories: accessories.map(accessory => ({ 
+          ...accessory, 
+          freeItemsCount: 12,
+          bookedItemsCount: 1,
+          refundsCount: 2,
+          accessoryHistory: [
+            {
+              id: 1,
+              count: 1,
+              fullName: 'Jon Doe',
+              time: '2018-04-11T15:18:03.000+01:00'
+            },
+            {
+              id: 2,
+              count: 20,
+              fullName: 'Jon Doe',
+              time: '2018-04-11T15:19:03.000+01:00'
+            },
+            {
+              id: 3,
+              count: -5,
+              fullName: 'Jon Doe',
+              time: '2018-04-11T15:20:03.000+01:00'
+            },
+          ]
+        })),
+        pagination 
+      }));
       return resp;
     });
 }
@@ -48,7 +79,17 @@ export const createAccessory = (values) => (dispatch, getState) => {
     venueId: currentVenue,
     values: {...values, priceCents, size}
   }).then(resp => {
-    dispatch(addAccessoryToStore(resp.data));
+      // HARDCODED, MUST BE REMOVED AFTER BACKEND INTEGRATION
+
+    dispatch(addAccessoryToStore({
+      ...resp.data,
+      freeItemsCount: 0,
+      bookedItemsCount: 0,
+      refundsCount: 0,
+      accessoryHistory: [
+       
+      ],
+    }));
     const size = getState().getIn(['page', 'accessories']).size;
     const pageNumber = getState().getIn(['page', 'pagination', 'pageNumber']);
     const perPage = getState().getIn(['page', 'pagination', 'perPage']);
@@ -98,4 +139,15 @@ export const restoreAccessory = (accessory) => (dispatch, getState) => {
 export const loadMoreClick = () => (dispatch, getState) => {
   dispatch(loadMore());
   dispatch(loadInitialData())
+}
+
+export const updateAccessoryFreeItems = (values) => (dispatch, getState) => {
+  const currentVenue = getState().getIn(['page', 'pageData', 'currentVenue']);
+  return updateAccessoryFreeItemsRequest({
+    ...values,
+    venueId: currentVenue,
+  }).then(resp => {
+    dispatch(updateAccessoryInStore(resp.data));
+    return resp;
+  });
 }

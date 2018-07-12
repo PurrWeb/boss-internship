@@ -96,3 +96,21 @@ export const restoreAccessoryRequest = ({venueId, accessoryId}) => {
     venueId,
   })
 }
+
+export const updateAccessoryFreeItemsRequest = ({ venueId, accessoryId, freeItemsCount }) => {
+  // HARDCODED, MUST BE REMOVED AFTER BACKEND INTEGRATION
+    return new Promise((res, rej) => {
+      setTimeout(() => { 
+      return rej({
+        response: {
+          data: {
+            errors: {
+              base: 'dfdfsdffd1',
+              freeItemsCount: 'dsfdfgfdgf2'
+            }
+          }
+        }
+      });
+      },1000)
+    })
+}
