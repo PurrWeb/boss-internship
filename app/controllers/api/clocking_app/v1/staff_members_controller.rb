@@ -19,7 +19,7 @@ module Api
         private
 
         def staff_member_from_params
-          StaffMember.find_by(id: params[:id])
+          StaffMember.find_by(id: params.fetch(:id))
         end
 
         def pin_code_from_params
