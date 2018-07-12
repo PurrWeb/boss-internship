@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710114709) do
+ActiveRecord::Schema.define(version: 20180712155938) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -330,26 +330,28 @@ ActiveRecord::Schema.define(version: 20180710114709) do
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
 
   create_table "finance_reports", force: :cascade do |t|
-    t.integer  "staff_member_id",         limit: 4,   null: false
-    t.string   "staff_member_name",       limit: 255, null: false
-    t.integer  "venue_id",                limit: 4,   null: false
-    t.string   "venue_name",              limit: 255, null: false
-    t.date     "week_start",                          null: false
-    t.float    "monday_hours_count",      limit: 24,  null: false
-    t.float    "tuesday_hours_count",     limit: 24,  null: false
-    t.float    "wednesday_hours_count",   limit: 24,  null: false
-    t.float    "thursday_hours_count",    limit: 24,  null: false
-    t.float    "friday_hours_count",      limit: 24,  null: false
-    t.float    "saturday_hours_count",    limit: 24,  null: false
-    t.float    "sunday_hours_count",      limit: 24,  null: false
-    t.float    "total_hours_count",       limit: 24,  null: false
-    t.integer  "total_cents",             limit: 4,   null: false
-    t.integer  "holiday_days_count",      limit: 4,   null: false
-    t.integer  "owed_hours_minute_count", limit: 4,   null: false
-    t.string   "pay_rate_description",    limit: 255, null: false
+    t.integer  "staff_member_id",                  limit: 4,   null: false
+    t.string   "staff_member_name",                limit: 255, null: false
+    t.integer  "venue_id",                         limit: 4,   null: false
+    t.string   "venue_name",                       limit: 255, null: false
+    t.date     "week_start",                                   null: false
+    t.float    "monday_hours_count",               limit: 24,  null: false
+    t.float    "tuesday_hours_count",              limit: 24,  null: false
+    t.float    "wednesday_hours_count",            limit: 24,  null: false
+    t.float    "thursday_hours_count",             limit: 24,  null: false
+    t.float    "friday_hours_count",               limit: 24,  null: false
+    t.float    "saturday_hours_count",             limit: 24,  null: false
+    t.float    "sunday_hours_count",               limit: 24,  null: false
+    t.float    "total_hours_count",                limit: 24,  null: false
+    t.integer  "total_cents",                      limit: 4,   null: false
+    t.integer  "holiday_days_count",               limit: 4,   null: false
+    t.integer  "owed_hours_minute_count",          limit: 4,   null: false
+    t.string   "pay_rate_description",             limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "accessories_cents",       limit: 4,   null: false
+    t.integer  "accessories_cents",                limit: 4,   null: false
+    t.boolean  "contains_time_shifted_owed_hours",             null: false
+    t.boolean  "contains_time_shifted_holidays",               null: false
   end
 
   add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
