@@ -119,6 +119,8 @@ class ReportItem extends Component {
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
     const sageId = oFetch(report, 'staffMemberSageId');
+    const containsTimeShiftedOwedHours = oFetch(report, 'containsTimeShiftedOwedHours');
+    const containsTimeShiftedHolidays = oFetch(report, 'containsTimeShiftedHolidays');
     const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
 
     const isIncomplete = status === 'incomplete';
@@ -140,11 +142,11 @@ class ReportItem extends Component {
     });
     const owedHoursClassName = classNames({
       'boss-table__cell': true,
-      'boss-table__cell_indicator_clock-warning': owedHours !== 0,
+      'boss-table__cell_indicator_clock-warning': (owedHours !== 0) && containsTimeShiftedOwedHours,
     });
     const holidayDaysCountClassName = classNames({
       'boss-table__cell': true,
-      'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0,
+      'boss-table__cell_indicator_clock-warning': (holidayDaysCount !== 0) && containsTimeShiftedHolidays,
     });
     return (
       <div className={rowClassName}>

@@ -19,7 +19,9 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :status,
     :netWagesCents,
     :canSeeNetWages,
-    :staffMemberSageId
+    :staffMemberSageId,
+    :containsTimeShiftedOwedHours,
+    :containsTimeShiftedHolidays
 
   def status
     FinanceReportCompletionStatus.new(finance_report: object).status_data
@@ -96,5 +98,13 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def staffMemberSageId
     object.staff_member.sage_id
+  end
+
+  def containsTimeShiftedOwedHours
+    object.contains_time_shifted_owed_hours?
+  end
+
+  def containsTimeShiftedHolidays
+    object.contains_time_shifted_holidays?
   end
 end

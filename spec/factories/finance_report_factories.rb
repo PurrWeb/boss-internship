@@ -18,5 +18,7 @@ FactoryGirl.define do
     total_cents 0
     holiday_days_count 0
     accessories_cents 0
+    contains_time_shifted_owed_hours false
+    contains_time_shifted_holidays false
   end
 end
