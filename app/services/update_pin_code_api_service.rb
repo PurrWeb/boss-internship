@@ -1,4 +1,4 @@
-class PinCodeApiService
+class UpdatePinCodeApiService
   Result = Struct.new(:success, :staff_member, :api_errors) do
     def success?
       success
@@ -10,8 +10,7 @@ class PinCodeApiService
     @staff_member = staff_member
   end
 
-  def update(pin_code:)
-
+  def call(pin_code:)
     model_service_result = UpdatePinCode.new(
       staff_member: staff_member,
       requester: requester,

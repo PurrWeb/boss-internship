@@ -9,11 +9,13 @@ class CreateClockingNote
     @clocking_note_params = clocking_note_params
     @clocking_day_params = clocking_day_params
     @requester = requester
+    @ability = StaffMemberAbility.new(requester)
   end
 
   def call
     success = false
     clocking_note = nil
+    ability.authorize!(:add, :note)
 
     ActiveRecord::Base.transaction do
       clock_in_day = ClockInDay.find_or_initialize_by(clocking_day_params)
@@ -33,5 +35,5 @@ class CreateClockingNote
   end
 
   private
-  attr_reader :clocking_note_params, :clocking_day_params, :requester
+  attr_reader :clocking_note_params, :clocking_day_params, :requester, :ability
 end

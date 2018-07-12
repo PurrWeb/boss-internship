@@ -9,10 +9,12 @@ class UpdateClockingNote
     @clocking_note = clocking_note
     @note = note
     @requester = requester
+    @ability = StaffMemberAbility.new(requester)
   end
 
   def call
     success = false
+    ability.authorize!(:edit, :note)
 
     ActiveRecord::Base.transaction do
       success = clocking_note.update({ note: note })
@@ -22,5 +24,5 @@ class UpdateClockingNote
   end
 
   private
-  attr_reader :clocking_note, :note, :requester
+  attr_reader :clocking_note, :note, :requester, :ability
 end

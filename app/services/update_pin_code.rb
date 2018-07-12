@@ -9,9 +9,11 @@ class UpdatePinCode
     @staff_member = staff_member
     @pin_code = pin_code
     @requester = requester
+    @ability = StaffMemberAbility.new(requester)
   end
 
   def call
+    ability.authorize!(:change, :pin_code)
     success = false
 
     ActiveRecord::Base.transaction do
@@ -22,5 +24,5 @@ class UpdatePinCode
   end
 
   private
-  attr_reader :staff_member, :pin_code, :requester
+  attr_reader :staff_member, :pin_code, :requester, :ability
 end
