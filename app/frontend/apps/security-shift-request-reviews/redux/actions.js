@@ -58,3 +58,5 @@ export const acceptSecurityShiftRequest = params => (dispatch, getState) => {
     return response;
   });
 };
+
+export const changeWeekDay = createAction(types.CHANGE_WEEK_DAY);

@@ -1,11 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import SecurityShiftRequestReviewsPage from '../components/security-shift-request-reviews-page';
 import {
   getPendingSecurityShiftRequests,
   getCompletedSecurityShiftRequests,
   getVenueById,
+  getWeekDaysWithCount,
 } from '../selectors';
 
 import {
@@ -13,6 +12,7 @@ import {
   undoSecurityShiftRequest,
   acceptSecurityShiftRequest,
   editSecurityShiftRequest,
+  changeWeekDay,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -23,6 +23,7 @@ const mapStateToProps = state => {
     startDate: state.getIn(['pageOptions', 'startDate']),
     endDate: state.getIn(['pageOptions', 'endDate']),
     date: state.getIn(['pageOptions', 'date']),
+    weekDates: getWeekDaysWithCount(state),
   };
 };
 
@@ -31,8 +32,7 @@ const mapDispatchToProps = {
   undoSecurityShiftRequest,
   acceptSecurityShiftRequest,
   editSecurityShiftRequest,
+  changeWeekDay,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  SecurityShiftRequestReviewsPage,
-);
+export default connect(mapStateToProps, mapDispatchToProps)(SecurityShiftRequestReviewsPage);

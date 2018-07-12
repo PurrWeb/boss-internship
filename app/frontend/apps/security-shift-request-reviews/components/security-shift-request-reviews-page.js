@@ -10,9 +10,10 @@ import SecurityShiftRequestCard from '~/components/security-shift-requests/secur
 import SecurityShiftRequestVenueList from './security-shift-request-venue-list';
 import SecurityShiftRequestVenueCard from './security-shift-request-venue-card';
 import SecurityShiftRequestItem from './security-shift-request-item';
+import WeekFilter from './requests-week-filter';
 
 class SecurityShiftRequestReviewsPage extends Component {
-  handleDateChage = ({startDate}) => {
+  handleDateChage = ({ startDate }) => {
     location.href = appRoutes.securityShiftRequestReviews({
       startDate,
     });
@@ -27,7 +28,9 @@ class SecurityShiftRequestReviewsPage extends Component {
     const acceptSecurityShiftRequest = oFetch(this.props, 'acceptSecurityShiftRequest');
     const pendingSecurityShiftRequests = oFetch(this.props, 'pendingSecurityShiftRequests');
     const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
-
+    const date = oFetch(this.props, 'date');
+    const changeWeekDay = oFetch(this.props, 'changeWeekDay');
+    const weekDates = oFetch(this.props, 'weekDates');
     return (
       <div>
         <DashboardWeekSelect
@@ -37,6 +40,7 @@ class SecurityShiftRequestReviewsPage extends Component {
           title="Security Shift Request Reviews"
         />
         <ContentWrapper>
+          <WeekFilter date={date} onChange={changeWeekDay} weekDates={weekDates.toJS()} />
           <SecurityShiftRequestCard title="Pending">
             <SecurityShiftRequestVenueList
               securityShiftRequestsGrupedByVenueId={pendingSecurityShiftRequests}
@@ -99,6 +103,8 @@ SecurityShiftRequestReviewsPage.propTypes = {
   rejectSecurityShiftRequest: PropTypes.func.isRequired,
   undoSecurityShiftRequest: PropTypes.func.isRequired,
   acceptSecurityShiftRequest: PropTypes.func.isRequired,
+  changeWeekDay: PropTypes.func.isRequired,
+  weekDates: ImmutablePropTypes.list.isRequired,
 };
 
 export default SecurityShiftRequestReviewsPage;
