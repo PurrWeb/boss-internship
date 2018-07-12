@@ -49,5 +49,18 @@ class ClockingNoteApiService
     Result.new(model_service_result.success?, model_service_result.clocking_note, api_errors)
   end
 
+  def delete
+    model_service_result = DeleteClockingNote.new(
+      clocking_note: clocking_note,
+      requester: requester,
+    ).call
+
+    api_errors = nil
+    unless model_service_result.success?
+      api_errors = ClockingNoteApiErrors.new(clocking_note: model_service_result.clocking_note)
+    end
+    Result.new(model_service_result.success?, model_service_result.clocking_note, api_errors)
+  end
+
   attr_reader :requester, :clocking_note
 end

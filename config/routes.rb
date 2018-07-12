@@ -248,7 +248,7 @@ Rails.application.routes.draw do
             end
           end
 
-          resources :notes, only: [:create, :update]
+          resources :notes, only: [:create, :update, :destroy]
         end
       end
 
