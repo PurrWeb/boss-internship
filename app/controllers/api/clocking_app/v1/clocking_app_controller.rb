@@ -4,13 +4,6 @@ module Api
       class ClockingAppController < ActionController::Base
         before_filter :parse_access_tokens
 
-        rescue_from CanCan::AccessDenied do |exception|
-          message = {}
-          message = {base: ['Only security staffs can access to this page']} if exception.action == :access
-          message = {base: ["You can't edit this note"]} if exception.action == :edit_note
-          render json: {errors: message}, status: 403
-        end
-
         def parse_access_tokens
           clocking_app_api_token = nil
           authenticate_or_request_with_http_token do |supplied_token, other_options|
@@ -38,10 +31,6 @@ module Api
 
         def venue_from_api_key
           @clocking_app_api_access_token.andand.api_key.andand.venue
-        end
-
-        def staff_member_from_token
-          @clocking_app_api_access_token.staff_member
         end
 
         def clocking_app_api_token_athenticate!
