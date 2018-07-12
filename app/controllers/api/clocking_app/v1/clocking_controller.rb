@@ -65,7 +65,7 @@ module Api
             staff_member: staff_member,
             state: to_state,
             at: at,
-            requester: staff_member_from_token
+            requester: current_staff_member
           ).call
 
           if result.success?
@@ -79,7 +79,7 @@ module Api
         end
 
         def staff_member_from_params
-          StaffMember.find(params[:staffMemberId])
+          StaffMember.enabled.find_by(id: params.fetch(:staffMemberId))
         end
 
         def date_from_params

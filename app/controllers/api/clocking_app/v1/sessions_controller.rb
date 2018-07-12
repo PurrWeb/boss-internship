@@ -44,7 +44,6 @@ module Api
         end
 
         private
-
         def venue_api_key_from_params
           ApiKey.boss.active.find_by(key: params.fetch(:apiKey))
         end
