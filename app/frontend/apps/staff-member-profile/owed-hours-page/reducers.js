@@ -12,6 +12,7 @@ import {
   ADD_OWED_HOURS_SUCCESS,
   CANCEL_EDIT_OWED_HOURS,
   CLOSE_EDIT_OWED_HOURS_MODAL,
+  FILTER,
 } from './constants';
 
 const initialState = fromJS({
@@ -21,6 +22,10 @@ const initialState = fromJS({
   newOwedHour: false,
   editOwedHour: false,
   editedOwedHours: {},
+  startDate: null,
+  endDate: null,
+  startPayslipDate: null,
+  endPayslipDate: null,
 });
 
 const owedHoursReducer = handleActions({
@@ -29,12 +34,20 @@ const owedHoursReducer = handleActions({
       staffMember,
       accessToken,
       owedHours,
+      startDate,
+      endDate,
+      startPayslipDate,
+      endPayslipDate,
     } = action.payload;
 
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
       .set('owedHours', fromJS(owedHours))
+      .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
+      .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
+      .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
+      .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
   },
   [ADD_NEW_OWED_HOUR]: (state) => {
     return state
@@ -74,6 +87,22 @@ const owedHoursReducer = handleActions({
     return state
       .set('owedHours', fromJS(owedHours));
   },
+  [FILTER]: (state, action) => {
+    const {
+      owedHours,
+      startDate,
+      endDate,
+      startPayslipDate,
+      endPayslipDate,
+    } = action.payload;
+
+    return state
+    .set('owedHours', fromJS(owedHours))
+    .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
+    .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
+    .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
+    .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
+  }
 }, initialState);
 
 export default owedHoursReducer;

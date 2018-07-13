@@ -13,10 +13,12 @@ import {
   deleteOwedHours,
   cancelEditOwedHours,
   openEditModal,
+  filter,
 } from '../actions';
 
 import OwedHoursHeader from '../components/owed-hours-header';
 import OwedHoursTable from '../components/owed-hours-table';
+import OwedHoursFilter from '../components/owed-hours-filter';
 import AddNewOwedHours from '../components/add-new-owed-hours';
 import EditOwedHours from '../components/edit-owed-hours';
 import ProfileWrapper from '../../profile-wrapper';
@@ -29,6 +31,10 @@ const mapStateToProps = (state) => {
     editOwedHour: state.getIn(['owedHours', 'editOwedHour']),
     editedOwedHours: state.getIn(['owedHours', 'editedOwedHours']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
+    startDate: state.getIn(['owedHours', 'startDate']),
+    endDate: state.getIn(['owedHours', 'endDate']),
+    startPayslipDate: state.getIn(['owedHours', 'startPayslipDate']),
+    endPayslipDate: state.getIn(['owedHours', 'endPayslipDate']),
   };
 }
 
@@ -41,6 +47,7 @@ const mapDispatchToProps = (dispatch) => {
       deleteOwedHours,
       cancelEditOwedHours,
       openEditModal,
+      filter,
     }, dispatch)
   };
 }
@@ -77,6 +84,10 @@ class OwedHours extends React.PureComponent {
       owedHours,
       editedOwedHours,
       disabled,
+      startDate,
+      endDate,
+      startPayslipDate,
+      endPayslipDate,
       actions: {
         updateAvatarRequest,
         addNewOwedHours,
@@ -84,6 +95,7 @@ class OwedHours extends React.PureComponent {
         cancelEditOwedHours,
         deleteOwedHours,
         openEditModal,
+        filter,
       }
     } = this.props;
     return (
@@ -107,6 +119,13 @@ class OwedHours extends React.PureComponent {
           <OwedHoursHeader isStaffMemberDisabled={disabled} title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
+              <OwedHoursFilter 
+                startDate={startDate} 
+                endDate={endDate} 
+                filter={filter}
+                startPayslipDate={startPayslipDate}
+                endPayslipDate={endPayslipDate} 
+              />
               <OwedHoursTable isStaffMemberDisabled={disabled} owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
             </div>
           </div> 

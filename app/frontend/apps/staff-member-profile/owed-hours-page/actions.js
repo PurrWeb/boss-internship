@@ -16,6 +16,7 @@ import {
   OPEN_EDIT_OWED_HOURS_MODAL,
   EDIT_OWED_HOURS_SUCCESS,
   CLOSE_EDIT_OWED_HOURS_MODAL,
+  FILTER,
 } from './constants';
 
 export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
@@ -125,3 +126,32 @@ export const initialLoad = createAction(INITIAL_LOAD);
 export const addNewOwedHours = createAction(ADD_NEW_OWED_HOUR);
 export const cancelAddNewOwedHours = createAction(CANCEL_ADD_NEW_OWED_HOUR);
 export const cancelEditOwedHours = createAction(CLOSE_EDIT_OWED_HOURS_MODAL);
+
+export const filter = (startDate, endDate, startPayslipDate, endPayslipDate) => (dispatch, getState) => {
+  const accessToken = getState().getIn(['profile', 'accessToken']);
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
+  let queryString = `owed_hours?start_date=${startDate}&end_date=${endDate}`;
+  if(startPayslipDate && endPayslipDate) {
+    queryString = `owed_hours?start_date=${startDate}&end_date=${endDate}&start_payslip_date=${startPayslipDate}&end_payslip_date=${endPayslipDate}`;
+  }
+  return axios
+    .get(
+      `/api/v1/staff_members/${staffMemberId}/${queryString}`,
+      {
+        headers: {
+          Authorization: `Token token="${accessToken}"`,
+        },
+      },
+    )
+    .then(resp => {
+      dispatch({
+        type: FILTER,
+        payload: resp.data,
+      });
+      window.history.pushState(
+        'state',
+        'title',
+        `${queryString}`,
+      );
+    });
+};
