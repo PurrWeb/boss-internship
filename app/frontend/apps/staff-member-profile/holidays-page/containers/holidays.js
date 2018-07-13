@@ -47,6 +47,8 @@ const mapStateToProps = state => {
     estimatedAccruedHolidayDays: state.getIn(['holidays', 'estimatedAccruedHolidayDays']),
     holidayStartDate: state.getIn(['holidays', 'holidayStartDate']),
     holidayEndDate: state.getIn(['holidays', 'holidayEndDate']),
+    startPayslipDate: state.getIn(['holidays', 'startPayslipDate']),
+    endPayslipDate: state.getIn(['holidays', 'endPayslipDate']),
     newHoliday: state.getIn(['holidays', 'newHoliday']),
     editHoliday: state.getIn(['holidays', 'editHoliday']),
     editedHoliday: state.getIn(['holidays', 'editedHoliday']),
@@ -221,6 +223,8 @@ class Holidays extends React.PureComponent {
       editHoliday,
       editedHoliday,
       disabled,
+      startPayslipDate,
+      endPayslipDate,
       actions: {
         updateAvatarRequest,
         addNewHoliday,
@@ -297,7 +301,13 @@ class Holidays extends React.PureComponent {
                 />
               </div>
               <div className="boss-board__manager-group boss-board__manager-group_role_data">
-                <HolidaysFilter startDate={holidayStartDate} endDate={holidayEndDate} filter={filter} />
+                <HolidaysFilter 
+                  startDate={holidayStartDate} 
+                  endDate={holidayEndDate} 
+                  filter={filter}
+                  startPayslipDate={startPayslipDate}
+                  endPayslipDate={endPayslipDate} 
+                />
                 {hasHolidays ? (
                   [
                     <HolidaysTable

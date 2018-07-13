@@ -37,6 +37,8 @@ const initialState = fromJS({
   editHoliday: false,
   editedHoliday: {},
   isAdminPlus: null,
+  startPayslipDate: null,
+  endPayslipDate: null,
   permissionsData: fromJS({})
 });
 
@@ -52,7 +54,9 @@ const holidaysReducer = handleActions({
       estimatedAccruedHolidayDays,
       holidayStartDate,
       holidayEndDate,
-      isAdminPlus
+      isAdminPlus,
+      startPayslipDate,
+      endPayslipDate,
     } = action.payload;
 
     const permissionsData = oFetch(action.payload, 'permissionsData');
@@ -69,6 +73,8 @@ const holidaysReducer = handleActions({
       .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
       .set('isAdminPlus', isAdminPlus)
       .set('permissionsData', fromJS(permissionsData))
+      .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
+      .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
@@ -182,8 +188,10 @@ const holidaysReducer = handleActions({
       paid_holiday_days,
       unpaid_holiday_days,
       estimated_accrued_holiday_days,
-      holidayStartDate,
-      holidayEndDate,
+      holiday_start_date,
+      holiday_end_date,
+      start_payslip_date,
+      end_payslip_date,
       holiday_requests,
     } = action.payload;
 
@@ -193,6 +201,10 @@ const holidaysReducer = handleActions({
       .set('paidHolidayDays', fromJS(paid_holiday_days))
       .set('unpaidHolidayDays', fromJS(unpaid_holiday_days))
       .set('estimatedAccruedHolidayDays', fromJS(estimated_accrued_holiday_days))
+      .set('holidayStartDate', safeMoment.parse(holiday_start_date, 'YYYY-MM-DD'))
+      .set('holidayEndDate', safeMoment.parse(holiday_end_date, 'YYYY-MM-DD'))
+      .set('startPayslipDate', start_payslip_date ? safeMoment.uiDateParse(start_payslip_date) : null)
+      .set('endPayslipDate', end_payslip_date ? safeMoment.uiDateParse(end_payslip_date) : null)
   }
 }, initialState);
 

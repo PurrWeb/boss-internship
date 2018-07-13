@@ -294,13 +294,16 @@ const updateHolidaysCount = (accessToken, staffMemberId) => {
   );
 };
 
-export const filter = (startDate, endDate) => (dispatch, getState) => {
+export const filter = (startDate, endDate, startPayslipDate, endPayslipDate) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
-
-  axios
+  let queryString = `holidays?start_date=${startDate}&end_date=${endDate}`;
+  if(startPayslipDate && endPayslipDate) {
+    queryString = `holidays?start_date=${startDate}&end_date=${endDate}&start_payslip_date=${startPayslipDate}&end_payslip_date=${endPayslipDate}`;
+  }
+  return axios
     .get(
-      `/api/v1/staff_members/${staffMemberId}/holidays?start_date=${startDate}&end_date=${endDate}`,
+      `/api/v1/staff_members/${staffMemberId}/${queryString}`,
       {
         headers: {
           Authorization: `Token token="${accessToken}"`,
@@ -315,7 +318,7 @@ export const filter = (startDate, endDate) => (dispatch, getState) => {
       window.history.pushState(
         'state',
         'title',
-        `holidays?start_date=${startDate}&end_date=${endDate}`,
+        `${queryString}`,
       );
     });
 };
