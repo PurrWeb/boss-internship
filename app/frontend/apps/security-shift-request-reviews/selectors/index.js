@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import utils from '~/lib/utils';
 import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
+import RotaDate from '~/lib/rota-date';
 
 export const shiftRequestsPermissionsSelector = state => state.getIn(['permissions', 'shiftRequests']);
 export const securityShiftRequestsSelector = state => state.get('securityShiftRequests');
@@ -11,6 +12,7 @@ export const venuesSelector = state => state.get('venues');
 export const staffMembersSelector = state => state.get('staffMembers');
 export const weekStartDateSelector = state => state.getIn(['pageOptions', 'startDate']);
 export const weekEndDateSelector = state => state.getIn(['pageOptions', 'endDate']);
+export const chosenDateSelector = state => state.getIn(['pageOptions', 'chosenDate']);
 
 export const getVenueById = createSelector(venuesSelector, venues => venueId =>
   venues.find(venue => venue.get('id') === venueId),
@@ -69,16 +71,73 @@ export const mappedShiftRequestsSelector = createSelector(
   },
 );
 
-export const getPendingSecurityShiftRequests = createSelector(mappedShiftRequestsSelector, securityShiftRequests => {
+export const getShiftRequestForEachWeekDay = createSelector(
+  weekStartDateSelector,
+  mappedShiftRequestsSelector,
+  (uiDate, securityShiftRequests) => {
+    const date = safeMoment.uiDateParse(uiDate);
+
+    return Immutable.List([1, 2, 3, 4, 5, 6, 7, 8]).map(weekDay => {
+      if (weekDay === 8) {
+        return Immutable.Map({
+          weekDay: 'All',
+          date: 'All',
+          count: securityShiftRequests.size,
+          shiftRequests: securityShiftRequests,
+        });
+      }
+      const currentDate = date.isoWeekday(weekDay);
+
+      const shiftRequests = securityShiftRequests.filter(shiftRequest => {
+        const currentRotaDate = new RotaDate({
+          dateOfRota: currentDate.toDate(),
+        });
+        return currentRotaDate.isShiftBelongsToRotaDay({
+          shiftStartsAt: shiftRequest.get('startsAt'),
+        });
+      });
+      const count = shiftRequests.size;
+      return Immutable.Map({
+        weekDay: currentDate.format('dddd'),
+        date: currentDate.format('DD-MM-YYYY'),
+        count,
+        shiftRequests,
+      });
+    });
+  },
+);
+
+export const getWeekDaysWithCount = createSelector(getShiftRequestForEachWeekDay, shiftRequestsForEachWeekDay => {
+  return shiftRequestsForEachWeekDay.map(day =>
+    Immutable.Map({
+      weekDay: day.get('weekDay'),
+      date: day.get('date'),
+      count: day.get('count'),
+    }),
+  );
+});
+
+export const getShiftRequestsForChosenDate = createSelector(
+  chosenDateSelector,
+  getShiftRequestForEachWeekDay,
+  (chosenDate, shiftRequestsForEachWeekDay) => {
+    return shiftRequestsForEachWeekDay.find(day => day.get('date') === chosenDate).get('shiftRequests');
+  },
+);
+
+export const getPendingSecurityShiftRequests = createSelector(getShiftRequestsForChosenDate, securityShiftRequests => {
   return securityShiftRequests
     .filter(securityShiftRequest => securityShiftRequest.get('status') === 'pending')
     .sort((a, b) => a.get('venueId') - b.get('venueId'))
     .groupBy(securityShiftRequest => securityShiftRequest.get('venueId'));
 });
 
-export const getCompletedSecurityShiftRequests = createSelector(mappedShiftRequestsSelector, securityShiftRequests => {
-  return securityShiftRequests
-    .filter(securityShiftRequest => securityShiftRequest.get('status') !== 'pending')
-    .sort((a, b) => a.get('venueId') - b.get('venueId'))
-    .groupBy(securityShiftRequest => securityShiftRequest.get('venueId'));
-});
+export const getCompletedSecurityShiftRequests = createSelector(
+  getShiftRequestsForChosenDate,
+  securityShiftRequests => {
+    return securityShiftRequests
+      .filter(securityShiftRequest => securityShiftRequest.get('status') !== 'pending')
+      .sort((a, b) => a.get('venueId') - b.get('venueId'))
+      .groupBy(securityShiftRequest => securityShiftRequest.get('venueId'));
+  },
+);

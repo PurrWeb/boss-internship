@@ -22,6 +22,7 @@ const securityShiftRequests = handleActions(
       const endsAt = oFetch(updatedSecurityShiftRequest, 'endsAt');
       const createdShiftId = oFetch(updatedSecurityShiftRequest, 'createdShiftId');
       const status = oFetch(updatedSecurityShiftRequest, 'status');
+      const rejectReason = oFetch(updatedSecurityShiftRequest, 'rejectReason');
 
       const shiftRequestIndex = state.findIndex(
         securityShiftRequest => securityShiftRequest.get('id') === id,
@@ -34,6 +35,7 @@ const securityShiftRequests = handleActions(
           .set('note', note)
           .set('createdShiftId', createdShiftId)
           .set('status', status)
+          .set('rejectReason', rejectReason)
       );
     },
   },

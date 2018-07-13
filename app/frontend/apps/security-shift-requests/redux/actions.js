@@ -53,3 +53,5 @@ export const deleteSecurityShiftRequest = id => (dispatch, getState) => {
     return response;
   });
 };
+
+export const changeWeekDay = createAction(types.CHANGE_WEEK_DAY);
