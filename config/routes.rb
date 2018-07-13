@@ -234,17 +234,19 @@ Rails.application.routes.draw do
               get :ably_auth, path: 'ably-auth'
             end
           end
+
           resources :clocking, only: [] do
             collection do
               post :clock_in, path: 'clock-in'
               post :clock_out, path: 'clock-out'
               post :start_break, path: 'start-break'
               post :end_break, path: 'end-break'
-              resources :staff_members, only: [] do
-                member do
-                  post :change_pin, path: 'change-pin'
-                end
-              end
+            end
+          end
+
+          resources :staff_members, only: [] do
+            member do
+              post :change_pin, path: 'change-pin'
             end
           end
 
