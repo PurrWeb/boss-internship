@@ -22,13 +22,13 @@ class TrackTimeshiftsOnFinanceReports < ActiveRecord::Migration
         end
 
         finance_report.update!(
-          contains_time_shifted_owed_hours: contains_time_shifted_owed_hours,
-          contains_time_shifted_holidays: contains_time_shifted_holidays
+          contains_time_shifted_owed_hours: !!contains_time_shifted_owed_hours,
+          contains_time_shifted_holidays: !!contains_time_shifted_holidays
         )
       end
     end
 
-    change_column_null :finance_reports, :contains_time_shifted_owed_hours, false
-    change_column_null :finance_reports, :contains_time_shifted_holidays, false
+    change_column_null :finance_reports, :contains_time_shifted_owed_hours, false, 0
+    change_column_null :finance_reports, :contains_time_shifted_holidays, false, 0
   end
 end
