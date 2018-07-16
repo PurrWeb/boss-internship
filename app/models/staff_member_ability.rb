@@ -7,7 +7,7 @@ class StaffMemberAbility
         if mobile_app.security_app?
           staff_member.staff_type.security?
         elsif mobile_app.clocking_app?
-          true
+          !staff_member.staff_type.security?
         else
           raise "attempt to check access to unsupported app #{mobile_app.name}"
         end

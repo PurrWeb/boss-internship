@@ -49,7 +49,7 @@ module Api
         date = date_from_params
         note = params.fetch(:note)
 
-        authorize! :add_note, staff_member
+        authorize! :add, :note
 
         clock_in_note = nil
 

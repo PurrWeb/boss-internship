@@ -140,7 +140,7 @@ module Api
       def change_pin
         staff_member = StaffMember.find(params.fetch(:id))
 
-        authorize! :change_pin, staff_member
+        authorize! :change, :pin_code
 
         pin_code = params.fetch(:pin_code)
         staff_member.update_attributes!(pin_code: pin_code)
@@ -176,7 +176,7 @@ module Api
       def enable
         staff_member = StaffMember.find(params[:id])
         frontend_updates = FrontendUpdates.new
-        
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
@@ -257,7 +257,7 @@ module Api
       def update_avatar
         staff_member = StaffMember.find(params[:id])
         frontend_updates = FrontendUpdates.new
-        
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
@@ -281,7 +281,7 @@ module Api
       def update_contact_details
         staff_member = StaffMember.find(params.fetch(:id))
         frontend_updates = FrontendUpdates.new
-        
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
@@ -310,7 +310,7 @@ module Api
       def update_personal_details
         staff_member = StaffMember.find(params[:id])
         frontend_updates = FrontendUpdates.new
-        
+
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
