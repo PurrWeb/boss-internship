@@ -35,29 +35,8 @@ class StaffVettingApp extends React.Component {
       venues,
       staffTypes,
     } = this.props;
-    const permissions = {
-      staffWithoutEmail: {
-        canView: false,
-      },
-      staffWithoutNiNumber: {
-        canView: true,
-      },
-      staffWithoutAddress: {
-        canView: false,
-      },
-      staffWithoutPhoto: {
-        canView: true,
-      },
-      staffOnWrongPayrate: {
-        canView: true,
-      },
-      staffWithExpiredSiaBadge: {
-        canView: false,
-      },
-      staffWithBouncedEmails: {
-        canView: false,
-      },
-    };
+
+    const permissions = oFetch(this.props, 'permissions');
 
     const staffVettingProps = {
       staffWithoutEmailCount,

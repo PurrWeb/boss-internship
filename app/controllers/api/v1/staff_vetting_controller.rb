@@ -4,7 +4,7 @@ module Api
       before_filter :web_token_authenticate!
 
       def staff_without_email
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_without_email_vetting_page
 
         render json: {
           staffWithoutEmail: ActiveModel::Serializer::CollectionSerializer.new(
@@ -15,7 +15,7 @@ module Api
       end
 
       def staff_without_ni_number
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_without_ni_number_vetting_page
 
         render json: {
           staffWithoutNiNumber: ActiveModel::Serializer::CollectionSerializer.new(
@@ -26,7 +26,7 @@ module Api
       end
 
       def staff_without_address
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_without_address_vetting_page
 
         render json: {
           staffWithoutAddress: ActiveModel::Serializer::CollectionSerializer.new(
@@ -37,7 +37,7 @@ module Api
       end
 
       def staff_without_photo
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_without_photo_vetting_page
 
         render json: {
           staffWithoutPhoto: ActiveModel::Serializer::CollectionSerializer.new(
@@ -48,7 +48,7 @@ module Api
       end
 
       def staff_with_expired_sia_badge
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_with_expired_sia_badge_vetting_page
 
         render json: {
           staffWithExpiredSiaBadge: ActiveModel::Serializer::CollectionSerializer.new(
@@ -59,6 +59,8 @@ module Api
       end
 
       def staff_with_bounced_email
+        authorize! :view, :staff_with_bounced_emails_vetting_page
+
         bounced_emails = BouncedEmailAddress.all.map {|be| be['email']}
         staff_members_with_bounced_email = StaffMember.enabled.joins(:email_address).where({email_addresses: {email: bounced_emails}})
 
@@ -71,7 +73,7 @@ module Api
       end
 
       def staff_on_wrong_payrate
-        authorize! :view, :staff_vetting_page
+        authorize! :view, :staff_on_wrong_payrate_vetting_page
 
         staff_wrongly_on_18_to_20_payrate = StaffMemberWronglyOn18To20PayrateQuery.new.
           all.
