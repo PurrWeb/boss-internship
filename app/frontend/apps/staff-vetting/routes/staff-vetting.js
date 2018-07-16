@@ -3,37 +3,7 @@ import PropTypes from 'prop-types';
 import SimpleDashboard from '~/components/boss-dashboards/simple-dashboard';
 import ContentWrapper from '~/components/content-wrapper';
 import StaffCountBlock from '../components/staff-count-block';
-
-const blocks = {
-  withoutEmail: {
-    title: 'Staff without Email Address',
-    href: '/staff_members_without_email',
-  },
-  withoutNI: {
-    title: 'Staff without NI Number',
-    href: '/staff_members_without_ni_number',
-  },
-  withoutAddress: {
-    title: 'Staff without Address',
-    href: '/staff_members_without_address',
-  },
-  withoutPhoto: {
-    title: 'Staff without Photo',
-    href: '/staff_members_without_photo',
-  },
-  wrongPayRate: {
-    title: 'Staff On Wrong Pay Rate',
-    href: '/staff_members_on_wrong_payrate',
-  },
-  expiredSIABadge: {
-    title: 'Security Staff with Expired SIA Badge',
-    href: '/staff_members_with_expired_sia_badge',
-  },
-  withBouncedEmails: {
-    title: 'Staff with Bounced Emails',
-    href: '/staff_members_with_bounced_emails',
-  },
-};
+import oFetch from 'o-fetch';
 
 class StaffVetting extends Component {
   render() {
@@ -46,6 +16,70 @@ class StaffVetting extends Component {
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
     } = this.props;
+
+    const canViewWithoutAddress = oFetch(this.props, 'permissions.staffWithoutAddress.canView');
+    const canViewWithoutEmail = oFetch(this.props, 'permissions.staffWithoutEmail.canView');
+    const canViewWithouNiNumber = oFetch(this.props, 'permissions.staffWithoutNiNumber.canView');
+
+    const canViewWithoutPhoto = oFetch(this.props, 'permissions.staffWithoutPhoto.canView');
+    const canViewOnWrongPayrate = oFetch(this.props, 'permissions.staffOnWrongPayrate.canView');
+    const canViewWithExpiredSiaBadge = oFetch(this.props, 'permissions.staffWithExpiredSiaBadge.canView');
+    const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
+    const blocks = {
+      withoutEmail: {
+        title: 'Staff without Email Address',
+        href: '/staff_members_without_email',
+        count: staffWithoutEmailCount,
+        canView: canViewWithoutEmail,
+      },
+      withoutNI: {
+        title: 'Staff without NI Number',
+        href: '/staff_members_without_ni_number',
+        count: staffWithoutNiNumberCount,
+        canView: canViewWithouNiNumber,
+      },
+      withoutAddress: {
+        title: 'Staff without Address',
+        href: '/staff_members_without_address',
+        count: staffWithoutAddressCount,
+        canView: canViewWithoutAddress,
+      },
+      withoutPhoto: {
+        title: 'Staff without Photo',
+        href: '/staff_members_without_photo',
+        count: staffWithoutPhotoCount,
+        canView: canViewWithoutPhoto,
+      },
+      wrongPayRate: {
+        title: 'Staff On Wrong Pay Rate',
+        href: '/staff_members_on_wrong_payrate',
+        count: staffOnWrongPayrateCount,
+        canView: canViewOnWrongPayrate,
+      },
+      expiredSIABadge: {
+        title: 'Security Staff with Expired SIA Badge',
+        href: '/staff_members_with_expired_sia_badge',
+        count: staffWithExpiredSiaBadgeCount,
+        canView: canViewWithExpiredSiaBadge,
+      },
+      withBouncedEmails: {
+        title: 'Staff with Bounced Emails',
+        href: '/staff_members_with_bounced_emails',
+        count: staffMembersWithBouncedEmailCount,
+        canView: canViewWithBouncedEmails,
+      },
+    };
+    const blocksJsx = Object.values(blocks)
+      .map(block => {
+        if (block.canView) {
+          return <StaffCountBlock key={block.title} title={block.title} count={block.count} href={block.href} />;
+        }
+      })
+      .filter(block => !!block);
+    const firstRowElements = blocksJsx.slice(0, 2);
+    const secondRowElements = blocksJsx.slice(2, 4);
+    const thirdRowElements = blocksJsx.slice(4, 6);
+    const fourthRowElements = blocksJsx.slice(6, 8);
     return (
       <main className="boss-page-main">
         <SimpleDashboard title="Staff Vetting" />
@@ -53,49 +87,10 @@ class StaffVetting extends Component {
           <div className="boss-page-main__group boss-page-main__group_adjust_staff-vetting">
             <div className="boss-users">
               <div className="boss-users__stats">
-                <div className="boss-users__stats-group">
-                  <StaffCountBlock
-                    title={blocks.withoutEmail.title}
-                    count={staffWithoutEmailCount}
-                    href={blocks.withoutEmail.href}
-                  />
-                  <StaffCountBlock
-                    title={blocks.withoutNI.title}
-                    count={staffWithoutNiNumberCount}
-                    href={blocks.withoutNI.href}
-                  />
-                </div>
-                <div className="boss-users__stats-group">
-                  <StaffCountBlock
-                    title={blocks.withoutAddress.title}
-                    count={staffWithoutAddressCount}
-                    href={blocks.withoutAddress.href}
-                  />
-                  <StaffCountBlock
-                    title={blocks.withoutPhoto.title}
-                    count={staffWithoutPhotoCount}
-                    href={blocks.withoutPhoto.href}
-                  />
-                </div>
-                <div className="boss-users__stats-group">
-                  <StaffCountBlock
-                    title={blocks.wrongPayRate.title}
-                    count={staffOnWrongPayrateCount}
-                    href={blocks.wrongPayRate.href}
-                  />
-                  <StaffCountBlock
-                    title={blocks.expiredSIABadge.title}
-                    count={staffWithExpiredSiaBadgeCount}
-                    href={blocks.expiredSIABadge.href}
-                  />
-                </div>
-                <div className="boss-users__stats-group">
-                  <StaffCountBlock
-                    title={blocks.withBouncedEmails.title}
-                    count={staffMembersWithBouncedEmailCount}
-                    href={blocks.withBouncedEmails.href}
-                  />
-                </div>
+                {firstRowElements.length > 0 && <div className="boss-users__stats-group">{firstRowElements}</div>}
+                {secondRowElements.length > 0 && <div className="boss-users__stats-group">{secondRowElements}</div>}
+                {thirdRowElements.length > 0 && <div className="boss-users__stats-group">{thirdRowElements}</div>}
+                {fourthRowElements.length > 0 && <div className="boss-users__stats-group">{fourthRowElements}</div>}
               </div>
             </div>
           </div>

@@ -176,12 +176,39 @@ class UserAbility
       end
 
       can :view, :staff_vetting_page do
-        user.payroll_manager? ||
-          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_without_email_vetting_page do
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_without_ni_number_vetting_page do
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_without_address_vetting_page do
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_without_photo_vetting_page do
+        can_view_main_vettings_page?(user)
       end
 
       can :view, :check_list_submissions_page do
         user.has_effective_access_level?(AccessLevel.manager_access_level)
+      end
+
+      can :view, :staff_on_wrong_payrate_vetting_page do
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_with_expired_sia_badge_vetting_page do
+        can_view_main_vettings_page?(user)
+      end
+
+      can :view, :staff_with_bounced_emails_vetting_page do
+        can_view_main_vettings_page?(user)
       end
 
       can [:view, :accept, :complete, :edit], :change_order_reports do
@@ -698,5 +725,10 @@ class UserAbility
       user.has_effective_access_level?(AccessLevel.manager_access_level) &&
         user.venues.include?(venue)
     )
+  end
+
+  def can_view_main_vettings_page?(user)
+    user.payroll_manager? ||
+      user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
   end
 end

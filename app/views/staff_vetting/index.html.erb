@@ -15,5 +15,6 @@
     staff_types,
     serializer: Api::V1::SimpleStaffTypeSerializer
   ),
+  permissions: Api::V1::StaffVettings::PermissionDataSerializer.new(UserAbility.new(current_user))
 })
 %>
