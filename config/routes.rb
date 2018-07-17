@@ -214,6 +214,47 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :clocking_app, path: 'clocking-app' do
+        namespace :v1 do
+          resources :init, only: [] do
+            collection do
+              post :index
+            end
+          end
+
+          resources :tests, only: [] do
+            collection do
+              get :get
+              post :post
+            end
+          end
+
+          resources :sessions, only: [] do
+            collection do
+              post :index
+              get :ably_auth, path: 'ably-auth'
+            end
+          end
+
+          resources :clocking, only: [] do
+            collection do
+              post :clock_in, path: 'clock-in'
+              post :clock_out, path: 'clock-out'
+              post :start_break, path: 'start-break'
+              post :end_break, path: 'end-break'
+            end
+          end
+
+          resources :staff_members, only: [] do
+            member do
+              post :change_pin, path: 'change-pin'
+            end
+          end
+
+          resources :notes, only: [:create, :update, :destroy]
+        end
+      end
+
       namespace :v1 do
         get 'version', to: 'version#version'
 

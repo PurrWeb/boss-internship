@@ -1,31 +1,31 @@
 {
-  "rules": {
-    "indent": [2, 2],
-    "quotes": [2, "double"],
-    "linebreak-style": [2, "unix"],
-    "semi": [2, "always"],
-    "padded-blocks": [2, "never"],
-    "space-before-function-paren": [2, "never"],
-    "no-shadow": [2, { "builtinGlobals": true }],
-    "one-var": [2, "never"],
-    "quote-props": [2, "as-needed"],
-    "sort-keys": [0, "asc"],
-    "react/jsx-indent": [2, 2]
-  },
-  "env": {
-    "es6": true,
-    "browser": true
-  },
+  "extends": [
+    "standard",
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "prettier/standard"
+  ],
+  "plugins": [
+    "flowtype",
+    "react",
+    "prettier",
+    "standard"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true,
-      "modules": true,
-      "experimentalObjectRestSpread": true
+      "jsx": true
     }
   },
-  "extends": ["eslint:all", "plugin:react/all"],
-  "plugins": [
-    "react"
-  ]
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "react/no-deprecated": "off"
+  }
 }

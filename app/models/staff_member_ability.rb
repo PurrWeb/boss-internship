@@ -6,6 +6,8 @@ class StaffMemberAbility
       staff_member.verified? && (
         if mobile_app.security_app?
           staff_member.staff_type.security?
+        elsif mobile_app.clocking_app?
+          !staff_member.staff_type.security?
         else
           raise "attempt to check access to unsupported app #{mobile_app.name}"
         end
@@ -19,11 +21,11 @@ class StaffMemberAbility
         staff_member == other_staff_member
     end
 
-    can :change_pin, StaffMember do |other_staff_member|
+    can :change, :pin_code do
       has_manager_mode_access?(staff_member)
     end
 
-    can :add_note, StaffMember do |other_staff_member|
+    can [:add, :edit, :delete], :note do
       has_manager_mode_access?(staff_member)
     end
   end

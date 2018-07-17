@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'feature/support/clocking_action_helper'
 
-RSpec.describe 'Clocking actions' do
+RSpec.describe 'Clocking App Clocking actions' do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -30,7 +30,7 @@ RSpec.describe 'Clocking actions' do
   let(:target_staff_member) { FactoryGirl.create(:staff_member) }
   let(:token_expires_at) { 30.minutes.from_now }
   let(:access_token) do
-    ApiAccessToken.new(
+    ClockingAppApiAccessToken.new(
       staff_member: staff_member,
       api_key: api_key
     ).persist!
@@ -41,10 +41,10 @@ RSpec.describe 'Clocking actions' do
   end
 
   describe '#clock_in' do
-    let(:url) { url_helpers.clock_in_api_v1_clocking_index_path }
+    let(:url) { url_helpers.clock_in_api_clocking_app_v1_clocking_index_path }
     let(:params) do
       {
-        staff_member_id: target_staff_member.id
+        staffMemberId: target_staff_member.id
       }
     end
 
@@ -94,8 +94,7 @@ RSpec.describe 'Clocking actions' do
     context 'when previous events exist' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id,
-          date: date.iso8601
+          staffMemberId: target_staff_member.id
         }
       end
 
@@ -124,12 +123,12 @@ RSpec.describe 'Clocking actions' do
   end
 
   describe '#clock_out' do
-    let(:url) { url_helpers.clock_out_api_v1_clocking_index_path }
+    let(:url) { url_helpers.clock_out_api_clocking_app_v1_clocking_index_path }
 
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id
+          staffMemberId: target_staff_member.id
         }
       end
 
@@ -215,7 +214,7 @@ RSpec.describe 'Clocking actions' do
     context 'when clock in period has breaks' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id
+          staffMemberId: target_staff_member.id
         }
       end
 
@@ -330,12 +329,12 @@ RSpec.describe 'Clocking actions' do
   end
 
   describe '#start_break' do
-    let(:url) { url_helpers.start_break_api_v1_clocking_index_path }
+    let(:url) { url_helpers.start_break_api_clocking_app_v1_clocking_index_path }
 
     context 'when last event is a clock_in' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id
+          staffMemberId: target_staff_member.id
         }
       end
 
@@ -402,13 +401,13 @@ RSpec.describe 'Clocking actions' do
   end
 
   describe '#end_break' do
-    let(:url) { url_helpers.end_break_api_v1_clocking_index_path }
+    let(:url) { url_helpers.end_break_api_clocking_app_v1_clocking_index_path }
     let(:start_break_time) { day_start + 1.hour + 30.minutes }
 
     context 'when last event is a start_break' do
       let(:params) do
         {
-          staff_member_id: target_staff_member.id
+          staffMemberId: target_staff_member.id
         }
       end
 
@@ -514,13 +513,11 @@ RSpec.describe 'Clocking actions' do
   end
 
   describe '#add_note' do
-    let(:url) { url_helpers.add_note_api_v1_clocking_index_path }
+    let(:url) { url_helpers.api_clocking_app_v1_notes_path }
     let(:params) do
       {
-        creator: user,
-        staff_member_id: target_staff_member.id,
-        date: date.iso8601,
-        note: note
+        staffMemberId: target_staff_member.id,
+        clockingNote: note
       }
     end
     let(:note) { 'this is the note' }

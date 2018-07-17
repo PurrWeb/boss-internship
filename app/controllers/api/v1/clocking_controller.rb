@@ -49,7 +49,7 @@ module Api
         date = date_from_params
         note = params.fetch(:note)
 
-        authorize! :add_note, staff_member
+        authorize! :add, :note
 
         clock_in_note = nil
 
@@ -94,6 +94,12 @@ module Api
           at: at,
           requester: staff_member_from_token
         ).call
+
+        if result.success?
+          clocking_app_frontend_updates = ClockingAppFrontendUpdates.new(venue_api_key: venue.api_key.key)
+          clocking_app_frontend_updates.clocking_events_updates(clocking_event: result.clock_in_day.last_clock_in_event)
+          clocking_app_frontend_updates.dispatch
+        end
 
         result
       end

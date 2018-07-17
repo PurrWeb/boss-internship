@@ -2,6 +2,7 @@ class Venue < ActiveRecord::Base
   VENUE_TYPE = "normal".freeze
   # Associations
   belongs_to :creator, class_name: 'User'
+  has_one :api_key
   has_many :rotas, inverse_of: :venue
   has_many :machines
   has_many :machines_refloats, through: :machines
