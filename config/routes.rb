@@ -225,6 +225,7 @@ Rails.application.routes.draw do
           resources :tests, only: [] do
             collection do
               get :get
+              post :post
             end
           end
 
