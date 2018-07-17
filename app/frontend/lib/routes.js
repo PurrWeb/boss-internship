@@ -2,6 +2,25 @@ import utils from "~/lib/utils"
 import moment from "moment"
 import oFetch from "o-fetch"
 
+const staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
+    if (staffMemberId === undefined) {
+        throw new Error("No staff member id supplied to appRoutes.staffMember")
+    }
+    const baseUrl = `/staff_members/${staffMemberId}/payments`;
+
+    if ((typeof queryStringParams === undefined) || _.isEmpty(queryStringParams)) {
+        return baseUrl;
+    } else {
+        let queryString = '?';
+        let paramIndex = 0;
+        for (let key in queryStringParams) {
+            queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
+            paramIndex = paramIndex + 1;
+        }
+        return baseUrl + queryString;
+    }
+}
+
 export const appRoutes = {
     rota: function (options){
         var [venueId, date] = oFetch(options, "venueId", "date");
@@ -223,25 +242,6 @@ export const appRoutes = {
       return "/weekly_reports?venue_id=" + venueId +
         "&week_start=" + utils.formatRotaUrlDate(weekStartDateM);
     }
-}
-
-const staffMemberPaymentsAppPath = function(staffMemberId, queryStringParams) {
-  if (staffMemberId === undefined) {
-    throw new Error("No staff member id supplied to appRoutes.staffMember")
-  }
-  const baseUrl = `/staff_members/${staffMemberId}/payments`;
-
-  if((typeof queryStringParams === undefined) || _.isEmpty(queryStringParams)) {
-    return baseUrl;
-  } else {
-    let queryString = '?';
-    let paramIndex = 0;
-    for( let key in queryStringParams) {
-      queryString = `${queryString}${paramIndex > 0 ? '&' : ''}${key}=${queryStringParams[key]}`;
-      paramIndex = paramIndex + 1;
-    }
-    return baseUrl + queryString;
-  }
 }
 
 const apiRoutes = {
