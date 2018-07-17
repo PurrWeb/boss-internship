@@ -4,7 +4,7 @@ import oFetch from 'o-fetch';
 import { DateRangePicker } from 'react-dates';
 import { PaymentFilterFilterTypeRadioGroup, defaultFilterValue } from './payment-filter-filter-type-radio-group';
 
-export function queryParamValues(params){
+export function queryParamValues(params) {
   const mStartDate = oFetch(params, 'mStartDate');
   const mEndDate = oFetch(params, 'mEndDate');
   const statusFilter = oFetch(params, 'statusFilter');
@@ -53,11 +53,11 @@ export class PaymentFilter extends React.Component {
     const requestInProgress = oFetch(this.props, 'requestInProgress');
 
     return <div className="boss-board__manager-filter">
-			<div className="boss-form">
-				<div className="boss-form__row boss-form__row_align_center boss-form__row_hidden-l">
-					<div className="boss-form__field boss-form__field_role_control boss-form__field_layout_max">
-						<p className="boss-form__label boss-form__label_type_light"><span className="boss-form__label-text">Filter</span></p>
-						<div className="date-range-picker date-range-picker_type_interval date-range-picker_type_icon">
+      <div className="boss-form">
+        <div className="boss-form__row boss-form__row_align_center boss-form__row_hidden-l">
+          <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_max">
+            <p className="boss-form__label boss-form__label_type_light"><span className="boss-form__label-text">Filter</span></p>
+            <div className="date-range-picker date-range-picker_type_interval date-range-picker_type_icon">
               <DateRangePicker
                 readOnly={requestInProgress}
                 numberOfMonths={1}
@@ -72,14 +72,22 @@ export class PaymentFilter extends React.Component {
                 focusedInput={focusedInput}
                 onFocusChange={focusedInput => this.setState({ focusedInput })}
               />
-						</div>
-					</div>
-          <PaymentFilterFilterTypeRadioGroup requestInProgress={requestInProgress} currentValue={this.state.statusFilter || defaultFilterValue} formFieldClass="boss-form__field_layout_min" onFilterTypeChange={this.onFilterTypeChange} />
-				</div>
-				<div className="boss-form__group boss-form__group_position_last boss-form__group_visible-l">
-					<div className="boss-form__field">
-						<p className="boss-form__label"><span className="boss-form__label-text">Filter</span></p>
-						<div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon">
+            </div>
+          </div>
+          <div className="boss-form__field boss-form__field_layout_min">
+            <PaymentFilterFilterTypeRadioGroup
+              className="boss-form__switcher"
+              radioGroupName="payment-filter"
+              requestInProgress={requestInProgress}
+              currentValue={this.state.statusFilter || defaultFilterValue}
+              onFilterTypeChange={this.onFilterTypeChange}
+            />
+          </div>
+        </div>
+        <div className="boss-form__group boss-form__group_position_last boss-form__group_visible-l">
+          <div className="boss-form__field">
+            <p className="boss-form__label"><span className="boss-form__label-text">Filter</span></p>
+            <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon">
               <DateRangePicker
                 readOnly={requestInProgress}
                 numberOfMonths={2}
@@ -94,13 +102,19 @@ export class PaymentFilter extends React.Component {
                 focusedInput={focusedInput}
                 onFocusChange={focusedInput => this.setState({ focusedInput })}
               />
-						</div>
-					</div>
-					<div className="boss-form__field">
-            <PaymentFilterFilterTypeRadioGroup requestInProgress={requestInProgress} currentValue={this.state.statusFilter || defaultFilterValue} onFilterTypeChange={this.onFilterTypeChange} />
+            </div>
           </div>
-				</div>
-			</div>
+          <div className="boss-form__field">
+            <PaymentFilterFilterTypeRadioGroup
+              className="boss-form__switcher boss-form__switcher_layout_vertical-s"
+              radioGroupName="payment-filter-mobile"
+              requestInProgress={requestInProgress}
+              currentValue={this.state.statusFilter || defaultFilterValue}
+              onFilterTypeChange={this.onFilterTypeChange}
+            />
+          </div>
+        </div>
+      </div>
     </div>;
   }
 }
