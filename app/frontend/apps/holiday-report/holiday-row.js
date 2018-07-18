@@ -34,9 +34,12 @@ const DetailsMobileRow = ({children}) => {
 }
 
 export default class HolidayRow extends React.Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    showDetails: false,
+    this.state = {
+      showDetails: false
+    }
   }
 
   renderHolidayCell(holidays) {
@@ -109,7 +112,7 @@ export default class HolidayRow extends React.Component {
       const createdAtText = safeMoment.iso8601Parse(holiday.created_at).format(utils.humanDateFormatWithTime());
       const dateText = startDateText === endDateText ? startDateText : `${startDateText} - ${endDateText}`;
       const sPayslipDate = oFetch(holiday, 'payslip_date');
-      const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(util.commonDateFormat) : 'N/A';
+      const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A';
 
       return (
         <div className="boss-check boss-check_role_panel boss-check_page_holidays-report-details" key={key}>
@@ -182,7 +185,7 @@ export default class HolidayRow extends React.Component {
     const avatarUrl = oFetch(staffMember, 'avatar_url');
     const staffMemberName = `${oFetch(staffMember, 'first_name')} ${oFetch(staffMember, 'surname') }`
 
-    const showDetails = oFetch(state, 'showDetails');
+    const showDetails = oFetch(this.state, 'showDetails');
 
     return (
       <div className="boss-table__group" key={ serverId }>

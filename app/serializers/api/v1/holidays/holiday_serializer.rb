@@ -1,6 +1,6 @@
 class Api::V1::Holidays::HolidaySerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  
+
   attributes \
     :id,
     :url,
@@ -12,7 +12,8 @@ class Api::V1::Holidays::HolidaySerializer < ActiveModel::Serializer
     :days,
     :staff_member,
     :created_by,
-    :created_at
+    :created_at,
+    :payslip_date
 
   def url
     api_v1_holiday_url(object)
@@ -30,6 +31,10 @@ class Api::V1::Holidays::HolidaySerializer < ActiveModel::Serializer
   def end_date
     #TODO: Should be in UIRotaDate format
     object.end_date.iso8601
+  end
+
+  def payslip_date
+    UIRotaDate.format(object.payslip_date)
   end
 
   def status
