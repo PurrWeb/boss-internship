@@ -85,13 +85,11 @@ class StaffMembersController < ApplicationController
     if can? :edit, staff_member
       tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
 
-      if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
-        holiday_start_date = holiday_start_date_from_params
-        holiday_end_date = holiday_end_date_from_params
-      else
-        holiday_start_date = tax_year.start_date
-        holiday_end_date = tax_year.end_date
+      if !holiday_tab_params_present?
+        return redirect_to(holidays_staff_member_path(holiday_tab_params(staff_member: staff_member, tax_year: tax_year)))
       end
+      holiday_start_date = holiday_start_date_from_params
+      holiday_end_date = holiday_end_date_from_params
 
       filtered_holidays = InRangeQuery.new(
           relation: staff_member.active_holidays.includes([:creator]),
@@ -99,19 +97,34 @@ class StaffMembersController < ApplicationController
           end_value: holiday_end_date,
           start_column_name: 'start_date',
           end_column_name: 'end_date'
-        ).
-        all.
+        ).all
+
+      if holiday_tab_filtering_by_payslip_date?
+        filtered_holidays = InRangeQuery.new(
+          relation: filtered_holidays,
+          start_value: holiday_tab_payslip_start_date_from_params,
+          end_value: holiday_tab_payslip_end_date_from_params,
+          start_column_name: 'payslip_date',
+          end_column_name: 'payslip_date',
+
+        ).all
+      end
+
+      filtered_holidays = filtered_holidays.
         includes(holiday_request: [:creator])
 
-
-      filtered_holiday_requests = InRangeQuery.new(
-        relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
-        start_value: holiday_start_date,
-        end_value: holiday_end_date,
-        start_column_name: 'start_date',
-        end_column_name: 'end_date'
-      )
-      .all
+      filtered_holiday_requests = nil
+      if holiday_tab_filtering_by_payslip_date?
+        filtered_holiday_requests = HolidayRequest.none
+      else
+        filtered_holiday_requests = InRangeQuery.new(
+          relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
+          start_value: holiday_start_date,
+          end_value: holiday_end_date,
+          start_column_name: 'start_date',
+          end_column_name: 'end_date'
+        ).all
+      end
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
@@ -358,6 +371,24 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def holiday_tab_params_present?
+    holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
+  end
+
+  def holiday_tab_filtering_by_payslip_date?
+    holiday_tab_payslip_start_date_from_params.present? && holiday_tab_payslip_end_date_from_params.present?
+  end
+
+  def holiday_tab_params(staff_member:, tax_year:)
+    {
+      id: staff_member.id,
+      start_date: UIRotaDate.format(holiday_start_date_from_params || tax_year.start_date),
+      end_date: UIRotaDate.format(holiday_end_date_from_params || tax_year.end_date),
+      payslip_start_date: holiday_tab_payslip_start_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_start_date_from_params) : nil,
+      payslip_end_date: holiday_tab_payslip_end_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_end_date_from_params) : nil
+    }
+  end
+
   def payment_index_params_present?
     payment_filter_start_date_from_params.present? && payment_filter_end_date_from_params.present? && payment_filter_status_filter_from_params.present?
   end
@@ -409,6 +440,14 @@ class StaffMembersController < ApplicationController
 
   def holiday_end_date_from_params
     UIRotaDate.parse_if_present(params['end_date'])
+  end
+
+  def holiday_tab_payslip_start_date_from_params
+    UIRotaDate.parse_if_present(params['payslip_start_date'])
+  end
+
+  def holiday_tab_payslip_end_date_from_params
+    UIRotaDate.parse_if_present(params['payslip_end_date'])
   end
 
   def get_app_download_link_data(staff_member)
