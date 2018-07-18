@@ -205,8 +205,29 @@ class StaffMembersController < ApplicationController
 
     if can? :edit, staff_member
       owed_hours = OwedHour.enabled.
-        where(staff_member: staff_member).
-        includes(creator: [:name]).all
+        where(staff_member: staff_member)
+
+      if owed_hour_tab_filtering_by_date?
+        owed_hours = InRangeQuery.new(
+          relation: owed_hours,
+          start_value: owed_hours_tab_start_date_from_params,
+          end_value: owed_hours_tab_end_date_from_params,
+          start_column_name: 'date',
+          end_column_name: 'date'
+        ).all
+      end
+
+      if owed_hour_tab_filtering_by_payslip_date?
+        owed_hours = InRangeQuery.new(
+          relation: owed_hours,
+          start_value: owed_hours_tab_payslip_start_date_from_params,
+          end_value: owed_hours_tab_payslip_end_date_from_params,
+          start_column_name: 'payslip_date',
+          end_column_name: 'payslip_date'
+        ).all
+      end
+
+      owed_hours = owed_hours.includes(creator: [:name]).all
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
@@ -410,6 +431,30 @@ class StaffMembersController < ApplicationController
       end_date: payment_filter_end_date_from_params,
       status_filter: payment_filter_status_filter_from_params
     }
+  end
+
+  def owed_hour_tab_filtering_by_date?
+    owed_hours_tab_start_date_from_params.present? && owed_hours_tab_end_date_from_params.present?
+  end
+
+  def owed_hour_tab_filtering_by_payslip_date?
+    owed_hours_tab_payslip_start_date_from_params.present? && owed_hours_tab_payslip_end_date_from_params.present?
+  end
+
+  def owed_hours_tab_start_date_from_params
+    UIRotaDate.parse_if_present(params["start_date"])
+  end
+
+  def owed_hours_tab_end_date_from_params
+    UIRotaDate.parse_if_present(params["end_date"])
+  end
+
+  def owed_hours_tab_payslip_start_date_from_params
+    UIRotaDate.parse_if_present(params["payslip_start_date"])
+  end
+
+  def owed_hours_tab_payslip_end_date_from_params
+    UIRotaDate.parse_if_present(params["payslip_end_date"])
   end
 
   def payment_filter_start_date_from_params
