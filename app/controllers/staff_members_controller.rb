@@ -167,6 +167,8 @@ class StaffMembersController < ApplicationController
         estimated_accrued_holiday_days: estimated_accrued_holiday_days,
         holiday_start_date: holiday_start_date,
         holiday_end_date: holiday_end_date,
+        holiday_start_payslip_date: holiday_tab_payslip_start_date_from_params,
+        holiday_end_payslip_date: holiday_tab_payslip_end_date_from_params,
         staff_types: StaffType.all,
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         gender_values: StaffMember::GENDERS,
