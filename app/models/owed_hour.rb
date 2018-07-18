@@ -26,7 +26,8 @@ class OwedHour < ActiveRecord::Base
     return unless enabled? && payslip_date.present?
 
     if changed.include?("payslip_date")
-      errors.add(:payslip_date, "can't be in the past") if payslip_date < RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+      current_week = RotaWeek.new(RotaShiftDate.to_rota_date(now))
+      errors.add(:payslip_date, "can't be in the past") if payslip_date < current_week.start_date
     end
   end
 

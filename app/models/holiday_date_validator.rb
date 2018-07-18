@@ -15,7 +15,7 @@ class HolidayDateValidator
     payslip_date_validations_failed = false
     if payslip_date_present?
       if holiday.validate_as_creation
-        if holiday.payslip_date < RotaShiftDate.to_rota_date(now)
+        if holiday.payslip_date < RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
           holiday.errors.add(:base, PAYSLIP_DATE_IN_PAST_CREATION_VALIDATION_MESSAGE)
           payslip_date_validations_failed = true
         end
