@@ -91,42 +91,16 @@ class StaffMembersController < ApplicationController
       holiday_start_date = holiday_start_date_from_params
       holiday_end_date = holiday_end_date_from_params
 
-      filtered_holidays = staff_member.active_holidays
-      if holiday_tab_filtering_by_date?
-        filtered_holidays = InRangeQuery.new(
-            relation: filtered_holidays,
-            start_value: holiday_start_date,
-            end_value: holiday_end_date,
-            start_column_name: 'start_date',
-            end_column_name: 'end_date'
-          ).all
-      end
-      if holiday_tab_filtering_by_payslip_date?
-        filtered_holidays = InRangeQuery.new(
-          relation: filtered_holidays,
-          start_value: holiday_tab_payslip_start_date_from_params,
-          end_value: holiday_tab_payslip_end_date_from_params,
-          start_column_name: 'payslip_date',
-          end_column_name: 'payslip_date',
+      index_query = StaffMemberProfileHolidayIndexQuery.new(
+        start_date: holiday_start_date,
+        end_date: holiday_end_date,
+        payslip_start_date: holiday_tab_payslip_start_date_from_params,
+        payslip_end_date: holiday_tab_payslip_end_date_from_params,
+      )
 
-        ).all
-      end
+      filtered_holidays = index_query.holidays.includes(:creator, holiday_request: [:creator])
 
-      filtered_holidays = filtered_holidays.
-        includes(:creator, holiday_request: [:creator])
-
-      filtered_holiday_requests = nil
-      if holiday_tab_filtering_by_payslip_date?
-        filtered_holiday_requests = HolidayRequest.none
-      else
-        filtered_holiday_requests = InRangeQuery.new(
-          relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
-          start_value: holiday_start_date,
-          end_value: holiday_end_date,
-          start_column_name: 'start_date',
-          end_column_name: 'end_date'
-        ).all
-      end
+      filtered_holiday_requests = index_query.holiday_requests.includes([:creator])
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
