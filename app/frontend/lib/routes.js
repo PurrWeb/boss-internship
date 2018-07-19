@@ -41,7 +41,7 @@ const staffMemberProfileHolidaysTabPath = function(params){
       if(filteringByPayslipDate){
         result = result + "&"
       }
-      result = result + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipStartDate.format(utils.apiDateFormat);
+      result = result + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipEndDate.format(utils.apiDateFormat);
     }
   }
   return result;
@@ -183,13 +183,13 @@ export const appRoutes = {
     staffMemberProfileHolidaysTab: staffMemberProfileHolidaysTabPath,
     staffMemberProfileHolidaysTabFromFinanceReport: function(params) {
       const staffMemberId = oFetch(params, 'staffMemberId')
-      const mStartDate = oFetch(params, 'mStartDate');
-      const mEndDate = oFetch(params, 'mEndDate');
+      const mPayslipStartDate = oFetch(params, 'mPayslipStartDate');
+      const mPayslipEndDate = oFetch(params, 'mPayslipEndDate');
 
       return staffMemberProfileHolidaysTabPath({
         staffMemberId: staffMemberId,
-        mStartDate: mStartDate,
-        mEndDate: mEndDate
+        mPayslipStartDate: mPayslipStartDate,
+        mPayslipEndDate: mPayslipEndDate
       })
     },
     staffMemberOwedHours: function(staffMemberId, dStartDate, dEndDate){
