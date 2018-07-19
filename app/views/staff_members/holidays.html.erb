@@ -6,8 +6,8 @@
   window.boss.store.paid_holiday_days = <%= paid_holiday_days.to_json.html_safe %>;
   window.boss.store.unpaid_holiday_days = <%= unpaid_holiday_days.to_json.html_safe %>;
   window.boss.store.estimated_accrued_holiday_days = <%= estimated_accrued_holiday_days.to_json.html_safe %>;
-  window.boss.store.holiday_start_date = <%= UIRotaDate.format(holiday_start_date).to_json.html_safe %>;
-  window.boss.store.holiday_end_date = <%= UIRotaDate.format(holiday_end_date).to_json.html_safe %>;
+  window.boss.store.holiday_start_date = <%= holiday_start_date ? UIRotaDate.format(holiday_start_date).to_json.html_safe : 'null' %>;
+  window.boss.store.holiday_end_date = <%= holiday_end_date ? UIRotaDate.format(holiday_end_date).to_json.html_safe : 'null' %>;
   window.boss.store.accessToken = "<%= access_token.token %>";
 </script>
 
@@ -19,8 +19,8 @@
   paidHolidayDays: paid_holiday_days,
   unpaidHolidayDays: unpaid_holiday_days,
   estimatedAccruedHolidayDays: estimated_accrued_holiday_days,
-  holidayStartDate: UIRotaDate.format(holiday_start_date),
-  holidayEndDate: UIRotaDate.format(holiday_end_date),
+  holidayStartDate: holiday_start_date ? UIRotaDate.format(holiday_start_date) : nil,
+  holidayEndDate: holiday_end_date ? UIRotaDate.format(holiday_end_date) : nil,
   startPayslipDate: holiday_start_payslip_date.present? ? UIRotaDate.format(holiday_start_payslip_date) : nil,
   endPayslipDate: holiday_end_payslip_date.present? ? UIRotaDate.format(holiday_end_payslip_date) : nil,
   staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
