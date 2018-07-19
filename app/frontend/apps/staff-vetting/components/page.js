@@ -10,12 +10,13 @@ import StaffMemberFilter from './staff-member-filter';
 
 class Page extends Component {
   render() {
-    const { count, title, venues, staffMembers, staffTypes } = this.props;
+    const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer } = this.props;
     if (staffMembers.size === 0) {
       return (
         <main className="boss-page-main">
           <StaffDashboard
             title={() => <StaffDashboardTitle text={title} count={count} />}
+            filterRenderer={dashboardFilterRenderer}
           />
           {count === 0 && (
             <ContentWrapper>
@@ -35,6 +36,7 @@ class Page extends Component {
       <main className="boss-page-main">
         <StaffDashboard
           title={() => <StaffDashboardTitle text={title} count={count} />}
+          filterRenderer={dashboardFilterRenderer}
         />
         <ContentWrapper>
           <PageContent

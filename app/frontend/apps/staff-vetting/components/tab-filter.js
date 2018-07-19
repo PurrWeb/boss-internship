@@ -98,11 +98,39 @@ class TabFilter extends Component {
     ];
   }
 
+  getTimeDodges() {
+    if (!this.props.timeDodgers) {
+      return [];
+    }
+
+    const {
+      imStaffMembersHardDodgers,
+      imStaffMembersSoftDodgers,
+      imStaffMembers,
+    } = this.props.timeDodgers;
+
+    const staffMembersHardDodgersTab = {
+      title: `Hard Dodgers - under 46 (${imStaffMembersHardDodgers.size})`,
+      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers),
+      onClear: () => this.props.onChangeTab(imStaffMembers),
+    };
+    const staffMembersSoftDodgersTab = {
+      title: `Soft Dodgers - 46 or more (${imStaffMembersSoftDodgers.size})`,
+      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers),
+      onClear: () => this.props.onChangeTab(imStaffMembers),
+    };
+    return [
+      staffMembersSoftDodgersTab,
+      staffMembersHardDodgersTab,
+    ];
+  }
+
   render() {
     const tabs = [
       ...this.getVenues(),
       ...this.getPayRates(),
       ...this.getSecurity(),
+      ...this.getTimeDodges(),
     ];
     return (
       <div className="boss-page-main__controls">
@@ -144,6 +172,7 @@ TabFilter.propTypes = {
   showPayRates: PropTypes.bool,
   showVenues: PropTypes.bool,
   showSecurity: PropTypes.bool,
+  timeDodgers: PropTypes.object,
   payRates: PropTypes.object,
   onChangeTab: PropTypes.func,
 };

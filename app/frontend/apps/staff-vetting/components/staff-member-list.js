@@ -18,20 +18,17 @@ class StaffMemberList extends Component {
     if (!staffMember.get('siaBadgeExpiryDate')) {
       return '-';
     }
-    return safeMoment
-      .parse(staffMember.get('siaBadgeExpiryDate'), 'YYYY-MM-DD')
-      .format('ddd DD/MM/YYYY');
+    return safeMoment.parse(staffMember.get('siaBadgeExpiryDate'), 'YYYY-MM-DD').format('ddd DD/MM/YYYY');
   }
 
   render() {
     const {
       staffMembers,
       staffTypes,
-      payRates,
       withAge,
       withSiaBadgeExpiryDate,
       withBouncedEmail,
-      searchQuery,
+      venues,
     } = this.props;
 
     if (staffMembers.size === 0) {
@@ -46,6 +43,8 @@ class StaffMemberList extends Component {
         <div className="boss-users__flow-list">
           {staffMembers.map(staffMember => {
             const bouncedEmailData = staffMember.get('bouncedEmailData');
+            const masterVenue = venues ? venues.find(venue => venue.get('id') === staffMember.get('venueId')).get('name') : null;
+
             return (
               <StaffMemberInfo
                 key={staffMember.get('id')}
@@ -53,25 +52,16 @@ class StaffMemberList extends Component {
                 avatarUrl={staffMember.get('avatarUrl')}
                 fullName={staffMember.get('fullName')}
                 staffType={staffTypes
-                  .find(
-                    staffType =>
-                      staffType.get('id') === staffMember.get('staffTypeId'),
-                  )
+                  .find(staffType => staffType.get('id') === staffMember.get('staffTypeId'))
                   .get('name')}
                 staffColor={staffTypes
-                  .find(
-                    staffType =>
-                      staffType.get('id') === staffMember.get('staffTypeId'),
-                  )
+                  .find(staffType => staffType.get('id') === staffMember.get('staffTypeId'))
                   .get('color')}
                 age={withAge && this.getStaffMemberAge(staffMember)}
-                expiredSiaBadge={
-                  withSiaBadgeExpiryDate &&
-                  this.getStaffMemberSiaBadgeExpiryDate(staffMember)
-                }
-                bouncedEmailData={
-                  withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()
-                }
+                expiredSiaBadge={withSiaBadgeExpiryDate && this.getStaffMemberSiaBadgeExpiryDate(staffMember)}
+                bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
+                hours={staffMember.get('hours')}
+                masterVenue={masterVenue}
               />
             );
           })}
@@ -87,6 +77,7 @@ StaffMemberList.propTypes = {
   withAge: PropTypes.bool,
   withSiaBadgeExpiryDate: PropTypes.bool,
   withBouncedEmail: PropTypes.bool,
+  venues: ImmutablePropTypes.list,
 };
 
 export default StaffMemberList;

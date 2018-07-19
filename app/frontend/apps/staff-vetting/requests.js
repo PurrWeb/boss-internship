@@ -42,3 +42,18 @@ export const getStaffMembersWithBouncedEmails = () => {
   );
 };
 
+export const getStaffMembersWithTimeDodges = (date) => {
+
+  const data = date[0] % 2 === 0 
+    ? require('./fixtures.json') 
+    : require('./fixtures-short.json')
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({
+      data,
+      })
+    }, 1000)
+  })
+};
+

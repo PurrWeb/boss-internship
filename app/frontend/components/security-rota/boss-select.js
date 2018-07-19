@@ -49,10 +49,10 @@ class BossSelect extends React.Component {
   };
 
   render() {
-    const { options, mappedProps, multi } = this.props;
+    const { options, mappedProps, multi, className } = this.props;
 
     return (
-      <div className="boss-form__select">
+      <div className={`boss-form__select ${className && className}`}>
         <Select
           options={this.getOptions(options)}
           value={this.props.selected}

@@ -11,6 +11,8 @@ function StaffMemberInfo({
   age,
   expiredSiaBadge,
   bouncedEmailData,
+  hours,
+  masterVenue,
 }) {
   const handleInfoClick = e => {
     if (bouncedEmailData) {
@@ -73,6 +75,18 @@ function StaffMemberInfo({
               </li>
             </ul>
           ) : null}
+          {hours && masterVenue && (
+            <ul className="boss-user-summary__review-list">
+              <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Master Venue: </span>
+                  <span className="boss-user-summary__review-val">{masterVenue}</span>
+              </li>
+              <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Hours: </span>
+                  <span className="boss-user-summary__review-val">{hours}</span>
+              </li>
+            </ul>
+          )}
         </div>
       </a>
     </div>
@@ -88,6 +102,8 @@ StaffMemberInfo.propTypes = {
   age: PropTypes.number,
   expiredSiaBadge: PropTypes.string,
   bouncedEmailData: PropTypes.object,
+  hours: PropTypes.number,
+  masterVenue: PropTypes.string,
 };
 
 export default StaffMemberInfo;
