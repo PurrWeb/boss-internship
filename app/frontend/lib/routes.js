@@ -154,25 +154,25 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId;
     },
-    staffMemberProfileHolidaysTab: function(staffMemberId, dStartDate, dEndDate){
-        if (staffMemberId === undefined) {
-            throw new Error("No staff member id supplied to appRoutes.staffMemberProfileHolidaysTab")
-        }
-        let result = "/staff_members/" + staffMemberId + "/holidays";
-        if(dStartDate !== undefined && dEndDate !== undefined){
-          result = result + "?start_date=" + utils.formatRotaUrlDate(dStartDate) + "&end_date=" + utils.formatRotaUrlDate(dEndDate);
-        }
-        return result;
+    staffMemberProfileHolidaysTab: function(params){
+      const staffMemberId = oFetch(params, 'staffMemberId')
+      const mStartDate = params.mStartDate;
+      const mEndDate = params.mEndDate;
+
+      let result = "/staff_members/" + staffMemberId + "/holidays";
+      if(mStartDate !== undefined && mEndDate !== undefined){
+        result = result + "?start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_da,te=" + mEndDate.format(utils.apiDateFormat);
+      }
+      return result;
     },
-    staffMemberProfileHolidaysTabFromFinanceReport: function(staffMemberId, dStartDate, dEndDate) {
-        if (staffMemberId === undefined) {
-            throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
-        }
-        let result = "/staff_members/" + staffMemberId + "/holidays";
-        if(dStartDate !== undefined && dEndDate !== undefined){
-          result = result + `?start_date=${dStartDate}&end_date=${dEndDate}`;
-        }
-        return result;
+    staffMemberProfileHolidaysTabFromFinanceReport: function(params) {
+      const staffMemberId = oFetch(params, 'staffMemberId')
+      const mStartDate = oFetch(params, 'mStartDate');
+      const mEndDate = oFetch(params, 'mEndDate');
+
+      let result = "/staff_members/" + staffMemberId + "/holidays";
+      result = result + `?start_date=${mStartDate.format(utils.apiDateFormat)}&end_date=${mEndDate.format(utils.apiDateFormat)}`;
+      return result;
     },
     staffMemberOwedHours: function(staffMemberId, dStartDate, dEndDate){
         if (staffMemberId === undefined) {

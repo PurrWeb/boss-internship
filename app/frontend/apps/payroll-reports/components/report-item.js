@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
+import safeMoment from "~/lib/safe-moment";
 import { appRoutes } from '~/lib/routes';
 
 class ReportItem extends Component {
@@ -52,8 +53,8 @@ class ReportItem extends Component {
 
   render() {
     const report = oFetch(this.props, 'report');
-    const startDate = oFetch(this.props, 'startDate');
-    const endDate = oFetch(this.props, 'endDate');
+    const mStartDate = safeMoment.uiDateParse(oFetch(this.props, 'startDate'));
+    const mEndDate = safeMoment.uiDateParse(oFetch(this.props, 'endDate'));
     const fullName = oFetch(report, 'staffMemberName');
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
@@ -136,7 +137,7 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className={holidayDaysCountClassName}>
-            <a href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport(staffMemberId, startDate, endDate)} className="boss-table__link">
+            <a href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({staffMemberId: staffMemberId, mStartDate: mStartDate, mEndDate: mEndDate)} className="boss-table__link">
               {holidayDaysCount}
             </a>
           </div>

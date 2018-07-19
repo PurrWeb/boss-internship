@@ -101,8 +101,8 @@ class ReportItem extends Component {
 
   render() {
     const report = oFetch(this.props, 'report');
-    const startDate = oFetch(this.props, 'startDate');
-    const endDate = oFetch(this.props, 'endDate');
+    const mStartDate = safeMoment.uiDateParse(oFetch(this.props, 'startDate'));
+    const mEndDate = safeMoment.uiDateParse(oFetch(this.props, 'endDate'));
     const fullName = oFetch(report, 'staffMemberName');
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
@@ -222,7 +222,7 @@ class ReportItem extends Component {
         ) : (
           <div className={holidayDaysCountClassName} style={cellStyle}>
             <a
-              href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport(staffMemberId, startDate, endDate)}
+              href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({staffMemberId: staffMemberId, mStartDate: mStartDate, mEndDate: mEndDate})}
               className={`${this.getTextClassName()} boss-table__link`}
             >
               {holidayDaysCount}
