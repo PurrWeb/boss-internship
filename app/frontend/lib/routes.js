@@ -41,7 +41,7 @@ const staffMemberProfileHolidaysTabPath = function(params){
       if(filteringByPayslipDate){
         result = result + "&"
       }
-      result = result + "payslip_start_date=" + mStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mEndDate.format(utils.apiDateFormat);
+      result = result + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipStartDate.format(utils.apiDateFormat);
     }
   }
   return result;
