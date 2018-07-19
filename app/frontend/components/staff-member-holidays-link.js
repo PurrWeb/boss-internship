@@ -14,7 +14,7 @@ export default class StaffMemberHolidaysLink extends React.Component {
         let sStartDate = this.props.sStartDate;
         let sEndDate = this.props.sEndDate;
 
-        let href = appRoutes.staffMemberHolidays(
+        let href = appRoutes.staffMemberProfileHolidaysTab(
           this.props.staffMemberServerId,
           sStartDate && safeMoment.uiDateParse(sStartDate).toDate(),
           sEndDate && safeMoment.uiDateParse(sEndDate).toDate()

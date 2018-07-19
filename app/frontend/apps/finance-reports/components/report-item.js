@@ -222,7 +222,7 @@ class ReportItem extends Component {
         ) : (
           <div className={holidayDaysCountClassName} style={cellStyle}>
             <a
-              href={appRoutes.staffMemberHolidaysFromFinanceReport(staffMemberId, startDate, endDate)}
+              href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport(staffMemberId, startDate, endDate)}
               className={`${this.getTextClassName()} boss-table__link`}
             >
               {holidayDaysCount}

@@ -154,9 +154,9 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId;
     },
-    staffMemberHolidays: function(staffMemberId, dStartDate, dEndDate){
+    staffMemberProfileHolidaysTab: function(staffMemberId, dStartDate, dEndDate){
         if (staffMemberId === undefined) {
-            throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
+            throw new Error("No staff member id supplied to appRoutes.staffMemberProfileHolidaysTab")
         }
         let result = "/staff_members/" + staffMemberId + "/holidays";
         if(dStartDate !== undefined && dEndDate !== undefined){
@@ -164,7 +164,7 @@ export const appRoutes = {
         }
         return result;
     },
-    staffMemberHolidaysFromFinanceReport: function(staffMemberId, dStartDate, dEndDate){
+    staffMemberProfileHolidaysTabFromFinanceReport: function(staffMemberId, dStartDate, dEndDate) {
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHolidays")
         }
