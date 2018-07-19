@@ -127,12 +127,12 @@ export const addNewOwedHours = createAction(ADD_NEW_OWED_HOUR);
 export const cancelAddNewOwedHours = createAction(CANCEL_ADD_NEW_OWED_HOUR);
 export const cancelEditOwedHours = createAction(CLOSE_EDIT_OWED_HOURS_MODAL);
 
-export const filter = (startDate, endDate, startPayslipDate, endPayslipDate) => (dispatch, getState) => {
+export const filter = (startDate, endDate, payslipStartDate, payslipEndDate) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   let queryString = `owed_hours?start_date=${startDate}&end_date=${endDate}`;
-  if(startPayslipDate && endPayslipDate) {
-    queryString = `owed_hours?start_date=${startDate}&end_date=${endDate}&start_payslip_date=${startPayslipDate}&end_payslip_date=${endPayslipDate}`;
+  if(payslipStartDate && payslipEndDate) {
+    queryString = `owed_hours?start_date=${startDate}&end_date=${endDate}&start_payslip_date=${payslipStartDate}&end_payslip_date=${payslipEndDate}`;
   }
   return axios
     .get(

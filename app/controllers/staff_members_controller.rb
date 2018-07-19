@@ -257,6 +257,10 @@ class StaffMembersController < ApplicationController
         venues: Venue.all,
         accessible_venue_ids: Venue.all.pluck(:id),
         accessible_pay_rates: accessible_pay_rate_ids,
+        filter_start_date: owed_hours_tab_start_date_from_params,
+        filter_end_date: owed_hours_tab_end_date_from_params,
+        filter_payslip_start_date: owed_hours_tab_payslip_start_date_from_params,
+        filter_payslip_end_date: owed_hours_tab_payslip_end_date_from_params,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
           current_user: current_user

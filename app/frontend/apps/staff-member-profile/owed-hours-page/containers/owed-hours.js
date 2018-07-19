@@ -33,8 +33,8 @@ const mapStateToProps = (state) => {
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
     startDate: state.getIn(['owedHours', 'startDate']),
     endDate: state.getIn(['owedHours', 'endDate']),
-    startPayslipDate: state.getIn(['owedHours', 'startPayslipDate']),
-    endPayslipDate: state.getIn(['owedHours', 'endPayslipDate']),
+    payslipStartDate: state.getIn(['owedHours', 'payslipStartDate']),
+    payslipEndDate: state.getIn(['owedHours', 'payslipEndDate']),
   };
 }
 
@@ -86,8 +86,8 @@ class OwedHours extends React.PureComponent {
       disabled,
       startDate,
       endDate,
-      startPayslipDate,
-      endPayslipDate,
+      payslipStartDate,
+      payslipEndDate,
       actions: {
         updateAvatarRequest,
         addNewOwedHours,
@@ -119,16 +119,16 @@ class OwedHours extends React.PureComponent {
           <OwedHoursHeader isStaffMemberDisabled={disabled} title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
-              <OwedHoursFilter 
-                startDate={startDate} 
-                endDate={endDate} 
+              <OwedHoursFilter
+                startDate={startDate}
+                endDate={endDate}
                 filter={filter}
-                startPayslipDate={startPayslipDate}
-                endPayslipDate={endPayslipDate} 
+                payslipStartDate={payslipStartDate}
+                payslipEndDate={payslipEndDate}
               />
               <OwedHoursTable isStaffMemberDisabled={disabled} owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
             </div>
-          </div> 
+          </div>
         </section>
       </ProfileWrapper>
     )

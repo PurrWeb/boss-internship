@@ -1,5 +1,7 @@
 import { fromJS, Map, List } from 'immutable';
 import { handleActions } from 'redux-actions';
+import safeMoment from "~/lib/safe-moment";
+import oFetch from 'o-fetch';
 
 import {
   INITIAL_LOAD,
@@ -24,20 +26,20 @@ const initialState = fromJS({
   editedOwedHours: {},
   startDate: null,
   endDate: null,
-  startPayslipDate: null,
-  endPayslipDate: null,
+  payslipStartDate: null,
+  payslipEndDate: null,
 });
 
 const owedHoursReducer = handleActions({
   [INITIAL_LOAD]: (state, action) => {
-    const { 
+    const {
       staffMember,
       accessToken,
       owedHours,
       startDate,
       endDate,
-      startPayslipDate,
-      endPayslipDate,
+      payslipStartDate,
+      payslipEndDate,
     } = action.payload;
 
     return state
@@ -46,8 +48,8 @@ const owedHoursReducer = handleActions({
       .set('owedHours', fromJS(owedHours))
       .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
       .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
-      .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
-      .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
+      .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
+      .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
   },
   [ADD_NEW_OWED_HOUR]: (state) => {
     return state
@@ -55,7 +57,7 @@ const owedHoursReducer = handleActions({
   },
   [ADD_OWED_HOURS_SUCCESS]: (state, action) => {
     const owedHours = fromJS(action.payload);
-    
+
     return state
       .set('owedHours', owedHours);
   },
@@ -92,16 +94,16 @@ const owedHoursReducer = handleActions({
       owedHours,
       startDate,
       endDate,
-      startPayslipDate,
-      endPayslipDate,
+      payslipStartDate,
+      payslipEndDate,
     } = action.payload;
 
     return state
     .set('owedHours', fromJS(owedHours))
     .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
     .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
-    .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
-    .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
+    .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
+    .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
   }
 }, initialState);
 

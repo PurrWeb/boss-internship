@@ -12,8 +12,8 @@ class OwedHoursFilter extends React.Component {
       focusedInputPayslipDate: null,
       startDate: oFetch(props, 'startDate'),
       endDate: oFetch(props, 'endDate'),
-      startPayslipDate: oFetch(props, 'startPayslipDate'),
-      endPayslipDate: oFetch(props, 'endPayslipDate'),
+      payslipStartDate: oFetch(props, 'payslipStartDate'),
+      payslipEndDate: oFetch(props, 'payslipEndDate'),
     };
   }
 
@@ -26,18 +26,18 @@ class OwedHoursFilter extends React.Component {
 
   onPayslipDatesChange = ({ startDate, endDate }) => {
     this.setState({
-      startPayslipDate: startDate,
-      endPayslipDate: endDate,
+      payslipStartDate: startDate,
+      payslipEndDate: endDate,
     });
   };
 
   onUpdate = () => {
-    const { startDate, endDate, startPayslipDate, endPayslipDate } = this.state;
+    const { startDate, endDate, payslipStartDate, payslipEndDate } = this.state;
     if (startDate && endDate) {
       const formatedStartDate = startDate.format('DD-MM-YYYY');
       const formatedEndDate = endDate.format('DD-MM-YYYY');
-      const formatedStartPayslipDate = startPayslipDate && startPayslipDate.format('DD-MM-YYYY');
-      const formatedEndPayslipDate = endPayslipDate && endPayslipDate.format('DD-MM-YYYY');
+      const formatedStartPayslipDate = payslipStartDate && payslipStartDate.format('DD-MM-YYYY');
+      const formatedEndPayslipDate = payslipEndDate && payslipEndDate.format('DD-MM-YYYY');
       return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
     }
   };
@@ -48,8 +48,8 @@ class OwedHoursFilter extends React.Component {
       focusedInputPayslipDate,
       startDate,
       endDate,
-      startPayslipDate,
-      endPayslipDate,
+      payslipStartDate,
+      payslipEndDate,
     } = this.state;
 
     return (
@@ -94,14 +94,14 @@ class OwedHoursFilter extends React.Component {
                     showClearDates
                     isOutsideRange={() => false}
                     displayFormat={'DD-MM-YYYY'}
-                    startDate={startPayslipDate}
+                    startDate={payslipStartDate}
                     keepOpenOnDateSelect={false}
-                    endDate={endPayslipDate}
+                    endDate={payslipEndDate}
                     onDatesChange={this.onPayslipDatesChange}
                     focusedInput={focusedInputPayslipDate}
                     onFocusChange={focusedInput => this.setState({ focusedInputPayslipDate: focusedInput })}
-                    startDateId="startPayslipDate"
-                    endDateId="endPayslipDate"
+                    startDateId="payslipStartDate"
+                    endDateId="payslipEndDate"
                   />
                 </div>
               </div>
@@ -150,14 +150,14 @@ class OwedHoursFilter extends React.Component {
                     showClearDates
                     isOutsideRange={() => false}
                     displayFormat={'DD-MM-YYYY'}
-                    startDate={startPayslipDate}
+                    startDate={payslipStartDate}
                     keepOpenOnDateSelect={false}
-                    endDate={endPayslipDate}
+                    endDate={payslipEndDate}
                     onDatesChange={this.onPayslipDatesChange}
                     focusedInput={focusedInputPayslipDate}
                     onFocusChange={focusedInput => this.setState({ focusedInputPayslipDate: focusedInput })}
-                    startDateId="startPayslipDate"
-                    endDateId="endPayslipDate"
+                    startDateId="payslipStartDate"
+                    endDateId="payslipEndDate"
                   />
                 </div>
               </div>
