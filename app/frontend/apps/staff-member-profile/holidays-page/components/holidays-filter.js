@@ -34,13 +34,11 @@ class HolidaysFilter extends React.Component {
 
   onUpdate = () => {
     const { startDate, endDate, startPayslipDate, endPayslipDate } = this.state;
-    if (startDate && endDate) {
-      const formatedStartDate = startDate.format(utils.apiDateFormat);
-      const formatedEndDate = endDate.format(utils.apiDateFormat);
-      const formatedStartPayslipDate = startPayslipDate && startPayslipDate.format(utils.apiDateFormat);
-      const formatedEndPayslipDate = endPayslipDate && endPayslipDate.format(utils.apiDateFormat);
-      return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
-    }
+    const formatedStartDate = startDate && startDate.format(utils.apiDateFormat);
+    const formatedEndDate = endDate && endDate.format(utils.apiDateFormat);
+    const formatedStartPayslipDate = startPayslipDate && startPayslipDate.format(utils.apiDateFormat);
+    const formatedEndPayslipDate = endPayslipDate && endPayslipDate.format(utils.apiDateFormat);
+    return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
   };
 
   render() {
