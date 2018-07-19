@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import humanize from 'string-humanize';
 import pluralize from 'pluralize';
+import oFetch from 'o-fetch';
 
 import ContentModal from '~/components/content-modal';
 
@@ -25,14 +26,15 @@ import ProfileWrapper from '../../profile-wrapper';
 
 const mapStateToProps = (state) => {
   return {
-    staffMember: state.getIn(['profile','staffMember']),
-    owedHours: state.getIn(['owedHours','owedHours']),
+    staffMember: state.getIn(['profile', 'staffMember']),
+    owedHours: state.getIn(['owedHours', 'owedHours']),
     newOwedHour: state.getIn(['owedHours', 'newOwedHour']),
     editOwedHour: state.getIn(['owedHours', 'editOwedHour']),
     editedOwedHours: state.getIn(['owedHours', 'editedOwedHours']),
     disabled: state.getIn(['profile', 'staffMember', 'disabled']),
     startDate: state.getIn(['owedHours', 'startDate']),
     endDate: state.getIn(['owedHours', 'endDate']),
+    permissionsData: state.getIn(['owedHours', 'permissionsData']),
     payslipStartDate: state.getIn(['owedHours', 'payslipStartDate']),
     payslipEndDate: state.getIn(['owedHours', 'payslipEndDate']),
   };
@@ -55,10 +57,10 @@ const mapDispatchToProps = (dispatch) => {
 @connect(mapStateToProps, mapDispatchToProps)
 class OwedHours extends React.PureComponent {
 
-  constructor(props){
+  constructor(props) {
     super(props);
   }
-  
+
   onAddNew = () => {
     this.props.actions.addNewOwedHours();
   }
@@ -98,25 +100,30 @@ class OwedHours extends React.PureComponent {
         filter,
       }
     } = this.props;
+
+    const permissionsData = oFetch(this, 'props.permissionsData').toJS();
+    const canCreateOwedHours = oFetch(permissionsData, 'canCreateOwedHours');
+    const owedHoursPermissions = oFetch(permissionsData, 'owedHoursPermissions');
+
     return (
       <ProfileWrapper currentPage="owed_hours">
         <section className="boss-board">
           <ContentModal
-              show={newOwedHour}
-              onClose={() => this.onCancelAddNew()}
-              title="Add owed hours"
-            >
+            show={newOwedHour}
+            onClose={() => this.onCancelAddNew()}
+            title="Add owed hours"
+          >
             <AddNewOwedHours
-              />
+            />
           </ContentModal>
           <ContentModal
             show={editOwedHour}
             onClose={() => this.onCanceEdit()}
             title="Edit owed hours"
           >
-            <EditOwedHours owedHour={editedOwedHours}/>
+            <EditOwedHours owedHour={editedOwedHours} />
           </ContentModal>
-          <OwedHoursHeader isStaffMemberDisabled={disabled} title="Owed hours" onAddNew={this.onAddNew} />
+          <OwedHoursHeader canCreateOwedHours={canCreateOwedHours} isStaffMemberDisabled={disabled} title="Owed hours" onAddNew={this.onAddNew} />
           <div className="boss-board__main">
             <div className="boss-board__manager">
               <OwedHoursFilter
@@ -126,7 +133,13 @@ class OwedHours extends React.PureComponent {
                 payslipStartDate={payslipStartDate}
                 payslipEndDate={payslipEndDate}
               />
-              <OwedHoursTable isStaffMemberDisabled={disabled} owedHours={owedHours} deleteOwedHours={deleteOwedHours} openEditModal={openEditModal} />
+              <OwedHoursTable
+                isStaffMemberDisabled={disabled}
+                owedHours={owedHours}
+                deleteOwedHours={deleteOwedHours}
+                openEditModal={openEditModal}
+                owedHoursPermissions={owedHoursPermissions}
+              />
             </div>
           </div>
         </section>

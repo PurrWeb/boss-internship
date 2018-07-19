@@ -6,6 +6,17 @@ import confirm from '~/lib/confirm-utils';
 
 import OwedHoursMobileItem from './owed-hours-mobile-item';
 
+function getOwedHourPermissions(owedHour, permissions) {
+  const owedHourId = oFetch(owedHour, 'id');
+  const owedHourPermissions = permissions[owedHourId];
+
+  if (!owedHourPermissions) {
+    throw new Error(`Permission for owed hour with id: ${owedHourId}, doesn't present on owedHoursPermissions object`);
+  }
+
+  return owedHourPermissions;
+}
+
 export const getOwedHourUIData = (owedHourJS) => {
   let hasDate = oFetch(owedHourJS, 'hasDate');
   const date = safeMoment.uiDateParse(oFetch(owedHourJS, 'date')).format('ddd DD MMM YYYY');
@@ -34,12 +45,13 @@ const ActionsCell = ({
   owedHour,
   editable,
   isStaffMemberDisabled,
+  owedHourPermissions,
 }) => {
 
   const onEdit = (owedHour) => {
     openEditModal(owedHour);
   }
-  
+
   const onDelete = (owedHourId) => {
     confirm('Are you sure ?', {
       title: 'Delete owed hours',
@@ -49,26 +61,29 @@ const ActionsCell = ({
     });
   }
 
+  const isEditable = oFetch(owedHourPermissions, 'isEditable');
+  const isDeletable = oFetch(owedHourPermissions, 'isDeletable');
+
   return (
     <div className="boss-table__cell">
-      { (editable && !isStaffMemberDisabled) && <div className="boss-table__info">
+      {(editable && !isStaffMemberDisabled) && <div className="boss-table__info">
         <p className="boss-table__label">{label}</p>
         <p className="boss-table__actions">
-          <button
+          {isEditable && <button
             onClick={() => (onEdit(owedHour))}
             className="boss-button boss-button_type_small boss-button_role_update boss-table__action"
-          >Edit</button>
-          <button
+          >Edit</button>}
+          {isDeletable && <button
             onClick={() => (onDelete(owedHourId))}
             className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
-          >Delete</button>
+          >Delete</button>}
         </p>
-      </div> }
+      </div>}
     </div>
   )
 }
 
-const SimpleCell = ({label, text}) => {
+const SimpleCell = ({ label, text }) => {
   return (
     <div className="boss-table__cell">
       <div className="boss-table__info">
@@ -79,7 +94,7 @@ const SimpleCell = ({label, text}) => {
   )
 }
 
-const CreatedByCell = ({label, creator, created}) => {
+const CreatedByCell = ({ label, creator, created }) => {
   return (
     <div className="boss-table__cell">
       <div className="boss-table__info">
@@ -97,19 +112,19 @@ const CreatedByCell = ({label, creator, created}) => {
   )
 }
 
-const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {
-    const owedHourJS = owedHour.toJS();
-    const [
-      date,
-      times,
-      durationHours,
-      durationMinutes,
-      creator,
-      created,
-      note,
-      editable,
-      payslipDate,
-    ] = oFetch(getOwedHourUIData(owedHourJS), "date", "times", "durationHours", "durationMinutes", "creator", "created", "note", "editable", "payslipDate");
+const Row = ({ owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled, owedHourPermissions }) => {
+  const owedHourJS = owedHour.toJS();
+  const [
+    date,
+    times,
+    durationHours,
+    durationMinutes,
+    creator,
+    created,
+    note,
+    editable,
+    payslipDate,
+  ] = oFetch(getOwedHourUIData(owedHourJS), "date", "times", "durationHours", "durationMinutes", "creator", "created", "note", "editable", "payslipDate");
 
   return (
     <div className="boss-table__row">
@@ -128,6 +143,7 @@ const Row = ({owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled}) 
         openEditModal={openEditModal}
         owedHour={owedHour}
         isStaffMemberDisabled={isStaffMemberDisabled}
+        owedHourPermissions={owedHourPermissions}
       />
     </div>
   )
@@ -148,7 +164,7 @@ const Header = () => {
   )
 }
 
-const OwedStats = ({week}) => {
+const OwedStats = ({ week }) => {
   const startDate = safeMoment.uiDateParse(week.get('startDate')).format('ddd DD MMM YYYY');
   const endDate = safeMoment.uiDateParse(week.get('endDate')).format('ddd DD MMM YYYY');
   return (
@@ -164,15 +180,28 @@ const OwedStats = ({week}) => {
 };
 
 
-const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMemberDisabled}) => {
+const OwedHoursTable = (props) => {
+  const [
+    owedHours,
+    deleteOwedHours,
+    openEditModal,
+    isStaffMemberDisabled,
+    owedHoursPermissions
+  ] = oFetch(props, 'owedHours', 'deleteOwedHours', 'openEditModal', 'isStaffMemberDisabled', 'owedHoursPermissions');
+
   const renderRows = (owedHours, deleteOwedHours, openEditModal) => {
     return owedHours.map(owedHour => {
+      const owedHourJS = owedHour.toJS();
+      const owedHourId = oFetch(owedHourJS, 'id');
+      const owedHourPermissions = getOwedHourPermissions(owedHourJS, owedHoursPermissions)
+
       return <Row
-        key={`${owedHour.get('id')}`}
+        key={`${owedHourId}`}
         owedHour={owedHour}
         deleteOwedHours={deleteOwedHours}
         openEditModal={openEditModal}
         isStaffMemberDisabled={isStaffMemberDisabled}
+        owedHourPermissions={owedHourPermissions}
       />
     });
   }
@@ -191,12 +220,11 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMembe
 
 
   const renderOwedhours = (owedHours) => {
-
     return owedHours.map((owedHour, index) => {
       return (
         <div key={index} className="boss-board__manager-group boss-board__manager-group_context_stack">
           <div className="boss-board__manager-stats boss-board__manager-stats_role_group-header">
-            <OwedStats week={owedHour.get('week')}/>
+            <OwedStats week={owedHour.get('week')} />
           </div>
           <div className="boss-board__manager-table">
             <div className="boss-table boss-table_page_smp-owed-hours">
@@ -214,10 +242,10 @@ const OwedHoursTable = ({owedHours, deleteOwedHours, openEditModal, isStaffMembe
 
   return (
     <div>
-      { hasOwedHours
-          ? renderOwedhours(owedHours)
-          : <h1 className="boss-table__cell boss-table__cell_role_header">
-              NO OWED HOURS FOUND
+      {hasOwedHours
+        ? renderOwedhours(owedHours)
+        : <h1 className="boss-table__cell boss-table__cell_role_header">
+          NO OWED HOURS FOUND
             </h1>
       }
     </div>

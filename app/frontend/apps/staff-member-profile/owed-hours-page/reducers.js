@@ -28,6 +28,7 @@ const initialState = fromJS({
   endDate: null,
   payslipStartDate: null,
   payslipEndDate: null,
+  permissionsData: {}
 });
 
 const owedHoursReducer = handleActions({
@@ -42,6 +43,11 @@ const owedHoursReducer = handleActions({
       payslipEndDate,
     } = action.payload;
 
+    const permissionsData = oFetch(action.payload, 'permissionsData');
+    const canEnable = oFetch(permissionsData, 'canEnable');
+    const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
+    const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
+
     return state
       .set('staffMember', fromJS(staffMember))
       .set('accessToken', fromJS(accessToken))
@@ -50,6 +56,7 @@ const owedHoursReducer = handleActions({
       .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
       .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
       .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
+      .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }))
   },
   [ADD_NEW_OWED_HOUR]: (state) => {
     return state
@@ -68,8 +75,8 @@ const owedHoursReducer = handleActions({
   },
   [CLOSE_EDIT_OWED_HOURS_MODAL]: (state, action) => {
     return state
-    .set('editedOwedHours', fromJS({}))
-    .set('editOwedHour', false);
+      .set('editedOwedHours', fromJS({}))
+      .set('editOwedHour', false);
   },
   [EDIT_OWED_HOURS_SUCCESS]: (state, action) => {
     return state
@@ -99,11 +106,11 @@ const owedHoursReducer = handleActions({
     } = action.payload;
 
     return state
-    .set('owedHours', fromJS(owedHours))
-    .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
-    .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
-    .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
-    .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
+      .set('owedHours', fromJS(owedHours))
+      .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
+      .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
+      .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
+      .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
   }
 }, initialState);
 

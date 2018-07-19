@@ -263,8 +263,10 @@ class StaffMembersController < ApplicationController
         filter_payslip_end_date: owed_hours_tab_payslip_end_date_from_params,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
-          current_user: current_user
-        )
+          current_user: current_user,
+          owed_hours: owed_hours,
+        ),
+        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
       }
     end
   end

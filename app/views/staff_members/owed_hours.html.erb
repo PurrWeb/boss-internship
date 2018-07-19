@@ -28,7 +28,8 @@
       endDate: filter_end_date.present? ? UIRotaDate.format(filter_end_date) : nil,
       payslipStartDate: filter_payslip_start_date.present? ? UIRotaDate.format(filter_payslip_start_date) : nil,
       payslipEndDate: filter_payslip_end_date.present? ? UIRotaDate.format(filter_payslip_end_date) : nil,
-      permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
+      permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions),
+      isAdminPlus: is_admin_plus,
     }
   )
 %>

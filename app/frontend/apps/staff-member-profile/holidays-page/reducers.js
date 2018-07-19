@@ -39,7 +39,7 @@ const initialState = fromJS({
   isAdminPlus: null,
   startPayslipDate: null,
   endPayslipDate: null,
-  permissionsData: fromJS({})
+  permissionsData: {}
 });
 
 const holidaysReducer = handleActions({
