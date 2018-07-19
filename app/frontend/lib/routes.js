@@ -21,6 +21,19 @@ const staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
     }
 }
 
+//Shared Helpers
+const staffMemberProfileHolidaysTabPath = function(params){
+  const staffMemberId = oFetch(params, 'staffMemberId')
+  const mStartDate = params.mStartDate;
+  const mEndDate = params.mEndDate;
+
+  let result = "/staff_members/" + staffMemberId + "/holidays";
+  if(mStartDate !== undefined && mEndDate !== undefined){
+    result = result + "?start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_da,te=" + mEndDate.format(utils.apiDateFormat);
+  }
+  return result;
+}
+
 export const appRoutes = {
     rota: function (options){
         var [venueId, date] = oFetch(options, "venueId", "date");
@@ -154,25 +167,17 @@ export const appRoutes = {
         }
         return "/staff_members/" + staffMemberId;
     },
-    staffMemberProfileHolidaysTab: function(params){
-      const staffMemberId = oFetch(params, 'staffMemberId')
-      const mStartDate = params.mStartDate;
-      const mEndDate = params.mEndDate;
-
-      let result = "/staff_members/" + staffMemberId + "/holidays";
-      if(mStartDate !== undefined && mEndDate !== undefined){
-        result = result + "?start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_da,te=" + mEndDate.format(utils.apiDateFormat);
-      }
-      return result;
-    },
+    staffMemberProfileHolidaysTab: staffMemberProfileHolidaysTabPath,
     staffMemberProfileHolidaysTabFromFinanceReport: function(params) {
       const staffMemberId = oFetch(params, 'staffMemberId')
       const mStartDate = oFetch(params, 'mStartDate');
       const mEndDate = oFetch(params, 'mEndDate');
 
-      let result = "/staff_members/" + staffMemberId + "/holidays";
-      result = result + `?start_date=${mStartDate.format(utils.apiDateFormat)}&end_date=${mEndDate.format(utils.apiDateFormat)}`;
-      return result;
+      return staffMemberProfileHolidaysTabPath({
+        staffMemberId: staffMemberId,
+        mStartDate: mStartDate,
+        mEndDate: mEndDate
+      })
     },
     staffMemberOwedHours: function(staffMemberId, dStartDate, dEndDate){
         if (staffMemberId === undefined) {
