@@ -103,7 +103,13 @@ const owedHoursReducer = handleActions({
       endDate,
       payslipStartDate,
       payslipEndDate,
+      permissionsData,
     } = action.payload;
+
+    const permissionsData = oFetch(action.payload, 'permissionsData');
+    const canEnable = oFetch(permissionsData, 'canEnable');
+    const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
+    const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
 
     return state
       .set('owedHours', fromJS(owedHours))
@@ -111,6 +117,8 @@ const owedHoursReducer = handleActions({
       .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
       .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
       .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
+      .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }))
+
   }
 }, initialState);
 
