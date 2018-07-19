@@ -26,10 +26,23 @@ const staffMemberProfileHolidaysTabPath = function(params){
   const staffMemberId = oFetch(params, 'staffMemberId')
   const mStartDate = params.mStartDate;
   const mEndDate = params.mEndDate;
+  const mPayslipStartDate = params.mPayslipStartDate;
+  const mPayslipEndDate = params.mPayslipEndDate;
+  const filteringByDate = mStartDate !== undefined && mEndDate !== undefined;
+  const filteringByPayslipDate = mPayslipStartDate !== undefined && mPayslipEndDate !== undefined;
 
   let result = "/staff_members/" + staffMemberId + "/holidays";
-  if(mStartDate !== undefined && mEndDate !== undefined){
-    result = result + "?start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_da,te=" + mEndDate.format(utils.apiDateFormat);
+  if(filteringByDate || filteringByPayslipDate){
+    result = result + "?"
+    if(filteringByDate){
+      result = result + "start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_date=" + mEndDate.format(utils.apiDateFormat);
+    }
+    if(filteringByPayslipDate){
+      if(filteringByPayslipDate){
+        result = result + "&"
+      }
+      result = result + "payslip_start_date=" + mStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mEndDate.format(utils.apiDateFormat);
+    }
   }
   return result;
 }
