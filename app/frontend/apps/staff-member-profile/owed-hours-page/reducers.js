@@ -103,7 +103,6 @@ const owedHoursReducer = handleActions({
       endDate,
       payslipStartDate,
       payslipEndDate,
-      permissionsData,
     } = action.payload;
 
     const permissionsData = oFetch(action.payload, 'permissionsData');
