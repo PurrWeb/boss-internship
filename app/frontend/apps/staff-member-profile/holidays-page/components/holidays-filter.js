@@ -2,6 +2,8 @@ import React from 'react';
 import { DateRangePicker } from 'react-dates';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
+import utils from "~/lib/utils";
+
 class HolidaysFilter extends React.Component {
   constructor(props) {
     super(props);
@@ -33,10 +35,10 @@ class HolidaysFilter extends React.Component {
   onUpdate = () => {
     const { startDate, endDate, startPayslipDate, endPayslipDate } = this.state;
     if (startDate && endDate) {
-      const formatedStartDate = startDate.format('DD-MM-YYYY');
-      const formatedEndDate = endDate.format('DD-MM-YYYY');
-      const formatedStartPayslipDate = startPayslipDate && startPayslipDate.format('DD-MM-YYYY');
-      const formatedEndPayslipDate = endPayslipDate && endPayslipDate.format('DD-MM-YYYY');
+      const formatedStartDate = startDate.format(utils.apiDateFormat);
+      const formatedEndDate = endDate.format(utils.apiDateFormat);
+      const formatedStartPayslipDate = startPayslipDate && startPayslipDate.format(utils.apiDateFormat);
+      const formatedEndPayslipDate = endPayslipDate && endPayslipDate.format(utils.apiDateFormat);
       return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
     }
   };
