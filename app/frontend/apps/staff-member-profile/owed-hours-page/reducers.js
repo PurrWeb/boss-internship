@@ -18,17 +18,17 @@ import {
 } from './constants';
 
 const initialState = fromJS({
-  staffMember: {},
+  staffMember: fromJS({}),
   accessToken: null,
-  owedHours: [],
+  owedHours: fromJS([]),
   newOwedHour: false,
   editOwedHour: false,
-  editedOwedHours: {},
+  editedOwedHours: fromJS({}),
   startDate: null,
   endDate: null,
   payslipStartDate: null,
   payslipEndDate: null,
-  permissionsData: {}
+  permissionsData: fromJS({})
 });
 
 const owedHoursReducer = handleActions({
@@ -111,7 +111,7 @@ const owedHoursReducer = handleActions({
     const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
 
     return state
-      .set('owedHours', fromJS(owedHours))
+      .set('owedHours', fromJS(owedHours || []))
       .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
       .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
       .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
