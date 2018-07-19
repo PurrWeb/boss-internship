@@ -13,23 +13,19 @@ module Api
 
           holiday_start_date = holiday_start_date_from_params
           holiday_end_date = holiday_end_date_from_params
+          holiday_payslip_start_date = holiday_payslip_start_date_from_params
+          holiday_payslip_end_date = holiday_payslip_end_date_from_params
 
-          filtered_holidays = InRangeQuery.new(
-            relation: staff_member.active_holidays.includes([:creator]),
-            start_value: holiday_start_date,
-            end_value: holiday_end_date,
-            start_column_name: 'start_date',
-            end_column_name: 'end_date'
-          ).all.includes(:creator)
-
-          filtered_holiday_requests = InRangeQuery.new(
-            relation: staff_member.holiday_requests.includes([:creator]),
-            start_value: holiday_start_date,
-            end_value: holiday_end_date,
-            start_column_name: 'start_date',
-            end_column_name: 'end_date'
+          index_query = StaffMemberProfileHolidayIndexQuery.new(
+            staff_member: staff_member,
+            start_date: holiday_start_date,
+            end_date: holiday_end_date,
+            payslip_start_date: holiday_payslip_start_date,
+            payslip_end_date: holiday_payslip_end_date
           )
-          .all
+
+          filtered_holidays = index_query.holidays.includes(:creator, holiday_request: [:creator])
+          filtered_holiday_requests = index_query.holiday_requests.includes([:creator])
 
           holidays_in_tax_year = HolidayInTaxYearQuery.new(
            relation: staff_member.active_holidays,
@@ -62,8 +58,10 @@ module Api
               paid_holiday_days: paid_holiday_days,
               unpaid_holiday_days: unpaid_holiday_days,
               estimated_accrued_holiday_days: estimated_accrued_holiday_days,
-              holiday_start_date: holiday_start_date,
-              holiday_end_date: holiday_end_date,
+              holiday_start_date: holiday_start_date && UIRotaDate.format(holiday_start_date),
+              holiday_end_date: holiday_end_date && UIRotaDate.format(holiday_end_date),
+              start_payslip_date: holiday_payslip_start_date && UIRotaDate.format(holiday_payslip_start_date),
+              end_payslip_date: holiday_payslip_end_date && UIRotaDate.format(holiday_payslip_end_date),
               permissions_data: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
             },
             status: :ok
@@ -199,23 +197,19 @@ module Api
       end
 
       def holiday_start_date_from_params
-        start_date_from_params = UIRotaDate.parse_if_present(params['start_date'])
-        if start_date_from_params.present?
-          start_date_from_params
-        else
-          tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-          tax_year.start_date
-        end
+        UIRotaDate.parse_if_present(params['start_date'])
       end
 
       def holiday_end_date_from_params
-        end_date_from_params = UIRotaDate.parse_if_present(params['end_date'])
-        if end_date_from_params.present?
-          end_date_from_params
-        else
-          tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
-          tax_year.end_date
-        end
+        UIRotaDate.parse_if_present(params['end_date'])
+      end
+
+      def holiday_payslip_start_date_from_params
+        UIRotaDate.parse_if_present(params['payslip_start_date'])
+      end
+
+      def holiday_payslip_end_date_from_params
+        UIRotaDate.parse_if_present(params['payslip_end_date'])
       end
     end
   end

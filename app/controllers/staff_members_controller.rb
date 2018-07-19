@@ -92,6 +92,7 @@ class StaffMembersController < ApplicationController
       holiday_end_date = holiday_end_date_from_params
 
       index_query = StaffMemberProfileHolidayIndexQuery.new(
+        staff_member: staff_member,
         start_date: holiday_start_date,
         end_date: holiday_end_date,
         payslip_start_date: holiday_tab_payslip_start_date_from_params,

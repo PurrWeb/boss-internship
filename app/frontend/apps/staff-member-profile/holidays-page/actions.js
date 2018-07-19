@@ -2,6 +2,8 @@ import { createAction } from 'redux-actions';
 import axios from 'axios';
 import oFetch from 'o-fetch';
 import notify from '~/components/global-notification';
+import { apiRoutes } from '~/lib/routes';
+import safeMoment from "~/lib/safe-moment";
 
 import { updateAvatar } from './requests';
 
@@ -294,16 +296,23 @@ const updateHolidaysCount = (accessToken, staffMemberId) => {
   );
 };
 
-export const filter = (startDate, endDate, startPayslipDate, endPayslipDate) => (dispatch, getState) => {
+export const filter = (sStartDate, sEndDate, sStartPayslipDate, sEndPayslipDate) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
-  let queryString = `holidays?start_date=${startDate}&end_date=${endDate}`;
-  if(startPayslipDate && endPayslipDate) {
-    queryString = `holidays?start_date=${startDate}&end_date=${endDate}&start_payslip_date=${startPayslipDate}&end_payslip_date=${endPayslipDate}`;
-  }
+  const mStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
+  const mEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
+  const mPayslipStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
+  const mPayslipEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
+  const getUrl = apiRoutes.staffMemberProfileHolidaysIndex.getPath({
+    staffMemberId: staffMemberId,
+    mStartDate: mStartDate,
+    mEndDate: mEndDate,
+    mPayslipStartDate: mPayslipStartDate,
+    mPayslipEndDate: mPayslipEndDate
+  })
   return axios
     .get(
-      `/api/v1/staff_members/${staffMemberId}/${queryString}`,
+      getUrl,
       {
         headers: {
           Authorization: `Token token="${accessToken}"`,
@@ -318,7 +327,7 @@ export const filter = (startDate, endDate, startPayslipDate, endPayslipDate) => 
       window.history.pushState(
         'state',
         'title',
-        `${queryString}`,
+        `${getUrl}`,
       );
     });
 };
