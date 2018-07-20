@@ -7,7 +7,7 @@ module.exports = function(env) {
   const config = getConfig(env);
 
   config.mode = 'development';
-  config.devtool = 'eval';
+  config.devtool = 'source-map';
   config.optimization.nodeEnv = 'development';
 
   config.plugins.push(new HardSourceWebpackPlugin({
