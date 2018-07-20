@@ -109,7 +109,7 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className={owedHoursClassName}>
-            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId})} className="boss-table__link">
+            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className="boss-table__link">
               {owedHours}
             </a>
           </div>
