@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import axios from 'axios';
 import oFetch from 'o-fetch';
 import notify from '~/components/global-notification';
-import { apiRoutes } from '~/lib/routes';
+import { apiRoutes, appRoutes } from '~/lib/routes';
 import safeMoment from "~/lib/safe-moment";
 
 import { updateAvatar } from './requests';
@@ -303,7 +303,14 @@ export const filter = (sStartDate, sEndDate, sStartPayslipDate, sEndPayslipDate)
   const mEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
   const mPayslipStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
   const mPayslipEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
-  const getUrl = apiRoutes.staffMemberProfileHolidaysIndex.getPath({
+  const getApiUrl = apiRoutes.staffMemberProfileHolidaysIndex.getPath({
+    staffMemberId: staffMemberId,
+    mStartDate: mStartDate,
+    mEndDate: mEndDate,
+    mPayslipStartDate: mPayslipStartDate,
+    mPayslipEndDate: mPayslipEndDate
+  })
+  const getWebUrl = appRoutes.staffMemberProfileHolidaysTab({
     staffMemberId: staffMemberId,
     mStartDate: mStartDate,
     mEndDate: mEndDate,
@@ -312,7 +319,7 @@ export const filter = (sStartDate, sEndDate, sStartPayslipDate, sEndPayslipDate)
   })
   return axios
     .get(
-      getUrl,
+      getApiUrl,
       {
         headers: {
           Authorization: `Token token="${accessToken}"`,
@@ -327,7 +334,7 @@ export const filter = (sStartDate, sEndDate, sStartPayslipDate, sEndPayslipDate)
       window.history.pushState(
         'state',
         'title',
-        `${getUrl}`,
+        `${getWebUrl}`,
       );
     });
 };
