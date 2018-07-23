@@ -37,7 +37,9 @@ const initialState = fromJS({
   editHoliday: false,
   editedHoliday: {},
   isAdminPlus: null,
-  permissionsData: fromJS({})
+  startPayslipDate: null,
+  endPayslipDate: null,
+  permissionsData: {}
 });
 
 const holidaysReducer = handleActions({
@@ -52,7 +54,9 @@ const holidaysReducer = handleActions({
       estimatedAccruedHolidayDays,
       holidayStartDate,
       holidayEndDate,
-      isAdminPlus
+      isAdminPlus,
+      startPayslipDate,
+      endPayslipDate,
     } = action.payload;
 
     const permissionsData = oFetch(action.payload, 'permissionsData');
@@ -65,10 +69,12 @@ const holidaysReducer = handleActions({
       .set('paidHolidayDays', fromJS(paidHolidayDays))
       .set('unpaidHolidayDays', fromJS(unpaidHolidayDays))
       .set('estimatedAccruedHolidayDays', fromJS(estimatedAccruedHolidayDays))
-      .set('holidayStartDate', safeMoment.uiDateParse(holidayStartDate))
-      .set('holidayEndDate', safeMoment.uiDateParse(holidayEndDate))
+      .set('holidayStartDate', holidayStartDate ? safeMoment.uiDateParse(holidayStartDate) : null)
+      .set('holidayEndDate', holidayEndDate ? safeMoment.uiDateParse(holidayEndDate) : null)
       .set('isAdminPlus', isAdminPlus)
       .set('permissionsData', fromJS(permissionsData))
+      .set('startPayslipDate', startPayslipDate ? safeMoment.uiDateParse(startPayslipDate) : null)
+      .set('endPayslipDate', endPayslipDate ? safeMoment.uiDateParse(endPayslipDate) : null)
   },
   [UPDATE_HOLIDAYS_COUNT]: (state, action) => {
     const {
@@ -95,36 +101,46 @@ const holidaysReducer = handleActions({
 
     return state
       .update('holidays',
-      (holidays) => holidays.filter(
-        (item) => item.get('id') !== id
+        (holidays) => holidays.filter(
+          (item) => item.get('id') !== id
+        )
       )
-    )
   },
   [DELETE_HOLIDAY_REQUEST]: (state, action) => {
     const id = action.payload.id
 
     return state
       .update('holidayRequests',
-      (holidays) => holidays.filter(
-        (item) => item.get('id') !== id
+        (holidays) => holidays.filter(
+          (item) => item.get('id') !== id
+        )
       )
-    )
   },
   [EDIT_HOLIDAY_SUCCESS]: (state, action) => {
-    const editedItem = fromJS(action.payload);
-    const id = editedItem.get('id');
-    const index = state.get('holidays').findIndex(item => item.get("id") === id);
+    const payloadJS = oFetch(action, 'payload');
+    const holidayJS = oFetch(payloadJS, 'holiday');
+    const holidayId = oFetch(holidayJS, 'id');
+    const permissions = oFetch(payloadJS, 'permissions');
+    const index = state.get('holidays').findIndex(item => item.get("id") === holidayId);
 
     return state
-      .setIn(['holidays', index], editedItem)
+      .setIn(['holidays', index], fromJS(holidayJS))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(holidayId, fromJS(permissions)),
+    );
   },
   [EDIT_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
-    const editedItem = fromJS(action.payload);
-    const id = editedItem.get('id');
-    const index = state.get('holidayRequests').findIndex(item => item.get("id") === id);
+    const payloadJS = fromJS(action.payload);
+    const editedHolidayRequestJS = oFetch(payloadJS, 'holidayRequest');
+    const holidayRequestPermissions = oFetch(payloadJS, 'permissions');
+    const holidayRequestId = oFetch(editedHolidayRequestJS, 'id');
+    const index = state.get('holidayRequests').findIndex(item => item.get("id") === holidayRequestId);
 
     return state
-      .setIn(['holidayRequests', index], editedItem)
+      .setIn(['holidayRequests', index], fromJS(editedHolidayRequestJS))
+      .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
+        holidayRequestsPermissions.set(holidayRequestId, fromJS(holidayRequestsPermissions)),
+    );
   },
   [ADD_HOLIDAY_SUCCESS]: (state, action) => {
     const newHoliday = oFetch(action, 'payload.newHoliday');
@@ -135,7 +151,7 @@ const holidaysReducer = handleActions({
       .update('holidays', holidays => holidays.push(fromJS(newHoliday)))
       .updateIn(['permissionsData', 'holidaysTab', 'holidays'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(newHolidayId, fromJS(newPermissions)),
-      );
+    );
   },
   [ADD_HOLIDAY_REQUEST_SUCCESS]: (state, action) => {
     const newHolidayRequest = oFetch(action, 'payload.newHolidayRequest');
@@ -146,7 +162,7 @@ const holidaysReducer = handleActions({
       .update('holidayRequests', holidays => holidays.push(fromJS(newHolidayRequest)))
       .updateIn(['permissionsData', 'holidaysTab', 'holidayRequests'], holidayRequestsPermissions =>
         holidayRequestsPermissions.set(newHolidayRequestId, fromJS(newPermissions)),
-      );
+    );
   },
   [CLOSE_HOLIDAY_MODAL]: (state) => {
     return state
@@ -155,7 +171,7 @@ const holidaysReducer = handleActions({
   [OPEN_EDIT_HOLIDAY_MODAL]: (state, action) => {
     return state
       .set('editHoliday', true)
-      .set('editedHoliday',fromJS(action.payload))
+      .set('editedHoliday', fromJS(action.payload))
   },
   [CLOSE_EDIT_HOLIDAY_MODAL]: (state) => {
     return state
@@ -172,9 +188,12 @@ const holidaysReducer = handleActions({
       paid_holiday_days,
       unpaid_holiday_days,
       estimated_accrued_holiday_days,
-      holidayStartDate,
-      holidayEndDate,
+      holiday_start_date,
+      holiday_end_date,
+      start_payslip_date,
+      end_payslip_date,
       holiday_requests,
+      permissions_data,
     } = action.payload;
 
     return state
@@ -183,6 +202,11 @@ const holidaysReducer = handleActions({
       .set('paidHolidayDays', fromJS(paid_holiday_days))
       .set('unpaidHolidayDays', fromJS(unpaid_holiday_days))
       .set('estimatedAccruedHolidayDays', fromJS(estimated_accrued_holiday_days))
+      .set('holidayStartDate', holiday_start_date ? safeMoment.uiDateParse(holiday_start_date): null)
+      .set('holidayEndDate', holiday_end_date ? safeMoment.uiDateParse(holiday_end_date) : null)
+      .set('startPayslipDate', start_payslip_date ? safeMoment.uiDateParse(start_payslip_date) : null)
+      .set('endPayslipDate', end_payslip_date ? safeMoment.uiDateParse(end_payslip_date) : null)
+      .set('permissionsData', fromJS(permissions_data))
   }
 }, initialState);
 

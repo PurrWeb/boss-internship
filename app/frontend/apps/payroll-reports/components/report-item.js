@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
+import safeMoment from "~/lib/safe-moment";
 import { appRoutes } from '~/lib/routes';
 
 class ReportItem extends Component {
@@ -52,6 +53,8 @@ class ReportItem extends Component {
 
   render() {
     const report = oFetch(this.props, 'report');
+    const mStartDate = safeMoment.uiDateParse(oFetch(this.props, 'startDate'));
+    const mEndDate = safeMoment.uiDateParse(oFetch(this.props, 'endDate'));
     const fullName = oFetch(report, 'staffMemberName');
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
@@ -68,6 +71,15 @@ class ReportItem extends Component {
     const fullNameCellClassName = classNames({
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
+    });
+
+    const owedHoursClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': owedHours !== 0,
+    });
+    const holidayDaysCountClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0,
     });
     return (
       <div className="boss-table__row">
@@ -92,12 +104,12 @@ class ReportItem extends Component {
           <p className="boss-table__text">{weeklyHours}</p>
         </div>
         {owedHours === 0 ? (
-          <div className="boss-table__cell">
+          <div className={owedHoursClassName}>
             <p className="boss-table__text">{owedHours}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberOwedHours(staffMemberId)} className="boss-table__link">
+          <div className={owedHoursClassName}>
+            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className="boss-table__link">
               {owedHours}
             </a>
           </div>
@@ -120,12 +132,12 @@ class ReportItem extends Component {
           <p className="boss-table__text boss-table__text_role_important">{totalHoursCount}</p>
         </div>
         {holidayDaysCount === 0 ? (
-          <div className="boss-table__cell">
+          <div className={holidayDaysCountClassName}>
             <p className="boss-table__text">{holidayDaysCount}</p>
           </div>
         ) : (
-          <div className="boss-table__cell">
-            <a href={appRoutes.staffMemberHolidays(staffMemberId)} className="boss-table__link">
+          <div className={holidayDaysCountClassName}>
+            <a href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className="boss-table__link">
               {holidayDaysCount}
             </a>
           </div>

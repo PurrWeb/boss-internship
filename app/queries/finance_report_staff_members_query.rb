@@ -90,16 +90,16 @@ class FinanceReportStaffMembersQuery
         ).
         or(
           InRangeInclusive.new(
-            start_column: paid_holidays[:start_date],
-            end_column: paid_holidays[:end_date],
+            start_column: paid_holidays[:payslip_date],
+            end_column: paid_holidays[:payslip_date],
             start_value: start_date,
             end_value: end_date
           ).arel
         ).
         or(
           InRangeInclusive.new(
-            start_column: enabled_owed_hours[:date],
-            end_column: enabled_owed_hours[:date],
+            start_column: enabled_owed_hours[:payslip_date],
+            end_column: enabled_owed_hours[:payslip_date],
             start_value: start_date,
             end_value: end_date
           ).arel

@@ -68,6 +68,14 @@ const EditOwedHoursForm = ({
           required
         />
       </div>
+      <div className="boss-form__field">
+        <Field
+          name="payslipDate"
+          component={BossFormCalendar}
+          label="Payslip date"
+          required
+        />
+      </div>
       <div className="boss-form__row">
         <div className="boss-form__field boss-form__field_layout_half">
           <Field

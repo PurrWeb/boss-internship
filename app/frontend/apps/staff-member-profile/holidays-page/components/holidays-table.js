@@ -103,13 +103,13 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
   const id = oFetch(jsHoliday, 'id');
   const type = humanize(oFetch(jsHoliday, 'holiday_type'));
   const status = humanize(oFetch(jsHoliday, 'state'));
-  const startDate = safeMoment.uiDateParse(oFetch(jsHoliday, 'start_date')).format('DD MMM YYYY');
-  const endDate = safeMoment.uiDateParse(oFetch(jsHoliday, 'end_date')).format('DD MMM YYYY');
   const note = oFetch(jsHoliday, 'note') || '-';
   const creator = oFetch(jsHoliday, 'creator');
   const cerated = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const editable = oFetch(jsHoliday, 'editable');
   const isFrozen = oFetch(jsHoliday, 'frozen');
+  const sPayslipDate = oFetch(jsHoliday, 'payslip_date');
+  const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A';
 
   const holidayDaysCount = utils.getDaysCountFromInterval(
     oFetch(jsHoliday, 'start_date'),
@@ -142,6 +142,7 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
       <SimpleCell label="dates" text={utils.formatDateForHoliday(holiday.toJS())} />
       <SimpleCell label="note" text={note} />
       <CreatedByCell label="createdBy" creator={creator} created={cerated} />
+      <SimpleCell label="payslipDate" text={payslipDateText} />
       <ActionsCell
         label="actions"
         isEditable={isEditable}
@@ -165,7 +166,8 @@ const Header = () => {
       <div className="boss-table__cell boss-table__cell_role_header">Dates</div>
       <div className="boss-table__cell boss-table__cell_role_header">Note</div>
       <div className="boss-table__cell boss-table__cell_role_header">Created By</div>
-      <div className="boss-table__cell boss-table__cell_role_header">Action</div>
+      <div className="boss-table__cell boss-table__cell_role_header">Payslip Date</div>
+      <div className="boss-table__cell boss-table__cell_role_header" />
     </div>
   );
 };
@@ -187,7 +189,7 @@ const HolidaysTableDesktop = ({ holidays, deleteHoliday, onEditHoliday, isStaffM
   };
 
   return (
-    <div className="boss-table boss-table_page_smp-holidays">
+    <div className="boss-table boss-table_page_smp-holiday-requests">
       <Header />
       {renderHolidays(holidays)}
     </div>

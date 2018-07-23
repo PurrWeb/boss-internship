@@ -13,6 +13,8 @@ class FinanceReport < ActiveRecord::Base
   validates :week_start, presence: true
   validates :pay_rate_description, presence: true
   validates :accessories_cents, presence: true
+  validates_inclusion_of :contains_time_shifted_owed_hours, in: [true, false]
+  validates_inclusion_of :contains_time_shifted_holidays, in: [true, false]
   validates :monday_hours_count, numericality: { greater_than_or_equal_to: 0 }
   validates :tuesday_hours_count, numericality: { greater_than_or_equal_to: 0 }
   validates :wednesday_hours_count, numericality: { greater_than_or_equal_to: 0 }

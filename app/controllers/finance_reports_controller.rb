@@ -178,7 +178,7 @@ class FinanceReportsController < ApplicationController
   end
 
   def default_week
-    RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
+    RotaWeek.new(RotaShiftDate.to_rota_date(Time.current) - 1.week)
   end
 
   def index_redirect_params

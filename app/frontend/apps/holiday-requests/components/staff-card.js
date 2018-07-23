@@ -28,7 +28,7 @@ class StaffCard extends Component {
                   </div>
                   <div className="boss-user-summary__footer">
                     <a
-                      href={ appRoutes.staffMemberHolidays(staffMemberId) }
+                      href={ appRoutes.staffMemberProfileHolidaysTab({staffMemberId: staffMemberId}) }
                       className="boss-button boss-button_role_view-details-light boss-button_type_extra-small"
                     >
                       View All Holidays

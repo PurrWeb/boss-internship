@@ -9,7 +9,8 @@ describe HolidayCapValidator do
       holiday_type: holiday_type,
       staff_member: staff_member,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      payslip_date: payslip_date
     ).tap do |holiday|
       holiday.validate_as_creation = true
     end
@@ -21,6 +22,7 @@ describe HolidayCapValidator do
   let(:end_of_current_tax_year) { tax_year.end_date }
   let(:start_date) { now.to_date + 1.week }
   let(:end_date) { start_date }
+  let(:payslip_date) { start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:user) { FactoryGirl.create(:user) }
   let(:validator) { HolidayCapValidator.new(holiday) }
@@ -51,7 +53,8 @@ describe HolidayCapValidator do
             staff_member: staff_member,
             creator: user,
             start_date: previous_holiday_start_date,
-            end_date: previous_holiday_start_date
+            end_date: previous_holiday_start_date,
+            payslip_date: previous_holiday_start_date
           )
         end
       end
@@ -106,7 +109,8 @@ describe HolidayCapValidator do
                 staff_member: staff_member,
                 creator: user,
                 start_date: previous_holiday_start_date,
-                end_date: previous_holiday_start_date
+                end_date: previous_holiday_start_date,
+                payslip_date: previous_holiday_start_date
               )
             end
           end

@@ -11,8 +11,9 @@ class HolidayApiErrors
     result[:staffMember] = holiday.errors[:staff_member] if holiday.errors[:staff_member].present?
     result[:startDate] = holiday.errors[:start_date] if holiday.errors[:start_date].present?
     result[:endDate] = holiday.errors[:end_date] if holiday.errors[:end_date].present?
+    result[:payslipDate] = holiday.errors[:payslip_date] if holiday.errors[:payslip_date].present?
     result[:holidayType] = holiday.errors[:holiday_type] if holiday.errors[:holiday_type].present?
-    
+
     result
   end
 end

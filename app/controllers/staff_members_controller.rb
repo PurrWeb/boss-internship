@@ -85,33 +85,23 @@ class StaffMembersController < ApplicationController
     if can? :edit, staff_member
       tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
 
-      if holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
-        holiday_start_date = holiday_start_date_from_params
-        holiday_end_date = holiday_end_date_from_params
-      else
-        holiday_start_date = tax_year.start_date
-        holiday_end_date = tax_year.end_date
+      if !holiday_tab_params_present?
+        return redirect_to(holidays_staff_member_path(holiday_tab_params(staff_member: staff_member, tax_year: tax_year)))
       end
+      holiday_start_date = holiday_start_date_from_params
+      holiday_end_date = holiday_end_date_from_params
 
-      filtered_holidays = InRangeQuery.new(
-          relation: staff_member.active_holidays.includes([:creator]),
-          start_value: holiday_start_date,
-          end_value: holiday_end_date,
-          start_column_name: 'start_date',
-          end_column_name: 'end_date'
-        ).
-        all.
-        includes(holiday_request: [:creator])
-
-
-      filtered_holiday_requests = InRangeQuery.new(
-        relation: staff_member.holiday_requests.in_state(:pending, :rejected).includes([:creator]),
-        start_value: holiday_start_date,
-        end_value: holiday_end_date,
-        start_column_name: 'start_date',
-        end_column_name: 'end_date'
+      index_query = StaffMemberProfileHolidayIndexQuery.new(
+        staff_member: staff_member,
+        start_date: holiday_start_date,
+        end_date: holiday_end_date,
+        payslip_start_date: holiday_tab_payslip_start_date_from_params,
+        payslip_end_date: holiday_tab_payslip_end_date_from_params,
       )
-      .all
+
+      filtered_holidays = index_query.holidays.includes(:creator, holiday_request: [:creator])
+
+      filtered_holiday_requests = index_query.holiday_requests.includes([:creator])
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
        relation: staff_member.active_holidays,
@@ -154,6 +144,8 @@ class StaffMembersController < ApplicationController
         estimated_accrued_holiday_days: estimated_accrued_holiday_days,
         holiday_start_date: holiday_start_date,
         holiday_end_date: holiday_end_date,
+        holiday_start_payslip_date: holiday_tab_payslip_start_date_from_params,
+        holiday_end_payslip_date: holiday_tab_payslip_end_date_from_params,
         staff_types: StaffType.all,
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         gender_values: StaffMember::GENDERS,
@@ -189,9 +181,15 @@ class StaffMembersController < ApplicationController
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
     if can? :edit, staff_member
-      owed_hours = OwedHour.enabled.
-        where(staff_member: staff_member).
-        includes(creator: [:name]).all
+      index_query = StaffMemberProfileOwedHourIndexQuery.new(
+        staff_member: staff_member,
+        start_date: owed_hours_tab_start_date_from_params,
+        end_date: owed_hours_tab_end_date_from_params,
+        payslip_start_date: owed_hours_tab_payslip_start_date_from_params,
+        payslip_end_date: owed_hours_tab_payslip_end_date_from_params
+      )
+
+      owed_hours = index_query.all.includes(creator: [:name])
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
@@ -221,10 +219,16 @@ class StaffMembersController < ApplicationController
         venues: Venue.all,
         accessible_venue_ids: Venue.all.pluck(:id),
         accessible_pay_rates: accessible_pay_rate_ids,
+        filter_start_date: owed_hours_tab_start_date_from_params,
+        filter_end_date: owed_hours_tab_end_date_from_params,
+        filter_payslip_start_date: owed_hours_tab_payslip_start_date_from_params,
+        filter_payslip_end_date: owed_hours_tab_payslip_end_date_from_params,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
-          current_user: current_user
-        )
+          current_user: current_user,
+          owed_hours: owed_hours,
+        ),
+        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
       }
     end
   end
@@ -358,6 +362,28 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def holiday_tab_params_present?
+    holiday_tab_filtering_by_date? || holiday_tab_filtering_by_payslip_date?
+  end
+
+  def holiday_tab_filtering_by_date?
+    holiday_start_date_from_params.present? && holiday_end_date_from_params.present?
+  end
+
+  def holiday_tab_filtering_by_payslip_date?
+    holiday_tab_payslip_start_date_from_params.present? && holiday_tab_payslip_end_date_from_params.present?
+  end
+
+  def holiday_tab_params(staff_member:, tax_year:)
+    {
+      id: staff_member.id,
+      start_date: UIRotaDate.format(holiday_start_date_from_params || tax_year.start_date),
+      end_date: UIRotaDate.format(holiday_end_date_from_params || tax_year.end_date),
+      payslip_start_date: holiday_tab_payslip_start_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_start_date_from_params) : nil,
+      payslip_end_date: holiday_tab_payslip_end_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_end_date_from_params) : nil
+    }
+  end
+
   def payment_index_params_present?
     payment_filter_start_date_from_params.present? && payment_filter_end_date_from_params.present? && payment_filter_status_filter_from_params.present?
   end
@@ -377,6 +403,30 @@ class StaffMembersController < ApplicationController
       end_date: payment_filter_end_date_from_params,
       status_filter: payment_filter_status_filter_from_params
     }
+  end
+
+  def owed_hour_tab_filtering_by_date?
+    owed_hours_tab_start_date_from_params.present? && owed_hours_tab_end_date_from_params.present?
+  end
+
+  def owed_hour_tab_filtering_by_payslip_date?
+    owed_hours_tab_payslip_start_date_from_params.present? && owed_hours_tab_payslip_end_date_from_params.present?
+  end
+
+  def owed_hours_tab_start_date_from_params
+    UIRotaDate.parse_if_present(params["start_date"])
+  end
+
+  def owed_hours_tab_end_date_from_params
+    UIRotaDate.parse_if_present(params["end_date"])
+  end
+
+  def owed_hours_tab_payslip_start_date_from_params
+    UIRotaDate.parse_if_present(params["payslip_start_date"])
+  end
+
+  def owed_hours_tab_payslip_end_date_from_params
+    UIRotaDate.parse_if_present(params["payslip_end_date"])
   end
 
   def payment_filter_start_date_from_params
@@ -409,6 +459,14 @@ class StaffMembersController < ApplicationController
 
   def holiday_end_date_from_params
     UIRotaDate.parse_if_present(params['end_date'])
+  end
+
+  def holiday_tab_payslip_start_date_from_params
+    UIRotaDate.parse_if_present(params['payslip_start_date'])
+  end
+
+  def holiday_tab_payslip_end_date_from_params
+    UIRotaDate.parse_if_present(params['payslip_end_date'])
   end
 
   def get_app_download_link_data(staff_member)

@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:requester) { FactoryGirl.create(:user) }
   let(:date) { RotaShiftDate.to_rota_date(Time.current) }
+  let(:payslip_week) { RotaWeek.new(date) }
   let(:rota_shift_date) { RotaShiftDate.new(date) }
   let(:minutes) { 50 }
   let(:owed_hour) do
     FactoryGirl.create(
       :owed_hour,
       date: date,
+      payslip_date: payslip_week.start_date,
       minutes: minutes,
       starts_at: rota_shift_date.start_time,
       ends_at: rota_shift_date.start_time + minutes.minutes
@@ -18,6 +20,7 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
   let(:owed_hour_params) do
     {
       date: date,
+      payslip_date: payslip_week.start_date,
       minutes: owed_hour.minutes,
       note: owed_hour.note,
       staff_member: owed_hour.staff_member
@@ -71,6 +74,7 @@ RSpec.describe 'ImmutableOwedHourUpdate service'  do
     let(:owed_hour_params) do
       {
         date: owed_hour.date,
+        payslip_date: owed_hour.payslip_date + 1.week,
         minutes: new_minutes,
         note: owed_hour.note,
         starts_at: owed_hour.starts_at,

@@ -7,6 +7,7 @@ FactoryGirl.define do
     minutes 40
     starts_at { RotaShiftDate.new(date).start_time }
     ends_at { RotaShiftDate.new(date).start_time + 40.minutes }
+    payslip_date { RotaWeek.new(date + 1.week).start_date }
 
     trait :disabled do
       disabled_at 2.weeks.ago

@@ -32,29 +32,32 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
     });
   };
 
-  const type = humanize(holiday.get('holiday_type'));
-  const note = holiday.get('note') || '-';
-  const creator = holiday.get('creator');
-  const status = humanize(holiday.get('state'));
-  const cerated = `(${safeMoment.iso8601Parse(holiday.get('created_at')).format('Do MMMM YYYY - HH:mm')})`;
-  const startDate = safeMoment.uiDateParse(holiday.get('start_date')).format('DD MMM Y');
-  const endDate = safeMoment.uiDateParse(holiday.get('end_date')).format('DD MMM Y');
   const jsHoliday = holiday.toJS();
+  const typeText = humanize(oFetch(jsHoliday, 'holiday_type'));
+  const note = jsHoliday.note || '-';
+  const creator = oFetch(jsHoliday, 'creator');
+  const status = humanize(oFetch(jsHoliday, 'state'));
+  const createdAtText = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const startDateText = safeMoment.uiDateParse(oFetch(jsHoliday, 'start_date')).format('DD MMM Y');
+  const endDateText = safeMoment.uiDateParse(oFetch(jsHoliday, 'end_date')).format('DD MMM Y');
+  const holidayType = oFetch(jsHoliday, 'type');
   const id = oFetch(jsHoliday, 'id');
   const holidayDaysCount = utils.getDaysCountFromInterval(
     oFetch(jsHoliday, 'start_date'),
     oFetch(jsHoliday, 'end_date'),
   );
+  const sPayslipDate = oFetch(jsHoliday, 'payslip_date');
+  const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A'
 
   const isEditable =
-    oFetch(jsHoliday, 'type') === 'holiday'
+    holidayType === 'holiday'
       ? oFetch(staffMemberProfileHolidaysPermissions, 'canEditHoliday')({ permissionsData: permissionsData, id: id })
       : oFetch(staffMemberProfileHolidaysPermissions, 'canEditHolidayRequest')({
           permissionsData: permissionsData,
           id: id,
         });
   const isDeletable =
-    oFetch(jsHoliday, 'type') === 'holiday'
+    holidayType === 'holiday'
       ? oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHoliday')({ permissionsData: permissionsData, id: id })
       : oFetch(staffMemberProfileHolidaysPermissions, 'canDestroyHolidayRequest')({
           permissionsData: permissionsData,
@@ -72,7 +75,7 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <p className="boss-check__title">
-            {holidayDaysCount} {pluralize(type, holidayDaysCount)}
+            {holidayDaysCount} {pluralize(typeText, holidayDaysCount)}
           </p>
         </div>
       </div>
@@ -94,7 +97,7 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
             <span className="boss-check__text-label">Created by: </span>
             {creator}
           </p>
-          <p className="boss-check__text boss-check__text_role_secondary">{cerated}</p>
+          <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
         </div>
       </div>
       {note !== '-' && (
@@ -106,6 +109,14 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
           </div>
         </div>
       )}
+      <div className="boss-check__row">
+        <div className="boss-check__cell">
+          <p className="boss-check__text boss-check__text_role_date">
+          <span className="boss-check__text-label">Payslip Date: </span>
+            {payslipDateText}
+          </p>
+        </div>
+      </div>
       {!isFrozen && (
         <div className="boss-check__row boss-check__row_role_actions">
           {isEditable && (

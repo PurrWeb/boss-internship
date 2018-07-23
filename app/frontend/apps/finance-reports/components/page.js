@@ -164,6 +164,8 @@ class Page extends Component {
                       onMarkCompleted={() => this.handleOpenMarkCompletedModal({ staffMemberId, reportsId })}
                       weekDates={weekDates}
                       report={report}
+                      startDate={startDate}
+                      endDate={endDate}
                     />
                   );
                 }}

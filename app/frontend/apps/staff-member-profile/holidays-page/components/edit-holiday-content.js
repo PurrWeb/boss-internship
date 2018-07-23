@@ -25,6 +25,7 @@ class EditHolidayContent extends React.PureComponent {
       note: oFetch(holidayData, 'note'),
       startDate: safeMoment.uiDateParse(oFetch(holidayData, 'start_date')),
       endDate: safeMoment.uiDateParse(oFetch(holidayData, 'end_date')),
+      payslipDate: safeMoment.uiDateParse(oFetch(holidayData, 'payslip_date')),
       holidayType: oFetch(holidayData, 'holiday_type'),
       id: oFetch(holidayData, 'id')
     }

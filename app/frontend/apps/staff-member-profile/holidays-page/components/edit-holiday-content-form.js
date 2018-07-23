@@ -27,6 +27,10 @@ const validate = values => {
     errors.endDate = "You must fill end date"
   }
 
+  if (!values.get('payslipDate')) {
+    errors.payslipDate = "You must fill payslip date"
+  }
+
   return errors;
 }
 
@@ -54,7 +58,7 @@ const EditHolidayForm = ({
     >
       {error && renderBaseError(error)}
       <div className="boss-form__row">
-        <div className="boss-form__field boss-form__field_layout_third">
+        <div className="boss-form__field boss-form__field_layout_half">
           <Field
             name="startDate"
             component={BossFormCalendar}
@@ -62,7 +66,7 @@ const EditHolidayForm = ({
             required
           />
         </div>
-        <div className="boss-form__field boss-form__field_layout_third">
+        <div className="boss-form__field boss-form__field_layout_half">
           <Field
             name="endDate"
             component={BossFormCalendar}
@@ -70,16 +74,27 @@ const EditHolidayForm = ({
             required
           />
         </div>
-        <div className="boss-form__field boss-form__field_layout_third">
+        
+      </div>
+      <div className="boss-form__row">
+        <div className="boss-form__field boss-form__field_layout_half">
+            <Field
+              component={BossFormSelect}
+              name="holidayType"
+              required
+              label="Holiday Type"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select holiday type ..."
+              options={HOLIDAYS_OPTIONS}
+            />
+          </div>
+        <div className="boss-form__field boss-form__field_layout_half">
           <Field
-            component={BossFormSelect}
-            name="holidayType"
+            name="payslipDate"
+            component={BossFormCalendar}
+            label="Payslip date"
             required
-            label="Holiday Type"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select holiday type ..."
-            options={HOLIDAYS_OPTIONS}
           />
         </div>
       </div>

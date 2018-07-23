@@ -1,6 +1,8 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import notify from '~/components/global-notification';
+import safeMoment from "~/lib/safe-moment";
+import { apiRoutes, appRoutes } from '~/lib/routes';
 
 import {
   updateAvatar,
@@ -16,6 +18,7 @@ import {
   OPEN_EDIT_OWED_HOURS_MODAL,
   EDIT_OWED_HOURS_SUCCESS,
   CLOSE_EDIT_OWED_HOURS_MODAL,
+  FILTER,
 } from './constants';
 
 export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
@@ -45,16 +48,18 @@ export const deleteOwedHours = (owedHourId) => (dispatch, getState) => {
   });
 }
 
-export const editOwedHours = ({startsAt, endsAt, date, note, id}) => (dispatch, getState) => {
+export const editOwedHours = ({startsAt, endsAt, date, note, id, payslipDate}) => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id'])
   const formatedDate = date.format('DD-MM-YYYY')
+  const formatedPayslipDate = payslipDate.format('DD-MM-YYYY')
 
   return axios.put(`/api/v1/staff_members/${staffMemberId}/owed_hours/${id}`, {
     startsAt: startsAt,
     endsAt: endsAt,
     note: note,
     date: formatedDate,
+    payslipDate: formatedPayslipDate,
   },
   {
     headers: {
@@ -123,3 +128,46 @@ export const initialLoad = createAction(INITIAL_LOAD);
 export const addNewOwedHours = createAction(ADD_NEW_OWED_HOUR);
 export const cancelAddNewOwedHours = createAction(CANCEL_ADD_NEW_OWED_HOUR);
 export const cancelEditOwedHours = createAction(CLOSE_EDIT_OWED_HOURS_MODAL);
+
+export const filter = (sStartDate, sEndDate, sPayslipStartDate, sPayslipEndDate) => (dispatch, getState) => {
+  const accessToken = getState().getIn(['profile', 'accessToken']);
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
+  const mStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
+  const mEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
+  const mPayslipStartDate = mPayslipStartDate && safeMoment.uiDateParse(mPayslipStartDate);
+  const mPayslipEndDate = mPayslipEndDate && safeMoment.uiDateParse(mPayslipEndDate);
+  const apiGetUrl = apiRoutes.staffMemberProfileOwedHoursIndex.getPath({
+    staffMemberId: staffMemberId,
+    mStartDate: mStartDate,
+    mEndDate: mEndDate,
+    mPayslipStartDate: mPayslipStartDate,
+    mPayslipEndDate: mPayslipEndDate
+  })
+  const webGetUrl = appRoutes.staffMemberOwedHours({
+    staffMemberId: staffMemberId,
+    mStartDate: mStartDate,
+    mEndDate: mEndDate,
+    mPayslipStartDate: mPayslipStartDate,
+    mPayslipEndDate: mPayslipEndDate
+  })
+  return axios
+    .get(
+      apiGetUrl,
+      {
+        headers: {
+          Authorization: `Token token="${accessToken}"`,
+        },
+      },
+    )
+    .then(resp => {
+      dispatch({
+        type: FILTER,
+        payload: resp.data,
+      });
+      window.history.pushState(
+        'state',
+        'title',
+        `${webGetUrl}`,
+      );
+    });
+};

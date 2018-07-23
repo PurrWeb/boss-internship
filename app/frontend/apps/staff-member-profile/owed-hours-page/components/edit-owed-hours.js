@@ -9,6 +9,7 @@ const EditNewOwedHours = ({owedHour}) => {
     endsAt: owedHour.getIn(['times', 'endsAtOffset']),
     id: owedHour.get('id'),
     date: safeMoment.uiDateParse(owedHour.get('date')),
+    payslipDate: safeMoment.uiDateParse(owedHour.get('payslipDate')),
   }
 
   return (

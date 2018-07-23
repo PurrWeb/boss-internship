@@ -9,7 +9,8 @@ class Api::V1::StaffMemberProfile::HolidayRequestSerializer < ActiveModel::Seria
     :creator,
     :note,
     :editable,
-    :frozen
+    :frozen,
+    :payslip_date
 
   def start_date
     UIRotaDate.format(object.start_date)
@@ -33,6 +34,10 @@ class Api::V1::StaffMemberProfile::HolidayRequestSerializer < ActiveModel::Seria
 
   def frozen
     object.frozen?
+  end
+
+  def payslip_date
+    nil
   end
 
   private

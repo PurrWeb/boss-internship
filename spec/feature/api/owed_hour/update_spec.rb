@@ -9,6 +9,14 @@ RSpec.describe 'Update owed hour API endpoint' do
     set_authorization_header(access_token.token)
   end
 
+  around(:each) do |example|
+    travel_to call_time do
+      example.run
+    end
+  end
+
+  let(:now) { Time.now }
+  let(:call_time) { now }
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
@@ -25,22 +33,23 @@ RSpec.describe 'Update owed hour API endpoint' do
   let(:old_ends_at) do
     RotaShiftDate.new(old_date).start_time + 40.minutes
   end
+  let(:old_payslip_date) do
+    call_time.to_date + 1.week
+  end
   let(:new_date) do
     (now - 2.week).to_date
   end
-  let(:new_starts_at_offset) do
-    0
-  end
-  let(:new_ends_at_offset) do
-    145
-  end
+  let(:new_starts_at_offset) { 0 }
+  let(:new_ends_at_offset) { 145 }
   let(:new_starts_at) do
     RotaShiftDate.new(new_date).start_time + new_starts_at_offset.minutes
   end
   let(:new_ends_at) do
     RotaShiftDate.new(new_date).start_time + new_ends_at_offset.minutes
   end
-  let(:now) { Time.current }
+  let(:new_payslip_date) do
+    new_date + 1.month
+  end
   let(:owed_hour) do
     FactoryGirl.create(
       :owed_hour,
@@ -48,6 +57,7 @@ RSpec.describe 'Update owed hour API endpoint' do
       date: old_date,
       starts_at: old_starts_at,
       ends_at: old_ends_at,
+      payslip_date: old_payslip_date
     )
   end
   let(:access_token) do
@@ -64,9 +74,10 @@ RSpec.describe 'Update owed hour API endpoint' do
   end
   let(:valid_params) do
     {
-      date: new_date.strftime('%d-%m-%Y'),
+      date: UIRotaDate.format(new_date),
       startsAt: new_starts_at_offset,
       endsAt: new_ends_at_offset,
+      payslipDate: UIRotaDate.format(new_payslip_date),
       note: "TEST"
     }
   end
@@ -75,10 +86,11 @@ RSpec.describe 'Update owed hour API endpoint' do
       date: nil,
       startsAt: nil,
       endsAt: nil,
+      payslipDate: nil,
       note: nil
     }
   end
-  
+
   context 'when empty params supplied' do
     let(:params) do
       empty_params
@@ -87,13 +99,15 @@ RSpec.describe 'Update owed hour API endpoint' do
     before do
       response
     end
-    
+
     it 'should return validation errors' do
       json = JSON.parse(response.body)
 
-      expect(json["errors"]["date"]).to eq(["can't be blank"])
-      expect(json["errors"]["startsAt"]).to eq(["can't be blank"])
-      expect(json["errors"]["endsAt"]).to eq(["can't be blank"])
+      json_errors = json.fetch("errors")
+      expect(json_errors.fetch("date")).to eq(["can't be blank"])
+      expect(json_errors.fetch("startsAt")).to eq(["can't be blank"])
+      expect(json_errors.fetch("endsAt")).to eq(["can't be blank"])
+      expect(json_errors.fetch("payslipDate")).to eq(["can't be blank"])
     end
   end
 
@@ -101,7 +115,7 @@ RSpec.describe 'Update owed hour API endpoint' do
     let(:params) do
       valid_params
     end
-    
+
     before do
       response
     end
@@ -117,8 +131,9 @@ RSpec.describe 'Update owed hour API endpoint' do
       expect(owed_hour.parent.date).to eq(new_date)
       expect(owed_hour.parent.starts_at).to eq(new_starts_at)
       expect(owed_hour.parent.ends_at).to eq(new_ends_at)
+      expect(owed_hour.parent.payslip_date).to eq(new_payslip_date)
     end
-  end    
+  end
 
   private
   def app

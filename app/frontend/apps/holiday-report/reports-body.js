@@ -8,7 +8,7 @@ import HolidaysWeekFilter from './holidays-week-filter';
 import URLSearchParams from 'url-search-params';
 
 export default class ReportsBody extends React.Component {
-  
+
   renderPeople() {
     return this.state.staffMemberCollection.map((staffMember, key) => {
       return (

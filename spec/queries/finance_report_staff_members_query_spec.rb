@@ -22,11 +22,14 @@ shared_examples "staff member has stuff on week" do
 
   context 'when staff member has enabled owed hours' do
     before do
-      FactoryGirl.create(
-        :owed_hour,
-        staff_member: _staff_member,
-        date: date,
-      )
+      travel_to(date - 1.week) do
+        FactoryGirl.create(
+          :owed_hour,
+          staff_member: _staff_member,
+          date: date - 2.weeks,
+          payslip_date: date
+        )
+      end
 
       # extra hour To ensure that only one record is returned
       # per joined record
@@ -35,6 +38,7 @@ shared_examples "staff member has stuff on week" do
           :owed_hour,
           staff_member: _staff_member,
           date: date + 3.weeks,
+          payslip_date: date + 4.weeks,
         )
       end
     end
@@ -55,7 +59,8 @@ shared_examples "staff member has stuff on week" do
           :holiday,
           staff_member: _staff_member,
           start_date: week.start_date,
-          end_date: week.start_date + 2.days
+          end_date: week.start_date + 2.days,
+          payslip_date: week.start_date,
         )
       end
 
@@ -155,11 +160,14 @@ describe FinanceReportStaffMembersQuery do
 
     context 'has owed hours' do
       let(:owed_hour) do
-        FactoryGirl.create(
-          :owed_hour,
-          staff_member: staff_member,
-          date: date
-        )
+        travel_to(date - 1.week) do
+          FactoryGirl.create(
+            :owed_hour,
+            staff_member: staff_member,
+            date: date - 2.weeks,
+            payslip_date: date
+          )
+        end
       end
 
       before do

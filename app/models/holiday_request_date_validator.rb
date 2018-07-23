@@ -20,30 +20,6 @@ class HolidayRequestDateValidator
       holiday_request.errors.add(:base, "Holiday must be within a single week")
     end
 
-    if holiday_request.validate_as_creation
-      if holiday_request.start_date < RotaShiftDate.to_rota_date(now)
-        holiday_request.errors.add(:base, "can't create holidays in the past")
-        return
-      end
-    else
-      current_rota_date = RotaShiftDate.to_rota_date(now)
-      start_date_moved_to_past = holiday_request.start_date_changed? && (
-        holiday_request.start_date < current_rota_date
-      )
-      end_date_moved_to_past = holiday_request.end_date_changed? && (
-        holiday_request.end_date < current_rota_date
-      )
-
-      if start_date_moved_to_past
-        holiday_request.errors.add(:start_date, "can't be changed to date in the past")
-      end
-      if end_date_moved_to_past
-        holiday_request.errors.add(:end_date, "can't be changed to date in the past")
-      end
-
-      return if start_date_moved_to_past || end_date_moved_to_past
-    end
-
     staff_member_holidays = Holiday.
       in_state(:enabled).
       where(staff_member: holiday_request.staff_member)
@@ -101,10 +77,6 @@ class HolidayRequestDateValidator
     if conflicting_owed_hours.present?
       holiday_request.errors.add(:base, 'Staff member is assigned owed hours on one of these days')
     end
-  end
-
-  def dates_changed?(holiday_request)
-    holiday_request.changed.include?(:start_date) || holiday_request.changed.include?(:end_date)
   end
 
   def state_subject_to_date_validation(state)

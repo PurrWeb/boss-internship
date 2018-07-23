@@ -91,8 +91,8 @@ class GenerateFinanceReportData
       relation: staff_member_holidays,
       start_value: week.start_date,
       end_value: week.end_date,
-      start_column_name: 'start_date',
-      end_column_name: 'end_date'
+      start_column_name: 'payslip_date',
+      end_column_name: 'payslip_date'
     ).all
 
     holiday_days_count = holidays.inject(0) do |sum, holiday|
@@ -105,8 +105,8 @@ class GenerateFinanceReportData
       relation: OwedHour.enabled.where(staff_member: staff_member),
       start_value: RotaShiftDate.new(week.start_date).start_time,
       end_value: RotaShiftDate.new(week.end_date).end_time,
-      start_column_name: 'created_at',
-      end_column_name: 'created_at',
+      start_column_name: 'payslip_date',
+      end_column_name: 'payslip_date',
       include_boundaries: [:start]
     ).all
 
