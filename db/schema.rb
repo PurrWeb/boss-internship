@@ -325,6 +325,22 @@ ActiveRecord::Schema.define(version: 20180924181537) do
     t.datetime "updated_at",                     null: false
   end
 
+  create_table "disciplinaries", force: :cascade do |t|
+    t.string   "title",               limit: 255,   null: false
+    t.integer  "level",               limit: 4,     null: false
+    t.integer  "staff_member_id",     limit: 4,     null: false
+    t.integer  "created_by_user_id",  limit: 4,     null: false
+    t.text     "note",                limit: 65535, null: false
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "disabled_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "disciplinaries", ["created_by_user_id"], name: "index_disciplinaries_on_created_by_user_id", using: :btree
+  add_index "disciplinaries", ["disabled_by_user_id"], name: "index_disciplinaries_on_disabled_by_user_id", using: :btree
+  add_index "disciplinaries", ["staff_member_id"], name: "index_disciplinaries_on_staff_member_id", using: :btree
+
   create_table "email_addresses", force: :cascade do |t|
     t.string   "email",      limit: 255, null: false
     t.datetime "created_at",             null: false
