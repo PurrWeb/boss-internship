@@ -472,6 +472,7 @@ Rails.application.routes.draw do
             end
           end
           resources :owed_hours, only: [:index, :update, :destroy, :create]
+          resources :disciplinaries, only: [:index, :update, :destroy, :create]
           member do
             post :disable
             post :enable

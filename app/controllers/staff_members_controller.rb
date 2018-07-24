@@ -428,6 +428,40 @@ class StaffMembersController < ApplicationController
     }
   end
 
+  def disciplinaries
+    query = StaffMember.where(id: params[:id])
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    staff_member = query.first
+    return redirect_to profile_staff_member_path if staff_member.security?
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
+    access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+    accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+      user: current_user,
+      pay_rate: staff_member.pay_rate
+    ).page_pay_rates.map(&:id)
+
+    app_download_link_data = get_app_download_link_data(staff_member)
+
+    render locals: {
+      staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+      access_token: access_token.token,
+      app_download_link_data: app_download_link_data,
+      staff_types: StaffType.all,
+      venues: Venue.all,
+      gender_values: StaffMember::GENDERS,
+      accessible_venue_ids: Venue.all.pluck(:id),
+      pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+        PayRate.all,
+        serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+        scope: current_user
+      ),
+      accessible_pay_rate_ids: accessible_pay_rate_ids,
+      accessible_pay_rates: accessible_pay_rate_ids,
+    }
+  end
+
   def new
     authorize! :create, :staff_members
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
