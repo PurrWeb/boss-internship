@@ -627,6 +627,10 @@ class UserAbility
       can :view_payments, StaffMember do |staff_member|
         can_edit_staff_member?(user, staff_member)
       end
+
+      can [:create, :disable], :disciplinary do
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+      end
     end
 
     #
