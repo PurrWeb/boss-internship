@@ -37,7 +37,7 @@ var staffMemberProfileHolidaysTabPath = function(params){
     if(filteringByDate){
       result = result + "start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_date=" + mEndDate.format(utils.apiDateFormat);
     }
-    if(filteringByPayslipDate){
+    if(filteringByDate){
       if(filteringByPayslipDate){
         result = result + "&"
       }
