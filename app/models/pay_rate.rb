@@ -1,5 +1,7 @@
 class PayRate < ActiveRecord::Base
-  TYPES = ['named', 'admin']
+  NAMED_PAYRATE_TYPE = 'named'
+  ADMIN_PAYRATE_TYPE = 'admin'
+  TYPES = [NAMED_PAYRATE_TYPE, ADMIN_PAYRATE_TYPE]
   HOURLY_CALCULATION_TYPE = 'incremental_per_hour'
   WEEKLY_CALCULATION_TYPE = 'salary_per_week'
   CALCULATION_TYPES = [HOURLY_CALCULATION_TYPE, WEEKLY_CALCULATION_TYPE]

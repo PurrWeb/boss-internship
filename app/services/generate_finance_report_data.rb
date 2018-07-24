@@ -30,8 +30,7 @@ class GenerateFinanceReportData
 
     hours_acceptance_periods = HoursAcceptancePeriod.
       accepted.
-      joins(:clock_in_day).
-      merge(clock_in_days).
+      where(clock_in_day: clock_in_days).
       includes(:clock_in_day)
 
     monday_hours_count = 0
@@ -147,6 +146,9 @@ class GenerateFinanceReportData
     else
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
+
+    report.contains_time_shifted_owed_hours = false
+    report.contains_time_shifted_holidays = false
 
     report.total_cents = report.total_cents + report.accessories_cents
 
