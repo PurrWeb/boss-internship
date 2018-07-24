@@ -147,8 +147,18 @@ class GenerateFinanceReportData
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
 
-    report.contains_time_shifted_owed_hours = false
-    report.contains_time_shifted_holidays = false
+    contains_time_shifted_owed_hours = owed_hours.any? do |owed_hour|
+      payslip_week = RotaWeek.new(owed_hour.date)
+      payslip_week != week
+    end
+
+    contains_time_shifted_holidays = holidays.any? do |holiday|
+      payslip_week = RotaWeek.new(holiday.start_date)
+      payslip_week != week
+    end
+
+    report.contains_time_shifted_owed_hours = !!contains_time_shifted_owed_hours
+    report.contains_time_shifted_holidays = !!contains_time_shifted_holidays
 
     report.total_cents = report.total_cents + report.accessories_cents
 
