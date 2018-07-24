@@ -39,13 +39,10 @@ class StaffMember < ActiveRecord::Base
 
   has_many :rota_shifts, inverse_of: :staff_member
   has_many :enabled_rota_shifts, lambda { RotaShift.enabled }, class_name: "RotaShift"
-
   has_many :holidays, inverse_of: :staff_member
-
   has_many :holiday_requests, inverse_of: :staff_member
-
   has_many :owed_hours, inverse_of: :staff_member
-
+  has_many :disciplinaries, inverse_of: :staff_member
   has_many :staff_member_transitions, autosave: false
 
   belongs_to :pay_rate
