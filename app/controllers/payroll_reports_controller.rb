@@ -35,12 +35,15 @@ class PayrollReportsController < ApplicationController
     staff_types = StaffType.all
     staff_members_with_reports = StaffMember.where(id: staff_members.map(&:id))
                                   .weekly_finance_reports(week.start_date)
-                                  .includes([:name, :staff_type])
+
     reports = FinanceReport.joins(:staff_member)
                 .where(staff_member: staff_members)
-                .where(week_start: week.start_date).all
+                .where(week_start: week.start_date)
+                .includes(:venue, staff_member: [:name, :staff_type])
+                .all
 
-    staffs_without_requests = staff_members - staff_members_with_reports
+    staffs_without_requests = StaffMember.where(id: (staff_members - staff_members_with_reports).map(&:id)).
+      includes([:name, :staff_type, :pay_rate, :master_venue])
 
     generated_reports = staffs_without_requests.map do |staff_member|
       GenerateFinanceReportData.new(
