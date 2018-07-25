@@ -3,6 +3,26 @@ module Api
     class DisciplinariesController < APIController
       before_filter :web_token_authenticate!
 
+      def index
+        authorize!(:view, :disciplinaries_page)
+
+        filtered_disciplinaries = DisciplinariesIndexQuery.new(
+          staff_member: staff_member_from_params,
+          filter: filter_from_params
+        ).all
+
+        render(
+          json: {
+            disciplinaries: ActiveModel::Serializer::CollectionSerializer.new(
+              filtered_disciplinaries,
+              serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
+            ),
+            filter: filter_from_params
+          },
+          status: 200
+        )
+      end
+
       def create
         authorize!(:create, :disciplinary)
 
@@ -51,6 +71,24 @@ module Api
 
       def disciplinary_from_params
         staff_member_from_params.disciplinaries.find_by(id: params.fetch(:id))
+      end
+
+      def filter_from_params
+        parced_start_date = UIRotaDate.parse_if_present(params[:start_date])
+        parced_end_date = UIRotaDate.parse_if_present(params[:end_date])
+        start_date = nil
+        end_date = nil
+
+        if parced_start_date.present? && parced_end_date.present? && parced_start_date <= parced_end_date
+          start_date = parced_start_date
+          end_date = parced_end_date
+        end
+        {
+          start_date: start_date,
+          end_date: end_date,
+          show_expired: params[:show].kind_of?(Array) && params[:show].include?('expired'),
+          show_disabled: params[:show].kind_of?(Array) && params[:show].include?('disabled'),
+        }
       end
     end
   end

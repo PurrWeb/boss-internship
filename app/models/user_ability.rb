@@ -628,6 +628,10 @@ class UserAbility
         can_edit_staff_member?(user, staff_member)
       end
 
+      can :view, :disciplinaries_page do
+        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+      end
+
       can [:create, :disable], :disciplinary do
         user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
