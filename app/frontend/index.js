@@ -121,6 +121,9 @@ registerComponent('StaffMemberShiftsApp', StaffMemberShiftsApp);
 import { StaffMemberAccessoriesApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberAccessoriesApp', StaffMemberAccessoriesApp);
 
+import { StaffMemberProfileDisciplinaryApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberProfileDisciplinaryApp', StaffMemberProfileDisciplinaryApp);
+
 import StaffTypeRotaApp from './apps/staff-type-rota/staff-type-rota-app';
 registerComponent('StaffTypeRotaApp', StaffTypeRotaApp);
 
