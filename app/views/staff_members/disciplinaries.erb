@@ -5,7 +5,7 @@
   window.boss.store.staffMember = <%= staff_member.to_json.html_safe %>;
 </script>
 
-<%= react_component('StaffMemberAccessoriesApp', {
+<%= react_component('StaffMemberProfileDisciplinaryApp', {
   staffMember: staff_member,
   accessToken: access_token,
   staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
@@ -21,4 +21,6 @@
     app_download_link_data,
     Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
   ),
+  permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions),
+  isAdminPlus: is_admin_plus,
 }) %>
