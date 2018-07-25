@@ -107,6 +107,7 @@ Rails.application.routes.draw do
         get :owed_hours
         get :accessories
         get :shifts
+        get :disciplinaries
       end
     end
 
