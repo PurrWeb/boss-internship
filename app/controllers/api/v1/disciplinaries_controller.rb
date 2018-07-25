@@ -11,13 +11,20 @@ module Api
           filter: filter_from_params
         ).all
 
+        permissions = StaffMemberProfilePermissions.new(
+          staff_member: staff_member_from_params,
+          current_user: current_user,
+          disciplinaries: filtered_disciplinaries
+        )
+
         render(
           json: {
             disciplinaries: ActiveModel::Serializer::CollectionSerializer.new(
               filtered_disciplinaries,
               serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
             ),
-            filter: filter_from_params
+            filter: filter_from_params,
+            permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(permissions)
           },
           status: 200
         )

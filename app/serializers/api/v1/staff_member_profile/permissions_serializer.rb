@@ -1,5 +1,5 @@
 class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializer
-  attributes :canEnable, :holidaysTab, :owedHoursTab, :accessoriesTab
+  attributes :canEnable, :holidaysTab, :owedHoursTab, :accessoriesTab, :disciplinariesTab
 
   def canEnable
     object.can_enable?
@@ -15,5 +15,9 @@ class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializ
 
   def accessoriesTab
     object.accessories_tab
+  end
+
+  def disciplinariesTab
+    object.disciplinaries_tab
   end
 end

@@ -5,6 +5,7 @@ class StaffMemberProfilePermissions
     holidays: [],
     holiday_requests: [],
     owed_hours: [],
+    disciplinaries: [],
     accessory_requests: AccessoryRequest.none
   )
     @user_ability = UserAbility.new(current_user)
@@ -13,6 +14,7 @@ class StaffMemberProfilePermissions
     @holiday_requests = holiday_requests
     @owed_hours = owed_hours
     @accessory_requests = accessory_requests
+    @disciplinaries = disciplinaries
   end
   attr_reader :user_ability, :staff_member
 
@@ -39,6 +41,13 @@ class StaffMemberProfilePermissions
     {
       canCreateAccessoryRequest: user_ability.can?(:create, AccessoryRequest.new(staff_member: staff_member)),
       accessory_requests: accessory_requests
+    }
+  end
+
+  def disciplinaries_tab
+    {
+      canCreateDisciplinary: user_ability.can?(:create, :disciplinary),
+      disciplinaries: disciplinaries,
     }
   end
 
@@ -82,6 +91,16 @@ class StaffMemberProfilePermissions
       result[accessory_request.id] = {
         isCancelable: user_ability.can?(:cancel, accessory_request),
         isRefundable: user_ability.can?(:refund_request, accessory_request)
+      }
+    end
+    result
+  end
+
+  def disciplinaries
+    result = {}
+    @disciplinaries.map do |disciplinary|
+      result[disciplinary.id] = {
+        isDisablable: user_ability.can?(:disable, :disciplinary)
       }
     end
     result
