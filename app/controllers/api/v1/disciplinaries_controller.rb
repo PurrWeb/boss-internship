@@ -23,7 +23,7 @@ module Api
               filtered_disciplinaries,
               serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
             ),
-            filter: filter_from_params,
+            filter: DisciplinariesFilter.new(filter_data: filter_from_params).call,
             permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(permissions)
           },
           status: 200
