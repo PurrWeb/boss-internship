@@ -65,7 +65,7 @@ class Page extends Component {
       .catch(hideModal);
   };
 
-  canExportToCSV(options){
+  canExportToFile(options){
     const staffTypesWithFinanceReports = oFetch(options, 'staffTypesWithFinanceReports');
     const staffTypesJS = staffTypesWithFinanceReports.toJS();
 
@@ -118,7 +118,7 @@ class Page extends Component {
       )
       .toJS();
 
-    const canExportToCSV = this.canExportToCSV({ staffTypesWithFinanceReports });
+    const canExportToFile = this.canExportToFile({ staffTypesWithFinanceReports });
 
     return (
       <div className="boss-page-main boss-page-main_adjust_finance-reports">
@@ -131,7 +131,7 @@ class Page extends Component {
           payRateFilter={payRateFilter}
           onDateChange={this.handleDateChange}
           onPayRateChange={this.handlePayRateChange}
-          canExportToCSV={canExportToCSV}
+          canExportToFile={canExportToFile}
         />
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}
