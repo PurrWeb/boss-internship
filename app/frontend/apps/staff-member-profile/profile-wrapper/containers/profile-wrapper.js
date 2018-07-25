@@ -171,8 +171,15 @@ class ProfileWrapper extends React.PureComponent {
         </DashboardWrapper>
 
         <ContentWrapper>
+          { enableProfile && <EnableProfilePage {...profileProps} />}
           {editProfile && <EditProfilePage onSubmissionComplete={onStaffMemberChanged} {...profileProps} />}
           {!editProfile && <div className="boss-page-main__flow">{this.props.children}</div>}
+          { !editProfile && !enableProfile && currentPage === 'disciplinaries' && this.props.children}
+          { !editProfile && !enableProfile && currentPage !== 'disciplinaries' && (
+            <div className="boss-page-main__flow">
+              {this.props.children}
+            </div>
+          )}
         </ContentWrapper>
       </div>
     );
