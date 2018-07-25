@@ -158,6 +158,7 @@ class ProfileWrapper extends React.PureComponent {
                 jobType={jobType.toJS()}
                 onEditAvatar={showEditAvatarModal}
                 venues={venues.toJS()}
+                permissionsData={permissionsData}
               />
               <StaffMemberProfileActions
                 staffMember={staffMember}
