@@ -164,7 +164,7 @@ const StaffMemberCard = ({
           className={`${isActive(
             currentPage,
             'disciplinary',
-          )} boss-button boss-button_type_small boss-button_role_payments boss-user-summary__switch`}
+          )} boss-button boss-button_type_small boss-button_role_disciplinary boss-page-dashboard__switch`}
         >
           Disciplinary
         </a>}
