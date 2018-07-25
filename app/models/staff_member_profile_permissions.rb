@@ -46,6 +46,7 @@ class StaffMemberProfilePermissions
 
   def disciplinaries_tab
     {
+      canViewPage: user_ability.can?(:view_disciplinaries_page, staff_member),
       canCreateDisciplinary: user_ability.can?(:create, :disciplinary),
       disciplinaries: disciplinaries,
     }

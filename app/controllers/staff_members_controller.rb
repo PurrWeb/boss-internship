@@ -436,6 +436,8 @@ class StaffMembersController < ApplicationController
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
+    authorize!(:view_disciplinaries_page, staff_member)
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
       user: current_user,

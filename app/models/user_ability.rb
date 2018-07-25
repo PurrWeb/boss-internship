@@ -628,8 +628,9 @@ class UserAbility
         can_edit_staff_member?(user, staff_member)
       end
 
-      can :view, :disciplinaries_page do
-        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+      can :view_disciplinaries_page, StaffMember do |staff_member|
+        !user_and_staff_member_same_person?(user: user, staff_member: staff_member) &&
+          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
       end
 
       can [:create, :disable], :disciplinary do
@@ -760,5 +761,9 @@ class UserAbility
   def can_view_main_vettings_page?(user)
     user.payroll_manager? ||
       user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+  end
+
+  def user_and_staff_member_same_person?(user:, staff_member:)
+    user.staff_member.present? && user.staff_member == staff_member
   end
 end

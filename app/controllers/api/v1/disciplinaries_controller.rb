@@ -4,7 +4,7 @@ module Api
       before_filter :web_token_authenticate!
 
       def index
-        authorize!(:view, :disciplinaries_page)
+        authorize!(:view_disciplinaries_page, staff_member_from_params)
 
         filtered_disciplinaries = DisciplinariesIndexQuery.new(
           staff_member: staff_member_from_params,
