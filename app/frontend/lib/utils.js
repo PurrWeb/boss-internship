@@ -252,6 +252,9 @@ var utils =  {
     commonDateFormatCalendar(){
       return 'ddd DD-MM-YYYY';
     },
+    commonDateFormatWithDay(){
+      return 'ddd DD-MM-YYYY';
+    },
     humanDateFormatWithDayOfWeek(){
       return 'HH:mm ddd DD/MM/YYYY';
     },
