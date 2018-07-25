@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712155938) do
+ActiveRecord::Schema.define(version: 20180725152708) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 20180712155938) do
 
   add_index "clock_in_days", ["date"], name: "index_clock_in_days_on_date", using: :btree
   add_index "clock_in_days", ["staff_member_id"], name: "index_clock_in_days_on_staff_member_id", using: :btree
+  add_index "clock_in_days", ["venue_id", "staff_member_id", "date"], name: "index_clock_in_days_on_venue_id_and_staff_member_id_and_date", using: :btree
   add_index "clock_in_days", ["venue_id"], name: "index_clock_in_days_on_venue_id", using: :btree
 
   create_table "clock_in_events", force: :cascade do |t|
@@ -239,6 +240,7 @@ ActiveRecord::Schema.define(version: 20180712155938) do
     t.string   "creator_type",    limit: 255, null: false
   end
 
+  add_index "clock_in_periods", ["clock_in_day_id", "ends_at"], name: "index_clock_in_periods_on_clock_in_day_id_and_ends_at", using: :btree
   add_index "clock_in_periods", ["clock_in_day_id"], name: "index_clock_in_periods_on_clock_in_day_id", using: :btree
   add_index "clock_in_periods", ["ends_at"], name: "index_clock_in_periods_on_ends_at", using: :btree
 
@@ -522,6 +524,7 @@ ActiveRecord::Schema.define(version: 20180712155938) do
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
   add_index "hours_acceptance_periods", ["clock_in_day_id"], name: "index_hours_acceptance_periods_on_clock_in_day_id", using: :btree
+  add_index "hours_acceptance_periods", ["status", "clock_in_day_id"], name: "index_hours_acceptance_periods_on_status_and_clock_in_day_id", using: :btree
   add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
 
   create_table "incident_reports", force: :cascade do |t|
@@ -852,6 +855,8 @@ ActiveRecord::Schema.define(version: 20180712155938) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "payments", ["disabled_at", "staff_member_id", "date"], name: "index_payments_on_disabled_at_and_staff_member_id_and_date", using: :btree
 
   create_table "pool_loft_table_session_edits", force: :cascade do |t|
     t.string   "guid",                 limit: 255, null: false
