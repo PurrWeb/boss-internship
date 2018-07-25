@@ -20,6 +20,7 @@ const BossFormSelect = ({
   optionComponent = undefined,
   input: { onBlur, value, onChange, name },
   meta: { asyncValidating, touched, error },
+  fieldClassName,
 }) => {
   const getItemOption = (option, { value, label }) => {
     let normalizedLabel = null;
@@ -70,7 +71,7 @@ const BossFormSelect = ({
   };
 
   return (
-    <div className={`boss-form__field ${className && className}`}>
+    <div className={`boss-form__field ${className && className} ${fieldClassName && fieldClassName}`}>
       {label && (
         <label htmlFor={name} className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${
