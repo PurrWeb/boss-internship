@@ -95,18 +95,21 @@ class FinanceReportsController < ApplicationController
     )
 
     staff_members.each do |staff_member|
-      pdf.add_report(
-        staff_type: staff_member.staff_type,
-        report: (
-          FinanceReport.find_by(
-            staff_member: staff_member,
-            week_start: week.start_date
-          ) || GenerateFinanceReportData.new(
-            staff_member: staff_member,
-            week: week
-          ).call.report
-        )
+      report = (
+        FinanceReport.find_by(
+          staff_member: staff_member,
+          week_start: week.start_date
+        ) || GenerateFinanceReportData.new(
+          staff_member: staff_member,
+          week: week
+        ).call.report
       )
+
+      if staff_member.sage_id.present? && (FinanceReportCompletionStatus.new(finance_report: report).status_text != FinanceReport::REPORT_STATUS_DONE_STATUS)
+        raise "Attempt to export incomplete finance report for staff member #{staff_member.id}"
+      end
+
+      pdf.add_report(staff_type: staff_member.staff_type, report: report)
     end
 
     #TODO: Extract File Timestamp Format to somewhere
