@@ -461,6 +461,11 @@ class StaffMembersController < ApplicationController
       ),
       accessible_pay_rate_ids: accessible_pay_rate_ids,
       accessible_pay_rates: accessible_pay_rate_ids,
+      staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+        staff_member: staff_member,
+        current_user: current_user,
+      ),
+      is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
     }
   end
 
