@@ -2,7 +2,7 @@ import utils from "~/lib/utils"
 import moment from "moment"
 import oFetch from "o-fetch"
 
-const staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
+var staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
     if (staffMemberId === undefined) {
         throw new Error("No staff member id supplied to appRoutes.staffMember")
     }
@@ -22,7 +22,7 @@ const staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
 }
 
 //Shared Helpers
-const staffMemberProfileHolidaysTabPath = function(params){
+var staffMemberProfileHolidaysTabPath = function(params){
   const staffMemberId = oFetch(params, 'staffMemberId')
   const mStartDate = params.mStartDate;
   const mEndDate = params.mEndDate;
@@ -37,7 +37,7 @@ const staffMemberProfileHolidaysTabPath = function(params){
     if(filteringByDate){
       result = result + "start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_date=" + mEndDate.format(utils.apiDateFormat);
     }
-    if(filteringByPayslipDate){
+    if(filteringByDate){
       if(filteringByPayslipDate){
         result = result + "&"
       }

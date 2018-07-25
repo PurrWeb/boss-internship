@@ -30,8 +30,7 @@ class GenerateFinanceReportData
 
     hours_acceptance_periods = HoursAcceptancePeriod.
       accepted.
-      joins(:clock_in_day).
-      merge(clock_in_days).
+      where(clock_in_day: clock_in_days).
       includes(:clock_in_day)
 
     monday_hours_count = 0
@@ -103,11 +102,10 @@ class GenerateFinanceReportData
 
     owed_hours = InRangeQuery.new(
       relation: OwedHour.enabled.where(staff_member: staff_member),
-      start_value: RotaShiftDate.new(week.start_date).start_time,
-      end_value: RotaShiftDate.new(week.end_date).end_time,
+      start_value: week.start_date,
+      end_value: week.end_date,
       start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date',
-      include_boundaries: [:start]
+      end_column_name: 'payslip_date'
     ).all
 
     owed_hours_minute_count = owed_hours.inject(0) do |sum, owed_hour|
@@ -148,6 +146,19 @@ class GenerateFinanceReportData
     else
       raise "Unsupported pay rate calculation_type: #{staff_member.pay_rate.calculation_type}"
     end
+
+    contains_time_shifted_owed_hours = owed_hours.any? do |owed_hour|
+      payslip_week = RotaWeek.new(owed_hour.date)
+      payslip_week != week
+    end
+
+    contains_time_shifted_holidays = holidays.any? do |holiday|
+      payslip_week = RotaWeek.new(holiday.start_date)
+      payslip_week != week
+    end
+
+    report.contains_time_shifted_owed_hours = !!contains_time_shifted_owed_hours
+    report.contains_time_shifted_holidays = !!contains_time_shifted_holidays
 
     report.total_cents = report.total_cents + report.accessories_cents
 
