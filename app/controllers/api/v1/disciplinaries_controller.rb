@@ -44,8 +44,12 @@ module Api
 
         if result.success?
           render(
-            json: result.disciplinary,
-            serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
+            json: {
+              disciplinary: Api::V1::StaffMemberProfile::DisciplinarySerializer.new(result.disciplinary),
+              permissions: {
+                isDisablable: can?(:disable, :disciplinary)
+              }
+            },
             status: 200
           )
         else
@@ -63,8 +67,12 @@ module Api
 
         if result.success?
           render(
-            json: result.disciplinary,
-            serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
+            json: {
+              disciplinary: Api::V1::StaffMemberProfile::DisciplinarySerializer.new(result.disciplinary),
+              permissions: {
+                isDisablable: can?(:disable, :disciplinary)
+              }
+            },
             status: 200
           )
         else
