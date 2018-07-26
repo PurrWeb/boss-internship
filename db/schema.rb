@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180725152708) do
+ActiveRecord::Schema.define(version: 20180725211549) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -489,8 +489,10 @@ ActiveRecord::Schema.define(version: 20180725152708) do
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
   add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
+  add_index "holidays", ["payslip_date", "staff_member_id"], name: "index_holidays_on_payslip_date_and_staff_member_id", using: :btree
   add_index "holidays", ["payslip_date"], name: "index_holidays_on_payslip_date", using: :btree
   add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
+  add_index "holidays", ["start_date", "end_date", "staff_member_id"], name: "index_holidays_on_start_date_and_end_date_and_staff_member_id", using: :btree
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
 
   create_table "hours_acceptance_breaks", force: :cascade do |t|
@@ -505,6 +507,7 @@ ActiveRecord::Schema.define(version: 20180725152708) do
   end
 
   add_index "hours_acceptance_breaks", ["disabled_at"], name: "index_hours_acceptance_breaks_on_disabled_at", using: :btree
+  add_index "hours_acceptance_breaks", ["hours_acceptance_period_id", "disabled_at"], name: "break_period_disabled_at", using: :btree
   add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
@@ -816,8 +819,10 @@ ActiveRecord::Schema.define(version: 20180725152708) do
     t.date     "payslip_date",                                             null: false
   end
 
+  add_index "owed_hours", ["date", "staff_member_id"], name: "index_owed_hours_on_date_and_staff_member_id", using: :btree
   add_index "owed_hours", ["date"], name: "index_owed_hours_on_date", using: :btree
   add_index "owed_hours", ["disabled_at"], name: "index_owed_hours_on_disabled_at", using: :btree
+  add_index "owed_hours", ["payslip_date", "staff_member_id"], name: "index_owed_hours_on_payslip_date_and_staff_member_id", using: :btree
   add_index "owed_hours", ["payslip_date"], name: "index_owed_hours_on_payslip_date", using: :btree
   add_index "owed_hours", ["staff_member_id"], name: "index_owed_hours_on_staff_member_id", using: :btree
 
@@ -1145,6 +1150,8 @@ ActiveRecord::Schema.define(version: 20180725152708) do
     t.datetime "updated_at",                null: false
   end
 
+  add_index "staff_member_venues", ["staff_member_id", "venue_id"], name: "index_staff_member_venues_on_staff_member_id_and_venue_id", using: :btree
+
   create_table "staff_members", force: :cascade do |t|
     t.integer  "address_id",                            limit: 4
     t.string   "gender",                                limit: 255,                   null: false
@@ -1188,6 +1195,7 @@ ActiveRecord::Schema.define(version: 20180725152708) do
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
   add_index "staff_members", ["date_of_birth"], name: "index_staff_members_on_date_of_birth", using: :btree
+  add_index "staff_members", ["master_venue_id"], name: "index_staff_members_on_master_venue_id", using: :btree
   add_index "staff_members", ["name_id"], name: "index_staff_members_on_name_id", using: :btree
   add_index "staff_members", ["notified_of_sia_expiry_at"], name: "index_staff_members_on_notified_of_sia_expiry_at", using: :btree
   add_index "staff_members", ["pay_rate_id"], name: "index_staff_members_on_pay_rate_id", using: :btree
@@ -1195,6 +1203,7 @@ ActiveRecord::Schema.define(version: 20180725152708) do
   add_index "staff_members", ["shift_change_occured_at"], name: "index_staff_members_on_shift_change_occured_at", using: :btree
   add_index "staff_members", ["sia_badge_expiry_date"], name: "index_staff_members_on_sia_badge_expiry_date", using: :btree
   add_index "staff_members", ["staff_type_id"], name: "index_staff_members_on_staff_type_id", using: :btree
+  add_index "staff_members", ["starts_at"], name: "index_staff_members_on_starts_at", using: :btree
   add_index "staff_members", ["verification_token"], name: "index_staff_members_on_verification_token", using: :btree
   add_index "staff_members", ["would_rehire"], name: "index_staff_members_on_would_rehire", using: :btree
 
