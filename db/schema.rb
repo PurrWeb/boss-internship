@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180726152345) do
+ActiveRecord::Schema.define(version: 20180726162125) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -330,6 +330,19 @@ ActiveRecord::Schema.define(version: 20180726152345) do
   end
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
+
+  create_table "finance_report_transitions", force: :cascade do |t|
+    t.string   "to_state",          limit: 255,   null: false
+    t.text     "metadata",          limit: 65535
+    t.integer  "sort_key",          limit: 4,     null: false
+    t.integer  "finance_report_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "finance_report_transitions", ["finance_report_id", "most_recent"], name: "index_finance_report_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "finance_report_transitions", ["finance_report_id", "sort_key"], name: "index_finance_report_transitions_parent_sort", unique: true, using: :btree
 
   create_table "finance_reports", force: :cascade do |t|
     t.integer  "staff_member_id",                  limit: 4,   null: false
