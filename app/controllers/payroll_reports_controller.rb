@@ -37,7 +37,10 @@ class PayrollReportsController < ApplicationController
                                   .weekly_finance_reports(week.start_date)
 
     reports = FinanceReport.joins(:staff_member)
-                .where(staff_member: staff_members_with_reports)
+                .where(
+                  staff_member: staff_members_with_reports,
+                  week_start: week.start_date
+                )
                 .includes(:venue, staff_member: [:name, :staff_type])
                 .all
 
