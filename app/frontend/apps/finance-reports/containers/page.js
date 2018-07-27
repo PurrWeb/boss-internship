@@ -17,6 +17,7 @@ const mapStateToProps = state => {
     venueId: oFetch(page, 'venueId'),
     startDate: oFetch(page, 'startDate'),
     endDate: oFetch(page, 'endDate'),
+    permissions: oFetch(page, 'permissions'),
     venueId: oFetch(page, 'venueId'),
     staffTypesWithFinanceReports: getStaffTypesWithFinanceReports(state),
     weekDates: getWeekDates(state),

@@ -62,7 +62,10 @@ class FinanceReportsController < ApplicationController
     finance_reports = reports + generated_reports
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
+    show_pdf_download_link = week < RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
+
     render locals: {
+      show_pdf_download_link: show_pdf_download_link,
       staff_members: staff_members,
       staff_types: staff_types,
       date: date,
@@ -81,6 +84,8 @@ class FinanceReportsController < ApplicationController
     week = week_from_params
     venue = venue_from_params
     filter_by_weekly_pay_rate = params.fetch(:pay_rate_filter) == 'weekly'
+
+    raise 'illegal attempt to render pdf' unless week < RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
 
     staff_members = FinanceReportStaffMembersQuery.new(
       venue: venue,

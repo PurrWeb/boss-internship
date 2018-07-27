@@ -102,6 +102,8 @@ class Page extends Component {
     const payRateFilter = oFetch(this.props, 'payRateFilter');
     const weekDates = oFetch(this.props, 'weekDates');
     const allReady = oFetch(this.props, 'allReady');
+    const permissions = oFetch(this.props, 'permissions');
+    const showPDFDownloadLink = oFetch(permissions, 'showPDFDownloadLink');
     const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
 
     const staffMemberIds = staffTypesWithFinanceReports
@@ -132,6 +134,7 @@ class Page extends Component {
           onDateChange={this.handleDateChange}
           onPayRateChange={this.handlePayRateChange}
           canExportToCSV={canExportToCSV}
+          showPDFDownloadLink={showPDFDownloadLink}
         />
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}

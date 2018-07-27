@@ -41,6 +41,7 @@ class Dashboard extends Component {
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
     });
+    const showPDFDownloadLink = oFetch(this.props, 'showPDFDownloadLink');
     const canExportToCSV = oFetch(this.props, 'canExportToCSV');
 
     return (
@@ -49,17 +50,17 @@ class Dashboard extends Component {
           <div className="boss-page-dashboard boss-page-dashboard_updated">
             <div className="boss-page-dashboard__group">
               <h1 className="boss-page-dashboard__title">{title}</h1>
-              { canExportToCSV && <div className="boss-page-dashboard__buttons-group">
+              { (canExportToCSV || showPDFDownloadLink) && <div className="boss-page-dashboard__buttons-group">
 
-                <a href={appRoutes.financeReportsPdfDownload({ date, venueId, payRateFilter })}
+                { showPDFDownloadLink && <a href={appRoutes.financeReportsPdfDownload({ date, venueId, payRateFilter })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button" >
                   Download PDF
-                </a>
-                <a href={appRoutes.financeReportsCSVExport({ date, venueId, payRateFilter })}
+                </a> }
+                { canExportToCSV && <a href={appRoutes.financeReportsCSVExport({ date, venueId, payRateFilter })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
                   Export CSV
-                </a>
+                </a> }
               </div> }
             </div>
             <div className="boss-page-dashboard__group">
@@ -98,7 +99,7 @@ Dashboard.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   onDateChange: PropTypes.func.isRequired,
-  onPayRateChange: PropTypes.func.isRequired,
+  onPayRateChange: PropTypes.func.isRequired
 };
 
 export default Dashboard;

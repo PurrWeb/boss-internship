@@ -9,6 +9,7 @@ export const financeReportsSelector = state => state.get('financeReports');
 export const staffMembersSelector = state => state.get('staffMembers');
 export const payRateFilterSelector = state => state.getIn(['page', 'payRateFilter']);
 export const startDateSelector = state => state.getIn(['page', 'startDate']);
+export const permissionsSelector = state => state.getIn(['page', 'permissions']);
 
 export const getFilteredFinanceReports = createSelector(
   financeReportsSelector,
