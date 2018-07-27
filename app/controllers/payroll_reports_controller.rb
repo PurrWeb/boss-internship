@@ -24,37 +24,34 @@ class PayrollReportsController < ApplicationController
     date = date_from_params
     week = week_from_params
     venue = venue_from_params
+    filter_by_weekly_pay_rate = params[:pay_rate_filter] == 'weekly'
 
-    staff_members = FinanceReportStaffMembersQuery.new(
-      venue: venue,
-      start_date: week.start_date,
-      end_date: week.end_date,
-      filter_by_weekly_pay_rate: false
-    ).to_a
-
-    staff_types = StaffType.all
-    staff_members_with_reports = StaffMember.where(id: staff_members.map(&:id))
-                                  .weekly_finance_reports(week.start_date)
-
-    reports = FinanceReport.joins(:staff_member)
-                .where(
-                  staff_member: staff_members_with_reports,
-                  week_start: week.start_date
-                )
-                .includes(:venue, staff_member: [:name, :staff_type])
-                .all
-
-    staffs_without_requests = StaffMember.where(id: (staff_members - staff_members_with_reports).map(&:id)).
-      includes([:name, :staff_type, :pay_rate, :master_venue])
-
-    generated_reports = staffs_without_requests.map do |staff_member|
-      GenerateFinanceReportData.new(
-        staff_member: staff_member,
-        week: week
-      ).call.report
+    pay_rates = PayRate.all
+    if filter_by_weekly_pay_rate
+      pay_rates = PayRate.weekly
     end
 
-    finance_reports = reports + generated_reports
+    staff_members = StaffMember.
+      where(
+        master_venue: venue,
+        pay_rate: pay_rates
+      )
+
+    staff_members = staff_members.
+      includes([:name, :staff_type, :pay_rate, :master_venue])
+
+    finance_reports = FinanceReport.
+      where(
+        venue: venue,
+        week_start: week.start_date,
+        staff_member: staff_members
+      ).
+      includes([:venue, :staff_member])
+
+    staff_types = StaffType.
+      joins(:staff_members).
+      merge(staff_members)
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     ability = UserAbility.new(current_user)
 
@@ -85,12 +82,27 @@ class PayrollReportsController < ApplicationController
     venue = venue_from_params
     filter_by_weekly_pay_rate = params.fetch(:pay_rate_filter) == 'weekly'
 
-    staff_members = FinanceReportStaffMembersQuery.new(
-      venue: venue,
-      start_date: week.start_date,
-      end_date: week.end_date,
-      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).to_a
+    pay_rates = PayRate.all
+    if filter_by_weekly_pay_rate
+      pay_rates = PayRate.weekly
+    end
+
+    staff_members = StaffMember.
+      where(
+        master_venue: venue,
+        pay_rate: pay_rates
+      )
+
+    staff_members = staff_members.
+      includes([:name, :staff_type, :pay_rate, :master_venue])
+
+    finance_reports = FinanceReport.
+      where(
+        venue: venue,
+        week_start: week.start_date,
+        staff_member: staff_members
+      ).
+      includes([:venue, :staff_member])
 
     pdf = FinanceReportPDF.new(
       report_title: 'Finance Report',
@@ -101,18 +113,12 @@ class PayrollReportsController < ApplicationController
       display_totals: false
     )
 
-    staff_members.each do |staff_member|
+    finance_reports.each do |finance_report|
+      staff_member = finance_report.staff_member
+
       pdf.add_report(
         staff_type: staff_member.staff_type,
-        report: (
-          FinanceReport.find_by(
-            staff_member: staff_member,
-            week_start: week.start_date
-          ) || GenerateFinanceReportData.new(
-            staff_member: staff_member,
-            week: week
-          ).call.report
-        )
+        report: finance_report
       )
     end
 

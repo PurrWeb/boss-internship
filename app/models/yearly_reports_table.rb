@@ -35,22 +35,41 @@ class YearlyReportsTable
   end
 
   def generate_report_data
-    staff_members = FinanceReportStaffMembersQuery.new(
-      venue: venue,
-      start_date: tax_year.start_date,
-      end_date: tax_year.end_date,
-      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).to_a
-    ActiveRecord::Associations::Preloader.new.preload(staff_members, [:staff_type, :pay_rate, :name])
-
-
     @_staff_types = []
     @_reports_by_staff_type = {}
     @_totals_by_staff_type = {}
 
+    finance_reports = FinanceReport.
+      where(
+        venue: venue
+      )
+
+    finance_reports = InRangeQuery.new(
+      relation: finance_reports,
+      start_value: tax_year.start_date,
+      end_value: tax_year.end_date,
+      start_column_name: 'week_start',
+      end_column_name: 'week_start'
+    ).all
+
+    pay_rates = PayRate.all
+    if filter_by_weekly_pay_rate
+      pay_rates = PayRate.weekly
+    end
+
+    staff_members = StaffMember.
+      where(
+        master_venue: venue,
+        pay_rate: pay_rates
+      ).
+      joins(:finance_reports).
+      merge(finance_reports).
+      uniq.
+      includes(:staff_type, :name, :pay_rate)
+
     staff_members.each do |staff_member|
       staff_type = staff_member.staff_type
-      report = GenerateYearlyReportData.new(
+      yearly_report = GenerateYearlyReportData.new(
         staff_member: staff_member,
         tax_year: tax_year
       ).call
@@ -58,10 +77,10 @@ class YearlyReportsTable
       @_staff_types << staff_type unless @_staff_types.include?(staff_type)
 
       @_reports_by_staff_type[staff_type] ||= []
-      @_reports_by_staff_type.fetch(staff_type) << report
+      @_reports_by_staff_type.fetch(staff_type) << yearly_report
 
       @_totals_by_staff_type[staff_type] ||= { total_cents: 0 }
-      @_totals_by_staff_type[staff_type][:total_cents] += report.total_cents
+      @_totals_by_staff_type[staff_type][:total_cents] += yearly_report.total_cents
 
       @empty = false
     end
