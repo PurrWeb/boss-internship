@@ -17,5 +17,8 @@
     staff_types,
     serializer: Api::V1::FinanceReports::StaffTypeSerializer,
   ),
-  venue: Api::V1::FinanceReports::VenueSerializer.new(venue)
+  venue: Api::V1::FinanceReports::VenueSerializer.new(venue),
+  permissions: {
+    showPDFDownloadLink: show_pdf_download_link
+  }
 }) %>
