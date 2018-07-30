@@ -20,5 +20,6 @@ FactoryGirl.define do
     accessories_cents 0
     contains_time_shifted_owed_hours false
     contains_time_shifted_holidays false
+    requiring_update true
   end
 end
