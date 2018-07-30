@@ -1,22 +1,14 @@
 class SaveFinanceReport
-  def initialize(staff_member:, week:)
-    @staff_member = staff_member
-    @week = week
+  def initialize(finance_report:)
+    @finance_report = finance_report
   end
-  attr_reader :week, :staff_member
+  attr_reader :finance_report
 
   def call
-    result = GenerateFinanceReportData.new(
-      staff_member: staff_member,
-      week: week
-    ).call
-
-    raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless FinanceReportCompletionStatus.new(finance_report: result.report).can_complete?
+    raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless finance_report.ready?
 
     ActiveRecord::Base.transaction do
-      report = result.report
-
-      report.save!
+      finance_report.mark_completed!
 
       result.hours_acceptance_periods.each do |hours_acceptance_period|
         hours_acceptance_period.update_attributes!(frozen_by: report)

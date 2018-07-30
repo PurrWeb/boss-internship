@@ -1,27 +1,18 @@
 class SaveFinanceReports
-  def initialize(staff_members:, week:)
-    @staff_members = staff_members
-    @week = week
+  def initialize(finance_reports:)
+    @finance_reports = finance_reports
   end
-  attr_reader :week, :staff_members
+  attr_reader :finance_reports
 
   def call
-    report_results = staff_members.map do |staff_member|
-      GenerateFinanceReportData.new(
-        staff_member: staff_member,
-        week: week
-      ).call
-    end
-
-    unsaveable_reports = report_results.map(&:report).reject{ |report| FinanceReportCompletionStatus.new(finance_report: report).can_complete? }
+    unsaveable_reports = finance_reports.reject{ |report| !report.ready? }
     if unsaveable_reports.length > 0
       raise "Attempt to complete incompletable finanace report for staff members with ids: #{ unsaveable_reports.map{ |report| report.staff_member_id }.join(', ') }"
     end
 
     ActiveRecord::Base.transaction do
-      report_results.each do |report_result|
-        report = report_result.report
-        report.save!
+      finance_reports.each do |report|
+        report.mark_completed!
 
         report_result.hours_acceptance_periods.each do |hours_acceptance_period|
           hours_acceptance_period.update_attributes!(frozen_by: report)
