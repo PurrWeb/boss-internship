@@ -40,9 +40,10 @@ class FinanceReport < ActiveRecord::Base
   # validation
   def requiring_update_matches_status
     if (
-      !@override_status_match_validation &&
-      (in_requiring_update_state? && requiring_update != true) ||
-      (!in_requiring_update_state? && requiring_update != false)
+      !@override_status_match_validation && (
+        (in_requiring_update_state? && requiring_update != true) ||
+        (!in_requiring_update_state? && requiring_update != false)
+      )
     )
       errors.add(:requiring_update, 'must match status')
     end
@@ -104,7 +105,7 @@ class FinanceReport < ActiveRecord::Base
 
   def mark_requiring_update!
     ActiveRecord::Base.transaction do
-      self.requiring_update = previous_state == FinanceReportStateMachine::REQUIRING_UPDATE_STATE.to_s
+      state_machine.transition_to!(FinanceReportStateMachine::REQUIRING_UPDATE_STATE)
     end
   end
 

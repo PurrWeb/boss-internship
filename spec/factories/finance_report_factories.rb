@@ -21,5 +21,11 @@ FactoryGirl.define do
     contains_time_shifted_owed_hours false
     contains_time_shifted_holidays false
     requiring_update true
+
+    trait :create_ready do
+      after(:create) do |object|
+        object.mark_ready!
+      end
+    end
   end
 end
