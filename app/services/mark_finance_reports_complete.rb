@@ -12,6 +12,7 @@ class MarkFinanceReportsComplete
 
     ActiveRecord::Base.transaction do
       finance_reports.each do |report|
+        report.allow_mark_completed = true
         report.mark_completed!
 
         report_result.hours_acceptance_periods.each do |hours_acceptance_period|

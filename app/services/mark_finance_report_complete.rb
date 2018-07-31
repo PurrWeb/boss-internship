@@ -8,6 +8,7 @@ class MarkFinanceReportComplete
     raise "Attempt to complete incompleatable finanace report with id: #{result.report.id}" unless finance_report.ready?
 
     ActiveRecord::Base.transaction do
+      report.allow_mark_completed = true
       finance_report.mark_completed!
 
       result.hours_acceptance_periods.each do |hours_acceptance_period|

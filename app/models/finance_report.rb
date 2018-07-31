@@ -33,8 +33,11 @@ class FinanceReport < ActiveRecord::Base
   validates :holiday_days_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validate  :week_start_valid
 
-  #used by services to makes statesman play well with our validations
+  # Used by services to makes statesman play well with our validations
   attr_accessor :override_status_match_validation
+
+  # This must be set by the service to avoid accidental calling without updating dependant records
+  attr_accessor :allow_mark_completed
 
   # validation
   def requiring_update_matches_status
@@ -121,6 +124,7 @@ class FinanceReport < ActiveRecord::Base
   end
 
   def mark_completed!
+    raise 'Allow mark completed not set' unless allow_mark_completed
     ActiveRecord::Base.transaction do
       state_machine.transition_to!(FinanceReportStateMachine::DONE_STATE)
     end
