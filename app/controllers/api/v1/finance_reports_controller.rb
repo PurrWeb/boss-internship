@@ -9,7 +9,7 @@ module Api
         week = week_from_params
         staff_members = staff_members_from_params
 
-        SaveFinanceReports.new(
+        MarkFinanceReportsComplete.new(
           staff_members: staff_members,
           week: week
         ).call
@@ -26,7 +26,7 @@ module Api
         week = week_from_params
         staff_member = staff_member_from_params
 
-        SaveFinanceReport.new(
+        MarkFinanceReportComplete.new(
           staff_member: staff_member,
           week: week
         ).call

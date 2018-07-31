@@ -1,4 +1,4 @@
-class SaveFinanceReport
+class MarkFinanceReportComplete
   def initialize(finance_report:)
     @finance_report = finance_report
   end
