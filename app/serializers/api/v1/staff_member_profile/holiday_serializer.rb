@@ -10,7 +10,17 @@ class Api::V1::StaffMemberProfile::HolidaySerializer < ActiveModel::Serializer
     :created_at,
     :editable,
     :state,
-    :frozen
+    :frozen,
+    :requestedBy,
+    :requestedAt
+
+  def requestedBy
+    object.holiday_request.creator.full_name if object.created_from_request?
+  end
+
+  def requestedAt
+    object.holiday_request.created_at if object.created_from_request?
+  end
 
   def start_date
     UIRotaDate.format(object.start_date)
