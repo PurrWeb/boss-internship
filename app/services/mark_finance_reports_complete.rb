@@ -26,6 +26,14 @@ class MarkFinanceReportsComplete
         report_result.owed_hours.each do |owed_hour|
           owed_hour.update_attributes!(frozen_by: report)
         end
+
+        result.accessories_requests.each do |request|
+          request.update_attributes!(frozen_by: report)
+        end
+
+        result.accessories_refunds.each do |refund|
+          refund.update_attributes!(frozen_by: report)
+        end
       end
     end
   end
