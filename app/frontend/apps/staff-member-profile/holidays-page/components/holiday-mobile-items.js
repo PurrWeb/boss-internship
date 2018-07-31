@@ -32,12 +32,79 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
     });
   };
 
+  const renderCreatedRow = ({ creator, createdAtText, status, requestedBy, requestedAt }) => {
+    if (status === 'Pending') {
+      return (
+        <div className="boss-check__row">
+          <div className="boss-check__cell">
+            <p className="boss-check__text boss-check__text_role_user">
+              <span className="boss-check__text-label">Requested: </span>
+              {creator}
+            </p>
+            <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
+          </div>
+        </div>
+      );
+    }
+    if (status === 'Accepted') {
+      return (
+        <div className="boss-check__row">
+          <div className="boss-check__cell">
+            <div className="boss-check__cell-content">
+              <div className="boss-check__cell-group">
+                <p className="boss-check__text boss-check__text_role_user">
+                  <span className="boss-check__text-label">Requested: </span>
+                  {requestedBy}
+                </p>
+                <p className="boss-check__text boss-check__text_role_secondary">{requestedAt}</p>
+              </div>
+              <div className="boss-check__cell-group">
+                <p className="boss-check__text boss-check__text_role_user">
+                  <span className="boss-check__text-label">Accepted: </span>
+                  {creator}
+                </p>
+                <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (status === 'Rejected') {
+      return (
+        <div className="boss-check__row">
+          <div className="boss-check__cell">
+            <p className="boss-check__text boss-check__text_role_user">
+              <span className="boss-check__text-label">Requested: </span>
+              {creator}
+            </p>
+            <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="boss-check__row">
+        <div className="boss-check__cell">
+          <p className="boss-check__text boss-check__text_role_user">
+            <span className="boss-check__text-label">Created by: </span>
+            {creator}
+          </p>
+          <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
+        </div>
+      </div>
+    );
+  };
+
   const jsHoliday = holiday.toJS();
   const typeText = humanize(oFetch(jsHoliday, 'holiday_type'));
   const note = jsHoliday.note || '-';
   const creator = oFetch(jsHoliday, 'creator');
   const status = humanize(oFetch(jsHoliday, 'state'));
   const createdAtText = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
+  const requestedBy = jsHoliday.requestedBy;
+  const requestedAt =
+    jsHoliday.requestedAt && `(${safeMoment.iso8601Parse(jsHoliday.requestedAt).format('Do MMMM YYYY - HH:mm')})`;
   const startDateText = safeMoment.uiDateParse(oFetch(jsHoliday, 'start_date')).format('DD MMM Y');
   const endDateText = safeMoment.uiDateParse(oFetch(jsHoliday, 'end_date')).format('DD MMM Y');
   const holidayType = oFetch(jsHoliday, 'type');
@@ -47,7 +114,7 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
     oFetch(jsHoliday, 'end_date'),
   );
   const sPayslipDate = oFetch(jsHoliday, 'payslip_date');
-  const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A'
+  const payslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : 'N/A';
 
   const isEditable =
     holidayType === 'holiday'
@@ -91,15 +158,7 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
           </p>
         </div>
       </div>
-      <div className="boss-check__row">
-        <div className="boss-check__cell">
-          <p className="boss-check__text boss-check__text_role_user">
-            <span className="boss-check__text-label">Created by: </span>
-            {creator}
-          </p>
-          <p className="boss-check__text boss-check__text_role_secondary">{createdAtText}</p>
-        </div>
-      </div>
+      {renderCreatedRow({ creator, createdAtText, status, requestedBy, requestedAt })}
       {note !== '-' && (
         <div className="boss-check__row">
           <div className="boss-check__cell">
@@ -112,7 +171,7 @@ const HolidayMobileItem = ({ holiday, deleteHoliday, onEditHoliday, isStaffMembe
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <p className="boss-check__text boss-check__text_role_date">
-          <span className="boss-check__text-label">Payslip Date: </span>
+            <span className="boss-check__text-label">Payslip Date: </span>
             {payslipDateText}
           </p>
         </div>

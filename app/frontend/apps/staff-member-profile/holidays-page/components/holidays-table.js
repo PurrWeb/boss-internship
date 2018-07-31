@@ -84,7 +84,68 @@ const SimpleCell = ({ label, text, classNames }) => {
   );
 };
 
-const CreatedByCell = ({ label, creator, created }) => {
+const CreatedByCell = ({ label, creator, created, status, requestedBy, requestedAt }) => {
+  if (status === 'Pending') {
+    return (
+      <div className="boss-table__cell">
+        <div className="boss-table__info">
+          <p className="boss-table__label">{label}</p>
+          <div className="boss-table__info-group">
+            <p className="boss-table__text">
+              <span className="boss-table__text-line">
+                <span className="boss-table__text-label">Requested: </span>
+                {creator}
+              </span>
+              <span className="boss-table__text-meta">{created}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (status === 'Accepted') {
+    return (
+      <div className="boss-table__cell">
+        <div className="boss-table__info">
+          <p className="boss-table__label">{label}</p>
+          <div className="boss-table__info-group">
+            <p className="boss-table__text">
+              <span className="boss-table__text-line">
+                <span className="boss-table__text-label">Requested: </span>
+                {requestedBy}
+              </span>
+              <span className="boss-table__text-meta">{requestedAt}</span>
+            </p>
+            <p className="boss-table__text">
+              <span className="boss-table__text-line">
+                <span className="boss-table__text-label">Accepted: </span>
+                {creator}
+              </span>
+              <span className="boss-table__text-meta">{created}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (status === 'Rejected') {
+    return (
+      <div className="boss-table__cell">
+        <div className="boss-table__info">
+          <p className="boss-table__label">{label}</p>
+          <div className="boss-table__info-group">
+            <p className="boss-table__text">
+              <span className="boss-table__text-line">
+                <span className="boss-table__text-label">Requested: </span>
+                {creator}
+              </span>
+              <span className="boss-table__text-meta">{created}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="boss-table__cell">
       <div className="boss-table__info">
@@ -105,6 +166,9 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
   const status = humanize(oFetch(jsHoliday, 'state'));
   const note = oFetch(jsHoliday, 'note') || '-';
   const creator = oFetch(jsHoliday, 'creator');
+  const requestedBy = jsHoliday.requestedBy;
+  const requestedAt =
+    jsHoliday.requestedAt && `(${safeMoment.iso8601Parse(jsHoliday.requestedAt).format('Do MMMM YYYY - HH:mm')})`;
   const cerated = `(${safeMoment.iso8601Parse(oFetch(jsHoliday, 'created_at')).format('Do MMMM YYYY - HH:mm')})`;
   const editable = oFetch(jsHoliday, 'editable');
   const isFrozen = oFetch(jsHoliday, 'frozen');
@@ -141,7 +205,14 @@ const Row = ({ holiday, deleteHoliday, onEditHoliday, isStaffMemberDisabled, per
       <SimpleCell label="status" text={status} classNames={statusClasses[oFetch(jsHoliday, 'state')]} />
       <SimpleCell label="dates" text={utils.formatDateForHoliday(holiday.toJS())} />
       <SimpleCell label="note" text={note} />
-      <CreatedByCell label="createdBy" creator={creator} created={cerated} />
+      <CreatedByCell
+        label="Created"
+        creator={creator}
+        created={cerated}
+        status={status}
+        requestedAt={requestedAt}
+        requestedBy={requestedBy}
+      />
       <SimpleCell label="payslipDate" text={payslipDateText} />
       <ActionsCell
         label="actions"
@@ -165,7 +236,7 @@ const Header = () => {
       <div className="boss-table__cell boss-table__cell_role_header">Status</div>
       <div className="boss-table__cell boss-table__cell_role_header">Dates</div>
       <div className="boss-table__cell boss-table__cell_role_header">Note</div>
-      <div className="boss-table__cell boss-table__cell_role_header">Created By</div>
+      <div className="boss-table__cell boss-table__cell_role_header">Created</div>
       <div className="boss-table__cell boss-table__cell_role_header">Payslip Date</div>
       <div className="boss-table__cell boss-table__cell_role_header" />
     </div>
