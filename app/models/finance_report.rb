@@ -33,14 +33,13 @@ class FinanceReport < ActiveRecord::Base
   validates :holiday_days_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validate  :week_start_valid
 
-  def override_status_match_validation=(val)
-    @override_status_match_validation = val
-  end
+  #used by services to makes statesman play well with our validations
+  attr_accessor :override_status_match_validation
 
   # validation
   def requiring_update_matches_status
     if (
-      !@override_status_match_validation && (
+      !override_status_match_validation && (
         (in_requiring_update_state? && requiring_update != true) ||
         (!in_requiring_update_state? && requiring_update != false)
       )
