@@ -262,8 +262,11 @@ class AssociateFinanceReportsWithExistingRecords < ActiveRecord::Migration
     else
       FinanceReport.create!(
         staff_member: staff_member,
+        staff_member_name: staff_member.full_name,
         week_start: week_start,
         venue: venue,
+        venue_name: venue.name,
+        pay_rate_description: staff_member.pay_rate.text_description_short,
         requiring_update: true
       )
     end

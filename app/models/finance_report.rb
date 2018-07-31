@@ -9,11 +9,15 @@ class FinanceReport < ActiveRecord::Base
   belongs_to :venue
   has_many :finance_report_transitions, autosave: false
 
+  has_many :holidays
+  has_many :owed_hours
+  has_many :accessory_requests
+  has_many :accessory_refund_requests
+
   validates :staff_member, presence: true
   validates :venue, presence: true
   validates :week_start, presence: true
   validates :requiring_update, inclusion: { in: [true, false], message: 'is required' }
-  validate :requiring_update_matches_status
   validates :venue_name, presence: true, unless: :requiring_update?
   validates :staff_member_name, presence: true, unless: :requiring_update?
   validates :pay_rate_description, presence: true, unless: :requiring_update?
@@ -27,17 +31,25 @@ class FinanceReport < ActiveRecord::Base
   validates :friday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validates :saturday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validates :sunday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :total_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validates :owed_hours_minute_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :total_cents, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
+  validates :total_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
   validates :holiday_days_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
+  validate :total_cents_valid
   validate  :week_start_valid
+  validate :requiring_update_matches_status
 
   # Used by services to makes statesman play well with our validations
   attr_accessor :override_status_match_validation
 
   # This must be set by the service to avoid accidental calling without updating dependant records
   attr_accessor :allow_mark_completed
+
+  # validation
+  def total_cents_valid
+    if total_cents.present? && (ready? || done?) && (total_cents < 0)
+      errors.add(:total_cents, 'must be < 0')
+    end
+  end
 
   # validation
   def requiring_update_matches_status
@@ -48,6 +60,14 @@ class FinanceReport < ActiveRecord::Base
       )
     )
       errors.add(:requiring_update, 'must match status')
+    end
+  end
+
+  #validation
+  def week_start_valid
+    return unless week_start.present?
+    if RotaWeek.new(week_start).start_date != week_start
+      errors.add(:week_start, 'must be at start of week')
     end
   end
 
@@ -75,14 +95,6 @@ class FinanceReport < ActiveRecord::Base
 
   def week
     RotaWeek.new(week_start)
-  end
-
-  #validation
-  def week_start_valid
-    return unless week_start.present?
-    if RotaWeek.new(week_start).start_date != week_start
-      errors.add(:week_start, 'must be at start of week')
-    end
   end
 
   def current_state

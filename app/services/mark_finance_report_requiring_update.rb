@@ -20,7 +20,9 @@ class MarkFinanceReportRequiringUpdate
     else
       FinanceReport.create!(
         staff_member: staff_member,
+        staff_member_name: staff_member.full_name,
         venue: venue,
+        venue_name: venue.name,
         week_start: week_start,
         requiring_update: true
       )
