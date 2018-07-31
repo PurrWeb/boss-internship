@@ -153,7 +153,7 @@ describe GenerateFinanceReportData do
       expect(finance_report.contains_time_shifted_holidays).to eq(false)
       expected_total_cents = (shift_length_hours *  staff_member.pay_rate.cents) + (owed_hour_hours * staff_member.pay_rate.cents) - (accessory_pounds * 100)
       expect(finance_report.total_cents).to eq(expected_total_cents)
-      expect(finance_report).to be_valid
+      expect(finance_report).to_not be_valid
     end
   end
 
@@ -194,7 +194,10 @@ describe GenerateFinanceReportData do
       expect(finance_report.contains_time_shifted_holidays).to eq(true)
       expected_total_cents = (shift_length_hours *  staff_member.pay_rate.cents) + (owed_hour_hours * staff_member.pay_rate.cents) - (accessory_pounds * 100)
       expect(finance_report.total_cents).to eq(expected_total_cents)
-      expect(finance_report).to be_valid
+
+      # This will be invalid untill the correct method is called to
+      # update it's status in the calling class
+      expect(finance_report).to_not be_valid
     end
   end
 end
