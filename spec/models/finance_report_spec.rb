@@ -194,7 +194,9 @@ describe FinanceReport do
         finance_report.assign_attributes(valid_extra_attributes)
         finance_report.save!
         finance_report.mark_ready!
-        finance_report.assign_attributes(extra_attributes)
+        finance_report.assign_attributes(
+          extra_attributes.merge(allow_mark_completed: true)
+        )
       end
 
       context 'invalid attributes supplied' do

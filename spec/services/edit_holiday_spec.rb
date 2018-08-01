@@ -172,14 +172,18 @@ RSpec.describe 'Edit Holiday service'  do
 
   context 'holiday is frozen' do
     let(:finance_report) do
-      FactoryGirl.create(:finance_report)
+      FactoryGirl.create(:finance_report).tap do |finance_report|
+        finance_report.mark_ready!
+        finance_report.allow_mark_completed = true
+        finance_report.mark_completed!
+      end
     end
     let(:holiday) do
       FactoryGirl.create(
         :holiday,
         start_date: start_date,
         end_date: end_date,
-        frozen_by: finance_report
+        finance_report: finance_report
       )
     end
     let(:result) { service.call }

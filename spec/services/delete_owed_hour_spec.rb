@@ -32,12 +32,16 @@ RSpec.describe 'DeleteOwedHour service'  do
 
   context 'owed_hour is frozen' do
     let(:finance_report) do
-      FactoryGirl.create(:finance_report)
+      FactoryGirl.create(:finance_report).tap do |finance_report|
+        finance_report.mark_ready!
+        finance_report.allow_mark_completed = true
+        finance_report.mark_completed!
+      end
     end
     let(:owed_hour) do
       FactoryGirl.create(
         :owed_hour,
-        frozen_by: finance_report
+        finance_report: finance_report
       )
     end
     let(:result) { service.call }

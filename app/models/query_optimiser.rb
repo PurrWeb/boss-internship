@@ -3,8 +3,8 @@
 class QueryOptimiser
   OPTIMISATIONS = {
     staff_member_show: [
-      { holidays: [:frozen_by, { creator: [:name]} ]},
-      { owed_hours: [:staff_member, :creator, :frozen_by] },
+      { holidays: [:finance_report, { creator: [:name]} ]},
+      { owed_hours: [:staff_member, :creator, :finance_report] },
       [:name]
     ]
   }
