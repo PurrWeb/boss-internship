@@ -99,6 +99,19 @@ RSpec.describe 'Clocking actions' do
       expect(HoursAcceptancePeriod.count).to eq(0)
     end
 
+    specify 'should update the finance report' do
+      expect(
+        FinanceReport.where(staff_member: target_staff_member).count
+      ).to eq(0)
+      post(url, params)
+      expect(
+        FinanceReport.where(staff_member: target_staff_member).count
+      ).to eq(1)
+      finance_report = FinanceReport.where(staff_member: target_staff_member).first
+      expect(finance_report.staff_member).to eq(target_staff_member)
+      expect(finance_report.requiring_update?).to eq(true)
+    end
+
     context 'when previous events exist' do
       let(:params) do
         {
@@ -216,6 +229,19 @@ RSpec.describe 'Clocking actions' do
         expect(hours_acceptance_period.clock_in_day).to eq(clock_in_period.clock_in_day)
         expect(hours_acceptance_period.starts_at).to eq(clock_in_period.starts_at)
         expect(hours_acceptance_period.ends_at).to eq(clock_in_period.ends_at)
+      end
+
+      specify 'should update the finance report' do
+        expect(
+          FinanceReport.where(staff_member: target_staff_member).count
+        ).to eq(0)
+        post(url, params)
+        expect(
+          FinanceReport.where(staff_member: target_staff_member).count
+        ).to eq(1)
+        finance_report = FinanceReport.where(staff_member: target_staff_member).first
+        expect(finance_report.staff_member).to eq(target_staff_member)
+        expect(finance_report.requiring_update?).to eq(true)
       end
     end
 
