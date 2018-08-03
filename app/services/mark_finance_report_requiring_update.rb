@@ -16,9 +16,10 @@ class MarkFinanceReportRequiringUpdate
     )
 
     if finance_report.present?
+     raise "Attempt to mark comepleted finance report #{finance_report.id} requiring update" if finance_report.done?
      finance_report.mark_requiring_update!
     else
-      FinanceReport.create!(
+      finance_report = FinanceReport.create!(
         staff_member: staff_member,
         staff_member_name: staff_member.full_name,
         venue: venue,
@@ -27,5 +28,6 @@ class MarkFinanceReportRequiringUpdate
         requiring_update: true
       )
     end
+    finance_report
   end
 end
