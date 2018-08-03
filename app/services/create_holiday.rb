@@ -14,13 +14,23 @@ class CreateHoliday
     success = false
     holiday = nil
     ActiveRecord::Base.transaction do
-      payslip_date = params[:start_date].present? && GetPayslipDate.new(item_date: params.fetch(:start_date)).call
+      start_date_from_params = params[:start_date]
+      staff_member_from_params = params[:staff_member]
+      payslip_date = start_date_from_params.present? && GetPayslipDate.new(item_date: start_date_from_params).call
       holiday = Holiday.new(params.merge(
         payslip_date: payslip_date
       ))
       holiday.validate_as_assignment = params[:validate_as_assignment]
       holiday.validate_as_creation = true
-      success = holiday.save
+
+      finance_report = nil
+      if staff_member_from_params.present? && payslip_date.present?
+        payslip_week = RotaWeek.new(payslip_date)
+        finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member_from_params, week: payslip_week).call
+      end
+
+      success = holiday.update_attributes(finance_report: finance_report)
+      raise ActiveRecord::Rollback unless success
     end
 
     Result.new(success, holiday)
