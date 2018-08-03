@@ -20,13 +20,15 @@ class CreateOwedHour
       ))
       owed_hour.validate_as_creation = true
       staff_member = owed_hour.staff_member
-      week = RotaWeek.new(payslip_date)
-      finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+      finance_report = nil
+
+      if payslip_date.present? && staff_member.present?
+        week = RotaWeek.new(payslip_date)
+        finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+      end
 
       success = owed_hour.update_attributes(finance_report: finance_report)
       raise ActiveRecord::Rollback unless success
-
-
     end
 
     Result.new(success, owed_hour)
