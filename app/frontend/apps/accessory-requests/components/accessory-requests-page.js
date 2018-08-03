@@ -1,8 +1,6 @@
 import React from 'react';
-import {
-  SimpleDashboard,
-  DashboardActions,
-} from '~/components/boss-dashboards';
+import oFetch from 'o-fetch';
+import { SimpleDashboard, DashboardActions } from '~/components/boss-dashboards';
 
 import VenueSelect from './venue-select';
 
@@ -28,30 +26,37 @@ class AccessoryRequestsPage extends React.Component {
 
   render() {
     const accessories = this.getAccessories();
-    const isShowLoadMore =
-      accessories.length < this.props.pagination.totalCount;
+    const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
+    const venuesJs = oFetch(this.props, 'venues').toJS();
+    const currentVenue = oFetch(this.props, 'currentVenue');
+    const accessoryRequestsJs = oFetch(this.props, 'accessoryRequests').toJS();
+    const accessoryRefundRequestsJs = oFetch(this.props, 'accessoryRefundRequests').toJS();
+    const staffMembersJs = oFetch(this.props, 'staffMembers').toJS();
+    const getAccessoryRequestPermission = oFetch(this.props, 'getAccessoryRequestPermission');
+    const getAccessoryRefundRequestPermission = oFetch(this.props, 'getAccessoryRefundRequestPermission');
 
     return (
       <div>
         <SimpleDashboard title="Accessory Requests">
           <DashboardActions>
-            <VenueSelect
-              venues={this.props.venues.toJS()}
-              selected={this.props.currentVenue}
-              onChange={this.handleVenueChange}
-            />
+            <VenueSelect venues={venuesJs} selected={currentVenue} onChange={this.handleVenueChange} />
           </DashboardActions>
         </SimpleDashboard>
         <AccessoryList
           accessories={this.getAccessories()}
-          accessoryRequests={this.props.accessoryRequests.toJS()}
-          accessoryRefundRequests={this.props.accessoryRefundRequests.toJS()}
-          staffMembers={this.props.staffMembers.toJS()}
+          accessoryRequests={accessoryRequestsJs}
+          accessoryRefundRequests={accessoryRefundRequestsJs}
+          staffMembers={staffMembersJs}
           onLoadMoreClick={this.handleLoadMore}
           totalCount={this.props.pagination.totalCount}
           isShowLoadMore={isShowLoadMore}
           accessoryItemRenderer={data => (
-            <AccessoryListItem actions={this.props.actions} data={data} />
+            <AccessoryListItem
+              getAccessoryRequestPermission={getAccessoryRequestPermission}
+              getAccessoryRefundRequestPermission={getAccessoryRefundRequestPermission}
+              actions={this.props.actions}
+              data={data}
+            />
           )}
         />
       </div>

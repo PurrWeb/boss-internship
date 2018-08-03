@@ -1,20 +1,29 @@
 import React, { Component } from 'react';
-import { BossTable, BossTableRow, BossTableCell } from '~/components/boss-table';
+import oFetch from 'o-fetch';
+import { BossTableRow, BossTableCell } from '~/components/boss-table';
 import { UserSummary } from '~/components/staff-members';
 import AccessoryRequestActions from './accessory-request-actions';
 
 class AccessoryRequestItem extends Component {
   render() {
-    const {
-      accessoryId,
-      avatarUrl,
-      fullName,
-      accessorySize,
-      staffMember,
-      requestId,
-      requestStatus,
-      frozen,
-    } = this.props.data;
+    const data = oFetch(this.props, 'data');
+    const permissions = oFetch(this.props, 'permissions');
+    const onRejectRequest = oFetch(this.props, 'onRejectRequest');
+    const onAcceptRequest = oFetch(this.props, 'onAcceptRequest');
+    const onUndoRequest = oFetch(this.props, 'onUndoRequest');
+    const onCompleteRequest = oFetch(this.props, 'onCompleteRequest');
+
+    const [accessoryId, avatarUrl, fullName, accessorySize, staffMember, requestId, requestStatus, frozen] = oFetch(
+      data,
+      'accessoryId',
+      'avatarUrl',
+      'fullName',
+      'accessorySize',
+      'staffMember',
+      'requestId',
+      'requestStatus',
+      'frozen',
+    );
 
     return (
       <BossTableRow>
@@ -43,26 +52,27 @@ class AccessoryRequestItem extends Component {
           {!frozen && (
             <AccessoryRequestActions
               status={requestStatus}
+              permissions={permissions}
               onRejectRequest={() =>
-                this.props.onRejectRequest({
+                onRejectRequest({
                   requestId: requestId,
                   accessoryId: accessoryId,
                 })
               }
               onAcceptRequest={() =>
-                this.props.onAcceptRequest({
+                onAcceptRequest({
                   requestId: requestId,
                   accessoryId: accessoryId,
                 })
               }
               onUndoRequest={() =>
-                this.props.onUndoRequest({
+                onUndoRequest({
                   requestId: requestId,
                   accessoryId: accessoryId,
                 })
               }
               onCompleteRequest={() =>
-                this.props.onCompleteRequest({
+                onCompleteRequest({
                   requestId: requestId,
                   accessoryId: accessoryId,
                 })

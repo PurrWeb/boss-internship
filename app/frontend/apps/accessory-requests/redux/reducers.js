@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import { combineReducers } from 'redux-immutable';
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
-
+import oFetch from 'o-fetch';
 import * as constants from './constants';
 
 const initialState = fromJS({
@@ -23,9 +23,7 @@ const accessoryRequestsReducer = handleActions(
       const { accessToken, currentVenue, venues } = action.payload;
 
       window.boss.accessToken = accessToken;
-      return state
-        .set('currentVenue', currentVenue)
-        .set('venues', fromJS(venues));
+      return state.set('currentVenue', currentVenue).set('venues', fromJS(venues));
     },
     [constants.SET_VENUE]: (state, action) => {
       const venueId = action.payload;
@@ -33,9 +31,7 @@ const accessoryRequestsReducer = handleActions(
     },
     [constants.UPDATE_REQUEST]: (state, action) => {
       const request = action.payload;
-      const index = state
-        .get('accessoryRequests')
-        .findIndex(item => item.get('id') === request.id);
+      const index = state.get('accessoryRequests').findIndex(item => item.get('id') === request.id);
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
     [constants.REMOVE_REQUEST]: (state, action) => {
@@ -46,21 +42,14 @@ const accessoryRequestsReducer = handleActions(
     },
     [constants.UPDATE_REFUND_REQUEST]: (state, action) => {
       const request = action.payload;
-      const index = state
-        .get('accessoryRefundRequests')
-        .findIndex(item => item.get('id') === request.id);
+      const index = state.get('accessoryRefundRequests').findIndex(item => item.get('id') === request.id);
       return state.setIn(['accessoryRefundRequests', index], fromJS(request));
     },
     [constants.REMOVE_REFUND_REQUEST]: (state, action) => {
       const request = action.payload;
-      return state.updateIn(
-        ['accessoryRefundRequests'],
-        accessoryRefundRequests => {
-          return accessoryRefundRequests.filter(
-            item => item.get('id') !== request.id,
-          );
-        },
-      );
+      return state.updateIn(['accessoryRefundRequests'], accessoryRefundRequests => {
+        return accessoryRefundRequests.filter(item => item.get('id') !== request.id);
+      });
     },
     [constants.REMOVE_ACCESSORY]: (state, action) => {
       const accessoryId = action.payload;
@@ -71,24 +60,33 @@ const accessoryRequestsReducer = handleActions(
         .updateIn(['pagination', 'totalCount'], totalCount => totalCount - 1);
     },
     [constants.LOAD_INITIAL_ACCESSORY_REQUESTS]: (state, action) => {
-      const {
+      const [
         pagination,
         accessories,
         accessoryRequests,
         accessoryRefundRequests,
         staffMembers,
-      } = action.payload;
+        permissionsData,
+      ] = oFetch(
+        action.payload,
+        'pagination',
+        'accessories',
+        'accessoryRequests',
+        'accessoryRefundRequests',
+        'staffMembers',
+        'permissionsData',
+      );
+
       return state
         .set('pagination', fromJS(pagination))
         .updateIn(['accessories'], items => items.concat(fromJS(accessories)))
         .set('accessoryRequests', fromJS(accessoryRequests))
         .set('accessoryRefundRequests', fromJS(accessoryRefundRequests))
-        .set('staffMembers', fromJS(staffMembers));
+        .set('staffMembers', fromJS(staffMembers))
+        .set('permissionsData', fromJS(permissionsData));
     },
     [constants.DROP_PAGE_NUMBER]: (state, action) => {
-      return state
-        .setIn(['pagination', 'pageNumber'], 1)
-        .setIn(['accessories'], fromJS([]));
+      return state.setIn(['pagination', 'pageNumber'], 1).setIn(['accessories'], fromJS([]));
     },
     [constants.LOAD_MORE]: (state, action) => {
       return state.updateIn(['pagination', 'pageNumber'], pageNumber => {

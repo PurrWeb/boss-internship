@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import oFetch from 'o-fetch';
 
 class AccessoryRequestActions extends Component {
   state = {
@@ -44,27 +45,39 @@ class AccessoryRequestActions extends Component {
     this.props.onCompleteRequest();
   };
 
-  renderDoneUndoButtons() {
+  renderDoneUndoButtons(canComplete, canUndo) {
     return (
       <div key="actions" className="boss-table__actions">
-        <button
-          className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
-          onClick={this.onComplete}
-        >
-          Complete
-        </button>
-        <button
-          className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
-          onClick={this.onUndo}
-        >
-          Undo
-        </button>
+        {canComplete && (
+          <button
+            className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
+            onClick={this.onComplete}
+          >
+            Complete
+          </button>
+        )}
+        {canUndo && (
+          <button
+            className="boss-button boss-button_type_extra-small boss-button_role_cancel-light boss-table__action"
+            onClick={this.onUndo}
+          >
+            Undo
+          </button>
+        )}
       </div>
     );
   }
 
   render() {
     const { currentStatus, requestPendind } = this.state;
+    const permissions = oFetch(this.props, 'permissions');
+    const [canAccept, canReject, canComplete, canUndo] = oFetch(
+      permissions,
+      'canAccept',
+      'canReject',
+      'canComplete',
+      'canUndo',
+    );
     if (currentStatus === 'undo') {
       return (
         <div>
@@ -86,18 +99,22 @@ class AccessoryRequestActions extends Component {
     if (currentStatus === 'pending') {
       return (
         <div className="boss-table__actions">
-          <button
-            className="boss-button boss-button_type_small boss-button_role_success boss-table__action"
-            onClick={this.onAccept}
-          >
-            Accept
-          </button>
-          <button
-            className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
-            onClick={this.onReject}
-          >
-            Reject
-          </button>
+          {canAccept && (
+            <button
+              className="boss-button boss-button_type_small boss-button_role_success boss-table__action"
+              onClick={this.onAccept}
+            >
+              Accept
+            </button>
+          )}
+          {canReject && (
+            <button
+              className="boss-button boss-button_type_small boss-button_role_cancel boss-table__action"
+              onClick={this.onReject}
+            >
+              Reject
+            </button>
+          )}
         </div>
       );
     }
@@ -109,7 +126,7 @@ class AccessoryRequestActions extends Component {
           </p>
           {!requestPendind && (
             <div key="actions" className="boss-table__actions">
-              {this.renderDoneUndoButtons()}
+              {this.renderDoneUndoButtons(canComplete, canUndo)}
             </div>
           )}
         </div>
