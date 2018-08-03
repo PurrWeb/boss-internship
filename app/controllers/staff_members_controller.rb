@@ -355,6 +355,7 @@ class StaffMembersController < ApplicationController
       staff_member_profile_permissions: StaffMemberProfilePermissions.new(
         staff_member: staff_member,
         current_user: current_user,
+        accessory_requests: accessory_requests,
       ),
       payslip_start_date: payslip_start_date,
       payslip_end_date: payslip_end_date,
