@@ -8,10 +8,11 @@ class ImmutableOwedHourUpdate
     end
   end
 
-  def initialize(requester:, owed_hour:, params:)
+  def initialize(requester:, owed_hour:, params:, nested: false)
     @requester = requester
     @owed_hour = owed_hour
     @params = params
+    @nested = nested
     assert_params
   end
 
@@ -19,7 +20,7 @@ class ImmutableOwedHourUpdate
     success = false
     new_owed_hour = nil
 
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: nested) do
       new_owed_hour = OwedHour.new(
         copy_params.
           merge(update_params).
@@ -31,6 +32,17 @@ class ImmutableOwedHourUpdate
         return Result.new(success, owed_hour)
       else
         owed_hour.disable!(requester: requester)
+
+        staff_member = owed_hour.staff_member
+        old_week = RotaWeek.new(owed_hour.payslip_date)
+        new_week = RotaWeek.new(new_owed_hour.payslip_date)
+
+        finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: old_week).call
+        if old_week.start_date != new_week.start_date
+          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: new_week).call
+        end
+
+        new_owed_hour.assign_attributes(finance_report: finance_report)
         success = new_owed_hour.save
         raise ActiveRecord::Rollback unless success
         owed_hour.update_attributes!(parent: new_owed_hour)
@@ -48,7 +60,7 @@ class ImmutableOwedHourUpdate
   end
 
   private
-  attr_reader :requester, :owed_hour, :params
+  attr_reader :requester, :owed_hour, :params, :nested
 
   def edit_attributes
     [:date, :payslip_date, :starts_at, :ends_at, :note, :minutes]
@@ -56,7 +68,7 @@ class ImmutableOwedHourUpdate
 
   def assert_params
     if params.keys.map(&:to_sym).sort != edit_attributes.sort
-      raise ArgumentError.new(":date, :starts_at :ends_at :note :minutes :staff_member owed hours params required, got:#{params.keys}")
+      raise ArgumentError.new("invalid owed hours params required: #{edit_attributes.to_s} got:#{params.keys}")
     end
   end
 
