@@ -81,7 +81,6 @@ Rails.application.routes.draw do
     resource :message_board, only: [:show]
     resources :holidays, only: [:index, :edit, :update]
     resources :holiday_requests, only: [:index], path: 'holiday-requests'
-    resources :owed_hours, only: [:edit, :update]
 
     resources :staff_members, only: [:show, :new, :index] do
       resources :hours_overview, only: :show
