@@ -1,7 +1,9 @@
 import React from 'react';
+import oFetch from 'o-fetch';
 
 class AccessoriesContent extends React.PureComponent {
   render() {
+    const children = oFetch(this.props, 'children');
     return (
       <div className="boss-board__main">
         <div className="boss-board__manager">

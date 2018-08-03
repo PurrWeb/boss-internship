@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AccessoriesPage from '../components/accessories-page';
+import { canCreateAccessoryRequest, getAccessoryRequestPermission } from '../selectors';
 
 import {
   newAccessory,
@@ -21,6 +22,8 @@ const mapStateToProps = state => {
     staffMember: state.getIn(['profile', 'staffMember']),
     mPayslipStartDate: state.getIn(['accessoriesPage', 'mPayslipStartDate']),
     mPayslipEndDate: state.getIn(['accessoriesPage', 'mPayslipEndDate']),
+    getAccessoryRequestPermission: getAccessoryRequestPermission(state),
+    canCreateAccessoryRequest: canCreateAccessoryRequest(state),
   };
 };
 
