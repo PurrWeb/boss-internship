@@ -10,6 +10,9 @@ RSpec.describe 'Admin accept and reject accessory requests API endpoint' do
     accessory_refund_request
   end
 
+  let(:now) { Time.current }
+  let(:today) { RotaShiftDate.to_rota_date(now) }
+  let(:current_week) { RotaWeek.new(today) }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
@@ -20,10 +23,9 @@ RSpec.describe 'Admin accept and reject accessory requests API endpoint' do
     accessory_type: Accessory.accessory_types[:uniform],
     size: 'S,M,L,XL,XXL'
   ) }
-  let(:now) { Time.current }
   let(:access_token) do
     WebApiAccessToken.new(
-      expires_at: 30.minutes.from_now,
+      expires_at: now + 30.minutes,
       user: user
     ).persist!
   end
@@ -50,7 +52,7 @@ RSpec.describe 'Admin accept and reject accessory requests API endpoint' do
   let(:valid_params) do
     {
       accessoryId: accessory.id,
-      venueId: venue.id,
+      venueId: venue.id
     }
   end
   let(:accept_response) do
@@ -77,7 +79,11 @@ RSpec.describe 'Admin accept and reject accessory requests API endpoint' do
       accept_response
     end
 
-    it ' accessory request status should be completed' do
+    it 'should succeed' do
+      expect(accept_response.status).to eq(ok_status)
+    end
+
+    it 'accessory request status should be completed' do
       expect(accessory_refund_request.accessory_request.current_state).to eq("completed")
       expect(accessory_refund_request.current_state).to eq("accepted")
     end

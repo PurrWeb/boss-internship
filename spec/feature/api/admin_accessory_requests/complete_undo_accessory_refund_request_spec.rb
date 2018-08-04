@@ -5,11 +5,9 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
 
-  before do
-    set_authorization_header(access_token.token)
-    accessory_refund_request
-  end
-
+  let(:now) { Time.current }
+  let(:today) { RotaShiftDate.to_rota_date(now) }
+  let(:current_week) { RotaWeek.new(today) }
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
@@ -20,7 +18,6 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
     accessory_type: Accessory.accessory_types[:uniform],
     size: 'S,M,L,XL,XXL'
   ) }
-  let(:now) { Time.current }
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
@@ -66,11 +63,27 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
       accessory_request: accessory_refund_request
     ).accept
   end
+  let(:existing_finance_report) do
+    FactoryGirl.create(
+      :finance_report,
+      staff_member: staff_member,
+      venue: venue,
+      week_start: current_week.start_date
+    ).tap do |report|
+      report.mark_ready!
+    end
+  end
   let(:undo_response) do
     post(url_helpers.undo_refund_api_v1_accessory_request_path(accessory_refund_request), params)
   end
   let(:complete_response) do
     post(url_helpers.complete_refund_api_v1_accessory_request_path(accessory_refund_request), params)
+  end
+
+  before do
+    set_authorization_header(access_token.token)
+    existing_finance_report
+    accessory_refund_request
   end
 
   context 'before call' do
@@ -122,23 +135,49 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
       end
 
       before do
-        complete_response
+        existing_finance_report.mark_ready!
       end
 
-      it ' accessory refund request status should be completed' do
-        expect(accessory_refund_request.current_state).to eq("completed")
+      context 'before call' do
+        specify 'finance report should exist' do
+          expect(FinanceReport.count).to eq(1)
+          accessory_refund_request.reload
+          expect(existing_finance_report.current_state).to eq(FinanceReportStateMachine::READY_STATE.to_s)
+          expect(accessory_refund_request.finance_report).to eq(nil)
+        end
       end
 
-      it ' should return completed accessory refund request' do
-        json = JSON.parse(complete_response.body).except("createdAt", "updatedAt", "timeline")
-        expect(json).to eq({
-          "id" => accessory_refund_request.id,
-          "size" => accessory_refund_request.accessory_request.size,
-          "staffMemberId" => staff_member.id,
-          "accessoryId" => accessory.id,
-          "status" => accessory_refund_request.current_state,
-          "frozen" => accessory_refund_request.frozen?,
-        })
+      context 'after call' do
+        it 'should succeed' do
+          complete_response
+          expect(complete_response.status).to eq(ok_status)
+        end
+
+        it 'should update finanance report and  assocaiate it with refund' do
+          complete_response
+          accessory_refund_request.reload
+          expect(FinanceReport.count).to eq(1)
+          expect(accessory_refund_request.finance_report).to eq(existing_finance_report)
+        end
+
+        it ' accessory refund request status should be completed' do
+          complete_response
+          expect(accessory_refund_request.current_state).to eq("completed")
+        end
+
+        it ' should return completed accessory refund request' do
+          complete_response
+          accessory_refund_request.reload
+          json = JSON.parse(complete_response.body).except("createdAt", "updatedAt", "timeline")
+          expect(json).to eq({
+            "id" => accessory_refund_request.id,
+            "size" => accessory_refund_request.accessory_request.size,
+            "staffMemberId" => staff_member.id,
+            "accessoryId" => accessory.id,
+            "status" => accessory_refund_request.current_state,
+            "frozen" => accessory_refund_request.frozen?,
+          })
+        end
       end
     end
   end
