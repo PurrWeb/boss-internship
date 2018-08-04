@@ -11,7 +11,7 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
   end
 
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
   let(:accessory) { FactoryGirl.create(
     :accessory,
