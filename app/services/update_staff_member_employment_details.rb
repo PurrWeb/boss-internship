@@ -5,15 +5,15 @@ class UpdateStaffMemberEmploymentDetails
     end
   end
 
-  def initialize(now: Time.zone.now, requester:, staff_member:, params:)
-    @now = now
+  def initialize(requester:, staff_member:, params:, migrate_finance_report_venue_service: MigrateIncompleteFinanceReportsToVenue)
     @requester = requester
     @staff_member = staff_member
     @params = params
     @requester = requester
+    @migrate_finance_report_venue_service = migrate_finance_report_venue_service
   end
 
-  def call
+  def call(now: Time.current)
     result = false
 
     ActiveRecord::Base.transaction do
@@ -26,6 +26,7 @@ class UpdateStaffMemberEmploymentDetails
 
       # Used below for system updates
       pay_rate_changed = staff_member.pay_rate_id_changed?
+      master_venue_changed = old_master_venue != staff_member.master_venue
 
       if staff_member.security? && staff_member.sia_badge_expiry_date.present? && staff_member.sia_badge_expiry_date_changed?
         if staff_member.sia_badge_expiry_date < now
@@ -44,8 +45,20 @@ class UpdateStaffMemberEmploymentDetails
       )
 
       result = staff_member.save
+      raise ActiveRecord::Rollback unless result
 
-      if result && pay_rate_changed
+      incomplete_finance_reports = staff_member.finance_reports.not_in_state([FinanceReportStateMachine::DONE_STATE, FinanceReportStateMachine::REQUIRING_UPDATE_STATE])
+      if master_venue_changed
+        migrate_finance_report_venue_service.new(
+          new_master_venue: staff_member.master_venue,
+          staff_member: staff_member,
+          nested: true
+        ).call
+      elsif pay_rate_changed
+        incomplete_finance_reports.find_each do |finance_report|
+          finance_report.mark_requiring_update!
+        end
+
         rotas = CurrentAndFutureRotasQuery.new(relation: Rota.with_forecasts).all.
           joins(:rota_shifts).
           merge(
@@ -63,7 +76,7 @@ class UpdateStaffMemberEmploymentDetails
         )
       end
 
-      if result && staff_member_updates_email.send?
+      if staff_member_updates_email.send?
         StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_now
       end
     end
@@ -72,7 +85,7 @@ class UpdateStaffMemberEmploymentDetails
   end
 
   private
-  attr_reader :now, :staff_member, :params, :requester
+  attr_reader :now, :staff_member, :params, :requester, :migrate_finance_report_venue_service
 
   def update_related_daily_reports(staff_member:, old_pay_rate:, new_pay_rate:)
     if [old_pay_rate, new_pay_rate].any? { |pay_rate| pay_rate.weekly? }

@@ -13,6 +13,7 @@ class FinanceReport < ActiveRecord::Base
   has_many :owed_hours
   has_many :accessory_requests
   has_many :accessory_refund_requests
+  has_many :hours_acceptance_periods
 
   validates :staff_member, presence: true
   validates :venue, presence: true

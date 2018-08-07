@@ -50,7 +50,7 @@ class HolidayDateValidator
     # Don't bother with the rest if we have more major issues
     return if payslip_date_validations_failed || date_validations_failed
 
-    if dates_present?
+    if dates_present? && holiday.staff_member.present?
       staff_member_holidays = Holiday.
         in_state(:enabled).
         where(staff_member: holiday.staff_member)
