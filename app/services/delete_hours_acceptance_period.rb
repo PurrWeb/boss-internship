@@ -13,8 +13,16 @@ class DeleteHoursAcceptancePeriod
   def call
     result = true
     if hours_acceptance_period.editable?
+      staff_member = hours_acceptance_period.staff_member
+      week = RotaWeek.new(hours_acceptance_period.date)
+      MarkFinanceReportRequiringUpdate.new(
+        week: week,
+        staff_member: staff_member
+      ).call
+
       hours_acceptance_period.update_attributes!(
-        status: 'deleted'
+        status: 'deleted',
+        finance_report: nil
       )
 
       DailyReport.mark_for_update!(
