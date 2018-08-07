@@ -17,7 +17,7 @@ class CreateHoursAcceptancePeriod
     @breaks = breaks
   end
 
-  def call
+  def call(now: Time.current)
     hours_acceptance_period = nil
     success = false
 
@@ -42,8 +42,15 @@ class CreateHoursAcceptancePeriod
       )
 
       if status == HoursAcceptancePeriod::ACCEPTED_STATE
+        week = RotaWeek.new(hours_acceptance_period.date)
+        finance_report = MarkFinanceReportRequiringUpdate.new(
+          staff_member: staff_member,
+          week: week
+        ).call
+
         hours_acceptance_period.assign_attributes({
-          accepted_at: Time.now.utc,
+          finance_report: finance_report,
+          accepted_at: now.utc,
           accepted_by: requester,
         })
       end
