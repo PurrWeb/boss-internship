@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180731105458) do
+ActiveRecord::Schema.define(version: 20180808093400) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -372,7 +372,7 @@ ActiveRecord::Schema.define(version: 20180731105458) do
 
   add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
   add_index "finance_reports", ["venue_id"], name: "index_finance_reports_on_venue_id", using: :btree
-  add_index "finance_reports", ["week_start", "staff_member_id"], name: "index_finance_reports_on_week_start_and_staff_member_id", unique: true, using: :btree
+  add_index "finance_reports", ["week_start", "staff_member_id", "venue_id"], name: "dup_report_constraint", using: :btree
   add_index "finance_reports", ["week_start"], name: "index_finance_reports_on_week_start", using: :btree
 
   create_table "first_name_groups", force: :cascade do |t|
