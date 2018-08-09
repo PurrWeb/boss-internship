@@ -21,7 +21,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :canSeeNetWages,
     :staffMemberSageId,
     :containsTimeShiftedOwedHours,
-    :containsTimeShiftedHolidays
+    :containsTimeShiftedHolidays,
+    :pendingCalculation
 
   def status
     object.current_state
@@ -36,39 +37,75 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
   end
 
   def mondayHoursCount
-    object.monday_hours_count
+    if object.requiring_update?
+      object.monday_hours_count || 0.0
+    else
+      object.monday_hours_count
+    end
   end
 
   def tuesdayHoursCount
-    object.tuesday_hours_count
+    if object.requiring_update?
+      object.tuesday_hours_count || 0.0
+    else
+      object.tuesday_hours_count
+    end
   end
 
   def wednesdayHoursCount
-    object.wednesday_hours_count
+    if object.requiring_update?
+      object.wednesday_hours_count || 0.0
+    else
+      object.wednesday_hours_count
+    end
   end
 
   def thursdayHoursCount
-    object.thursday_hours_count
+    if object.requiring_update?
+      object.thursday_hours_count || 0.0
+    else
+      object.thursday_hours_count
+    end
   end
 
   def fridayHoursCount
-    object.friday_hours_count
+    if object.requiring_update?
+      object.friday_hours_count || 0.0
+    else
+      object.friday_hours_count
+    end
   end
 
   def saturdayHoursCount
-    object.saturday_hours_count
+    if object.requiring_update?
+      object.saturday_hours_count || 0.0
+    else
+      object.saturday_hours_count
+    end
   end
 
   def sundayHoursCount
-    object.sunday_hours_count
+    if object.requiring_update?
+      object.sunday_hours_count || 0.0
+    else
+      object.sunday_hours_count
+    end
   end
 
   def holidayDaysCount
-    object.holiday_days_count
+    if object.requiring_update?
+      object.holiday_days_count || 0
+    else
+      object.holiday_days_count
+    end
   end
 
   def owedHoursMinuteCount
-    object.owed_hours_minute_count
+    if object.requiring_update?
+      object.owed_hours_minute_count || 0
+    else
+      object.owed_hours_minute_count
+    end
   end
 
   def payRateDescription
@@ -76,15 +113,27 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
   end
 
   def accessoriesCents
-    object.accessories_cents
+    if object.requiring_update?
+      object.accessories_cents || 0
+    else
+      object.accessories_cents
+    end
   end
 
   def total
-    object.total
+    if object.requiring_update?
+      object.total || 0
+    else
+      object.total
+    end
   end
 
   def totalHoursCount
-    object.total_hours_count
+    if object.requiring_update?
+      object.total_hours_count || 0.0
+    else
+      object.total_hours_count
+    end
   end
 
   def canSeeNetWages
@@ -106,5 +155,9 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def containsTimeShiftedHolidays
     object.contains_time_shifted_holidays?
+  end
+
+  def pendingCalculation
+    object.requiring_update?
   end
 end
