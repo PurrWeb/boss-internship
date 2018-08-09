@@ -100,6 +100,27 @@ module Api
             ),
           }, status: 200
       end
+
+      def staff_dodgers
+        date = date_from_params
+        week = RotaWeek.new(date);
+        accepted_hours = StaffMembersAcceptedHoursByWeekQuery.new(week: week).all
+        paid_holidays = StaffMembersPaidHolidaysByWeekQuery.new(week: week).all
+        staff_members = StaffMember.where(id: accepted_hours.keys)
+        render json: {
+          acceptedHours: accepted_hours,
+          paidHolidays: paid_holidays,
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+            staff_members,
+            serializer: Api::V1::StaffVettings::StaffMemberSerializer
+          )
+        }, status: 200
+      end
+
+      private
+      def date_from_params
+        UIRotaDate.parse(params.fetch(:date))
+      end
     end
   end
 end

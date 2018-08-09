@@ -303,13 +303,14 @@ Rails.application.routes.draw do
 
         resources :staff_vetting, only: [] do
           collection do
-            get :staff_without_email, path: "staff-without-email"
-            get :staff_without_ni_number, path: "staff-without-ni-number"
-            get :staff_without_address, path: "staff-without-address"
-            get :staff_without_photo, path: "staff-without-photo"
-            get :staff_with_expired_sia_badge, path: "staff-with-expired-sia-badge"
-            get :staff_on_wrong_payrate, path: "staff-on-wrong-payrate"
-            get :staff_with_bounced_email, path: "staff-with-bounced-email"
+            get :staff_without_email, path: 'staff-without-email'
+            get :staff_without_ni_number, path: 'staff-without-ni-number'
+            get :staff_without_address, path: 'staff-without-address'
+            get :staff_without_photo, path: 'staff-without-photo'
+            get :staff_with_expired_sia_badge, path: 'staff-with-expired-sia-badge'
+            get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
+            get :staff_with_bounced_email, path: 'staff-with-bounced-email'
+            get :staff_dodgers, path: 'staff-dodgers'
           end
         end
 
