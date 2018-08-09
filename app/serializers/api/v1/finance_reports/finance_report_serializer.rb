@@ -24,7 +24,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :containsTimeShiftedHolidays
 
   def status
-    FinanceReportCompletionStatus.new(finance_report: object).status_data
+    object.current_state
   end
 
   def staffMemberId
