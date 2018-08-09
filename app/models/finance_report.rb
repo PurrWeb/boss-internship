@@ -19,9 +19,9 @@ class FinanceReport < ActiveRecord::Base
   validates :venue, presence: true
   validates :week_start, presence: true
   validates :requiring_update, inclusion: { in: [true, false], message: 'is required' }
-  validates :venue_name, presence: true, unless: :requiring_update?
-  validates :staff_member_name, presence: true, unless: :requiring_update?
-  validates :pay_rate_description, presence: true, unless: :requiring_update?
+  validates :venue_name, presence: true
+  validates :staff_member_name, presence: true
+  validates :pay_rate_description, presence: true
   validates :accessories_cents, presence: true, unless: :requiring_update?
   validates_inclusion_of :contains_time_shifted_owed_hours, in: [true, false], unless: :requiring_update?
   validates_inclusion_of :contains_time_shifted_holidays, in: [true, false], unless: :requiring_update?
