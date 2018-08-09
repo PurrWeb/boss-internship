@@ -22,9 +22,7 @@ class Page extends Component {
             <ContentWrapper>
               <div className="boss-page-main__group boss-page-main__group_adjust_staff-vetting">
                 <div className="boss-users">
-                  <p className="boss-users__text-placeholder">
-                    No staff members found
-                  </p>
+                  <p className="boss-users__text-placeholder">No staff members found</p>
                 </div>
               </div>
             </ContentWrapper>
@@ -44,10 +42,9 @@ class Page extends Component {
             tabsFilterRenderer={this.props.tabsFilterRenderer}
             staffMembers={staffMembers}
             venues={venues}
+            selectedVenueIds={this.props.selectedVenueIds}
             staffTypes={staffTypes}
-            staffMemberFilterRenderer={props => (
-              <StaffMemberFilter {...props} />
-            )}
+            staffMemberFilterRenderer={props => <StaffMemberFilter {...props} />}
             staffMemberListRenderer={this.props.staffMemberListRenderer}
           />
         </ContentWrapper>

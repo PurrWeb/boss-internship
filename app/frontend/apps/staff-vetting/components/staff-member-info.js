@@ -13,6 +13,7 @@ function StaffMemberInfo({
   bouncedEmailData,
   hours,
   masterVenue,
+  paidHolidays,
 }) {
   const handleInfoClick = e => {
     if (bouncedEmailData) {
@@ -57,36 +58,37 @@ function StaffMemberInfo({
           {expiredSiaBadge && (
             <ul className="boss-user-summary__review-list">
               <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-label">
-                  Expiry Date:{' '}
-                </span>
-                <span className="boss-user-summary__review-val">
-                  {expiredSiaBadge}
-                </span>
+                <span className="boss-user-summary__review-label">Expiry Date: </span>
+                <span className="boss-user-summary__review-val">{expiredSiaBadge}</span>
               </li>
             </ul>
           )}
           {bouncedEmailData ? (
             <ul className="boss-user-summary__review-list">
               <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-wrap">
-                  {bouncedEmailData.email}
-                </span>
+                <span className="boss-user-summary__review-wrap">{bouncedEmailData.email}</span>
               </li>
             </ul>
           ) : null}
-          {hours && masterVenue && (
-            <ul className="boss-user-summary__review-list">
-              <li className="boss-user-summary__review-item">
+          {hours &&
+            masterVenue && (
+              <ul className="boss-user-summary__review-list">
+                <li className="boss-user-summary__review-item">
                   <span className="boss-user-summary__review-label">Master Venue: </span>
                   <span className="boss-user-summary__review-val">{masterVenue}</span>
-              </li>
-              <li className="boss-user-summary__review-item">
+                </li>
+                <li className="boss-user-summary__review-item">
                   <span className="boss-user-summary__review-label">Hours: </span>
                   <span className="boss-user-summary__review-val">{hours}</span>
-              </li>
-            </ul>
-          )}
+                </li>
+                {paidHolidays && (
+                  <li className="boss-user-summary__review-item">
+                    <span className="boss-user-summary__review-label">Paid holidays: </span>
+                    <span className="boss-user-summary__review-val">{paidHolidays}h</span>
+                  </li>
+                )}
+              </ul>
+            )}
         </div>
       </a>
     </div>

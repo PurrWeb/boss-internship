@@ -28,7 +28,7 @@ class StaffVetting extends Component {
     const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
     const canViewWithTimeDodges = oFetch(this.props, 'permissions.staffWithWithTimeDodges.canView');
     const timeDodgesDate = oFetch(this.props, 'timeDodgesDate');
-    
+
     const blocks = {
       withoutEmail: {
         title: 'Staff without Email Address',
@@ -75,7 +75,6 @@ class StaffVetting extends Component {
       withTimeDodges: {
         title: 'Staff with Time Dodges',
         href: `/staff_members_with_time_dodges/${timeDodgesDate}`,
-        count: staffMembersWithTimeDodgesCount,
         canView: canViewWithTimeDodges,
       },
     };
@@ -117,6 +116,8 @@ StaffVetting.propTypes = {
   staffWithoutPhotoCount: PropTypes.number.isRequired,
   staffOnWrongPayrateCount: PropTypes.number.isRequired,
   staffWithExpiredSiaBadgeCount: PropTypes.number.isRequired,
+  staffMembersWithBouncedEmailCount: PropTypes.number.isRequired,
+  staffMembersWithTimeDodgesCount: PropTypes.number.isRequired,
 };
 
 export default StaffVetting;

@@ -13,7 +13,6 @@ class SimpleDashboard extends React.Component {
       if (child.type === DashboardActions) {
         this.actions = React.cloneElement(child);
       }
-      return;
     });
   };
 

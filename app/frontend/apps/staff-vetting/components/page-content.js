@@ -4,16 +4,42 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import utils from '~/lib/utils';
 
 class PageContent extends Component {
-  state = {
-    filteredStaffMembers: this.props.staffMembers,
-    searchQuery: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      filteredStaffMembers: this.filterByVenues(props.staffMembers),
+      searchQuery: '',
+      staffMembers: props.staffMembers,
+    };
+  }
+
+  componentWillReceiveProps = nextProps => {
+    const { selectedVenueIds } = nextProps;
+    if (this.props.selectedVenueIds && this.props.selectedVenueIds.length !== selectedVenueIds.length) {
+      this.setState(state => {
+        const filteredStaffMembers = this.filterByVenues(this.state.staffMembers, selectedVenueIds);
+        return {
+          filteredStaffMembers,
+        };
+      });
+    }
+  };
+
+  filterByVenues = (staffMembers, selectedVenueIds = this.props.selectedVenueIds) => {
+    if (!this.props.selectedVenueIds) {
+      return staffMembers;
+    }
+    if (selectedVenueIds.length === 0) {
+      return staffMembers;
+    }
+    return staffMembers.filter(staffMember => selectedVenueIds.includes(staffMember.get('venueId')));
   };
 
   onSearchChange = searchQuery => {
     this.setState(state => {
       const filteredStaffMembers = utils.staffMemberFilterFullName(
         searchQuery,
-        this.props.staffMembers,
+        this.filterByVenues(this.state.staffMembers),
       );
       return {
         searchQuery,
@@ -33,18 +59,15 @@ class PageContent extends Component {
   }
 
   renderStaffMemberList() {
-    return React.cloneElement(
-      this.props.staffMemberListRenderer(this.state.filteredStaffMembers),
-      { staffTypes: this.props.staffTypes },
-    );
+    return React.cloneElement(this.props.staffMemberListRenderer(this.state.filteredStaffMembers), {
+      staffTypes: this.props.staffTypes,
+    });
   }
 
   onChangeTab = staffMembers => {
     this.setState({
-      filteredStaffMembers: utils.staffMemberFilterFullName(
-        this.state.searchQuery,
-        staffMembers,
-      ),
+      staffMembers,
+      filteredStaffMembers: utils.staffMemberFilterFullName(this.state.searchQuery, this.filterByVenues(staffMembers)),
     });
   };
 

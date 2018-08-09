@@ -22,14 +22,7 @@ class StaffMemberList extends Component {
   }
 
   render() {
-    const {
-      staffMembers,
-      staffTypes,
-      withAge,
-      withSiaBadgeExpiryDate,
-      withBouncedEmail,
-      venues,
-    } = this.props;
+    const { staffMembers, staffTypes, withAge, withSiaBadgeExpiryDate, withBouncedEmail, venues } = this.props;
 
     if (staffMembers.size === 0) {
       return (
@@ -43,7 +36,12 @@ class StaffMemberList extends Component {
         <div className="boss-users__flow-list">
           {staffMembers.map(staffMember => {
             const bouncedEmailData = staffMember.get('bouncedEmailData');
-            const masterVenue = venues ? venues.find(venue => venue.get('id') === staffMember.get('venueId')).get('name') : null;
+            const paidHolidays = staffMember.get('paidHolidays');
+            const masterVenue = venues
+              ? staffMember.get('venueId')
+                ? venues.find(venue => venue.get('id') === staffMember.get('venueId')).get('name')
+                : null
+              : null;
 
             return (
               <StaffMemberInfo
@@ -62,6 +60,7 @@ class StaffMemberList extends Component {
                 bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
                 hours={staffMember.get('hours')}
                 masterVenue={masterVenue}
+                paidHolidays={paidHolidays}
               />
             );
           })}

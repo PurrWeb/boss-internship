@@ -13,6 +13,7 @@ import StaffMemberList from '../components/staff-member-list';
 import { getStaffMembersWithTimeDodges } from '../requests';
 import Page from '../components/page';
 import DashboardFilter from '../components/dashboard-filter';
+import oFetch from 'o-fetch';
 
 const getEndDate = uiDate =>
   safeMoment
@@ -32,7 +33,7 @@ class StaffMembersWithTimeDodgers extends PureComponent {
       imStaffMembersHardDodgers: Immutable.List([]),
       isLoaded: false,
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
-      startDate: weekStartDate ? weekStartDate : timeDodgesDate,
+      startDate: weekStartDate || timeDodgesDate,
       endDate: weekStartDate ? getEndDate(weekStartDate) : getEndDate(timeDodgesDate),
     };
   }
@@ -44,19 +45,26 @@ class StaffMembersWithTimeDodgers extends PureComponent {
 
   fetchStaffMembers = date => {
     return getStaffMembersWithTimeDodges(date).then(res => {
-      const imStaffMembersHardDodgers = Immutable.fromJS(
-        res.data.staffMembersHardDodgers.map(staffMember => ({
+      const staffMembers = oFetch(res, 'data.staffMembers');
+      const acceptedHours = oFetch(res, 'data.acceptedHours');
+      const paidHolidays = oFetch(res, 'data.paidHolidays');
+
+      const imStaffMembers = Immutable.fromJS(
+        staffMembers.map(staffMember => ({
           ...staffMember,
           fullName: `${staffMember.firstName} ${staffMember.surname}`,
+          hours: acceptedHours[staffMember.id],
+          paidHolidays: paidHolidays[staffMember.id] || null,
         })),
       );
-      const imStaffMembersSoftDodgers = Immutable.fromJS(
-        res.data.staffMembersSoftDodgers.map(staffMember => ({
-          ...staffMember,
-          fullName: `${staffMember.firstName} ${staffMember.surname}`,
-        })),
+
+      const imStaffMembersSoftDodgers = imStaffMembers.filter(
+        staffMember => staffMember.get('hours') + staffMember.get('paidHolidays') >= 46,
       );
-      const imStaffMembers = imStaffMembersHardDodgers.concat(imStaffMembersSoftDodgers);
+      const imStaffMembersHardDodgers = imStaffMembers.filter(
+        staffMember => staffMember.get('hours') + staffMember.get('paidHolidays') < 46,
+      );
+
       return {
         imStaffMembersHardDodgers,
         imStaffMembersSoftDodgers,
@@ -70,7 +78,7 @@ class StaffMembersWithTimeDodgers extends PureComponent {
     const { timeDodgesDate } = this.props;
     const { selectedVenueIds } = this.state;
 
-    const date = weekStartDate ? weekStartDate : timeDodgesDate;
+    const date = weekStartDate || timeDodgesDate;
     if (!weekStartDate) {
       this.changeURL(selectedVenueIds, date);
     }
@@ -159,6 +167,7 @@ class StaffMembersWithTimeDodgers extends PureComponent {
       <Page
         title={this.props.title}
         venues={this.props.venues}
+        selectedVenueIds={this.state.selectedVenueIds}
         count={imStaffMembers.size}
         staffMembers={imStaffMembers}
         staffTypes={this.props.staffTypes}
