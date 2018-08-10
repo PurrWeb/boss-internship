@@ -178,9 +178,7 @@
 
           <div class="boss-check__row">
             <div class="boss-check__cell">
-              <p class="boss-check__text boss-check__text_role_user <%= positive?(safe_check.enabled_notes.count) ? 'boss-check__text_indicator_att' : '' %>">
-                <%= safe_check.checked_by_note %>
-              </p>
+              <p class="boss-check__text boss-check__text_role_user <%= positive?(safe_check.enabled_notes.count) && 'boss-check__text_indicator_att' %>"><%= safe_check.checked_by_note %></p>
             </div>
           </div>
 
