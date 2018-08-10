@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bouncedEmailModal from '~/components/bounced-email-modal';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment);
 
 function StaffMemberInfo({
   id,
@@ -70,25 +74,30 @@ function StaffMemberInfo({
               </li>
             </ul>
           ) : null}
-          {hours &&
-            masterVenue && (
-              <ul className="boss-user-summary__review-list">
+          {masterVenue && (
+            <ul className="boss-user-summary__review-list">
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Master Venue: </span>
+                <span className="boss-user-summary__review-val">{masterVenue}</span>
+              </li>
+              {hours !== 0 && (
                 <li className="boss-user-summary__review-item">
-                  <span className="boss-user-summary__review-label">Master Venue: </span>
-                  <span className="boss-user-summary__review-val">{masterVenue}</span>
+                  <span className="boss-user-summary__review-label">Accepted: </span>
+                  <span className="boss-user-summary__review-val">
+                    {moment.duration(hours, 'minutes').format('h[h] m[m]', { trim: 'all', useGrouping: false })}
+                  </span>
                 </li>
+              )}
+              {paidHolidays !== 0 && (
                 <li className="boss-user-summary__review-item">
-                  <span className="boss-user-summary__review-label">Hours: </span>
-                  <span className="boss-user-summary__review-val">{hours}</span>
+                  <span className="boss-user-summary__review-label">Paid holidays: </span>
+                  <span className="boss-user-summary__review-val">
+                    {moment.duration(paidHolidays, 'minutes').format('h[h] m[m]', { trim: 'all', useGrouping: false })}
+                  </span>
                 </li>
-                {paidHolidays && (
-                  <li className="boss-user-summary__review-item">
-                    <span className="boss-user-summary__review-label">Paid holidays: </span>
-                    <span className="boss-user-summary__review-val">{paidHolidays}h</span>
-                  </li>
-                )}
-              </ul>
-            )}
+              )}
+            </ul>
+          )}
         </div>
       </a>
     </div>

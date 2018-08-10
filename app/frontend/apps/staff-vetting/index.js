@@ -33,16 +33,11 @@ class StaffVettingApp extends React.Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
-      staffMembersWithTimeDodgesCount = require('./fixtures.json').staffMembersWithTimeDodgesCount, // Hardcoded, must be changed after backend integration
       venues,
       staffTypes,
-      timeDodgesDate = require('./fixtures.json').timeDodgesDate, // Hardcoded, must be removed after backend integration
     } = this.props;
 
-    const permissions = {
-      ...oFetch(this.props, 'permissions'),
-      staffWithWithTimeDodges: require('./fixtures.json').permissions.staffWithWithTimeDodges // Hardcoded, must be removed after backend integration
-      };
+    const permissions = oFetch(this.props, 'permissions');
 
     const staffVettingProps = {
       staffWithoutEmailCount,
@@ -52,9 +47,7 @@ class StaffVettingApp extends React.Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
-      staffMembersWithTimeDodgesCount,
       permissions,
-      timeDodgesDate,
     };
     const imVenues = Immutable.fromJS(venues);
     const imStaffTypes = Immutable.fromJS(staffTypes);
@@ -177,9 +170,7 @@ class StaffVettingApp extends React.Component {
               <StaffMembersWithTimeDodges
                 venues={imVenues}
                 staffTypes={imStaffTypes}
-                count={staffMembersWithTimeDodgesCount}
                 title="Staff Members with Time Dodges"
-                timeDodgesDate={timeDodgesDate}
               />
             )}
           />

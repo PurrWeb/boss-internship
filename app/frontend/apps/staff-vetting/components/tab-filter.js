@@ -99,12 +99,12 @@ class TabFilter extends Component {
     const { imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers } = this.props.timeDodgers;
 
     const staffMembersHardDodgersTab = {
-      title: `Hard Dodgers - under 46 (${imStaffMembersHardDodgers.size})`,
+      title: `Hard Dodgers - under 45h (${imStaffMembersHardDodgers.size})`,
       onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
     const staffMembersSoftDodgersTab = {
-      title: `Soft Dodgers - 46 or more (${imStaffMembersSoftDodgers.size})`,
+      title: `Soft Dodgers 45-47h (${imStaffMembersSoftDodgers.size})`,
       onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };

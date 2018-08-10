@@ -27,7 +27,6 @@ class StaffVetting extends Component {
     const canViewWithExpiredSiaBadge = oFetch(this.props, 'permissions.staffWithExpiredSiaBadge.canView');
     const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
     const canViewWithTimeDodges = oFetch(this.props, 'permissions.staffWithWithTimeDodges.canView');
-    const timeDodgesDate = oFetch(this.props, 'timeDodgesDate');
 
     const blocks = {
       withoutEmail: {
@@ -74,7 +73,7 @@ class StaffVetting extends Component {
       },
       withTimeDodges: {
         title: 'Staff with Time Dodges',
-        href: `/staff_members_with_time_dodges/${timeDodgesDate}`,
+        href: `/staff_members_with_time_dodges`,
         canView: canViewWithTimeDodges,
       },
     };

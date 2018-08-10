@@ -52,7 +52,7 @@ class PageContent extends Component {
     return React.cloneElement(
       this.props.staffMemberFilterRenderer({
         onChange: this.onSearchChange,
-        total: this.props.total,
+        total: this.state.staffMembers.size,
         showing: this.state.filteredStaffMembers.size,
       }),
     );
