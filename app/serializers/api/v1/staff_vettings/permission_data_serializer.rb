@@ -6,7 +6,8 @@ class Api::V1::StaffVettings::PermissionDataSerializer < ActiveModel::Serializer
    :staffWithoutPhoto,
    :staffOnWrongPayrate,
    :staffWithExpiredSiaBadge,
-   :staffWithBouncedEmails
+   :staffWithBouncedEmails,
+   :staffWithWithTimeDodges
 
   def staffWithoutEmail
     {
@@ -47,6 +48,12 @@ class Api::V1::StaffVettings::PermissionDataSerializer < ActiveModel::Serializer
   def staffWithBouncedEmails
     {
       canView: user_ability.can?(:view, :staff_with_bounced_emails_vetting_page)
+    }
+  end
+
+  def staffWithWithTimeDodges
+    {
+      canView: user_ability.can?(:view, :time_dodgers)
     }
   end
 
