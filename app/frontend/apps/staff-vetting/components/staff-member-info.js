@@ -80,22 +80,18 @@ function StaffMemberInfo({
                 <span className="boss-user-summary__review-label">Master Venue: </span>
                 <span className="boss-user-summary__review-val">{masterVenue}</span>
               </li>
-              {hours !== 0 && (
-                <li className="boss-user-summary__review-item">
-                  <span className="boss-user-summary__review-label">Accepted: </span>
-                  <span className="boss-user-summary__review-val">
-                    {moment.duration(hours, 'minutes').format('h[h] m[m]', { trim: 'all', useGrouping: false })}
-                  </span>
-                </li>
-              )}
-              {paidHolidays !== 0 && (
-                <li className="boss-user-summary__review-item">
-                  <span className="boss-user-summary__review-label">Paid holidays: </span>
-                  <span className="boss-user-summary__review-val">
-                    {moment.duration(paidHolidays, 'minutes').format('h[h] m[m]', { trim: 'all', useGrouping: false })}
-                  </span>
-                </li>
-              )}
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Accepted: </span>
+                <span className="boss-user-summary__review-val">
+                  {moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                </span>
+              </li>
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Paid holidays: </span>
+                <span className="boss-user-summary__review-val">
+                  {moment.duration(paidHolidays, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                </span>
+              </li>
             </ul>
           )}
         </div>
