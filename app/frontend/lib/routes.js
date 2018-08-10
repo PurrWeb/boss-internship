@@ -216,6 +216,16 @@ export const appRoutes = {
       }
       return result;
     },
+    staffMemberAccessories: function(params) {
+       const staffMemberId = oFetch(params, 'staffMemberId');
+       const { mPayslipStartDate, mPayslipEndDate } = params;
+       const filteringByPayslipDate = mPayslipStartDate && mPayslipEndDate;
+       let result = `/staff_members/${staffMemberId}/accessories`;
+       if (filteringByPayslipDate) {
+        result = result + "?" + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipEndDate.format(utils.apiDateFormat);
+       }
+       return result;
+    },
     staffMemberHoursOverview: function(staffMemberId, dDate){
         if (staffMemberId === undefined) {
             throw new Error("No staff member id supplied to appRoutes.staffMemberHoursOverview")
@@ -238,12 +248,6 @@ export const appRoutes = {
           end_date: mEndDate.format(utils.apiDateFormat)
         }
       );
-    },
-    staffMemberAccessories: function(staffMemberId){
-        if (staffMemberId === undefined) {
-            throw new Error("No staff member id supplied to appRoutes.staffMemberAccessories")
-        }
-        return "/staff_members/" + staffMemberId + "/accessories";
     },
     holidaysCsv: function(options){
         var date = oFetch(options, "date");
@@ -487,6 +491,19 @@ const apiRoutes = {
             }
             result = result + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipEndDate.format(utils.apiDateFormat);
           }
+        }
+        return result;
+      },
+      method: 'GET'
+    },
+    staffMemberProfileAccessoriesIndex: {
+      getPath: function(params) {
+        const staffMemberId = oFetch(params, 'staffMemberId');
+        const { mPayslipStartDate, mPayslipEndDate } = params;
+        const filteringByPayslipDate = mPayslipStartDate && mPayslipEndDate;
+        let result = `/api/v1/staff_members/${staffMemberId}/accessory-requests`;
+        if (filteringByPayslipDate) {
+          result = result + "?" + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipEndDate.format(utils.apiDateFormat);
         }
         return result;
       },
