@@ -70,7 +70,7 @@
 
                     <div class="boss-stats__meta">
                       <p class="boss-stats__label">
-                        <span><%= safe_check.created_at.to_s(:human) %></span>
+                        <span><%= safe_check.created_at.strftime(date_format) %></span>
                       </p>
                     </div>
                   </div>
@@ -171,8 +171,7 @@
 
             <div class="boss-check__cell boss-check__cell_size_half">
               <p class="boss-check__text boss-check__text_role_date">
-                <span><%= safe_check.created_at.to_s(:human).split(' ').first %></span>
-                <span class="boss-check__text-line"><%= safe_check.created_at.to_s(:human).split(' ').last %></span>
+                <span><%= safe_check.created_at.strftime(date_format) %></span>
               </p>
             </div>
           </div>
@@ -290,7 +289,7 @@
     'DetailsModal',
     {
       modal_id: index,
-      created_at: safe_check.created_at.to_s(:human),
+      created_at: safe_check.created_at.strftime(date_format),
       checked_by: safe_check.checked_by_note,
       notes: safe_check.enabled_notes,
       safe_check: safe_check,
