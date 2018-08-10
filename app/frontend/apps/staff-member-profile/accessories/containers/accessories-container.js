@@ -9,6 +9,8 @@ import {
   newAccessory,
   cancelAccessory,
   refundAccessory,
+  filter,
+  editAccessoryRequestPayslipDate,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -16,6 +18,8 @@ const mapStateToProps = state => {
     accessories: state.getIn(['accessoriesPage', 'accessories']),
     accessoryRequests: state.getIn(['accessoriesPage', 'accessoryRequests']),
     staffMember: state.getIn(['profile', 'staffMember']),
+    mPayslipStartDate: state.getIn(['accessoriesPage', 'mPayslipStartDate']),
+    mPayslipEndDate: state.getIn(['accessoriesPage', 'mPayslipEndDate']),
   };
 };
 
@@ -26,6 +30,8 @@ const mapDispatchToProps = dispatch => {
         newAccessory,
         cancelAccessory,
         refundAccessory,
+        filter,
+        editAccessoryRequestPayslipDate,
       },
       dispatch,
     ),

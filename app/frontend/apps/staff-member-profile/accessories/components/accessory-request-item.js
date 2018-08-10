@@ -76,25 +76,25 @@ class AccessoryRequestItem extends React.Component {
 
   renderTimeline = accessoryRequest => {
     return accessoryRequest.timeline.map((timelineItem, key) => {
-      const date = safeMoment
-        .iso8601Parse(oFetch(timelineItem, 'createdAt'))
-        .format(utils.humanDateFormatWithTime());
+      const date = safeMoment.iso8601Parse(oFetch(timelineItem, 'createdAt')).format(utils.humanDateFormatWithTime());
       const requestType = oFetch(timelineItem, 'requestType');
-      const requestAction =
-        oFetch(timelineItem, 'state') === 'pending' ? 'Requested' : oFetch(timelineItem, 'state');
+      const requestAction = oFetch(timelineItem, 'state') === 'pending' ? 'Requested' : oFetch(timelineItem, 'state');
       const fullName = oFetch(timelineItem, 'requester.fullName');
       return (
         <div key={`${key}`} className="boss-requests__details-record">
           <p className="boss-requests__details-text">
-            {requestType === 'refundRequest'
-              ? `Refund ${humanize(requestAction)}`
-              : humanize(requestAction)}
+            {requestType === 'refundRequest' ? `Refund ${humanize(requestAction)}` : humanize(requestAction)}
             {` on ${date} by ${fullName}`}
             <span className="boss-requests__details-text-marked" />
           </p>
         </div>
       );
     });
+  };
+
+  handleEditPayslipDate = () => {
+    const [onEditPayslipDate, accessoryRequest] = oFetch(this.props, 'onEditPayslipDate', 'accessoryRequest');
+    return onEditPayslipDate(accessoryRequest);
   };
 
   render() {
@@ -110,6 +110,8 @@ class AccessoryRequestItem extends React.Component {
     const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
     const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
     const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
+    const { payslipDate } = accessoryRequest;
+    const sPayslipDate = payslipDate ? safeMoment.uiDateParse(payslipDate).format(utils.commonDateFormat) : null;
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
@@ -128,6 +130,22 @@ class AccessoryRequestItem extends React.Component {
             </h3>
             { this.renderRequestActions(accessoryRequest)}
           </div>
+          {sPayslipDate && (
+            <div className="boss-requests__details">
+              <div className="boss-requests__details-content">
+                <div className="boss-requests__details-line">
+                  <div className="boss-requests__details-value">
+                    <p className="boss-request__details-text">
+                      Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDate}</span>
+                    </p>
+                  </div>
+                  <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
+                    <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="boss-requests__details">
             <p
               className={`boss-requests__details-switch ${
@@ -144,9 +162,7 @@ class AccessoryRequestItem extends React.Component {
               className="boss-requests__details-dropdown"
               style={{ display: 'block' }}
             >
-              <div className="boss-requests__details-content">
-                {this.renderTimeline(accessoryRequest)}
-              </div>
+              <div className="boss-requests__details-content">{this.renderTimeline(accessoryRequest)}</div>
             </Collapse>
           </div>
         </div>

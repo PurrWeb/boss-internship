@@ -7,12 +7,13 @@ import {
   newAccessoryRequest,
   cancelAccessoryRequest,
   refundAccessoryRequest,
+  getAccessoriesRequest,
+  editAccessoryRequestRequest,
 } from '../requests';
 export const loadInitialState = createAction(constants.LOAD_INITIAL_STATE);
 export const addAccessory = createAction(constants.ADD_ACCESSORY);
-export const updateAccessoryRequestInStore = createAction(
-  constants.UPDATE_ACCESSORY_REQUEST,
-);
+export const updateAccessoryRequestInStore = createAction(constants.UPDATE_ACCESSORY_REQUEST);
+export const loadAccessoryRequests = createAction(constants.LOAD_ACCESSORY_REQUESTS);
 
 export const newAccessory = params => (dispatch, getState) => {
   const staffMemberId = oFetch(params, 'staffMemberId');
@@ -30,19 +31,30 @@ export const newAccessory = params => (dispatch, getState) => {
 export const cancelAccessory = params => (dispatch, getState) => {
   const staffMemberId = oFetch(params, 'staffMemberId');
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
-  return cancelAccessoryRequest(staffMemberId, accessoryRequestId).then(
-    response => {
-      updateAccessoryRequestInStore(response.data);
-    },
-  );
+  return cancelAccessoryRequest(staffMemberId, accessoryRequestId).then(response => {
+    dispatch(updateAccessoryRequestInStore(response.data));
+  });
 };
 
 export const refundAccessory = params => (dispatch, getState) => {
   const staffMemberId = oFetch(params, 'staffMemberId');
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
-  return refundAccessoryRequest(staffMemberId, accessoryRequestId).then(
-    response => {
-      dispatch(updateAccessoryRequestInStore(response.data));
-    },
+  return refundAccessoryRequest(staffMemberId, accessoryRequestId).then(response => {
+    dispatch(updateAccessoryRequestInStore(response.data));
+  });
+};
+
+export const filter = ({ staffMemberId, mPayslipStartDate, mPayslipEndDate }) => (dispatch, getState) => {
+  return getAccessoriesRequest(staffMemberId, mPayslipStartDate, mPayslipEndDate).then(resp =>
+    dispatch(loadAccessoryRequests(resp.data)),
   );
+};
+
+export const editAccessoryRequestPayslipDate = params => (dispatch, getState) => {
+  const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
+  const accessoryRequestId = oFetch(params, 'accessoryRequestId');
+  const mPayslipDate = oFetch(params, 'payslipDate');
+  return editAccessoryRequestRequest(staffMemberId, accessoryRequestId, mPayslipDate).then(response => {
+    dispatch(updateAccessoryRequestInStore(response.data));
+  });
 };

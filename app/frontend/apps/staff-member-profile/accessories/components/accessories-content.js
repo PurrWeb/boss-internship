@@ -5,14 +5,10 @@ class AccessoriesContent extends React.PureComponent {
     return (
       <div className="boss-board__main">
         <div className="boss-board__manager">
-          <div className="boss-board__manager-requests">
-            <div className="boss-requests">
-              { this.props.children }
-            </div>
-          </div>
+          <div className="boss-board__manager-group boss-board__manager-group_role_data">{this.props.children}</div>
         </div>
       </div>
-    )
+    );
   }
 }
 
