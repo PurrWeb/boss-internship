@@ -17,9 +17,10 @@ class StaffMembersAcceptedHoursByWeekQuery
     StaffMember
       .enabled
       .regular
+      .where.not(master_venue: nil)
       .joins(clock_in_days: :hours_acceptance_periods)
       .merge(ClockInDay.where(id: clocking_day_ids))
       .group('staff_members.id')
-      .sum('TIMESTAMPDIFF(hour, hours_acceptance_periods.starts_at, hours_acceptance_periods.ends_at)')
+      .sum('TIMESTAMPDIFF(minute, hours_acceptance_periods.starts_at, hours_acceptance_periods.ends_at)')
   end
 end

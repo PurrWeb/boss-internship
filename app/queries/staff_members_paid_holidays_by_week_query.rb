@@ -17,9 +17,10 @@ class StaffMembersPaidHolidaysByWeekQuery
     StaffMember
       .enabled
       .regular
+      .where.not(master_venue: nil)
       .joins(:holidays)
       .merge(Holiday.where(id: holiday_ids))
       .group('staff_members.id')
-      .sum('TIMESTAMPDIFF(hour, holidays.start_date, holidays.end_date)')
+      .sum('TIMESTAMPDIFF(day, holidays.start_date, holidays.end_date)')
   end
 end
