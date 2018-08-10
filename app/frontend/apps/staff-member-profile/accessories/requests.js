@@ -1,6 +1,7 @@
 import axios from 'axios';
 import globalNotification from '~/components/global-notification';
 import oFetch from 'o-fetch';
+import { apiRoutes } from '~/lib/routes';
 
 export default function http({ ...params }) {
   const instance = axios.create();
@@ -86,4 +87,14 @@ export const refundAccessoryRequest = (staffMemberId, accessoryRequestId) => {
   return http().post(
     `/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/refund`,
   );
+};
+
+export const getAccessoriesRequest = (staffMemberId, mPayslipStartDate, mPayslipEndDate) => {
+  const apiGetUrl = apiRoutes.staffMemberProfileAccessoriesIndex.getPath({
+    staffMemberId,
+    mPayslipStartDate,
+    mPayslipEndDate,
+  });
+
+  return http().get(apiGetUrl);
 };
