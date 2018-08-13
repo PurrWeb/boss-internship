@@ -2,6 +2,7 @@ import React from 'react';
 import { combineReducers } from 'redux-immutable';
 import { reducer as formReducer, SubmissionError } from 'redux-form/immutable';
 import { modalRedux } from '~/components/modals';
+import moment from 'moment';
 
 import EnableProfileForm from './enable-profile-form';
 
@@ -25,7 +26,7 @@ class EnableProfile extends React.Component {
   };
 
   render() {
-    const initialValues = { startsAt: null };
+    const initialValues = { startsAt: moment() };
 
     return <EnableProfileForm onSubmit={this.handleSubmit} initialValues={initialValues} />;
   }
