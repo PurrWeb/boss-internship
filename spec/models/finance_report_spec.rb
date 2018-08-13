@@ -41,9 +41,6 @@ describe FinanceReport do
   end
   let(:invalid_extra_attributes) do
     {
-      venue_name: nil,
-      staff_member_name: nil,
-      pay_rate_description: nil,
       accessories_cents: nil,
       contains_time_shifted_owed_hours: nil,
       contains_time_shifted_holidays: nil,
@@ -73,7 +70,10 @@ describe FinanceReport do
     let(:finance_report) do
       FinanceReport.new(
         staff_member: staff_member,
+        staff_member_name: staff_member.full_name,
         venue: venue,
+        venue_name: venue.name,
+        pay_rate_description: staff_member.pay_rate.text_description_short,
         week_start: week_start,
         requiring_update: true
       )

@@ -134,7 +134,10 @@ describe MigrateIncompleteFinanceReportsToVenue do
 
           finance_report = FinanceReport.first
           expect(finance_report.venue).to eq(new_venue)
+          expect(finance_report.venue_name).to eq(new_venue.name)
           expect(finance_report.staff_member).to eq(staff_member)
+          expect(finance_report.staff_member_name).to eq(staff_member.full_name)
+          expect(finance_report.pay_rate_description).to eq(staff_member.pay_rate.text_description_short)
           expect(finance_report.week_start).to eq(incomplete_finance_report_week_start)
           expect(finance_report.requiring_update?).to eq(true)
         end

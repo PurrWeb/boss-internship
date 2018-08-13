@@ -22,6 +22,7 @@ class MarkFinanceReportRequiringUpdate
       finance_report = FinanceReport.create!(
         staff_member: staff_member,
         staff_member_name: staff_member.full_name,
+        pay_rate_description: staff_member.pay_rate.text_description_short,
         venue: venue,
         venue_name: venue.name,
         week_start: week_start,

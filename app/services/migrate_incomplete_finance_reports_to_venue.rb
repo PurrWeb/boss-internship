@@ -15,7 +15,10 @@ class MigrateIncompleteFinanceReportsToVenue
       incomplete_finance_reports.find_each do |incomplete_finance_report|
         replacement_report = FinanceReport.create!(
           staff_member: staff_member,
+          staff_member_name: staff_member.full_name,
           venue: new_master_venue,
+          venue_name: new_master_venue.name,
+          pay_rate_description: staff_member.pay_rate.text_description_short,
           week_start: incomplete_finance_report.week_start,
           requiring_update: true
         )

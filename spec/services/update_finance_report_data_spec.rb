@@ -19,9 +19,9 @@ describe UpdateFinanceReportData do
   let(:call_time) { RotaShiftDate.new(future_week.start_date).start_time }
   let(:default_finance_report_factory_params) do
     {
-      venue_name: nil,
-      staff_member_name: nil,
-      pay_rate_description: nil,
+      venue_name: venue.name,
+      staff_member_name: staff_member.full_name,
+      pay_rate_description: pay_rate.text_description_short,
       accessories_cents: nil,
       contains_time_shifted_owed_hours: nil,
       contains_time_shifted_holidays: nil,
