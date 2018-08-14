@@ -111,11 +111,6 @@ class FinanceReportsController < ApplicationController
           week: week
         ).call.report
       )
-
-      if staff_member.sage_id.present? && (FinanceReportCompletionStatus.new(finance_report: report).status_text != FinanceReport::REPORT_STATUS_DONE_STATUS)
-        raise "Attempt to export incomplete finance report for staff member #{staff_member.id}"
-      end
-
       pdf.add_report(staff_type: staff_member.staff_type, report: report)
     end
 
