@@ -78,7 +78,7 @@ class ReportList extends Component {
               >
                 <div className="boss-board__scroll-content">
                   <div className="boss-table boss-table_page_payroll-reports">
-                    <ReportTableHeader startDate={startDate} />
+                    <ReportTableHeader staffTypeName={name} startDate={startDate} />
                     {this.renderItems()}
                   </div>
                 </div>

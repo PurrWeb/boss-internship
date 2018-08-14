@@ -90,7 +90,7 @@ class Page extends Component {
 
     return (oFetch(sageIdStaffMemberReportsJS, 'length') > 0) &&
       _.every(sageIdStaffMemberReportsJS, (report) => {
-        return oFetch(report, 'status.status_text') === FINANCE_REPORT_STATUS_DONE_STATUS
+        return oFetch(report, 'status') === FINANCE_REPORT_STATUS_DONE_STATUS
       });
   }
 
@@ -108,14 +108,14 @@ class Page extends Component {
 
     const staffMemberIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status', 'status_text']) === 'ready').map(report => report.get('staffMemberId'))),
+        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status']) === 'ready').map(report => report.get('staffMemberId'))),
         Immutable.List(),
       )
       .toJS();
 
     const reportsIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status', 'status_text']) === 'ready').map(report => report.get('frontendId'))),
+        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status']) === 'ready').map(report => report.get('frontendId'))),
         Immutable.List(),
       )
       .toJS();
@@ -145,12 +145,12 @@ class Page extends Component {
             const reportsJS = oFetch(staffTypeJS, 'reports');
 
             const staffMemberIds = reportsJS.filter((report) => {
-              return oFetch(report, 'status.status_text') === 'ready'
+              return oFetch(report, 'status') === 'ready'
             })
             .map(report => oFetch(report, 'staffMemberId'));
 
             const reportsIds = reportsJS.filter(report => (report) => {
-              return oFetch(report, 'status.status_text') === 'ready'
+              return oFetch(report, 'status') === 'ready'
             })
             .map(report => oFetch(report, 'frontendId'));
 

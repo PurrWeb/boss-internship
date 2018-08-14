@@ -22,9 +22,10 @@ class ReportItem extends Component {
     const sundayHoursCount = utils.round(oFetch(report, 'sundayHoursCount'), 2);
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
-    const status = oFetch(report, 'status.status_text');
-    const canComplete = oFetch(report, 'status.can_complete');
-    const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
+    const status = oFetch(report, 'status');
+    const canComplete = oFetch(report, 'canComplete');
+    const daysNeedingCompletion = oFetch(report, 'daysNeedingCompletion');
+    const pendingCalculation = oFetch(report, 'pendingCalculation');
     const isIncomplete = status === 'incomplete';
 
     return [
@@ -63,7 +64,7 @@ class ReportItem extends Component {
 
   getCellClassName(hasIncompleteDay = false) {
     const report = oFetch(this.props, 'report');
-    const status = oFetch(report, 'status.status_text');
+    const status = oFetch(report, 'status');
     const isIncomplete = status === 'incomplete';
     return classNames({
       'boss-table__cell': true,
@@ -73,7 +74,7 @@ class ReportItem extends Component {
 
   getTextClassName(hasIncompleteDay = false) {
     const report = oFetch(this.props, 'report');
-    const status = oFetch(report, 'status.status_text');
+    const status = oFetch(report, 'status');
     const isIncomplete = status === 'incomplete';
     return classNames({
       'boss-boss-table__text': true,
@@ -107,7 +108,7 @@ class ReportItem extends Component {
     const weeklyHours = utils.round(oFetch(report, 'weeklyHours'), 2);
     const owedHours = utils.round(oFetch(report, 'owedHours'), 2);
 
-    const status = oFetch(report, 'status.status_text');
+    const status = oFetch(report, 'status');
     const acessories = utils.round(oFetch(report, 'acessories'), 2);
     const acessoriesColor = utils.colorizedAmount(acessories);
     const payRateDescription = oFetch(report, 'payRateDescription');
@@ -121,7 +122,9 @@ class ReportItem extends Component {
     const sageId = oFetch(report, 'staffMemberSageId');
     const containsTimeShiftedOwedHours = oFetch(report, 'containsTimeShiftedOwedHours');
     const containsTimeShiftedHolidays = oFetch(report, 'containsTimeShiftedHolidays');
-    const daysNeedingCompletion = oFetch(report, 'status.days_needing_completion');
+    const daysNeedingCompletion = oFetch(report, 'daysNeedingCompletion');
+    const pendingCalculation = oFetch(report, 'pendingCalculation');
+    const staffMemberDisabled = oFetch(report, 'staffMemberDisabled');
 
     const isIncomplete = status === 'incomplete';
     const hasIncompleteDays = Object.values(daysNeedingCompletion).length > 0;
@@ -133,12 +136,17 @@ class ReportItem extends Component {
       'boss-table__text_role_success-status': status === 'done',
     });
     const fullNameCellClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_user-disabled': staffMemberDisabled
+    });
+    const fullNameCellTextClassName = classNames({
       'boss-table__text': true,
-      'boss-table__text_indicator_accessory': acessories !== 0,
+      'boss-table__text_indicator_accessory': acessories !== 0
     });
     const rowClassName = classNames({
       'boss-table__row': true,
       'boss-table__row_state_alert': hasIncompleteDays,
+      'boss-table__row_state_pre-calculated': pendingCalculation
     });
     const owedHoursClassName = classNames({
       'boss-table__cell': true,
@@ -150,8 +158,8 @@ class ReportItem extends Component {
     });
     return (
       <div className={rowClassName}>
-        <div className="boss-table__cell">
-          <p className={fullNameCellClassName}>
+        <div className={fullNameCellClassName}>
+          <p className={fullNameCellTextClassName}>
             <a
               href={appRoutes.staffMember(staffMemberId)}
               className="boss-table__link"

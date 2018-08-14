@@ -17,19 +17,34 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :total,
     :totalHoursCount,
     :status,
+    :canComplete,
     :netWagesCents,
     :canSeeNetWages,
     :staffMemberSageId,
+    :staffMemberDisabled,
     :containsTimeShiftedOwedHours,
     :containsTimeShiftedHolidays,
+    :daysNeedingCompletion,
     :pendingCalculation
 
   def status
     object.current_state
   end
 
+  def canComplete
+    status_data.fetch(:can_complete)
+  end
+
+  def daysNeedingCompletion
+    status_data.fetch(:days_needing_completion)
+  end
+
   def staffMemberId
     object.staff_member_id
+  end
+
+  def staffMemberDisabled
+    object.staff_member.disabled?
   end
 
   def staffMemberName
@@ -159,5 +174,10 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def pendingCalculation
     object.requiring_update?
+  end
+
+  private
+  def status_data
+    @status_data ||= GetPendingHoursStatus.new(week: RotaWeek.new(object.week_start), staff_member: object.staff_member).status_data
   end
 end
