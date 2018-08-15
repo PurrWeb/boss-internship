@@ -1379,9 +1379,7 @@ ActiveRecord::Schema.define(version: 20180813101708) do
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
 
-  add_foreign_key "accessory_refund_requests", "finance_reports"
   add_foreign_key "accessory_refund_requests", "users", column: "created_by_user_id"
-  add_foreign_key "accessory_requests", "finance_reports"
   add_foreign_key "accessory_requests", "users", column: "created_by_user_id"
   add_foreign_key "hours_acceptance_periods", "users", column: "accepted_by_id"
   add_foreign_key "incident_reports", "users"
