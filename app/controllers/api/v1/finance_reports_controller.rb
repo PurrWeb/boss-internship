@@ -22,8 +22,8 @@ module Api
             :hours_acceptance_periods,
             :holidays,
             :owed_hours,
-            :accessories_requests,
-            :accessories_refunds
+            :accessory_requests,
+            :accessory_refund_requests
           )
 
         MarkFinanceReportsComplete.new(finance_reports: finance_reports).call
@@ -50,13 +50,13 @@ module Api
             :hours_acceptance_periods,
             :holidays,
             :owed_hours,
-            :accessories_requests,
-            :accessories_refunds
+            :accessory_requests,
+            :accessory_refund_requests
           )
 
         raise 'mutiple finance reports returned for single complete' if finance_reports.count != 1
 
-        MarkFinanceReportComplete.new(finance_reports: finance_reports).call
+        MarkFinanceReportsComplete.new(finance_reports: finance_reports).call
 
         render(
           json: {},
@@ -71,7 +71,7 @@ module Api
       end
 
       def venue_from_params
-        Venue.find_by(id: params[:venue_id])
+        Venue.find(params.fetch("venueId"))
       end
 
       def staff_member_from_params
