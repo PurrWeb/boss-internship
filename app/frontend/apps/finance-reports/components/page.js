@@ -66,32 +66,7 @@ class Page extends Component {
   };
 
   canExportToCSV(options){
-    const staffTypesWithFinanceReports = oFetch(options, 'staffTypesWithFinanceReports');
-    const staffTypesJS = staffTypesWithFinanceReports.toJS();
-
-    const staffMembersWithSageIdByIdJS = _.reduce(staffTypesJS, (acc, staffType) => {
-      _.forEach(oFetch(staffType, 'staffMembers'), (value, key) => {
-        //values are always a 1 element array for some reason
-        const staffMember = value[0];
-        if(staffMember.sageId) {
-          acc[key] = staffMember;
-        }
-      });
-      return acc;
-    }, {});
-    const sageIdStaffMemberReportsJS = _.reduce(staffTypesJS, (acc, staffType) => {
-      return acc.concat(
-        _.filter(oFetch(staffType, 'reports'), (report) => {
-          const staffMemberId = oFetch(report, 'staffMemberId');
-          return _.includes(_.keys(staffMembersWithSageIdByIdJS), staffMemberId.toString())
-        })
-      );
-    }, []);
-
-    return (oFetch(sageIdStaffMemberReportsJS, 'length') > 0) &&
-      _.every(sageIdStaffMemberReportsJS, (report) => {
-        return oFetch(report, 'status') === FINANCE_REPORT_STATUS_DONE_STATUS
-      });
+    return true;
   }
 
   render() {

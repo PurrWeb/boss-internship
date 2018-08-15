@@ -25,7 +25,8 @@ class SageFinanceReportExportCSV
       where(
         master_venue: venue,
         pay_rate: pay_rates
-      )
+      ).
+      where('sage_id IS NOT ?', nil)
 
     staff_members = staff_members.
       includes([:name, :staff_type, :pay_rate, :master_venue])
@@ -40,10 +41,6 @@ class SageFinanceReportExportCSV
 
       finance_reports.find_each do |finance_report|
         staff_member = finance_report.staff_member
-
-        raise "Attempt to export staff member #{staff_member.id} with no sage id" unless staff_member.sage_id.present?
-
-        raise "Attempt to export incomplete finance report for staff member #{staff_member.id}" unless finance_report.done?
 
         csv << [
           staff_member.sage_id,
