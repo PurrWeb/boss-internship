@@ -274,146 +274,144 @@ class AssociateFinanceReportsWithExistingRecords < ActiveRecord::Migration
 
   def change
     ActiveRecord::Base.logger.level = Logger::FATAL
-    ActiveRecord::Base.transaction do
-      puts "Marking existing finance reports as completed"
-      puts "************************************"
-      finance_reports = FinanceReport.all
-      puts "processing #{finance_reports.count} records"
-      puts ""
-      finance_reports.find_each do |finance_report|
-        created_at = finance_report.created_at
-        travel_to created_at do
-          finance_report.mark_ready!
-          finance_report.allow_mark_completed = true
-          finance_report.mark_completed!
+    puts "Marking existing finance reports as completed"
+    puts "************************************"
+    finance_reports = FinanceReport.all
+    puts "processing #{finance_reports.count} records"
+    puts ""
+    finance_reports.find_each do |finance_report|
+      created_at = finance_report.created_at
+      travel_to created_at do
+        finance_report.mark_ready!
+        finance_report.allow_mark_completed = true
+        finance_report.mark_completed!
+      end
+    end
+
+
+    puts "Patch acccepted HoursAcceptancePeriods"
+    puts "************************************"
+    hours_acceptance_periods = HoursAcceptancePeriod.
+      accepted.
+      where(finance_report_id: nil)
+    puts "processing #{hours_acceptance_periods.count} records"
+    puts ""
+
+    hours_acceptance_periods.
+      includes(clock_in_day: [staff_member: [:name, :master_venue, :pay_rate]]).
+      find_each do |hours_acceptance_period|
+        date = hours_acceptance_period.clock_in_day.date
+        week = RotaWeek.new(date)
+        staff_member = hours_acceptance_period.clock_in_day.staff_member
+        venue = staff_member.master_venue
+        #security staff have no master venue
+        next unless venue.present?
+
+        finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
+        if !finance_report.in_requiring_update_state?
+          finance_report.mark_requiring_update!
         end
+        hours_acceptance_period.update_attributes!(finance_report: finance_report)
       end
 
+    puts "Patch acccepted Holidays"
+    puts "************************************"
+    holidays = Holiday.
+      enabled.
+      where(finance_report_id: nil)
+    puts "processing #{holidays.count} records"
+    puts ""
 
-      puts "Patch acccepted HoursAcceptancePeriods"
-      puts "************************************"
-      hours_acceptance_periods = HoursAcceptancePeriod.
-        accepted.
-        where(finance_report_id: nil)
-      puts "processing #{hours_acceptance_periods.count} records"
-      puts ""
+    holidays.
+      includes(staff_member: [:name, :master_venue, :pay_rate]).
+      find_each do |holiday|
+        date = holiday.payslip_date
+        week = RotaWeek.new(date)
+        staff_member = holiday.staff_member
+        venue = staff_member.master_venue
+        #security staff have no master venue
+        next unless venue.present?
 
-      hours_acceptance_periods.
-        includes(clock_in_day: [staff_member: [:name, :master_venue, :pay_rate]]).
-        find_each do |hours_acceptance_period|
-          date = hours_acceptance_period.clock_in_day.date
-          week = RotaWeek.new(date)
-          staff_member = hours_acceptance_period.clock_in_day.staff_member
-          venue = staff_member.master_venue
-          #security staff have no master venue
-          next unless venue.present?
-
-          finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
-          if !finance_report.in_requiring_update_state?
-            finance_report.mark_requiring_update!
-          end
-          hours_acceptance_period.update_attributes!(finance_report: finance_report)
+        finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
+        if !finance_report.in_requiring_update_state?
+          finance_report.mark_requiring_update!
         end
+        holiday.update_attributes!(finance_report: finance_report)
+      end
 
-      puts "Patch acccepted Holidays"
-      puts "************************************"
-      holidays = Holiday.
-        enabled.
-        where(finance_report_id: nil)
-      puts "processing #{holidays.count} records"
-      puts ""
+    puts "Patch acccepted OwedHours"
+    puts "************************************"
+    owed_hours = OwedHour.
+      enabled.
+      where(finance_report_id: nil)
+    puts "processing #{owed_hours.count} records"
+    puts ""
 
-      holidays.
-        includes(staff_member: [:name, :master_venue, :pay_rate]).
-        find_each do |holiday|
-          date = holiday.payslip_date
-          week = RotaWeek.new(date)
-          staff_member = holiday.staff_member
-          venue = staff_member.master_venue
-          #security staff have no master venue
-          next unless venue.present?
+    owed_hours.
+      includes(staff_member: [:name, :master_venue, :pay_rate]).
+      find_each do |owed_hour|
+        date = owed_hour.payslip_date
+        week = RotaWeek.new(date)
+        staff_member = owed_hour.staff_member
+        venue = staff_member.master_venue
+        #security staff have no master venue
+        next unless venue.present?
 
-          finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
-          if !finance_report.in_requiring_update_state?
-            finance_report.mark_requiring_update!
-          end
-          holiday.update_attributes!(finance_report: finance_report)
+        finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
+        if !finance_report.in_requiring_update_state?
+          finance_report.mark_requiring_update!
         end
+        owed_hour.update_attributes!(finance_report: finance_report)
+      end
 
-      puts "Patch acccepted OwedHours"
-      puts "************************************"
-      owed_hours = OwedHour.
-        enabled.
-        where(finance_report_id: nil)
-      puts "processing #{owed_hours.count} records"
-      puts ""
+    puts "Patch acccepted AccessoryRefundRequests"
+    puts "************************************"
+    accessory_refund_requests = AccessoryRefundRequest.
+      where("`completed_at` IS NOT ?", nil).
+      where(finance_report_id: nil)
+    puts "processing #{accessory_refund_requests.count} records"
+    puts ""
 
-      owed_hours.
-        includes(staff_member: [:name, :master_venue, :pay_rate]).
-        find_each do |owed_hour|
-          date = owed_hour.payslip_date
-          week = RotaWeek.new(date)
-          staff_member = owed_hour.staff_member
-          venue = staff_member.master_venue
-          #security staff have no master venue
-          next unless venue.present?
+    accessory_refund_requests.
+      includes(staff_member: [:name, :master_venue, :pay_rate]).
+      find_each do |accessory_refund_request|
+        date = GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(accessory_refund_request.completed_at)).call
+        week = RotaWeek.new(date)
+        staff_member = accessory_refund_request.staff_member
+        venue = staff_member.master_venue
+        #security staff have no master venue
+        next unless venue.present?
 
-          finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
-          if !finance_report.in_requiring_update_state?
-            finance_report.mark_requiring_update!
-          end
-          owed_hour.update_attributes!(finance_report: finance_report)
+        finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
+        if !finance_report.in_requiring_update_state?
+          finance_report.mark_requiring_update!
         end
+        accessory_refund_request.update_attributes!(finance_report: finance_report)
+      end
 
-      puts "Patch acccepted AccessoryRefundRequests"
-      puts "************************************"
-      accessory_refund_requests = AccessoryRefundRequest.
-        where("`completed_at` IS NOT ?", nil).
-        where(finance_report_id: nil)
-      puts "processing #{accessory_refund_requests.count} records"
-      puts ""
+    puts "Patch acccepted AccessoryRequests"
+    puts "************************************"
+    accessory_requests = AccessoryRequest.
+      where("`completed_at` IS NOT ?", nil).
+      where(finance_report_id: nil)
+    puts "processing #{accessory_requests.count} records"
+    puts ""
 
-      accessory_refund_requests.
-        includes(staff_member: [:name, :master_venue, :pay_rate]).
-        find_each do |accessory_refund_request|
-          date = GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(accessory_refund_request.completed_at)).call
-          week = RotaWeek.new(date)
-          staff_member = accessory_refund_request.staff_member
-          venue = staff_member.master_venue
-          #security staff have no master venue
-          next unless venue.present?
+    accessory_requests.
+      includes(staff_member: [:name, :master_venue, :pay_rate]).
+      find_each do |accessory_request|
+        date = GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(accessory_request.completed_at)).call
+        week = RotaWeek.new(date)
+        staff_member = accessory_request.staff_member
+        venue = staff_member.master_venue
+        #security staff have no master venue
+        next unless venue.present?
 
-          finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
-          if !finance_report.in_requiring_update_state?
-            finance_report.mark_requiring_update!
-          end
-          accessory_refund_request.update_attributes!(finance_report: finance_report)
+        finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
+        if !finance_report.in_requiring_update_state?
+          finance_report.mark_requiring_update!
         end
-
-      puts "Patch acccepted AccessoryRequests"
-      puts "************************************"
-      accessory_requests = AccessoryRequest.
-        where("`completed_at` IS NOT ?", nil).
-        where(finance_report_id: nil)
-      puts "processing #{accessory_requests.count} records"
-      puts ""
-
-      accessory_requests.
-        includes(staff_member: [:name, :master_venue, :pay_rate]).
-        find_each do |accessory_request|
-          date = GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(accessory_request.completed_at)).call
-          week = RotaWeek.new(date)
-          staff_member = accessory_request.staff_member
-          venue = staff_member.master_venue
-          #security staff have no master venue
-          next unless venue.present?
-
-          finance_report = find_or_create_report(week: week, venue: venue, staff_member: staff_member)
-          if !finance_report.in_requiring_update_state?
-            finance_report.mark_requiring_update!
-          end
-          accessory_request.update_attributes!(finance_report: finance_report)
-        end
-    end
+        accessory_request.update_attributes!(finance_report: finance_report)
+      end
   end
 end
