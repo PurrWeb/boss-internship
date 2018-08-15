@@ -41,8 +41,8 @@ class ReportItem extends Component {
       if (canComplete === false && daysNeedingCompletion[weekDate]) {
         const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
         return (
-          <div key={index} className={this.getCellClassName(true)} style={cellStyle}>
-            <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName(true)} boss-table__link`}>
+          <div key={index} className={this.getCellClassName({ alertStyles: true })} style={cellStyle}>
+            <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName({ alertStyles: true })} boss-table__link`}>
               {dayHoursCount}
             </a>
             {this.renderTooltip(tooltipContent)}
@@ -50,9 +50,9 @@ class ReportItem extends Component {
         );
       } else {
         return (
-          <div key={index} className={this.getCellClassName()} style={cellStyle}>
-            <p style={{marginBottom: 0}} className={this.getTextClassName()}>
-              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName()} boss-table__link`}>
+          <div key={index} className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
+            <p style={{marginBottom: 0}} className={this.getTextClassName({ alertStyles: false })}>
+              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}>
                 {dayHoursCount}
               </a>
             </p>
@@ -62,23 +62,19 @@ class ReportItem extends Component {
     });
   }
 
-  getCellClassName(hasIncompleteDay = false) {
-    const report = oFetch(this.props, 'report');
-    const status = oFetch(report, 'status');
-    const isIncomplete = status === 'incomplete';
+  getCellClassName(params) {
+    const alertStyles = oFetch(params, 'alertStyles');
     return classNames({
       'boss-table__cell': true,
-      'boss-table__cell_state_alert': hasIncompleteDay,
+      'boss-table__cell_state_alert': alertStyles,
     });
   }
 
-  getTextClassName(hasIncompleteDay = false) {
-    const report = oFetch(this.props, 'report');
-    const status = oFetch(report, 'status');
-    const isIncomplete = status === 'incomplete';
+  getTextClassName(params) {
+    const alertStyles = oFetch(params, 'alertStyles');
     return classNames({
       'boss-boss-table__text': true,
-      'boss-table__text_state_alert': hasIncompleteDay,
+      'boss-table__text_state_alert': alertStyles,
     });
   }
 
@@ -186,52 +182,52 @@ class ReportItem extends Component {
             </a>
           </div> }
         {this.renderWeekDaysCells()}
-        <div className={this.getCellClassName()} style={cellStyle}>
-          <p className={this.getTextClassName()}>{weeklyHours}</p>
+        <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
+          <p className={this.getTextClassName({ alertStyles: false })}>{weeklyHours}</p>
         </div>
         {owedHours === 0 ? (
           <div className={owedHoursClassName} style={cellStyle}>
-            <p className={this.getTextClassName()}>{owedHours}</p>
+            <p className={this.getTextClassName({ alertStyles: false })}>{owedHours}</p>
           </div>
         ) : (
           <div className={owedHoursClassName} style={cellStyle}>
-            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className={`${this.getTextClassName()} boss-table__link`}>
+            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}>
               {owedHours}
             </a>
           </div>
         )}
 
-        <div className={this.getCellClassName()} style={cellStyle}>
+        <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
           {acessories === 0 ? (
-            <p className={this.getTextClassName()}>{utils.moneyFormat(acessories)}</p>
+            <p className={this.getTextClassName({ alertStyles: false })}>{utils.moneyFormat(acessories)}</p>
           ) : (
             <a
               href={appRoutes.staffMemberAccessories(staffMemberId)}
-              className={this.getTextClassName()}
+              className={this.getTextClassName({ alertStyles: false })}
               style={{ color: acessoriesColor }}
             >
               {utils.moneyFormat(acessories)}
             </a>
           )}
         </div>
-        <div className={this.getCellClassName()} style={cellStyle}>
-          <p className={this.getTextClassName()}>{payRateDescription}</p>
+        <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
+          <p className={this.getTextClassName({ alertStyles: false })}>{payRateDescription}</p>
         </div>
-        <div className={this.getCellClassName()} style={cellStyle}>
-          <p className={`${this.getTextClassName()} boss-table__text_role_important`}>{totalHoursCount}</p>
+        <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
+          <p className={`${this.getTextClassName({ alertStyles: false })} boss-table__text_role_important`}>{totalHoursCount}</p>
         </div>
-        <div className={this.getCellClassName()} style={cellStyle}>
-          <p className={this.getTextClassName()}>{utils.moneyFormat(total)}</p>
+        <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
+          <p className={this.getTextClassName({ alertStyles: false })}>{utils.moneyFormat(total)}</p>
         </div>
         {holidayDaysCount === 0 ? (
           <div className={holidayDaysCountClassName} style={cellStyle}>
-            <p className={this.getTextClassName()}>{holidayDaysCount}</p>
+            <p className={this.getTextClassName({ alertStyles: false })}>{holidayDaysCount}</p>
           </div>
         ) : (
           <div className={holidayDaysCountClassName} style={cellStyle}>
             <a
               href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})}
-              className={`${this.getTextClassName()} boss-table__link`}
+              className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}
             >
               {holidayDaysCount}
             </a>
