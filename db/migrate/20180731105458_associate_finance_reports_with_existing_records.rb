@@ -198,6 +198,8 @@ class AssociateFinanceReportsWithExistingRecords < ActiveRecord::Migration
   end
 
   class Holiday < ActiveRecord::Base
+    PAID_HOLIDAY_TYPE = "paid_holiday"
+
     belongs_to :staff_member
     belongs_to :finance_report
     has_many :holiday_transitions, autosave: false
@@ -218,6 +220,10 @@ class AssociateFinanceReportsWithExistingRecords < ActiveRecord::Migration
 
     def self.enabled
       in_state(:enabled)
+    end
+
+    def self.paid
+      where(holiday_type: PAID_HOLIDAY_TYPE)
     end
 
     private
@@ -318,6 +324,7 @@ class AssociateFinanceReportsWithExistingRecords < ActiveRecord::Migration
     puts "************************************"
     holidays = Holiday.
       enabled.
+      paid.
       where(finance_report_id: nil)
     puts "processing #{holidays.count} records"
     puts ""
