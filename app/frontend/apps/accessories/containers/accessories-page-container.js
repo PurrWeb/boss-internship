@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AccessoriesPage from '../components/accessories-page';
+import { getHistoryByAccessoryId } from '../redux/reducers';
 
 import {
   loadInitialData,
@@ -15,27 +16,31 @@ import {
   updateAccessoryFreeItems,
 } from '../redux/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     accessories: state.getIn(['page', 'accessories']),
     pagination: state.getIn(['page', 'pagination']),
+    getHistoryByAccessoryId: getHistoryByAccessoryId(state),
   };
-}
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({
-      loadInitialData,
-      createAccessory,
-      updateAccessory,
-      disableAccessory,
-      restoreAccessory,
-      loadMoreClick,
-      filter,
-      updateAccessoryFreeItems,
-    }, dispatch)
+    actions: bindActionCreators(
+      {
+        loadInitialData,
+        createAccessory,
+        updateAccessory,
+        disableAccessory,
+        restoreAccessory,
+        loadMoreClick,
+        filter,
+        updateAccessoryFreeItems,
+      },
+      dispatch,
+    ),
   };
-}
+};
 @connect(mapStateToProps, mapDispatchToProps)
 class AccessoriesPageContainer extends React.Component {
   componentWillMount() {
@@ -47,11 +52,9 @@ class AccessoriesPageContainer extends React.Component {
       ...this.props,
       accessories: this.props.accessories.toJS(),
       pagination: this.props.pagination.toJS(),
-    }
+    };
 
-    return (
-      <AccessoriesPage {...props}/>
-    )
+    return <AccessoriesPage {...props} />;
   }
 }
 

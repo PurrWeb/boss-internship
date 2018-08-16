@@ -2,11 +2,7 @@ import React from 'react';
 import URLSearchParams from 'url-search-params';
 import oFetch from 'o-fetch';
 
-import {
-  SimpleDashboard,
-  DashboardFilter,
-  DashboardActions,
-} from '~/components/boss-dashboards';
+import { SimpleDashboard, DashboardFilter, DashboardActions } from '~/components/boss-dashboards';
 
 import { openWarningModal, openContentModal } from '~/components/modals';
 
@@ -50,7 +46,6 @@ class AccessoriesPage extends React.Component {
       return resp;
     });
   };
-
 
   handleEditFreeItemsSubmit = (hideModal, values) => {
     return this.props.actions.updateAccessoryFreeItems(values).then(resp => {
@@ -99,16 +94,17 @@ class AccessoriesPage extends React.Component {
   };
 
   handleOpenHistory = accessory => {
+    const history = this.props.getHistoryByAccessoryId(oFetch(accessory, 'id')).toJS();
     openContentModal({
       config: { title: `${oFetch(accessory, 'name')} History`, modalClassName: 'boss-modal-window_role_history' },
-      props: { 
-        accessoryHistory: oFetch(accessory, 'accessoryHistory'),
-        itemRenderer: (historyItem) => {
-          return <EditFreeItemsHistoryItem historyItem={historyItem} />
-        } 
+      props: {
+        accessoryHistory: history, // oFetch(accessory, 'accessoryHistory'),
+        itemRenderer: (historyItem, previousCount) => {
+          return <EditFreeItemsHistoryItem historyItem={historyItem} previousCount={previousCount} />;
+        },
       },
     })(EditFreeItemsHistoryList);
-  }
+  };
 
   handleEditFreeItems = accessory => {
     openContentModal({
@@ -144,23 +140,16 @@ class AccessoriesPage extends React.Component {
 
   render() {
     const accessories = this.getAccessories();
-    const isShowLoadMore =
-      accessories.length < this.props.pagination.totalCount;
+    const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
     return (
       <div>
         <SimpleDashboard title="Accessories">
           <DashboardActions>
-            <button
-              className="boss-button boss-button_role_add"
-              onClick={this.handleAddAccessory}
-            >
+            <button className="boss-button boss-button_role_add" onClick={this.handleAddAccessory}>
               Add Accessory
             </button>
           </DashboardActions>
-          <DashboardFilter
-            onFilter={this.handleFilter}
-            component={AccessoriesFilter}
-          />
+          <DashboardFilter onFilter={this.handleFilter} component={AccessoriesFilter} />
         </SimpleDashboard>
         <AccessoriesList
           accessories={this.getAccessories()}

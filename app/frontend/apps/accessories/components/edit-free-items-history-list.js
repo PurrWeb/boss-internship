@@ -5,11 +5,12 @@ class EditFreeItemsHistory extends React.Component {
   renderItems(accessoryHistory) {
     const itemRenderer = oFetch(this.props, 'itemRenderer');
 
-    return accessoryHistory.map(historyItem => {
-      const historyItemId = oFetch(historyItem, 'id');
+    return accessoryHistory.map((historyItem, index) => {
+      const previouseItem = accessoryHistory[index - 1];
+      const previousCount = previouseItem ? previouseItem.count : 0;
 
-      return React.cloneElement(itemRenderer(historyItem), {
-        key: historyItemId.toString(),
+      return React.cloneElement(itemRenderer(historyItem, previousCount), {
+        key: index.toString(),
       });
     });
   }
@@ -20,9 +21,11 @@ class EditFreeItemsHistory extends React.Component {
       <div>
         <div className="boss-modal-window__timeline">
           <div className="boss-timeline">
-            <ul className="boss-timeline__list">
-              {this.renderItems(accessoryHistory)}
-            </ul>
+            {accessoryHistory.length > 0 ? (
+              <ul className="boss-timeline__list">{this.renderItems(accessoryHistory)}</ul>
+            ) : (
+              <h1>No history</h1>
+            )}
           </div>
         </div>
         <div className="boss-modal-window__actions">

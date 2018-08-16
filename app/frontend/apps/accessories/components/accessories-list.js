@@ -17,34 +17,36 @@ class AccessoriesList extends React.Component {
   renderEnabledButtons(accessory) {
     return (
       <BossCheckCardActions>
-        <button
-          className="boss-button boss-button_role_edit"
-          onClick={() => this.props.onEdit(accessory)}
-        >Edit</button>
-        <button
-          className="boss-button boss-button_role_disable"
-          onClick={() => this.props.onDisable(accessory)}
-        >Disable</button>
+        <button className="boss-button boss-button_role_edit" onClick={() => this.props.onEdit(accessory)}>
+          Edit
+        </button>
+        <button className="boss-button boss-button_role_disable" onClick={() => this.props.onDisable(accessory)}>
+          Disable
+        </button>
       </BossCheckCardActions>
-    )
+    );
   }
 
   renderDisabledButtons(accessory) {
     return (
       <BossCheckCardActions>
-        <button
-          className="boss-button boss-button_role_restore"
-          onClick={() => this.props.onRestore(accessory)}
-        >Restore</button>
+        <button className="boss-button boss-button_role_restore" onClick={() => this.props.onRestore(accessory)}>
+          Restore
+        </button>
       </BossCheckCardActions>
-    )
+    );
   }
 
   getSizes(sizesString) {
-    if (sizesString === null) {return 'N/A'}
-    return sizesString.split(',').map(size => {
-      return size.toUpperCase();
-    }).join(', ');
+    if (sizesString === null) {
+      return 'N/A';
+    }
+    return sizesString
+      .split(',')
+      .map(size => {
+        return size.toUpperCase();
+      })
+      .join(', ');
   }
 
   renderAccessories(accessories) {
@@ -62,72 +64,85 @@ class AccessoriesList extends React.Component {
           className="boss-check__title_role_accessory"
         >
           <BossCheckCardRow title="Price" text={`£${price}`} />
-          <BossCheckCardRow title="Type" text={accessoriesConstants.ACCESSORY_TYPE_LABELS[oFetch(accessory, 'accessoryType')]} />
+          <BossCheckCardRow
+            title="Type"
+            text={accessoriesConstants.ACCESSORY_TYPE_LABELS[oFetch(accessory, 'accessoryType')]}
+          />
           <BossCheckCardRow title="Size" text={this.getSizes(oFetch(accessory, 'size'))} />
           <BossCheckCardRow title="Self requestable" text={oFetch(accessory, 'userRequestable') ? 'Yes' : 'No'} />
           <BossCheckCardRow title="Current requests" text={pendingRequestCount} />
           <BossCheckCardRow title="Current refunds" text={pendingRefundCount} />
           <BossCheckSimpleRow>
-            <AccessoriesInventoryCell 
-              title="Free Items" 
-              count={oFetch(accessory, 'freeItemsCount')} 
+            <AccessoriesInventoryCell
+              title="Free Items"
+              count={oFetch(accessory, 'freeItems')}
               actionRenderer={() => {
                 return (
-                  <button 
-                    onClick={() => 
-                      onEditFreeItems(accessory)
-                    } 
-                    className="boss-check__link"
-                  >
-                      <span className="boss-check__text boss-check__text_role_edit boss-check__text_role_link">Edit</span>
+                  <button onClick={() => onEditFreeItems(accessory)} className="boss-check__link">
+                    <span className="boss-check__text boss-check__text_role_edit boss-check__text_role_link">Edit</span>
                   </button>
-                )
-              }} 
+                );
+              }}
             />
-            <AccessoriesInventoryCell 
-              title="Booked Items" 
-              count={oFetch(accessory, 'bookedItemsCount')} 
+            <AccessoriesInventoryCell
+              title="Booked Items"
+              count={oFetch(accessory, 'booked')}
               actionRenderer={() => {
-                return <a href="#" className="boss-check__link">
-                          <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">Details</span>
-                      </a>
-              }} 
+                return (
+                  <a href="#" className="boss-check__link">
+                    <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">
+                      Details
+                    </span>
+                  </a>
+                );
+              }}
             />
-            <AccessoriesInventoryCell 
-            title="Refunds" 
-            count={oFetch(accessory, 'refundsCount')} 
-            actionRenderer={() => {
-                return <a href="#" className="boss-check__link">
-                          <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">Details</span>
-                      </a>
-              }} 
+            <AccessoriesInventoryCell
+              title="Refunds"
+              count={oFetch(accessory, 'refunded')}
+              actionRenderer={() => {
+                return (
+                  <a href="#" className="boss-check__link">
+                    <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">
+                      Details
+                    </span>
+                  </a>
+                );
+              }}
             />
           </BossCheckSimpleRow>
-          { isEnabled
-              ? this.renderEnabledButtons(accessory)
-              : this.renderDisabledButtons(accessory)
-          }
+          {isEnabled ? this.renderEnabledButtons(accessory) : this.renderDisabledButtons(accessory)}
         </BossCheckCard>
-      )
-    })
+      );
+    });
   }
 
   render() {
     return (
       <ContentWrapper>
-        { this.renderAccessories(this.props.accessories) }
-        { !!this.props.accessories.length && <div className="boss-page-main__count boss-page-main__count_space_large">
-          <span className="boss-page-main__count-text">Showing </span>
-          <span className="boss-page-main__count-text boss-page-main__count-text_marked">{this.props.accessories.length}</span>
-          <span className="boss-page-main__count-text"> of </span>
-          <span className="boss-page-main__count-text boss-page-main__count-text_marked">{this.props.totalCount}</span>
-        </div> }
-        { this.props.isShowLoadMore && <div className="boss-page-main__actions boss-page-main__actions_position_last">
-          <button
-            onClick={this.props.onLoadMoreClick}
-            className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
-          >Load more</button>
-        </div> }
+        {this.renderAccessories(this.props.accessories)}
+        {!!this.props.accessories.length && (
+          <div className="boss-page-main__count boss-page-main__count_space_large">
+            <span className="boss-page-main__count-text">Showing </span>
+            <span className="boss-page-main__count-text boss-page-main__count-text_marked">
+              {this.props.accessories.length}
+            </span>
+            <span className="boss-page-main__count-text"> of </span>
+            <span className="boss-page-main__count-text boss-page-main__count-text_marked">
+              {this.props.totalCount}
+            </span>
+          </div>
+        )}
+        {this.props.isShowLoadMore && (
+          <div className="boss-page-main__actions boss-page-main__actions_position_last">
+            <button
+              onClick={this.props.onLoadMoreClick}
+              className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
+            >
+              Load more
+            </button>
+          </div>
+        )}
       </ContentWrapper>
     );
   }
