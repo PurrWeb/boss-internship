@@ -355,6 +355,7 @@ Rails.application.routes.draw do
         resources :accessories, only: [:index, :create, :update, :destroy] do
           member do
             post :restore
+            put :update_free_items
           end
         end
 
