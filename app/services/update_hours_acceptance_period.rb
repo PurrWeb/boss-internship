@@ -25,6 +25,8 @@ class UpdateHoursAcceptancePeriod
       Result.new(false, hours_acceptance_period, breaks, api_errors)
     else
       ActiveRecord::Base.transaction do
+        old_status = hours_acceptance_period.status
+
         hours_acceptance_period.assign_attributes(
           starts_at: starts_at,
           ends_at: ends_at,
@@ -33,7 +35,7 @@ class UpdateHoursAcceptancePeriod
         )
         if status == HoursAcceptancePeriod::ACCEPTED_STATE
           hours_acceptance_period.assign_attributes({
-            accepted_at: Time.now.utc,
+            accepted_at: call_time.utc,
             accepted_by: requester,
           })
         else
@@ -41,6 +43,19 @@ class UpdateHoursAcceptancePeriod
             accepted_at: nil,
             accepted_by: nil,
           })
+        end
+
+        accepting = (status == HoursAcceptancePeriod::ACCEPTED_STATE) && (old_status != HoursAcceptancePeriod::ACCEPTED_STATE)
+        unaccecpting = (old_status == HoursAcceptancePeriod::ACCEPTED_STATE) && (status != HoursAcceptancePeriod::ACCEPTED_STATE)
+
+        week = RotaWeek.new(RotaShiftDate.to_rota_date(call_time))
+        staff_member = hours_acceptance_period.staff_member
+        if accepting
+          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+          hours_acceptance_period.finance_report = finance_report
+        elsif unaccecpting
+          hours_acceptance_period.finance_report = nil
+          MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
         end
 
         existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled.includes(:disabled_by)
@@ -89,7 +104,6 @@ class UpdateHoursAcceptancePeriod
             date: hours_acceptance_period.date,
             venue: hours_acceptance_period.venue
           )
-
         end
 
         raise ActiveRecord::Rollback unless result

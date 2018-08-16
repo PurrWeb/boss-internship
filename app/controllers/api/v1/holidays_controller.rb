@@ -31,7 +31,7 @@ module Api
            relation: staff_member.active_holidays,
            tax_year: tax_year,
            staff_member_start_date: staff_member.starts_at
-          ).all.includes(:frozen_by)
+          ).all.includes(:finance_report)
 
           paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
           unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }
@@ -161,7 +161,7 @@ module Api
           relation: staff_member.active_holidays,
           tax_year: tax_year,
            staff_member_start_date: staff_member.starts_at
-         ).all.includes(:frozen_by)
+         ).all.includes(:finance_report)
 
          paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
          unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }

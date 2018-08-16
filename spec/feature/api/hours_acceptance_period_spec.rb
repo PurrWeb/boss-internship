@@ -274,7 +274,11 @@ RSpec.describe 'Hours acceptance endpoints' do
 
     context 'when period is frozen' do
       let(:finance_report) do
-        FactoryGirl.create(:finance_report)
+        FactoryGirl.create(:finance_report).tap do |finance_report|
+          finance_report.mark_ready!
+          finance_report.allow_mark_completed = true
+          finance_report.mark_completed!
+        end
       end
 
       let(:hours_acceptance_period) do
@@ -283,7 +287,7 @@ RSpec.describe 'Hours acceptance endpoints' do
           starts_at: start_of_shift,
           ends_at: end_of_shift,
           clock_in_day: clock_in_day,
-          frozen_by: finance_report
+          finance_report: finance_report
         )
       end
 

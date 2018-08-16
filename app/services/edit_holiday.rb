@@ -23,6 +23,9 @@ class EditHoliday
       new_holiday = nil
 
       ActiveRecord::Base.transaction do
+        old_payslip_date = holiday.payslip_date
+        staff_member = holiday.staff_member
+
         holiday.disable!(requester: requester)
 
         new_holiday = Holiday.new(
@@ -30,7 +33,18 @@ class EditHoliday
             merge(update_params).
             merge(creator: requester)
         )
-        success = new_holiday.save
+
+        finance_report = nil
+        if new_holiday.payslip_date.present?
+          old_week = RotaWeek.new(old_payslip_date)
+          new_week = RotaWeek.new(new_holiday.payslip_date)
+          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: old_week).call
+          if old_week.start_date != new_week.start_date
+            finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: new_week).call
+          end
+        end
+
+        success = new_holiday.update_attributes(finance_report: finance_report)
 
         raise ActiveRecord::Rollback unless success
         holiday.update_attributes!(parent: new_holiday)

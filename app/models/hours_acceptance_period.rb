@@ -9,7 +9,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   belongs_to :clock_in_day
   belongs_to :creator, polymorphic: true
   belongs_to :accepted_by, class_name: 'User', foreign_key: 'accepted_by_id'
-  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
+  belongs_to :finance_report
   has_many :hours_acceptance_breaks
   has_many :hours_acceptance_breaks_enabled, -> (_o) {
     where(disabled_at: nil)
@@ -51,7 +51,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def frozen?
-    frozen_by.present?
+    finance_report.andand.done?
   end
 
   def enabled?

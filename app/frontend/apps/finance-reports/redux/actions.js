@@ -12,21 +12,25 @@ export const markReportCompletedAction = createAction(types.MARK_REPORT_COMPLETE
 export const markReportsCompletedAction = createAction(types.MARK_REPORTS_COMPLETED);
 
 export const markReportCompleted = options => (dispatch, getState) => {
-  const date = getState().getIn(['page', 'date']);
+  const pageStateJS = getState().get('page').toJS()
+  const date = oFetch(pageStateJS, 'date');
+  const venueId = oFetch(pageStateJS, 'venueId');
   const staffMemberId = oFetch(options, 'staffMemberId');
   const reportsId = oFetch(options, 'reportsId');
 
-  return markReportCompletedRequest({ date, staffMemberId }).then(response => {
+  return markReportCompletedRequest({ date, staffMemberId, venueId }).then(response => {
     dispatch(markReportCompletedAction({ reportsId }));
   });
 };
 
 export const markReportsCompleted = options => (dispatch, getState) => {
-  const date = getState().getIn(['page', 'date']);
+  const pageStateJS = getState().get('page').toJS()
+  const date = oFetch(pageStateJS, 'date');
+  const venueId = oFetch(pageStateJS, 'venueId');
   const staffMemberIds = oFetch(options, 'staffMemberIds');
   const reportsIds = oFetch(options, 'reportsIds');
 
-  return markReportsCompletedRequest({ date, staffMemberIds }).then(response => {
+  return markReportsCompletedRequest({ date, staffMemberIds, venueId }).then(response => {
     dispatch(markReportsCompletedAction({ reportsIds }));
   });
 };

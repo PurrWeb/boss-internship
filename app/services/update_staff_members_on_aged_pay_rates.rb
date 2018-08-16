@@ -10,7 +10,7 @@ class UpdateStaffMembersOnAgedPayRates
         begin
           pay_rate = StaffMemberRealPayRate.new(now: now, staff_member: staff_member).call
           if pay_rate != staff_member.pay_rate
-            result = UpdateStaffMemberEmploymentDetails.new(now: now, staff_member: staff_member, params: { pay_rate: pay_rate }, requester: User.first).call
+            result = UpdateStaffMemberEmploymentDetails.new(staff_member: staff_member, params: { pay_rate: pay_rate }, requester: User.first).call(now: now)
             raise "Pay rate update to pay_rate: #{pay_rate.id} unsuccessful for staff_member:#{staff_member.id}" unless result.success?
           end
         rescue PayRateException => e

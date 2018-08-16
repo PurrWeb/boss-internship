@@ -62,7 +62,7 @@ class HoursOverviewController < ApplicationController
       enabled.
       joins(:clock_in_day).
       merge(staff_clock_in_days).
-      includes(:accepted_by, :frozen_by)
+      includes(:accepted_by, :finance_report)
 
     hours_acceptance_breaks = HoursAcceptanceBreak.
       enabled.

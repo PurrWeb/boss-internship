@@ -27,28 +27,21 @@ class FinanceReportTable
 
   private
   def generate_report_data
-    staff_members = FinanceReportStaffMembersQuery.new(
+    finance_reports = FinanceReport.where(
       venue: venue,
-      start_date: week.start_date,
-      end_date: week.end_date,
-      filter_by_weekly_pay_rate: filter_by_weekly_pay_rate
-    ).to_a
-
-    ActiveRecord::Associations::Preloader.new.preload(staff_members, [:pay_rate])
+      week_start: week.start_date
+    ).includes(staff_member: [:staff_type])
 
     @_staff_types = []
     @_reports_by_staff_type ||= begin
       result = {}
-      staff_members.each do |staff_member|
+      finance_reports.each do |finance_report|
+        #TODO: Filter by weekly payrate
+        staff_member = finance_report.staff_member
+
         @_staff_types << staff_member.staff_type unless @_staff_types.include?(staff_member.staff_type)
         result[staff_member.staff_type] ||= []
-        result[staff_member.staff_type] << (FinanceReport.find_by(
-          staff_member: staff_member,
-          week_start: week.start_date
-        ) || GenerateFinanceReportData.new(
-          staff_member: staff_member,
-          week: week
-        ).call.report)
+        result[staff_member.staff_type] << finance_report
       end
       result
     end

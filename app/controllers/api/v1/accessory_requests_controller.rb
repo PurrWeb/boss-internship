@@ -227,14 +227,18 @@ module Api
       end
 
       def request_from_params
-        AccessoryRequest.find_by(
+        result = AccessoryRequest.find_by(
           accessory: accessory_from_params,
           id: params.fetch(:id)
         )
+        ActiveRecord::Associations::Preloader.new.preload(result, { staff_member: [:master_venue] }) if result
+        result
       end
 
       def refund_request_from_params
-        AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory_from_params.present?
+        result = AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory_from_params.present?
+        ActiveRecord::Associations::Preloader.new.preload(result, { staff_member: [:master_venue] }) if result
+        result
       end
 
       def accessible_venues

@@ -34,7 +34,7 @@ class HoursConfirmationController < ApplicationController
 
       hours_acceptance_periods = HoursAcceptancePeriod.enabled.where(
         clock_in_day: clock_in_days
-      ).includes([:frozen_by, :hours_acceptance_breaks_enabled, accepted_by: [:name], clock_in_day: [:venue]])
+      ).includes([:finance_report, :hours_acceptance_breaks_enabled, accepted_by: [:name], clock_in_day: [:venue]])
 
       ability = UserAbility.new(current_user);
       user_periods_permissions = hours_acceptance_periods.map do |period|
@@ -131,7 +131,7 @@ class HoursConfirmationController < ApplicationController
       hours_acceptance_periods = HoursAcceptancePeriod.where(
         clock_in_day: clock_in_days,
         status: HoursAcceptancePeriod::STATES - [HoursAcceptancePeriod::DELETED_STATE]
-      ).includes(:frozen_by, :hours_acceptance_breaks_enabled, :accepted_by, clock_in_day: [:venue])
+      ).includes(:finance_report, :hours_acceptance_breaks_enabled, :accepted_by, clock_in_day: [:venue])
 
       ability = UserAbility.new(current_user);
       user_periods_permissions = hours_acceptance_periods.map do |period|

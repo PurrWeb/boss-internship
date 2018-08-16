@@ -20,10 +20,13 @@ class HolidayDateValidator
           payslip_date_validations_failed = true
         end
       else
-        current_rota_date = RotaShiftDate.to_rota_date(now)
-        payslip_date_moved_to_past = holiday.payslip_date_changed? && (
-          holiday.payslip_date < current_rota_date
-        )
+        payslip_date_moved_to_past = false
+        if holiday.payslip_date_changed?
+          current_rota_date = RotaShiftDate.to_rota_date(now)
+          current_week = RotaWeek.new(current_rota_date)
+          payslip_date_week = RotaWeek.new(holiday.payslip_date)
+          payslip_date_moved_to_past = payslip_date_week.start_date < current_week.start_date
+        end
 
         if payslip_date_moved_to_past
           holiday.errors.add(:payslip_date, PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE)
@@ -47,7 +50,7 @@ class HolidayDateValidator
     # Don't bother with the rest if we have more major issues
     return if payslip_date_validations_failed || date_validations_failed
 
-    if dates_present?
+    if dates_present? && holiday.staff_member.present?
       staff_member_holidays = Holiday.
         in_state(:enabled).
         where(staff_member: holiday.staff_member)

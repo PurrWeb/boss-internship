@@ -1,6 +1,8 @@
 class Holiday < ActiveRecord::Base
   PAID_HOLIDAY_TYPE = "paid_holiday"
-  UNPAID_HOLIDAY_TYPES = ["unpaid_holiday", "sick_leave"]
+  UNPAID_HOLIDAY_TYPE = "unpaid_holiday"
+  SICK_LEAVE_HOLIDAY_TYPE = "sick_leave"
+  UNPAID_HOLIDAY_TYPES = [UNPAID_HOLIDAY_TYPE, SICK_LEAVE_HOLIDAY_TYPE]
   HOLIDAY_TYPES = [PAID_HOLIDAY_TYPE] + UNPAID_HOLIDAY_TYPES
 
   include Statesman::Adapters::ActiveRecordQueries
@@ -10,7 +12,7 @@ class Holiday < ActiveRecord::Base
   has_many :holiday_transitions, autosave: false
   belongs_to :staff_member
   belongs_to :creator, foreign_key: 'creator_user_id', class_name: 'User'
-  belongs_to :frozen_by, class_name: 'FinanceReport', foreign_key: 'frozen_by_finance_report_id'
+  belongs_to :finance_report
   has_one :holiday_request, foreign_key: :created_holiday_id, class_name: 'HolidayRequest'
 
   validates :start_date, presence: true
@@ -77,7 +79,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def frozen?
-    frozen_by.present?
+    finance_report.andand.done?
   end
 
   private

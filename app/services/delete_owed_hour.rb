@@ -13,7 +13,14 @@ class DeleteOwedHour
   def call
     result = true
     if owed_hour.editable?
-      owed_hour.disable!(requester: requester)
+      staff_member = owed_hour.staff_member
+      payslip_week = RotaWeek.new(owed_hour.payslip_date)
+
+      ActiveRecord::Base.transaction do
+        owed_hour.disable!(requester: requester)
+
+        MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: payslip_week).call
+      end
     else
       owed_hour.errors.add(:base, "can't delete owed hour that has been frozen")
       result = false

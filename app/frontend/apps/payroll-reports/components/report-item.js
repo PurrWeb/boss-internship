@@ -67,8 +67,20 @@ class ReportItem extends Component {
     const payRateType = oFetch(report, 'payRateType');
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
+    const pendingCalculation = oFetch(report, 'pendingCalculation');
+    const staffMemberDisabled = oFetch(report, 'staffMemberDisabled');
 
     const fullNameCellClassName = classNames({
+      'boss-table__cell': true,
+      'boss-table__cell_indicator_user-disabled': staffMemberDisabled
+    });
+
+    const rowClassName = classNames({
+      'boss-table__row': true,
+      'boss-table__row_state_pre-calculated': pendingCalculation
+    });
+
+    const fullNameCellTextClassName = classNames({
       'boss-table__text': true,
       'boss-table__text_indicator_accessory': acessories !== 0,
     });
@@ -82,9 +94,9 @@ class ReportItem extends Component {
       'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0,
     });
     return (
-      <div className="boss-table__row">
-        <div className="boss-table__cell">
-          <p className={fullNameCellClassName}>
+      <div className={rowClassName}>
+        <div className={fullNameCellClassName}>
+          <p className={fullNameCellTextClassName}>
             <a
               href={appRoutes.staffMember(staffMemberId)}
               className="boss-table__link"

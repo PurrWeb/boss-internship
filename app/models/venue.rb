@@ -21,6 +21,7 @@ class Venue < ActiveRecord::Base
   has_many :accessories
   has_many :ops_diaries
   has_many :security_shift_requests
+  has_many :finance_reports
 
   before_create :generate_rollbar_guid
   before_validation :check_rollbar_guid

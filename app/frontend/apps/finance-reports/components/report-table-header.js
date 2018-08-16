@@ -6,11 +6,12 @@ import utils from '~/lib/utils';
 
 class ReportTableHeader extends Component {
   renderWeekCells() {
+    const staffTypeName = oFetch(this.props, 'staffTypeName');
     const startDate = safeMoment.uiDateParse(oFetch(this.props, 'startDate'));
 
     return [1, 2, 3, 4, 5, 6, 7].map(weekDay => {
       const currentDate = startDate.isoWeekday(weekDay);
-      return (<div key={weekDay} className="boss-table__cell boss-table__cell_role_header">
+      return (<div key={`${staffTypeName}:header:${weekDay}`} className="boss-table__cell boss-table__cell_role_header">
       {currentDate.format(utils.tableDateFormat)} <br /> {currentDate.format(utils.monthDateFormat)}
     </div>)
     });

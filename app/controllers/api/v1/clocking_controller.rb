@@ -83,6 +83,7 @@ module Api
         venue = venue_from_api_key
         at = Time.current
         date = RotaShiftDate.to_rota_date(at)
+        week = RotaWeek.new(date)
 
         authorize!(:perform_clocking_action, staff_member)
 
@@ -96,6 +97,9 @@ module Api
         ).call
 
         if result.success?
+          if [:clocked_in, :clocked_out].include?(to_state)
+            MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+          end
           clocking_app_frontend_updates = ClockingAppFrontendUpdates.new(venue_api_key: venue.api_key.key)
           clocking_app_frontend_updates.clocking_events_updates(clocking_event: result.clock_in_day.last_clock_in_event)
           clocking_app_frontend_updates.dispatch

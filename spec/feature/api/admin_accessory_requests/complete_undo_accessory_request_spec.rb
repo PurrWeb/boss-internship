@@ -10,8 +10,11 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
     accessory_request
   end
 
+  let(:now) { Time.current }
+  let(:today) { RotaShiftDate.to_rota_date(now) }
+  let(:current_week) { RotaWeek.new(today) }
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
   let(:accessory) { FactoryGirl.create(
     :accessory,
@@ -100,24 +103,94 @@ RSpec.describe 'Admin complete & undo accessory requests API endpoint' do
         valid_params
       end
 
-      before do
-        complete_response
+      context 'no finance report exists' do
+        context 'before call' do
+          specify 'no finance reports exist' do
+            expect(FinanceReport.count).to eq(0)
+          end
+        end
+
+        context 'after call' do
+          before do
+            complete_response
+          end
+
+          it 'should succeed' do
+            expect(complete_response.status).to eq(ok_status)
+          end
+
+          it 'should create finanance report and  assocaiate it with request' do
+            accessory_request.reload
+            expect(FinanceReport.count).to eq(1)
+            finance_report = FinanceReport.last
+            expect(finance_report.staff_member).to eq(staff_member)
+            expect(finance_report.venue).to eq(staff_member.master_venue)
+            expect(finance_report.week_start).to eq(current_week.start_date)
+            expect(accessory_request.finance_report).to eq(finance_report)
+          end
+
+          it ' accessory request status should be completed' do
+            accessory_request.reload
+            expect(accessory_request.current_state).to eq("completed")
+          end
+
+          it ' should return completed accessory request' do
+            accessory_request.reload
+            json = JSON.parse(complete_response.body).except("createdAt", "updatedAt", "timeline")
+            expect(json).to eq({
+              "id" => accessory_request.id,
+              "size" => accessory_request.size,
+              "staffMemberId" => staff_member.id,
+              "accessoryId" => accessory.id,
+              "status" => accessory_request.current_state,
+              "frozen" => accessory_request.frozen?,
+            })
+          end
+        end
       end
 
-      it ' accessory request status should be completed' do
-        expect(accessory_request.current_state).to eq("completed")
-      end
+      context 'ready finance report already exists' do
+        let(:existing_finance_report) do
+          FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: venue,
+            week_start: current_week.start_date
+          ).tap do |report|
+            report.mark_ready!
+          end
+        end
+        let(:params) do
+          valid_params
+        end
 
-      it ' should return completed accessory request' do
-        json = JSON.parse(complete_response.body).except("createdAt", "updatedAt", "timeline")
-        expect(json).to eq({
-          "id" => accessory_request.id,
-          "size" => accessory_request.size,
-          "staffMemberId" => staff_member.id,
-          "accessoryId" => accessory.id,
-          "status" => accessory_request.current_state,
-          "frozen" => accessory_request.frozen?,
-        })
+        before do
+          existing_finance_report
+        end
+
+        context 'before call' do
+          specify 'finance report should exist' do
+            expect(FinanceReport.count).to eq(1)
+            accessory_request.reload
+            expect(accessory_request.finance_report).to_not eq(existing_finance_report)
+          end
+        end
+
+        context 'after call' do
+          before do
+            complete_response
+          end
+
+          it 'should succeed' do
+            expect(complete_response.status).to eq(ok_status)
+          end
+
+          it 'should update finanance report and  assocaiate it with refund' do
+            accessory_request.reload
+            expect(FinanceReport.count).to eq(1)
+            expect(accessory_request.finance_report).to eq(existing_finance_report)
+          end
+        end
       end
     end
   end

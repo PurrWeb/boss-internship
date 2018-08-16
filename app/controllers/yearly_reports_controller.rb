@@ -46,6 +46,7 @@ class YearlyReportsController < ApplicationController
     staff_member = StaffMember.find(params.fetch(:staff_member_id))
     venue = Venue.find_by!(id: params[:venue_id])
     tax_year = tax_year_from_params
+
     raise 'unsupported tax year' unless tax_year.present?
     report = GenerateYearlyReportData.new(
       staff_member: staff_member,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180725211549) do
+ActiveRecord::Schema.define(version: 20180813101708) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -42,13 +42,13 @@ ActiveRecord::Schema.define(version: 20180725211549) do
     t.datetime "updated_at",                     null: false
     t.integer  "created_by_user_id",   limit: 4
     t.datetime "completed_at"
-    t.integer  "frozen_by_id",         limit: 4
+    t.integer  "finance_report_id",    limit: 4
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
   add_index "accessory_refund_requests", ["accessory_request_id"], name: "index_accessory_refund_requests_on_accessory_request_id", using: :btree
   add_index "accessory_refund_requests", ["created_by_user_id"], name: "index_accessory_refund_requests_on_created_by_user_id", using: :btree
-  add_index "accessory_refund_requests", ["frozen_by_id"], name: "index_accessory_refund_requests_on_frozen_by_id", using: :btree
+  add_index "accessory_refund_requests", ["finance_report_id"], name: "index_accessory_refund_requests_on_finance_report_id", using: :btree
   add_index "accessory_refund_requests", ["staff_member_id"], name: "index_accessory_refund_requests_on_staff_member_id", using: :btree
 
   create_table "accessory_request_transitions", force: :cascade do |t|
@@ -70,12 +70,12 @@ ActiveRecord::Schema.define(version: 20180725211549) do
     t.datetime "updated_at",                     null: false
     t.integer  "created_by_user_id", limit: 4
     t.datetime "completed_at"
-    t.integer  "frozen_by_id",       limit: 4
+    t.integer  "finance_report_id",  limit: 4
   end
 
   add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
   add_index "accessory_requests", ["created_by_user_id"], name: "index_accessory_requests_on_created_by_user_id", using: :btree
-  add_index "accessory_requests", ["frozen_by_id"], name: "index_accessory_requests_on_frozen_by_id", using: :btree
+  add_index "accessory_requests", ["finance_report_id"], name: "index_accessory_requests_on_finance_report_id", using: :btree
   add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
@@ -331,34 +331,48 @@ ActiveRecord::Schema.define(version: 20180725211549) do
 
   add_index "email_addresses", ["email"], name: "index_email_addresses_on_email", using: :btree
 
+  create_table "finance_report_transitions", force: :cascade do |t|
+    t.string   "to_state",          limit: 255,   null: false
+    t.text     "metadata",          limit: 65535
+    t.integer  "sort_key",          limit: 4,     null: false
+    t.integer  "finance_report_id", limit: 4,     null: false
+    t.boolean  "most_recent"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "finance_report_transitions", ["finance_report_id", "most_recent"], name: "index_finance_report_transitions_parent_most_recent", unique: true, using: :btree
+  add_index "finance_report_transitions", ["finance_report_id", "sort_key"], name: "index_finance_report_transitions_parent_sort", unique: true, using: :btree
+
   create_table "finance_reports", force: :cascade do |t|
     t.integer  "staff_member_id",                  limit: 4,   null: false
-    t.string   "staff_member_name",                limit: 255, null: false
+    t.string   "staff_member_name",                limit: 255
     t.integer  "venue_id",                         limit: 4,   null: false
-    t.string   "venue_name",                       limit: 255, null: false
+    t.string   "venue_name",                       limit: 255
     t.date     "week_start",                                   null: false
-    t.float    "monday_hours_count",               limit: 24,  null: false
-    t.float    "tuesday_hours_count",              limit: 24,  null: false
-    t.float    "wednesday_hours_count",            limit: 24,  null: false
-    t.float    "thursday_hours_count",             limit: 24,  null: false
-    t.float    "friday_hours_count",               limit: 24,  null: false
-    t.float    "saturday_hours_count",             limit: 24,  null: false
-    t.float    "sunday_hours_count",               limit: 24,  null: false
-    t.float    "total_hours_count",                limit: 24,  null: false
-    t.integer  "total_cents",                      limit: 4,   null: false
-    t.integer  "holiday_days_count",               limit: 4,   null: false
-    t.integer  "owed_hours_minute_count",          limit: 4,   null: false
-    t.string   "pay_rate_description",             limit: 255, null: false
+    t.float    "monday_hours_count",               limit: 24
+    t.float    "tuesday_hours_count",              limit: 24
+    t.float    "wednesday_hours_count",            limit: 24
+    t.float    "thursday_hours_count",             limit: 24
+    t.float    "friday_hours_count",               limit: 24
+    t.float    "saturday_hours_count",             limit: 24
+    t.float    "sunday_hours_count",               limit: 24
+    t.float    "total_hours_count",                limit: 24
+    t.integer  "total_cents",                      limit: 4
+    t.integer  "holiday_days_count",               limit: 4
+    t.integer  "owed_hours_minute_count",          limit: 4
+    t.string   "pay_rate_description",             limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "accessories_cents",                limit: 4,   null: false
-    t.boolean  "contains_time_shifted_owed_hours",             null: false
-    t.boolean  "contains_time_shifted_holidays",               null: false
+    t.integer  "accessories_cents",                limit: 4
+    t.boolean  "contains_time_shifted_owed_hours"
+    t.boolean  "contains_time_shifted_holidays"
+    t.boolean  "requiring_update",                             null: false
   end
 
   add_index "finance_reports", ["staff_member_id"], name: "index_finance_reports_on_staff_member_id", using: :btree
   add_index "finance_reports", ["venue_id"], name: "index_finance_reports_on_venue_id", using: :btree
-  add_index "finance_reports", ["week_start", "staff_member_id"], name: "index_finance_reports_on_week_start_and_staff_member_id", unique: true, using: :btree
+  add_index "finance_reports", ["week_start", "staff_member_id", "venue_id"], name: "dup_report_constraint", using: :btree
   add_index "finance_reports", ["week_start"], name: "index_finance_reports_on_week_start", using: :btree
 
   create_table "first_name_groups", force: :cascade do |t|
@@ -474,17 +488,17 @@ ActiveRecord::Schema.define(version: 20180725211549) do
   add_index "holiday_transitions", ["holiday_id", "sort_key"], name: "index_holiday_transitions_parent_sort", unique: true, using: :btree
 
   create_table "holidays", force: :cascade do |t|
-    t.date     "start_date",                                null: false
-    t.date     "end_date",                                  null: false
-    t.string   "holiday_type",                limit: 255,   null: false
-    t.integer  "creator_user_id",             limit: 4,     null: false
-    t.integer  "staff_member_id",             limit: 4,     null: false
-    t.text     "note",                        limit: 65535
+    t.date     "start_date",                      null: false
+    t.date     "end_date",                        null: false
+    t.string   "holiday_type",      limit: 255,   null: false
+    t.integer  "creator_user_id",   limit: 4,     null: false
+    t.integer  "staff_member_id",   limit: 4,     null: false
+    t.text     "note",              limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_holiday_id",           limit: 4
-    t.integer  "frozen_by_finance_report_id", limit: 4
-    t.date     "payslip_date",                              null: false
+    t.integer  "parent_holiday_id", limit: 4
+    t.integer  "finance_report_id", limit: 4
+    t.date     "payslip_date",                    null: false
   end
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
@@ -511,18 +525,18 @@ ActiveRecord::Schema.define(version: 20180725211549) do
   add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
-    t.integer  "creator_id",                  limit: 4,                       null: false
-    t.string   "creator_type",                limit: 255,                     null: false
-    t.string   "reason_note",                 limit: 255
-    t.datetime "starts_at",                                                   null: false
-    t.datetime "ends_at",                                                     null: false
-    t.integer  "clock_in_day_id",             limit: 4
-    t.string   "status",                      limit: 255, default: "pending", null: false
+    t.integer  "creator_id",        limit: 4,                       null: false
+    t.string   "creator_type",      limit: 255,                     null: false
+    t.string   "reason_note",       limit: 255
+    t.datetime "starts_at",                                         null: false
+    t.datetime "ends_at",                                           null: false
+    t.integer  "clock_in_day_id",   limit: 4
+    t.string   "status",            limit: 255, default: "pending", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "frozen_by_finance_report_id", limit: 4
+    t.integer  "finance_report_id", limit: 4
     t.datetime "accepted_at"
-    t.integer  "accepted_by_id",              limit: 4
+    t.integer  "accepted_by_id",    limit: 4
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
@@ -802,21 +816,21 @@ ActiveRecord::Schema.define(version: 20180725211549) do
   add_index "ops_diaries", ["venue_id"], name: "index_ops_diaries_on_venue_id", using: :btree
 
   create_table "owed_hours", force: :cascade do |t|
-    t.date     "date",                                                     null: false
-    t.integer  "minutes",                     limit: 4,                    null: false
-    t.integer  "creator_user_id",             limit: 4,                    null: false
-    t.integer  "staff_member_id",             limit: 4,                    null: false
-    t.text     "note",                        limit: 65535,                null: false
-    t.integer  "parent_owed_hour_id",         limit: 4
+    t.date     "date",                                             null: false
+    t.integer  "minutes",             limit: 4,                    null: false
+    t.integer  "creator_user_id",     limit: 4,                    null: false
+    t.integer  "staff_member_id",     limit: 4,                    null: false
+    t.text     "note",                limit: 65535,                null: false
+    t.integer  "parent_owed_hour_id", limit: 4
     t.datetime "disabled_at"
-    t.integer  "disabled_by_user_id",         limit: 4
+    t.integer  "disabled_by_user_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "frozen_by_finance_report_id", limit: 4
-    t.boolean  "require_times",                             default: true, null: false
+    t.integer  "finance_report_id",   limit: 4
+    t.boolean  "require_times",                     default: true, null: false
     t.datetime "starts_at"
     t.datetime "ends_at"
-    t.date     "payslip_date",                                             null: false
+    t.date     "payslip_date",                                     null: false
   end
 
   add_index "owed_hours", ["date", "staff_member_id"], name: "index_owed_hours_on_date_and_staff_member_id", using: :btree
@@ -1365,9 +1379,7 @@ ActiveRecord::Schema.define(version: 20180725211549) do
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
 
-  add_foreign_key "accessory_refund_requests", "finance_reports", column: "frozen_by_id"
   add_foreign_key "accessory_refund_requests", "users", column: "created_by_user_id"
-  add_foreign_key "accessory_requests", "finance_reports", column: "frozen_by_id"
   add_foreign_key "accessory_requests", "users", column: "created_by_user_id"
   add_foreign_key "hours_acceptance_periods", "users", column: "accepted_by_id"
   add_foreign_key "incident_reports", "users"

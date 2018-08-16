@@ -1,29 +1,15 @@
-class FinanceReportCompletionStatus
-  def initialize(finance_report: )
-    @finance_report = finance_report
+class GetPendingHoursStatus
+  def initialize(week:, staff_member:)
+    @week = week
+    @staff_member = staff_member
   end
+  attr_reader :week, :staff_member
 
   def status_data
     {
-      can_complete: can_complete?,
-      status_text: status_text,
+      can_complete: days_needing_completion.count == 0,
       days_needing_completion: days_needing_completion
     }
-  end
-
-  def can_complete?
-    return false if finance_report.persisted?
-    return false if finance_report.week >= RotaWeek.new(RotaShiftDate.to_rota_date(Time.current))
-
-    days_needing_completion.size == 0
-  end
-
-  def status_text
-    if finance_report.new_record?
-      can_complete? ? FinanceReport::REPORT_STATUS_READY_STATUS : FinanceReport::REPORT_STATUS_INCOMPLETE_STATUS
-    else
-      FinanceReport::REPORT_STATUS_DONE_STATUS
-    end
   end
 
   private
@@ -44,9 +30,9 @@ class FinanceReportCompletionStatus
 
   def staff_member_clocking_days
     InRangeQuery.new(
-      relation: ClockInDay.where(venue: finance_report.venue, staff_member: finance_report.staff_member),
-      start_value: finance_report.week.start_date,
-      end_value: finance_report.week.end_date,
+      relation: ClockInDay.where(staff_member: staff_member),
+      start_value: week.start_date,
+      end_value: week.end_date,
       start_column_name: 'date',
       end_column_name: 'date'
     ).all
