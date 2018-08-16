@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20180823154619) do
     t.integer  "created_by_user_id",   limit: 4
     t.datetime "completed_at"
     t.integer  "finance_report_id",    limit: 4
+    t.date     "payslip_date"
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(version: 20180823154619) do
     t.integer  "created_by_user_id", limit: 4
     t.datetime "completed_at"
     t.integer  "finance_report_id",  limit: 4
+    t.date     "payslip_date"
   end
 
   add_index "accessory_requests", ["accessory_id"], name: "index_accessory_requests_on_accessory_id", using: :btree
