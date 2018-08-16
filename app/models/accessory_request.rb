@@ -17,6 +17,8 @@ class AccessoryRequest < ActiveRecord::Base
   validates :size, presence: true, if: :uniform?
   validates :completed_at, presence: true, if: :completed?
   validates :completed_at, absence: true, unless: :completed?
+  validates :payslip_date, presence: true, if: :completed?
+  validates :payslip_date, absence: true, unless: :completed?
 
   def state_machine
     @state_machine ||= AccessoryRequestStateMachine.new(

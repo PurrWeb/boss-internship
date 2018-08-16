@@ -211,22 +211,30 @@ describe UpdateFinanceReportData do
 
   context 'completed accessory requests exist' do
     let(:accessory_price_cents) { 300 }
-    before do
-      accessory = Accessory.create!(
+    let(:accessory) do
+      Accessory.create!(
         name: 'foo',
         accessory_type: :misc,
         price_cents: accessory_price_cents,
         venue: venue,
         user_requestable: false
       )
-      accessory_request = AccessoryRequest.create!(
+    end
+    let(:accessory_request) do
+      AccessoryRequest.create!(
         accessory: accessory,
         accessory_type: accessory.accessory_type,
         staff_member: staff_member,
         price_cents: accessory.price_cents,
       )
-      accessory_request.transition_to!(:accepted)
-      accessory_request.transition_to!(:completed)
+    end
+    before do
+      create_time = RotaShiftDate.new(current_week.start_date).start_time
+      travel_to create_time do
+        accessory_request
+        accessory_request.transition_to!(:accepted)
+        accessory_request.transition_to!(:completed)
+      end
     end
 
     let(:expected_values) do
@@ -238,7 +246,9 @@ describe UpdateFinanceReportData do
     end
 
     specify 'service should update report accepted accessory refund request data' do
-      service.call(now: call_time)
+      travel_to call_time do
+        service.call
+      end
       finance_report.reload
       expect_finance_report_values(finance_report: finance_report, expected_values: expected_values)
     end

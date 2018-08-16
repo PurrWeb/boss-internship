@@ -12,6 +12,7 @@ class AccessoryRequestStateMachine
 
   after_transition(from: :accepted, to: :completed) do |model, transition|
     model.completed_at = Time.now.utc
+    model.payslip_date = RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
     model.save
   end
 
