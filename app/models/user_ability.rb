@@ -447,7 +447,7 @@ class UserAbility
 
       can :view, :payroll_reports do
         user.payroll_manager? ||
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
+          user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
       can :view, :daily_reports do
