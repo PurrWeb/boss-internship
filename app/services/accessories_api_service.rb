@@ -54,6 +54,17 @@ class AccessoriesApiService
     Result.new(model_service_result.success?, model_service_result.accessory, api_errors)
   end
 
+  def update_free_items(count:)
+    restock = AccessoryStocktaking.new(
+      accessory: accessory,
+      count: count,
+      requester: requester
+    ).call
+
+    api_errors = nil
+    Result.new(true, accessory, api_errors)
+  end
+
   def disable
     model_service_result = DisableAccessory.new(
       accessory: accessory,
