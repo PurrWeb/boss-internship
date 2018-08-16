@@ -66,32 +66,16 @@ class AccessoryRequestAdminApiService
     else
       result = false
       ActiveRecord::Base.transaction do
-        staff_member = accessory_request.staff_member
-        week = RotaWeek.new(
-          GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(now)).call
-        )
-        finance_report = nil
-        if staff_member.can_have_finance_reports?
-          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
-        end
-
-        accessory_request.transition_to!(:completed, requster_user_id: requster_user.id)
-        if finance_report.present?
-          result = accessory_request.update_attributes(finance_report: finance_report)
-        else
-          result = accessory_request.save
-        end
-
-        raise ActiveRecord::Rollback unless result
-        result = true
+        service_result = CompleteAccessoryRequest.new(accessory_request: accessory_request, requester: requster_user).call
+        raise ActiveRecord::Rollback unless service_result.success?
       end
     end
 
     api_errors = nil
-    unless result
-      api_errors = AccessoryRequestApiErrors.new(accessory_request: accessory_request)
+    unless result.success?
+      api_errors = AccessoryRequestApiErrors.new(accessory_request: result.accessory_request)
     end
-    Result.new(result, accessory_request, api_errors)
+    Result.new(result.success?, result.accessory_request, api_errors)
   end
 
   attr_reader :requster_user, :ability, :accessory_request
