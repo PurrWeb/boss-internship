@@ -389,6 +389,10 @@ class StaffMember < ActiveRecord::Base
     user.present? && user.enabled?
   end
 
+  def can_have_finance_reports?
+    !security?
+  end
+
   private
   def setting_password?
     password || password_confirmation

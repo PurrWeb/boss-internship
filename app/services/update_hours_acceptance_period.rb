@@ -50,12 +50,14 @@ class UpdateHoursAcceptancePeriod
 
         week = RotaWeek.new(RotaShiftDate.to_rota_date(call_time))
         staff_member = hours_acceptance_period.staff_member
-        if accepting
-          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
-          hours_acceptance_period.finance_report = finance_report
-        elsif unaccecpting
-          hours_acceptance_period.finance_report = nil
-          MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+        if staff_member.can_have_finance_reports?
+          if accepting
+            finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+            hours_acceptance_period.finance_report = finance_report
+          elsif unaccecpting
+            hours_acceptance_period.finance_report = nil
+            MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+          end
         end
 
         existing_breaks = hours_acceptance_period.hours_acceptance_breaks.enabled.includes(:disabled_by)

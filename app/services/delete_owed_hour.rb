@@ -19,7 +19,9 @@ class DeleteOwedHour
       ActiveRecord::Base.transaction do
         owed_hour.disable!(requester: requester)
 
-        MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: payslip_week).call
+        if staff_member.can_have_finance_reports?
+          MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: payslip_week).call
+        end
       end
     else
       owed_hour.errors.add(:base, "can't delete owed hour that has been frozen")

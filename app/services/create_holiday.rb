@@ -24,7 +24,7 @@ class CreateHoliday
       holiday.validate_as_creation = true
 
       finance_report = nil
-      if staff_member_from_params.present? && payslip_date.present?
+      if staff_member_from_params.present? && payslip_date.present? && staff_member_from_params.can_have_finance_reports?
         payslip_week = RotaWeek.new(payslip_date)
         finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member_from_params, week: payslip_week).call
       end

@@ -97,7 +97,7 @@ module Api
         ).call
 
         if result.success?
-          if [:clocked_in, :clocked_out].include?(to_state)
+          if staff_member.can_have_finance_reports? && [:clocked_in, :clocked_out].include?(to_state)
             MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
           end
           clocking_app_frontend_updates = ClockingAppFrontendUpdates.new(venue_api_key: venue.api_key.key)

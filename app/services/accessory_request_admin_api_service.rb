@@ -70,9 +70,18 @@ class AccessoryRequestAdminApiService
         week = RotaWeek.new(
           GetPayslipDate.new(item_date: RotaShiftDate.to_rota_date(now)).call
         )
-        finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+        finance_report = nil
+        if staff_member.can_have_finance_reports?
+          finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+        end
+
         accessory_request.transition_to!(:completed, requster_user_id: requster_user.id)
-        result = accessory_request.update_attributes(finance_report: finance_report)
+        if finance_report.present?
+          result = accessory_request.update_attributes(finance_report: finance_report)
+        else
+          result = accessory_request.save
+        end
+
         raise ActiveRecord::Rollback unless result
         result = true
       end

@@ -22,12 +22,15 @@ class CreateOwedHour
       staff_member = owed_hour.staff_member
       finance_report = nil
 
-      if payslip_date.present? && staff_member.present?
+      if payslip_date.present? && staff_member.present? && staff_member.can_have_finance_reports?
         week = RotaWeek.new(payslip_date)
         finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+
+        success = owed_hour.update_attributes(finance_report: finance_report)
+      else
+        success = owed_hour.save
       end
 
-      success = owed_hour.update_attributes(finance_report: finance_report)
       raise ActiveRecord::Rollback unless success
     end
 

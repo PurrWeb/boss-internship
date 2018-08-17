@@ -34,8 +34,8 @@ class ImmutableOwedHourUpdate
         owed_hour.disable!(requester: requester)
 
         staff_member = owed_hour.staff_member
-        finance_report = nil
-        if new_owed_hour.payslip_date.present? && owed_hour.payslip_date.present?
+        if new_owed_hour.payslip_date.present? && owed_hour.payslip_date.present? && staff_member.can_have_finance_reports?
+          finance_report = nil
           old_week = RotaWeek.new(owed_hour.payslip_date)
           new_week = RotaWeek.new(new_owed_hour.payslip_date)
 
@@ -43,10 +43,11 @@ class ImmutableOwedHourUpdate
           if old_week.start_date != new_week.start_date
             finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: new_week).call
           end
-        end
 
-        new_owed_hour.assign_attributes(finance_report: finance_report)
+          new_owed_hour.assign_attributes(finance_report: finance_report)
+        end
         success = new_owed_hour.save
+
         raise ActiveRecord::Rollback unless success
         owed_hour.update_attributes!(parent: new_owed_hour)
       end
