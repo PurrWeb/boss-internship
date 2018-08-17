@@ -34,17 +34,20 @@ class EditHoliday
             merge(creator: requester)
         )
 
-        finance_report = nil
-        if new_holiday.payslip_date.present?
+        if new_holiday.payslip_date.present? && staff_member.can_have_finance_reports?
+          finance_report = nil
+
           old_week = RotaWeek.new(old_payslip_date)
           new_week = RotaWeek.new(new_holiday.payslip_date)
           finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: old_week).call
           if old_week.start_date != new_week.start_date
             finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: new_week).call
           end
-        end
 
-        success = new_holiday.update_attributes(finance_report: finance_report)
+          success = new_holiday.update_attributes(finance_report: finance_report)
+        else
+          success = new_holiday.save
+        end
 
         raise ActiveRecord::Rollback unless success
         holiday.update_attributes!(parent: new_holiday)

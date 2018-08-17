@@ -6,6 +6,8 @@ class MarkFinanceReportRequiringUpdate
   attr_reader :staff_member, :week
 
   def call
+    raise "attempt to update finance report for staff member #{staff_member.id} who can't have finance report" unless staff_member.can_have_finance_reports?
+
     week_start = week.start_date
     venue = staff_member.master_venue
 

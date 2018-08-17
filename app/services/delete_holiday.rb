@@ -15,10 +15,13 @@ class DeleteHoliday
     if holiday.editable?
       ActiveRecord::Base.transaction do
         staff_member = holiday.staff_member
-        payslip_week = RotaWeek.new(holiday.payslip_date)
 
         holiday.disable!(requester: requester)
-        MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: payslip_week).call
+
+        if staff_member.can_have_finance_reports?
+          payslip_week = RotaWeek.new(holiday.payslip_date)
+          MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: payslip_week).call
+        end
       end
     else
       holiday.errors.add(:base, "can't delete holiday that has been frozen")

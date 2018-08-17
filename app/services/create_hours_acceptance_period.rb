@@ -43,16 +43,23 @@ class CreateHoursAcceptancePeriod
 
       if status == HoursAcceptancePeriod::ACCEPTED_STATE
         week = RotaWeek.new(hours_acceptance_period.date)
-        finance_report = MarkFinanceReportRequiringUpdate.new(
-          staff_member: staff_member,
-          week: week
-        ).call
+        if staff_member.can_have_finance_reports?
+          finance_report = MarkFinanceReportRequiringUpdate.new(
+            staff_member: staff_member,
+            week: week
+          ).call
 
-        hours_acceptance_period.assign_attributes({
-          finance_report: finance_report,
-          accepted_at: now.utc,
-          accepted_by: requester,
-        })
+          hours_acceptance_period.assign_attributes({
+            finance_report: finance_report,
+            accepted_at: now.utc,
+            accepted_by: requester,
+          })
+        else
+          hours_acceptance_period.assign_attributes({
+            accepted_at: now.utc,
+            accepted_by: requester,
+          })
+        end
       end
 
       breaks.each do |_break|
