@@ -66,16 +66,17 @@ class AccessoryRequestAdminApiService
     else
       result = false
       ActiveRecord::Base.transaction do
-        service_result = CompleteAccessoryRequest.new(accessory_request: accessory_request, requester: requster_user).call
-        raise ActiveRecord::Rollback unless service_result.success?
+        service_result = CompleteAccessoryRequest.new(accessory_request: accessory_request, requester: requster_user, now: now).call
+        result = service_result.success?
+        raise ActiveRecord::Rollback unless result
       end
     end
 
     api_errors = nil
-    unless result.success?
-      api_errors = AccessoryRequestApiErrors.new(accessory_request: result.accessory_request)
+    unless result
+      api_errors = AccessoryRequestApiErrors.new(accessory_request: accessory_request)
     end
-    Result.new(result.success?, result.accessory_request, api_errors)
+    Result.new(result, accessory_request, api_errors)
   end
 
   attr_reader :requster_user, :ability, :accessory_request

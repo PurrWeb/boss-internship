@@ -5,15 +5,17 @@ class CompleteAccessoryRequest
     end
   end
 
-  def initialize(accessory_request:, requester:)
+  def initialize(accessory_request:, requester:, now: Time.current)
     @accessory_request = accessory_request
     @requester = requester
+    @now = now
   end
 
   def call
     complete_success = false
     restock_success = false
     finance_report_success = false
+    accessory_restock_success = false
 
     accessory = accessory_request.accessory
     last_count = accessory.accessory_restocks.last.andand.count || 0
@@ -47,13 +49,14 @@ class CompleteAccessoryRequest
       }
 
       accessory_restock_result = CreateAccessoryRestock.new(params: restock_params).call
+      accessory_restock_success = accessory_restock_result.success?
 
-      raise ActiveRecord::Rollback unless complete_success && accessory_restock_result.success? && finance_report_success
+      raise ActiveRecord::Rollback unless complete_success && accessory_restock_success && finance_report_success
     end
 
-    Result.new(complete_success && accessory_restock_result.success? && finance_report_success, accessory_request)
+    Result.new(complete_success && accessory_restock_success && finance_report_success, accessory_request)
   end
 
   private
-  attr_reader :accessory_request, :requester
+  attr_reader :accessory_request, :requester, :now
 end
