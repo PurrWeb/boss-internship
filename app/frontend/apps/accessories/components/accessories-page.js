@@ -98,7 +98,7 @@ class AccessoriesPage extends React.Component {
     openContentModal({
       config: { title: `${oFetch(accessory, 'name')} History`, modalClassName: 'boss-modal-window_role_history' },
       props: {
-        accessoryHistory: history, // oFetch(accessory, 'accessoryHistory'),
+        accessoryHistory: history,
         itemRenderer: (historyItem, previousCount) => {
           return <EditFreeItemsHistoryItem historyItem={historyItem} previousCount={previousCount} />;
         },
