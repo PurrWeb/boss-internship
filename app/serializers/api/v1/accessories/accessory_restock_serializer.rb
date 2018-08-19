@@ -3,7 +3,7 @@ class Api::V1::Accessories::AccessoryRestockSerializer < ActiveModel::Serializer
     :accessoryId,
     :createdByUser,
     :createdAt,
-    :assignedTo,
+    :assignedToStaffMemberId,
     :count,
     :delta
 
@@ -19,7 +19,7 @@ class Api::V1::Accessories::AccessoryRestockSerializer < ActiveModel::Serializer
     object.created_at
   end
 
-  def assignedTo
-    object.accessory_request.staff_member.full_name if object.accessory_request.present?
+  def assignedToStaffMemberId
+    object.accessory_request.staff_member_id if object.accessory_request.present?
   end
 end

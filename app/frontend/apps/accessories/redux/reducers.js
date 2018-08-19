@@ -6,8 +6,17 @@ import oFetch from 'o-fetch';
 
 import * as constants from './constants';
 
+export const getStaffMemberByStaffMemberId = state => staffMemberId => {
+  if (!staffMemberId) return null;
+  return state.getIn(['page', 'staffMembers']).find(staffMember => staffMember.get('id') === staffMemberId) || List();
+};
+
 export const getHistoryByAccessoryId = state => accessoryId => {
-  return state.getIn(['page', 'history']).filter(history => history.get('accessoryId') === accessoryId) || List();
+  const history =
+    state.getIn(['page', 'history']).filter(history => history.get('accessoryId') === accessoryId) || List();
+  return history.map(h => {
+    return h.set('staffMember', getStaffMemberByStaffMemberId(state)(h.get('assignedToStaffMemberId')));
+  });
 };
 
 const initialState = fromJS({
@@ -32,11 +41,14 @@ const accessoriesReducer = handleActions(
     [constants.LOAD_INITIAL_ACCESSORIES]: (state, action) => {
       const { accessories, pagination } = action.payload;
       const history = oFetch(pagination, 'history');
+      const staffMembers = oFetch(pagination, 'staffMembers');
       delete pagination.history;
+      delete pagination.staffMembers;
       return state
         .updateIn(['accessories'], items => items.concat(fromJS(accessories)))
         .set('pagination', fromJS(pagination))
-        .set('history', fromJS(history));
+        .set('history', fromJS(history))
+        .set('staffMembers', fromJS(staffMembers));
     },
     [constants.UPDATE_ACCESSORY]: (state, action) => {
       const accessory = action.payload;

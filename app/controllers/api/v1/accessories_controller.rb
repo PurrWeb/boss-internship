@@ -20,6 +20,8 @@ module Api
 
         ids = paginated_accessories.map(&:id)
 
+        staff_members = StaffMember.joins(accessory_requests: :accessory).where(accessories: {id: ids})
+
         accessories_history = AccessoryRestock
           .where(accessory_id: ids)
 
@@ -29,6 +31,10 @@ module Api
             history: ActiveModel::Serializer::CollectionSerializer.new(
               accessories_history,
               serializer: Api::V1::Accessories::AccessoryRestockSerializer,
+            ),
+            staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+              staff_members,
+              serializer: Api::V1::Accessories::StaffMemberSerializer,
             ),
             pageNumber: page_from_params,
             perPage: per_page,
