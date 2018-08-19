@@ -7,10 +7,14 @@ RSpec.describe 'AccessoryStocktaking service'  do
   let!(:accessory) do
     FactoryGirl.create(:accessory, venue: venue)
   end
+  let(:previous_count) { -5 }
+  let(:previous_delta) { -5 }
   let!(:accessory_restock) do
-    FactoryGirl.create(:accessory_restock, accessory: accessory, created_by_user: user, count: -5, delta: -4)
+    FactoryGirl.create(:accessory_restock, accessory: accessory, created_by_user: user, count: previous_count, delta: previous_delta)
   end
   let(:count) { 10 }
+  let(:expected_delta) { 15 }
+  let(:expected_count) { previous_count + expected_delta }
   let(:service) do
     AccessoryStocktaking.new(
       accessory: accessory,
@@ -30,9 +34,12 @@ RSpec.describe 'AccessoryStocktaking service'  do
       expect(accessory.accessory_restocks.count).to eq(2)
     end
 
-    it 'accessory restocks data should be seccess' do
-      expect(result.accessory_restock.count).to eq(10)
-      expect(result.accessory_restock.delta).to eq(15)
+    it 'accessory restocks count should be correct' do
+      expect(result.accessory_restock.count).to eq(expected_count)
+    end
+
+    it 'accessory restocks delta should be correct' do
+      expect(result.accessory_restock.delta).to eq(expected_delta)
     end
   end
 end
