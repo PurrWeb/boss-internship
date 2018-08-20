@@ -29,7 +29,7 @@ export const getStaffMembersWithBouncedEmails = () => {
 };
 
 export const getStaffMembersWithTimeDodges = date => {
-  return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-dodgers`, {
+  return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/time-dodgers`, {
     params: {
       date,
     },

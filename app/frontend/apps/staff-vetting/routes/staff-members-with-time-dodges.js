@@ -16,6 +16,9 @@ import Page from '../components/page';
 import DashboardFilter from '../components/dashboard-filter';
 import oFetch from 'o-fetch';
 
+const TIME_DODGERS_START_LIMIT = 45;
+const TIME_DODGERS_END_LIMIT = 47;
+
 const getEndDate = uiDate =>
   safeMoment
     .uiDateParse(uiDate)
@@ -49,6 +52,7 @@ class StaffMembersWithTimeDodgers extends PureComponent {
       const staffMembers = oFetch(res, 'data.staffMembers');
       const acceptedHours = oFetch(res, 'data.acceptedHours');
       const paidHolidays = oFetch(res, 'data.paidHolidays');
+      const acceptedBreaks = oFetch(res, 'data.acceptedBreaks');
 
       const imStaffMembers = Immutable.fromJS(
         staffMembers.map(staffMember => ({
@@ -56,16 +60,17 @@ class StaffMembersWithTimeDodgers extends PureComponent {
           fullName: `${staffMember.firstName} ${staffMember.surname}`,
           hours: acceptedHours[staffMember.id] || 0,
           paidHolidays: paidHolidays[staffMember.id] || 0,
+          acceptedBreaks: acceptedBreaks[staffMember.id] || 0,
         })),
       );
 
       const imStaffMembersSoftDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
-        return hours >= 45 * 60 && hours <= 47 * 60;
+        const hours = staffMember.get('hours') - staffMember.get('acceptedBreaks') + staffMember.get('paidHolidays');
+        return hours >= TIME_DODGERS_START_LIMIT * 60 && hours <= TIME_DODGERS_END_LIMIT * 60;
       });
       const imStaffMembersHardDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
-        return hours < 45 * 60;
+        const hours = staffMember.get('hours') - staffMember.get('acceptedBreaks') + staffMember.get('paidHolidays');
+        return hours < TIME_DODGERS_START_LIMIT * 60;
       });
 
       return {

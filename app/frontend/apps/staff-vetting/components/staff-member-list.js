@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import StaffMemberInfo from './staff-member-info';
 import moment from 'moment';
-import utils from '~/lib/utils';
 import safeMoment from '~/lib/safe-moment';
 
 class StaffMemberList extends Component {
@@ -59,6 +58,7 @@ class StaffMemberList extends Component {
                 expiredSiaBadge={withSiaBadgeExpiryDate && this.getStaffMemberSiaBadgeExpiryDate(staffMember)}
                 bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
                 hours={staffMember.get('hours')}
+                acceptedBreaks={staffMember.get('acceptedBreaks')}
                 masterVenue={masterVenue}
                 paidHolidays={paidHolidays}
               />

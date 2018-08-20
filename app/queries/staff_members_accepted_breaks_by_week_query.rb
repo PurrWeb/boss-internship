@@ -1,4 +1,4 @@
-class StaffMembersAcceptedHoursByWeekQuery
+class StaffMembersAcceptedBreaksByWeekQuery
   def initialize(week: RotaWeek.new(Time.current.to_date))
     @week = week
   end
@@ -21,6 +21,6 @@ class StaffMembersAcceptedHoursByWeekQuery
       .joins(clock_in_days: { hours_acceptance_periods: :hours_acceptance_breaks})
       .merge(ClockInDay.where(id: clocking_day_ids))
       .group('staff_members.id')
-      .sum('TIMESTAMPDIFF(minute, hours_acceptance_periods.starts_at, hours_acceptance_periods.ends_at)')
+      .sum('TIMESTAMPDIFF(minute, hours_acceptance_breaks.starts_at, hours_acceptance_breaks.ends_at)')
   end
 end
