@@ -98,7 +98,7 @@ class AccessoryRequestItem extends React.Component {
   };
 
   render() {
-    const { accessoryRequest } = this.props;
+    const accessoryRequest = oFetch(this.props, 'accessoryRequest');
     const requestDate = safeMoment
       .iso8601Parse(oFetch(accessoryRequest, 'updatedAt'))
       .format(utils.humanDateFormatWithTime());
@@ -110,8 +110,8 @@ class AccessoryRequestItem extends React.Component {
     const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
     const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
     const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
-    const { payslipDate } = accessoryRequest;
-    const sPayslipDate = payslipDate ? safeMoment.uiDateParse(payslipDate).format(utils.commonDateFormat) : null;
+    const sPayslipDate = oFetch(accessoryRequest, 'payslipDate');
+    const sPayslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : null;
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
@@ -130,13 +130,13 @@ class AccessoryRequestItem extends React.Component {
             </h3>
             { this.renderRequestActions(accessoryRequest)}
           </div>
-          {sPayslipDate && (
+          {sPayslipDateText && (
             <div className="boss-requests__details">
               <div className="boss-requests__details-content">
                 <div className="boss-requests__details-line">
                   <div className="boss-requests__details-value">
                     <p className="boss-request__details-text">
-                      Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDate}</span>
+                      Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDateText}</span>
                     </p>
                   </div>
                   <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
