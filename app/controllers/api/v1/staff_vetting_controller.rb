@@ -101,16 +101,17 @@ module Api
           }, status: 200
       end
 
-      def staff_dodgers
+      def time_dodgers
         date = date_from_params
         week = RotaWeek.new(date);
         time_dodgers_service = TimeDodgersService.new(week: week)
-        dodgers_accepted_hours, dodgers_paid_holidays = time_dodgers_service.dodgers_data
+        dodgers_data = time_dodgers_service.dodgers_data
 
         staff_members = time_dodgers_service.staff_members
         render json: {
-          acceptedHours: dodgers_accepted_hours,
-          paidHolidays: dodgers_paid_holidays,
+          acceptedHours: dodgers_data.fetch(:accepted_hours),
+          acceptedBreaks: dodgers_data.fetch(:accepted_breaks),
+          paidHolidays: dodgers_data.fetch(:paid_holidays),
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer

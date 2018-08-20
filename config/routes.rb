@@ -310,7 +310,7 @@ Rails.application.routes.draw do
             get :staff_with_expired_sia_badge, path: 'staff-with-expired-sia-badge'
             get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
             get :staff_with_bounced_email, path: 'staff-with-bounced-email'
-            get :staff_dodgers, path: 'staff-dodgers'
+            get :time_dodgers, path: 'time-dodgers'
           end
         end
 

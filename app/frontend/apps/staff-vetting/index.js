@@ -167,11 +167,7 @@ class StaffVettingApp extends React.Component {
             path="/staff_members_with_time_dodges/:weekStartDate?"
             canView={canViewWithTimeDodges}
             render={props => (
-              <StaffMembersWithTimeDodges
-                venues={imVenues}
-                staffTypes={imStaffTypes}
-                title="Staff Members with Time Dodges"
-              />
+              <StaffMembersWithTimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodges" />
             )}
           />
         </div>
