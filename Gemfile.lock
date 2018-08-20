@@ -554,7 +554,7 @@ DEPENDENCIES
   rmagick (= 2.13.2)
   rollbar
   rspec-rails
-  sass-rails (>= 3.2)
+  sass-rails (>= 3.2.8)
   search_cop
   seedbank
   sendgrid-ruby
