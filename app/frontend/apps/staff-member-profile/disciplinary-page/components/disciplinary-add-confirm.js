@@ -15,7 +15,7 @@ class DisciplinaryAddConfirm extends PureComponent {
       <div>
         <div className="boss-modal-window__message-block">
           <span className="boss-modal-window__message-text">
-            Continuing will notify the staff member of this disciplinary along with a copy of the note
+            Continuing will notify the staff member of this disciplinary along with the all the details entered in this form
           </span>
         </div>
 
