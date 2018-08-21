@@ -9,7 +9,9 @@ class Disciplinary < ActiveRecord::Base
 
   validates :title, presence: true
   validates :level, inclusion: { in: Disciplinary.levels.keys, message: :invalid }, presence: true
-  validates :note, presence: true
+  validates :conduct, presence: true
+  validates :consequence, presence: true
+  validates :nature, presence: true
   validates :staff_member, presence: true
   validates :created_by_user, presence: true
 

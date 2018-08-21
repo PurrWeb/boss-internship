@@ -330,11 +330,13 @@ ActiveRecord::Schema.define(version: 20180924181537) do
     t.integer  "level",               limit: 4,     null: false
     t.integer  "staff_member_id",     limit: 4,     null: false
     t.integer  "created_by_user_id",  limit: 4,     null: false
-    t.text     "note",                limit: 65535, null: false
     t.integer  "disabled_by_user_id", limit: 4
     t.datetime "disabled_at"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.text     "conduct",             limit: 65535, null: false
+    t.text     "nature",              limit: 65535, null: false
+    t.text     "consequence",         limit: 65535, null: false
   end
 
   add_index "disciplinaries", ["created_by_user_id"], name: "index_disciplinaries_on_created_by_user_id", using: :btree
