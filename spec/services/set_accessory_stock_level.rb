@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'AccessoryStocktaking service'  do
+RSpec.describe 'SetAccessoryStockLevel service'  do
   let(:now) { Time.current + 1.week }
   let!(:venue) { FactoryGirl.create(:venue) }
   let!(:user) { FactoryGirl.create(:user, :admin) }
@@ -16,7 +16,7 @@ RSpec.describe 'AccessoryStocktaking service'  do
   let(:expected_delta) { 15 }
   let(:expected_count) { previous_count + expected_delta }
   let(:service) do
-    AccessoryStocktaking.new(
+    SetAccessoryStockLevel.new(
       accessory: accessory,
       count: count,
       requester: user

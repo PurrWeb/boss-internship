@@ -1,4 +1,4 @@
-class AccessoryStocktaking
+class SetAccessoryStockLevel
   Result = Struct.new(:success, :accessory_restock) do
     def success?
       success

@@ -55,7 +55,7 @@ class AccessoriesApiService
   end
 
   def update_free_items(count:)
-    restock = AccessoryStocktaking.new(
+    restock = SetAccessoryStockLevel.new(
       accessory: accessory,
       count: count,
       requester: requester
