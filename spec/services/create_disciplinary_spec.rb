@@ -6,7 +6,9 @@ RSpec.describe CreateDisciplinary do
   let(:valid_params) do
     {
       title: 'Title',
-      note: 'Note',
+      conduct: 'Some conduct',
+      consequence: 'Some consequence',
+      nature: 'Some nature',
       created_by_user: user,
       staff_member: staff_member,
       level: 'first_level'

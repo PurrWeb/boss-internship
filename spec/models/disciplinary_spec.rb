@@ -7,7 +7,9 @@ RSpec.describe Disciplinary, type: :model do
   subject {
     described_class.new(
       title: 'Title',
-      note: 'Note',
+      conduct: 'Some conduct',
+      consequence: 'Some consequence',
+      nature: 'Some nature',
       created_by_user: user,
       staff_member: staff_member,
       level: described_class.levels[:first_level]
@@ -23,7 +25,9 @@ RSpec.describe Disciplinary, type: :model do
   describe "Validations" do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:level) }
-    it { should validate_presence_of(:note) }
+    it { should validate_presence_of(:conduct) }
+    it { should validate_presence_of(:consequence) }
+    it { should validate_presence_of(:nature) }
     it { should validate_presence_of(:staff_member) }
     it { should validate_presence_of(:created_by_user) }
   end
@@ -37,8 +41,18 @@ RSpec.describe Disciplinary, type: :model do
     expect(subject).to_not be_valid
   end
 
-  it "is not valid without a note" do
-    subject.note = nil
+  it "is not valid without a conduct" do
+    subject.conduct = nil
+    expect(subject).to_not be_valid
+  end
+
+  it "is not valid without a consequence" do
+    subject.consequence = nil
+    expect(subject).to_not be_valid
+  end
+
+  it "is not valid without a nature" do
+    subject.nature = nil
     expect(subject).to_not be_valid
   end
 
