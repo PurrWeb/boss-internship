@@ -166,7 +166,7 @@ class UpdateFinanceReportData
       finance_report.mark_incomplete!
     else
       pending_hours_status = GetPendingHoursStatus.new(week: finance_report_week, staff_member: staff_member).status_data
-      if pending_hours_status.fetch(:can_complete)
+      if !pending_hours_status.fetch(:hours_pending)
         finance_report.mark_ready!
       else
         finance_report.mark_incomplete!

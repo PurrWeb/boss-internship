@@ -17,7 +17,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :total,
     :totalHoursCount,
     :status,
-    :canComplete,
+    :hoursPending,
     :netWagesCents,
     :canSeeNetWages,
     :staffMemberSageId,
@@ -31,8 +31,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     object.current_state
   end
 
-  def canComplete
-    status_data.fetch(:can_complete)
+  def hoursPending
+    status_data.fetch(:hours_pending)
   end
 
   def daysNeedingCompletion

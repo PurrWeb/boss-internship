@@ -85,10 +85,10 @@ export const getStaffTypesWithFinanceReports = createSelector(
         return oFetch(report, 'status') !== 'done'
       });
       const noIncompletableReportsExist = incompleteReportsJS.filter((report) => {
-        return oFetch(report, 'canComplete') === false
+        return oFetch(report, 'hoursPending') === true
       }).length === 0;
       const completeableReportsExist = incompleteReportsJS.filter((report) => {
-        return oFetch(report, 'canComplete')
+        return !oFetch(report, 'hoursPending')
       }).length > 0;
 
       const allReady = noIncompletableReportsExist && completeableReportsExist;

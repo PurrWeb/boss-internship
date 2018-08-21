@@ -23,7 +23,7 @@ class ReportItem extends Component {
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
     const status = oFetch(report, 'status');
-    const canComplete = oFetch(report, 'canComplete');
+    const hoursPending = oFetch(report, 'hoursPending');
     const daysNeedingCompletion = oFetch(report, 'daysNeedingCompletion');
     const pendingCalculation = oFetch(report, 'pendingCalculation');
     const isIncomplete = status === 'incomplete';
@@ -38,7 +38,7 @@ class ReportItem extends Component {
       sundayHoursCount,
     ].map((dayHoursCount, index) => {
       const weekDate = weekDates.get(index);
-      if (canComplete === false && daysNeedingCompletion[weekDate]) {
+      if (hoursPending === true && daysNeedingCompletion[weekDate]) {
         const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
         return (
           <div key={index} className={this.getCellClassName({ alertStyles: true })} style={cellStyle}>
