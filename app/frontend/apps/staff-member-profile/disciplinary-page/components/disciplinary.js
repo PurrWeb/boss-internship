@@ -9,7 +9,7 @@ import DisciplinaryFilter from './disciplinary-filter';
 import DisciplinaryList from './disciplinary-list';
 import DisciplinaryLevelList from './disciplinary-level-list';
 import DisciplinaryItem from './disciplinary-item';
-import DisciplinaryNote from './disciplinary-note';
+import DisciplinaryDetails from './disciplinary-details';
 import DisciplinaryAdd from './disciplinary-add';
 import DisciplinaryAddConfirm from './disciplinary-add-confirm';
 
@@ -57,20 +57,22 @@ class Disciplinary extends React.Component {
     this.props.loadDisciplinaries({ queryString });
   };
 
-  handleViewNote = disciplinary => {
+  handleViewDetails = disciplinary => {
     openContentModal({
       config: {
         title: (
           <span>
-            Note for <span className="boss-modal-window__marked">{oFetch(disciplinary, 'title')}</span>
+            <span className="boss-modal-window__marked">{oFetch(disciplinary, 'title')}</span> Details
           </span>
         ),
-        modalClassName: 'boss-modal-window_role_disciplinary-note',
+        modalClassName: 'boss-modal-window_role_disciplinary-details',
       },
       props: {
-        note: oFetch(disciplinary, 'note'),
+        nature: oFetch(disciplinary, 'nature'),
+        conduct: oFetch(disciplinary, 'conduct'),
+        consequence: oFetch(disciplinary, 'consequence'),
       },
-    })(DisciplinaryNote);
+    })(DisciplinaryDetails);
   };
 
   handleAddDisciplinarySubmit = (hideModal, values, hideConfirmationModal) => {
@@ -181,7 +183,7 @@ class Disciplinary extends React.Component {
                         return (
                           <DisciplinaryItem
                             {...disciplinary}
-                            onViewNote={() => this.handleViewNote(disciplinary)}
+                            onViewDetails={() => this.handleViewDetails(disciplinary)}
                             onOpenDisableDisciplinary={() =>
                               this.handleOpenDisableDisciplinary({ disciplinaryId: disciplinary.id })
                             }

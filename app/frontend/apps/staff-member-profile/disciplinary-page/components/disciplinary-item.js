@@ -32,7 +32,7 @@ class DisciplinaryItem extends React.Component {
     const expiredAt = oFetch(this.props, 'expiredAt');
     const exporesAtFormatted = safeMoment.iso8601Parse(expiredAt).format(utils.commonDateFormatWithDay());
 
-    const onViewNote = oFetch(this.props, 'onViewNote');
+    const onViewDetails = oFetch(this.props, 'onViewDetails');
     const onOpenDisableDisciplinary = oFetch(this.props, 'onOpenDisableDisciplinary');
     const isExpired = oFetch(this.props, 'isExpired');
     const isDisablable = oFetch(this.props, 'isDisablable');
@@ -88,9 +88,9 @@ class DisciplinaryItem extends React.Component {
             <button
               type="button"
               className="boss-button boss-button_role_view-notes boss-button_type_small boss-check__header-action"
-              onClick={onViewNote}
+              onClick={onViewDetails}
             >
-              View Note
+              View Details
             </button>
             {!(isExpired || disabledAt) &&
               isDisablable && (
