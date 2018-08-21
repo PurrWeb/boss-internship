@@ -18,7 +18,9 @@ class CreateDisciplinaryApiService
 
     disciplinary_params = {
       title: params.fetch(:title),
-      note: params.fetch(:note),
+      conduct: params.fetch(:conduct),
+      consequence: params.fetch(:consequence),
+      nature: params.fetch(:nature),
       created_by_user: requester,
       staff_member: staff_member,
       level: params.fetch(:level)

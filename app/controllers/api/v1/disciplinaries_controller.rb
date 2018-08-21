@@ -39,7 +39,9 @@ module Api
         ).call(params: {
           title: params.fetch(:title),
           level: params.fetch(:level),
-          note: params.fetch(:note)
+          conduct: params.fetch(:conduct),
+          consequence: params.fetch(:consequence),
+          nature: params.fetch(:nature)
         })
 
         if result.success?
