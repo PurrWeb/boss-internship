@@ -81,15 +81,28 @@ export const getStaffTypesWithFinanceReports = createSelector(
       );
       const reportsJS = reports.toJS();
       const total = reportsJS.reduce((acc, report) => acc + oFetch(report, 'total'), 0);
-      const incompleteReportsJS = reportsJS.filter((report) => {
-        return oFetch(report, 'status') !== 'done'
+      const readyReportsJS = reportsJS.filter((report) => {
+        return oFetch(report, 'status') === 'ready'
       });
-      const noIncompletableReportsExist = incompleteReportsJS.filter((report) => {
-        return oFetch(report, 'hoursPending') === true
-      }).length === 0;
-      const completeableReportsExist = incompleteReportsJS.filter((report) => {
-        return !oFetch(report, 'hoursPending')
-      }).length > 0;
+      const requiringUpdateReportsJS = reportsJS.filter((report) => {
+        return oFetch(report, 'status') === 'requiring_update'
+      });
+
+      const completableReadyReports = [];
+      const incompletableReadyReports = [];
+      readyReportsJS.forEach((report) => {
+        const completionDateReached = oFetch(report, 'completionDateReached');
+        const hoursPending = oFetch(report, 'hoursPending');
+
+        if (hoursPending || !completionDateReached){
+          incompletableReadyReports.push(report)
+        } else {
+          completableReadyReports.push(report)
+        }
+      });
+
+      const noIncompletableReportsExist = incompletableReadyReports.length === 0;
+      const completeableReportsExist = completableReadyReports.length > 0;
 
       const allReady = noIncompletableReportsExist && completeableReportsExist;
       return staffType

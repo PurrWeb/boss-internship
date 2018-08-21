@@ -63,7 +63,7 @@ describe UpdateStaffMemberEmploymentDetails do
           venue: old_venue,
           week_start: previous_week.start_date
         ).tap do |report|
-          report.mark_incomplete!
+          report.mark_ready!
         end
       end
       let(:previous_week2)  do
@@ -111,7 +111,7 @@ describe UpdateStaffMemberEmploymentDetails do
           existing_finance_reports.each(&:reload)
 
           expect(current_week_finance_report.done?).to eq(true)
-          expect(previous_week_finance_report.incomplete?).to eq(true)
+          expect(previous_week_finance_report.ready?).to eq(true)
           expect(previous_week2_finance_report.ready?).to eq(true)
         end
       end
@@ -165,7 +165,7 @@ describe UpdateStaffMemberEmploymentDetails do
           venue: old_venue,
           week_start: previous_week.start_date
         ).tap do |report|
-          report.mark_incomplete!
+          report.mark_ready!
         end
       end
       let(:previous_week2)  do
@@ -212,7 +212,7 @@ describe UpdateStaffMemberEmploymentDetails do
           expect(FinanceReport.count).to eq(3)
 
           expect(current_week_finance_report.done?).to eq(true)
-          expect(previous_week_finance_report.incomplete?).to eq(true)
+          expect(previous_week_finance_report.ready?).to eq(true)
           expect(previous_week2_finance_report.ready?).to eq(true)
         end
       end

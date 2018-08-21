@@ -25,7 +25,8 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :containsTimeShiftedOwedHours,
     :containsTimeShiftedHolidays,
     :daysNeedingCompletion,
-    :pendingCalculation
+    :pendingCalculation,
+    :completionDateReached
 
   def status
     object.current_state
@@ -33,6 +34,10 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def hoursPending
     status_data.fetch(:hours_pending)
+  end
+
+  def completionDateReached
+    object.completion_date_reached?
   end
 
   def daysNeedingCompletion

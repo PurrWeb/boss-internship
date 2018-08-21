@@ -87,13 +87,13 @@ describe CreateOwedHour do
             staff_member: staff_member,
             venue: staff_member.master_venue
           })
-          finance_report.mark_incomplete!
+          finance_report.mark_ready!
           finance_report
         end
 
         context 'before call' do
           it 'should be marked incomplete' do
-            expect(existing_finance_report.incomplete?).to eq(true)
+            expect(existing_finance_report.ready?).to eq(true)
           end
         end
 

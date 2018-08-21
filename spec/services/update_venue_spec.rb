@@ -60,7 +60,7 @@ describe UpdateVenue do
           venue: venue,
           week_start: previous_week.start_date
         ).tap do |report|
-          report.mark_incomplete!
+          report.mark_ready!
         end
       end
       let(:previous_week2)  do
@@ -108,7 +108,7 @@ describe UpdateVenue do
           existing_finance_reports.each(&:reload)
 
           expect(current_week_finance_report.done?).to eq(true)
-          expect(previous_week_finance_report.incomplete?).to eq(true)
+          expect(previous_week_finance_report.ready?).to eq(true)
           expect(previous_week2_finance_report.ready?).to eq(true)
         end
       end

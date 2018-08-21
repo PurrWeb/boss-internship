@@ -1,5 +1,4 @@
 class FinanceReport < ActiveRecord::Base
-  REPORT_STATUS_INCOMPLETE_STATUS = 'incomplete'
   REPORT_STATUS_READY_STATUS = 'ready'
   REPORT_STATUS_DONE_STATUS = 'done'
 
@@ -47,7 +46,7 @@ class FinanceReport < ActiveRecord::Base
 
   # validation
   def total_cents_valid
-    if total_cents.present? && (ready? || done?) && (total_cents < 0)
+    if total_cents.present? && done? && (total_cents < 0)
       errors.add(:total_cents, 'must be < 0')
     end
   end
@@ -98,12 +97,13 @@ class FinanceReport < ActiveRecord::Base
     RotaWeek.new(week_start)
   end
 
-  def current_state
-    state_machine.current_state
+  def completion_date_reached?(now: Time.current)
+    current_week = RotaWeek.new(RotaShiftDate.to_rota_date(now))
+    week.start_date < current_week.start_date
   end
 
-  def incomplete?
-    current_state == FinanceReportStateMachine::INCOMPLETE_STATE.to_s
+  def current_state
+    state_machine.current_state
   end
 
   def ready?
@@ -121,12 +121,6 @@ class FinanceReport < ActiveRecord::Base
   def mark_requiring_update!
     ActiveRecord::Base.transaction do
       state_machine.transition_to!(FinanceReportStateMachine::REQUIRING_UPDATE_STATE)
-    end
-  end
-
-  def mark_incomplete!
-    ActiveRecord::Base.transaction do
-      state_machine.transition_to!(FinanceReportStateMachine::INCOMPLETE_STATE)
     end
   end
 
