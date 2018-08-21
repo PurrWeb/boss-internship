@@ -7,10 +7,10 @@ export const loadDisciplinariesSuceed = createAction(types.LOAD_DISCIPLINARIES_S
 export const addDisciplinarySucceed = createAction(types.ADD_DISCIPLINARY_SUCCEED);
 export const disableDisciplinarySucceed = createAction(types.DISABLE_DISCIPLINARY_SUCCEED);
 
-export const addDisciplinary = ({ note, level, title }) => (dispatch, getState) => {
+export const addDisciplinary = params => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
-  return requests.addDisciplinaryRequest({ note, level, staffMemberId, title }).then(resp => {
+  return requests.addDisciplinaryRequest({ ...params, staffMemberId }).then(resp => {
     dispatch(addDisciplinarySucceed(resp.data));
   });
 };

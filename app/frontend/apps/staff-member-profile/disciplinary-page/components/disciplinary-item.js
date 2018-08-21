@@ -87,7 +87,7 @@ class DisciplinaryItem extends React.Component {
           <div className="boss-check__header-actions">
             <button
               type="button"
-              className="boss-button boss-button_role_view-notes boss-button_type_small boss-check__header-action"
+              className="boss-button boss-button_role_view-details-alt boss-button_type_small boss-check__header-action"
               onClick={onViewDetails}
             >
               View Details

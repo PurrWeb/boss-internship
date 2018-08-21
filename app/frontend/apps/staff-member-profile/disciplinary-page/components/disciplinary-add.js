@@ -27,7 +27,9 @@ class DisciplinaryAdd extends React.Component {
     const initialValues = {
       title: null,
       level: null,
-      note: null,
+      nature: null,
+      conduct: null,
+      consequence: null,
     };
 
     return (

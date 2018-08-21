@@ -10,11 +10,9 @@ export const loadDisciplinariesRequest = ({ staffMemberId, queryString }) => {
   );
 };
 
-export const addDisciplinaryRequest = ({ note, title, level, staffMemberId }) => {
+export const addDisciplinaryRequest = ({ staffMemberId, ...rest }) => {
   return http({ notify: false, globalLoader: false }).post(`/api/v1/staff_members/${staffMemberId}/disciplinaries`, {
-    note,
-    title,
-    level,
+    ...rest,
   });
 };
 

@@ -38,8 +38,20 @@ class DisciplinaryForm extends React.Component {
           </div>
 
           <Field
-            name="note"
-            label="Note"
+            name="nature"
+            label="The nature of the unsatisfactory conduct or performance was"
+            component={BossFormTextarea}
+            placeholder=" "
+          />
+          <Field
+            name="conduct"
+            label="The conduct or performance improvement expected is"
+            component={BossFormTextarea}
+            placeholder=" "
+          />
+          <Field
+            name="consequence"
+            label="The likely consequence of further misconduct or insufficient improvement is"
             component={BossFormTextarea}
             placeholder=" "
             note="Note: This text will be the official correspondence of this warning sent to the Staff Member."

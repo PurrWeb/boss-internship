@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 
-class DisciplinaryNote extends React.Component {
+class DisciplinaryDetails extends React.Component {
   render() {
     const [nature, conduct, consequence] = oFetch(this.props, 'nature', 'conduct', 'consequence');
     return (
@@ -36,10 +36,10 @@ class DisciplinaryNote extends React.Component {
   }
 }
 
-DisciplinaryNote.propTypes = {
+DisciplinaryDetails.propTypes = {
   nature: PropTypes.string.isRequired,
   conduct: PropTypes.string.isRequired,
   consequence: PropTypes.string.isRequired,
 };
 
-export default DisciplinaryNote;
+export default DisciplinaryDetails;
