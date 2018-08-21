@@ -84,32 +84,8 @@ class AccessoriesList extends React.Component {
                 );
               }}
             />
-            <AccessoriesInventoryCell
-              title="Booked Items"
-              count={oFetch(accessory, 'booked')}
-              actionRenderer={() => {
-                return (
-                  <a href="#" className="boss-check__link">
-                    <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">
-                      Details
-                    </span>
-                  </a>
-                );
-              }}
-            />
-            <AccessoriesInventoryCell
-              title="Refunds"
-              count={oFetch(accessory, 'refunded')}
-              actionRenderer={() => {
-                return (
-                  <a href="#" className="boss-check__link">
-                    <span className="boss-check__text boss-check__text_role_details boss-check__text_role_link">
-                      Details
-                    </span>
-                  </a>
-                );
-              }}
-            />
+            <AccessoriesInventoryCell title="Booked Items" count={oFetch(accessory, 'booked')} />
+            <AccessoriesInventoryCell title="Refunds" count={oFetch(accessory, 'refunded')} />
           </BossCheckSimpleRow>
           {isEnabled ? this.renderEnabledButtons(accessory) : this.renderDisabledButtons(accessory)}
         </BossCheckCard>
