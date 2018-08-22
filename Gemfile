@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.1.2"
+ruby "2.3.7"
 
 gem "rails", "~> 4.2.0"
 gem 'mysql2', "~> 0.3.20"
@@ -8,14 +8,14 @@ gem "devise", "~> 3.4.0"
 gem "disposable", "~> 0.3.0"
 gem "thin"
 gem "rollbar"
-gem 'sass-rails', '>= 3.2'
+gem 'sass-rails', '>= 3.2.8'
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "uglifier"
 gem "fog"
 gem "carrierwave", "~> 0.11"
 gem 'carrierwave-data-uri'
-gem 'rmagick', '2.13.2', require: false
+gem 'rmagick', '2.16.0', require: false
 gem "figaro"
 gem "sidekiq"
 gem "sidekiq-failures"
