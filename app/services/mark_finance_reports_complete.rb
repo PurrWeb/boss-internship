@@ -5,7 +5,9 @@ class MarkFinanceReportsComplete
   attr_reader :finance_reports
 
   def call
-    unsaveable_reports = finance_reports.reject{ |report| report.ready? }
+    unsaveable_reports = finance_reports.reject do |report|
+      report.ready? || report.completion_date_reached? || (finance_report.total_cents >= 0)
+    end
     if unsaveable_reports.length > 0
       raise "Attempt to complete incompletable finanace report for staff members with ids: #{ unsaveable_reports.map{ |report| report.staff_member_id }.join(', ') }"
     end

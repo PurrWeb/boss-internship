@@ -7,7 +7,7 @@ class GetPendingHoursStatus
 
   def status_data
     {
-      can_complete: days_needing_completion.count == 0,
+      hours_pending: days_needing_completion.count > 0,
       days_needing_completion: days_needing_completion
     }
   end

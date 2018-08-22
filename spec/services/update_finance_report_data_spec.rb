@@ -233,7 +233,7 @@ describe UpdateFinanceReportData do
       empty_valid_finace_report_values.merge({
         accessories_cents: -300,
         total_cents: -300,
-        current_state: FinanceReportStateMachine::INCOMPLETE_STATE.to_s
+        current_state: FinanceReportStateMachine::READY_STATE.to_s
       })
     end
 
@@ -246,7 +246,7 @@ describe UpdateFinanceReportData do
     specify 'should set finance report to not requiring update' do
       service.call(now: call_time)
       finance_report.reload
-      expect(finance_report.incomplete?).to eq(true)
+      expect(finance_report.ready?).to eq(true)
     end
   end
 

@@ -4,7 +4,6 @@ require 'rails_helper'
 def status_methods_hash(finance_report)
   {
     requiring_update: finance_report.requiring_update?,
-    incomplete: finance_report.incomplete?,
     ready: finance_report.ready?,
     done: finance_report.done?
   }
@@ -87,59 +86,9 @@ describe FinanceReport do
       expect(finance_report.current_state).to eq(FinanceReportStateMachine::REQUIRING_UPDATE_STATE.to_s)
       expect(status_methods_hash(finance_report)).to eq({
         requiring_update: true,
-        incomplete: false,
         ready: false,
         done: false
       })
-    end
-
-    context 'mark as incomplete' do
-      let(:extra_attributes) { invalid_extra_attributes }
-      before do
-        finance_report.save!
-        finance_report.assign_attributes(extra_attributes)
-      end
-
-      it 'should not be valid' do
-        expect{ finance_report.mark_incomplete! }.to raise_error(Statesman::GuardFailedError)
-      end
-
-      it 'should not change state' do
-        begin
-          finance_report.mark_incomplete!
-        rescue Statesman::GuardFailedError
-          #swallow
-        end
-        expect(finance_report.valid?).to eq(true)
-        expect(finance_report.current_state).to eq(FinanceReportStateMachine::REQUIRING_UPDATE_STATE.to_s)
-        expect(status_methods_hash(finance_report)).to eq({
-          requiring_update: true,
-          incomplete: false,
-          ready: false,
-          done: false
-        })
-      end
-
-      context 'supplying valid attributes' do
-        let(:extra_attributes) do
-          valid_extra_attributes
-        end
-        it 'should be valid' do
-          expect{ finance_report.mark_incomplete! }.to_not raise_error
-          expect(finance_report.valid?).to eq(true)
-        end
-
-        it 'should report being in correct state' do
-          finance_report.mark_incomplete!
-          expect(finance_report.current_state).to eq(FinanceReportStateMachine::INCOMPLETE_STATE.to_s)
-          expect(status_methods_hash(finance_report)).to eq({
-            requiring_update: false,
-            incomplete: true,
-            ready: false,
-            done: false
-          })
-        end
-      end
     end
 
     context 'mark as ready' do
@@ -163,7 +112,6 @@ describe FinanceReport do
         expect(finance_report.current_state).to eq(FinanceReportStateMachine::REQUIRING_UPDATE_STATE.to_s)
         expect(status_methods_hash(finance_report)).to eq({
           requiring_update: true,
-          incomplete: false,
           ready: false,
           done: false
         })
@@ -181,7 +129,6 @@ describe FinanceReport do
           expect(finance_report.current_state).to eq(FinanceReportStateMachine::READY_STATE.to_s)
           expect(status_methods_hash(finance_report)).to eq({
             requiring_update: false,
-            incomplete: false,
             ready: true,
             done: false
           })
@@ -216,7 +163,6 @@ describe FinanceReport do
           expect(finance_report.current_state).to eq(FinanceReportStateMachine::READY_STATE.to_s)
           expect(status_methods_hash(finance_report)).to eq({
             requiring_update: false,
-            incomplete: false,
             ready: true,
             done: false
           })
@@ -237,7 +183,6 @@ describe FinanceReport do
           expect(finance_report.current_state).to eq(FinanceReportStateMachine::DONE_STATE.to_s)
           expect(status_methods_hash(finance_report)).to eq({
             requiring_update: false,
-            incomplete: false,
             ready: false,
             done: true
           })
