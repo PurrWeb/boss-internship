@@ -15,7 +15,7 @@ gem "uglifier"
 gem "fog"
 gem "carrierwave", "~> 0.11"
 gem 'carrierwave-data-uri'
-gem 'rmagick', '2.13.2', require: false
+gem 'rmagick', '2.16.0', require: false
 gem "figaro"
 gem "sidekiq"
 gem "sidekiq-failures"
