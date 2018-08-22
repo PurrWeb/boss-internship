@@ -23,16 +23,18 @@ class CreateDisciplinaryApiService
       nature: params.fetch(:nature),
       created_by_user: requester,
       staff_member: staff_member,
-      level: params.fetch(:level)
+      level: params.fetch(:level),
     }
 
     model_service_result = CreateDisciplinary.new(
-      params: disciplinary_params
+      params: disciplinary_params,
     ).call
 
     api_errors = nil
-    unless model_service_result.success?
+    if !model_service_result.success?
       api_errors = DisciplinaryApiErrors.new(disciplinary: model_service_result.disciplinary)
+    else
+      StaffMemberDisciplinaryMailer.send_disciplinary_email(disciplinary: model_service_result.disciplinary).deliver_now
     end
     Result.new(model_service_result.success?, model_service_result.disciplinary, api_errors)
   end
