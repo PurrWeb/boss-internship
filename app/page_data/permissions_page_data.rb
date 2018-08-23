@@ -28,23 +28,6 @@ class PermissionsPageData
           path: @path.rotas_path
         },
         {
-          description: "Security Shift Requests",
-          permitted: role.can?(:view, :security_shift_requests),
-          path: @path.security_shift_requests_path
-        },
-        {
-          description: "Security Rota",
-          permitted: role.can?(:view, :security_rota),
-          path: @path.security_rotas_path
-        },
-        {
-          description: "Security Rota Requests",
-          permitted: role.can?(:view, :security_rota),
-          path: @path.requests_security_rota_path(
-            UIRotaDate.format(RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date)
-          )
-        },
-        {
           description: "Change Orders",
           permitted: role.can?(:view, :change_orders_page),
           path: @path.change_orders_path
@@ -99,6 +82,30 @@ class PermissionsPageData
           permitted: role.can?(:view, :venue_dashboard),
           path: @path.venue_dashboard_path
         },
+      ]
+    }
+
+    security = {
+      name: "Security",
+      color: "#ff80e3",
+      items: [
+        {
+          description: "Security Shift Requests",
+          permitted: role.can?(:view, :security_shift_requests),
+          path: @path.security_shift_requests_path
+        },
+        {
+          description: "Security Rota",
+          permitted: role.can?(:view, :security_rota),
+          path: @path.security_rotas_path
+        },
+        {
+          description: "Security Rota Requests",
+          permitted: role.can?(:view, :security_rota),
+          path: @path.requests_security_rota_path(
+            UIRotaDate.format(RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date)
+          )
+        }
       ]
     }
 
@@ -333,6 +340,7 @@ class PermissionsPageData
     menu = []
 
     menu << venue if venue.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
+    menu << security if security.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << staff_members if staff_members.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << reports if reports.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
     menu << applications if applications.fetch(:items).any?{ |item_data| item_data.fetch(:permitted) }
