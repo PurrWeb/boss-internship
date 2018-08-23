@@ -2,7 +2,8 @@ class AnonymiseDatabase
   def call
     ActiveRecord::Base.transaction do
       processed_user_ids = []
-      
+      existing_names = []
+
       bounced_emails_list = [
         "bounced1@jsmbars.co.uk",
         "bounced2@jsmbars.co.uk",
@@ -31,12 +32,12 @@ class AnonymiseDatabase
           postcode: FactoryHelper::Address.postcode
         )
       end
-      
+
       puts "Anonymising Staff Members"
       StaffMember.find_each do |staff_member|
         male = Random.rand(2) == 1
 
-        update_name_and_email(male: male, record: staff_member)
+        update_name_and_email(male: male, record: staff_member, existing_names: existing_names)
 
         new_gender = male ? StaffMember::MALE_GENDER : StaffMember::FEMALE_GENDER
 
@@ -90,7 +91,7 @@ class AnonymiseDatabase
       User.find_each do |user|
         next if processed_user_ids.include?(user.id)
 
-        update_name_and_email(record: user)
+        update_name_and_email(record: user, existing_names: existing_names)
 
         new_password = Faker::Lorem.characters(10)
 
@@ -106,7 +107,7 @@ class AnonymiseDatabase
 
       puts "Anonymising Invites"
       Invite.find_each do |invite|
-        new_email = invite.user.present? ? invite.user.email : FactoryHelper::Internet.free_email
+        new_email = FactoryHelper::Internet.free_email(FactoryHelper::Internet.password)
 
         invite.update_attributes!(
           email: new_email,
@@ -342,15 +343,20 @@ class AnonymiseDatabase
     values.join('')
   end
 
-  def update_name_and_email(male: Random.rand(2) == 1, record:)
+  def update_name_and_email(male: Random.rand(2) == 1, existing_names:, record:)
     name = record.name
     email_address = record.email_address
 
-    new_first_name = male ?
-      FactoryHelper::Name.male_first_name :
-      FactoryHelper::Name.female_first_name
+      new_first_name = male ?
+        FactoryHelper::Name.male_first_name :
+        FactoryHelper::Name.female_first_name
 
-    new_surname = FactoryHelper::Name.last_name
+    unique_name_found = false
+    index = 1
+    while !unique_name_found do
+      new_surname = FactoryHelper::Name.last_name + "#{index > 1 ? index : ''}"
+      unique_name_found = existing_names.include?([new_first_name, new_surname].join(' '))
+    end
 
     name.update_attributes!(
       first_name: new_first_name,
@@ -362,5 +368,7 @@ class AnonymiseDatabase
     if email_address.present?
       email_address.update_attributes!(email: new_email)
     end
+
+    existing_names << [new_first_name, new_surname].join(' ')
   end
 end
