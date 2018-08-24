@@ -1,4 +1,5 @@
 import axios from 'axios';
+import oFetch from 'o-fetch'
 import globalNotification from '~/components/global-notification';
 import { apiRoutes } from '~/lib/routes';
 import utils from '~/lib/utils';
@@ -84,13 +85,17 @@ export const getAccessoriesRequest = (staffMemberId, mPayslipStartDate, mPayslip
   return http().get(apiGetUrl);
 };
 
-export const editAccessoryRequestRequest = (staffMemberId, accessoryRequestId, mPayslipDate) => {
+export const editAccessoryRequestRequest = (params) => {
+  const accessoryRequestId = oFetch(params, 'accessoryRequestId');
+  const mPayslipDate = oFetch(params, 'mPayslipDate');
   const sPayslipDate = mPayslipDate.format(utils.apiDateFormat);
-  return Promise.reject({
-    response: {
-      data: {
-        errors: { payslipDate: 'lalala' },
-      },
-    },
-  });
+
+  return http().post(
+    apiRoutes.staffMemberProfileUpdatePayslipDate.getPath({
+      accessoryRequestId: accessoryRequestId
+    }),
+    {
+      payslipDate: sPayslipDate
+    }
+  );
 };

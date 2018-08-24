@@ -217,6 +217,30 @@ module Api
         end
       end
 
+      def update_payslip_date
+        accessory_request = AccessoryRequest.find(params.fetch(:id))
+        authorize!(:update_payslip_date, :accessory_requests)
+
+        new_payslip_date = UIRotaDate.parse(params.fetch("payslipDate"))
+
+        result = UpdateAccessoryRequestPayslipDate.new(
+          accessory_request: accessory_request,
+          new_payslip_date: new_payslip_date,
+          requester: current_user
+        ).call
+
+       if result.success?
+          render(
+            json: {
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request)
+            },
+            status: 200
+          )
+        else
+          render json: { errors: result.api_errors.errors }, status: 422
+        end
+      end
+
       private
       def page_from_params
         params[:page].to_i || 1

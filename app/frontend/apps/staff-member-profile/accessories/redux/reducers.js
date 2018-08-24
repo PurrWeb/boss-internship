@@ -16,21 +16,21 @@ const initialState = fromJS({
 const accessoriesReducer = handleActions(
   {
     [constants.LOAD_INITIAL_STATE]: (state, action) => {
-      const [accessToken, accessories, accessoryRequests, payslipStartDate, payslipEndDate] = oFetch(
+      const [accessToken, accessories, accessoryRequests, sPayslipStartDate, sPayslipEndDate] = oFetch(
         action.payload,
         'accessToken',
         'accessories',
         'accessoryRequests',
-        'payslipStartDate',
-        'payslipEndDate',
+        'sPayslipStartDate',
+        'sPayslipEndDate',
       );
       window.boss.accessToken = accessToken;
 
       return state
         .setIn(['accessories'], fromJS(accessories))
         .setIn(['accessoryRequests'], fromJS(accessoryRequests))
-        .setIn(['mPayslipEndDate'], payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
-        .setIn(['mPayslipStartDate'], payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null);
+        .setIn(['mPayslipEndDate'], sPayslipEndDate ? safeMoment.uiDateParse(sPayslipEndDate) : null)
+        .setIn(['mPayslipStartDate'], sPayslipStartDate ? safeMoment.uiDateParse(sPayslipStartDate) : null);
     },
     [constants.ADD_ACCESSORY]: (state, action) => {
       const newAccessory = action.payload;
@@ -40,7 +40,7 @@ const accessoriesReducer = handleActions(
       });
     },
     [constants.UPDATE_ACCESSORY_REQUEST]: (state, action) => {
-      const request = action.payload;
+      const request = oFetch(action.payload, 'accessoryRequest');
       const index = state.get('accessoryRequests').findIndex(item => item.get('id') === request.id);
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
@@ -49,14 +49,14 @@ const accessoriesReducer = handleActions(
         action.payload,
         'accessories',
         'accessoryRequests',
-        'payslipStartDate',
-        'payslipEndDate',
+        'sPayslipStartDate',
+        'sPayslipEndDate',
       );
       return state
         .setIn(['accessories'], fromJS(accessories))
         .setIn(['accessoryRequests'], fromJS(accessoryRequests))
-        .setIn(['mPayslipEndDate'], payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
-        .setIn(['mPayslipStartDate'], payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null);
+        .setIn(['mPayslipEndDate'], sPayslipEndDate ? safeMoment.uiDateParse(sPayslipEndDate) : null)
+        .setIn(['mPayslipStartDate'], sPayslipStartDate ? safeMoment.uiDateParse(sPayslipStartDate) : null);
     },
   },
   initialState,

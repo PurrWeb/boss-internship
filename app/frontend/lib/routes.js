@@ -469,6 +469,14 @@ const apiRoutes = {
       },
       method: 'GET'
     },
+    staffMemberProfileUpdatePayslipDate: {
+      getPath(options) {
+        const accessoryRequestId = oFetch(options, 'accessoryRequestId');
+
+        return `/api/v1/accessory-requests/${accessoryRequestId}/update_payslip_date`;
+      },
+      method: "POST"
+    },
     staffMemberProfileOwedHoursIndex: {
       getPath: function(params){
         const staffMemberId = oFetch(params, 'staffMemberId')

@@ -54,7 +54,8 @@ export const editAccessoryRequestPayslipDate = params => (dispatch, getState) =>
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'payslipDate');
-  return editAccessoryRequestRequest(staffMemberId, accessoryRequestId, mPayslipDate).then(response => {
+  return editAccessoryRequestRequest({ accessoryRequestId, mPayslipDate }).
+  then(response => {
     dispatch(updateAccessoryRequestInStore(response.data));
-  });
+  })
 };

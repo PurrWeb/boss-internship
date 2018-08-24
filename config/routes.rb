@@ -309,6 +309,7 @@ Rails.application.routes.draw do
             post :reject_refund, path: 'reject-refund'
             post :undo_refund, path: 'undo-refund'
             post :complete_refund, path: 'complete-refund'
+            post :update_payslip_date
           end
         end
         resources :ops_diaries, only: [:index, :create, :update, :destroy], path: 'ops-diaries' do

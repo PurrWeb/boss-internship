@@ -20,11 +20,7 @@ class StaffMemberAccessoriesApp extends React.Component {
     this.store.dispatch(initialProfileLoad({ ...this.props }));
     this.store.dispatch(
       loadInitialState({
-        ...this.props,
-        /* HARDCODED */
-        accessoryRequests: this.props.accessoryRequests.map(ar => ({ ...ar, payslipDate: '09-04-2018' })),
-        payslipStartDate: '09-04-2018',
-        payslipEndDate: '19-04-2018',
+        ...this.props
       }),
     );
   }
