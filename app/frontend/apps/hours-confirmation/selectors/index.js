@@ -1,15 +1,6 @@
 import { createSelector } from 'reselect';
 import { List, Map, Set, fromJS } from 'immutable';
 import safeMoment from '~/lib/safe-moment';
-import uuid from 'uuid/v1';
-import oFetch from 'o-fetch';
-
-function keyIn(...keys) {
-  var keySet = Set(keys);
-  return function(v, k) {
-    return keySet.has(k);
-  };
-}
 
 export const periodPermissionSelector = (state, id) => {
   const permission = state
@@ -97,9 +88,7 @@ export const data = createSelector(
       .groupBy(x => x.get('date'))
       .map((periodsInDate, periodsDate) => {
         const mDate = safeMoment.uiDateParse(periodsDate);
-        const rota = rotas.find(rota =>
-          safeMoment.uiDateParse(rota.get('date')).isSame(mDate),
-        );
+        const rotasOnDate = rotas.filter(rota => safeMoment.uiDateParse(rota.get('date')).isSame(mDate));
         return periodsInDate
           .groupBy(x => x.get('venue'))
           .map((periodsInVenue, periodVenueId) => {
@@ -126,14 +115,18 @@ export const data = createSelector(
                   .set('clockInNotes', clockInNotes.filter(note => note.get('staffMember') === staffMemberId && note.get('date') === periodsDate))
                   .set('clockInEvents', events)
                   .update('rotaedShifts', () => {
-                    if (!rota) {
+                    if (rotasOnDate.size === 0) {
                       return List([]);
                     }
                     return rotaShifts
                       .filter(
-                        shift =>
-                          shift.get('staffMember') === staffMemberId &&
-                          shift.get('rota') === rota.get('id'),
+                        shift => {
+                          const rota = rotasOnDate.find(rota => shift.get('rota') === rota.get('id'));
+                          if (!rota) {
+                            throw new Error(`Rota for RotaShift ${shift.get('id')} not found`);
+                          }
+                          return shift.get('staffMember') === staffMemberId && rota;
+                        },
                       )
                       .map(item => item.set('breaks', []));
                   })
