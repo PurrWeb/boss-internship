@@ -9,7 +9,8 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :hasRefundRequest,
     :refundRequestStatus,
     :timeline,
-    :frozen
+    :frozen,
+    :payslipDate
 
   def updatedAt
     last_refund_state_change = if object.has_refund_request?
@@ -38,6 +39,10 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
 
   def timeline
     AccessoryRequestTimeline.new(accessory_request: object).serialize
+  end
+
+  def payslipDate
+    object.payslip_date.present? ? UIRotaDate.format(object.payslip_date) : nil
   end
 
   def hasRefundRequest
