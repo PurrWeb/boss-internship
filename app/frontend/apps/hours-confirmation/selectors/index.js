@@ -122,9 +122,6 @@ export const data = createSelector(
                       .filter(
                         shift => {
                           const rota = rotasOnDate.find(rota => shift.get('rota') === rota.get('id'));
-                          if (!rota) {
-                            throw new Error(`Rota for RotaShift ${shift.get('id')} not found`);
-                          }
                           return shift.get('staffMember') === staffMemberId && rota;
                         },
                       )
