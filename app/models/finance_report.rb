@@ -120,20 +120,20 @@ class FinanceReport < ActiveRecord::Base
 
   def mark_requiring_update!
     ActiveRecord::Base.transaction do
-      state_machine.transition_to!(FinanceReportStateMachine::REQUIRING_UPDATE_STATE)
+      state_machine.transition_to!(FinanceReportStateMachine::REQUIRING_UPDATE_STATE) unless in_requiring_update_state?
     end
   end
 
   def mark_ready!
     ActiveRecord::Base.transaction do
-      state_machine.transition_to!(FinanceReportStateMachine::READY_STATE)
+      state_machine.transition_to!(FinanceReportStateMachine::READY_STATE) unless ready?
     end
   end
 
   def mark_completed!
     raise 'Allow mark completed not set' unless allow_mark_completed
     ActiveRecord::Base.transaction do
-      state_machine.transition_to!(FinanceReportStateMachine::DONE_STATE)
+      state_machine.transition_to!(FinanceReportStateMachine::DONE_STATE) unless done?
     end
   end
 
