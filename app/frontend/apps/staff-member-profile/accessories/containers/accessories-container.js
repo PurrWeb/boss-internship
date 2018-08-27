@@ -11,6 +11,7 @@ import {
   refundAccessory,
   filter,
   editAccessoryRequestPayslipDate,
+  editAccessoryRefundRequestPayslipDate
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -32,6 +33,7 @@ const mapDispatchToProps = dispatch => {
         refundAccessory,
         filter,
         editAccessoryRequestPayslipDate,
+        editAccessoryRefundRequestPayslipDate
       },
       dispatch,
     ),

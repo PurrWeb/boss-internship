@@ -9,8 +9,10 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :hasRefundRequest,
     :refundRequestStatus,
     :timeline,
-    :frozen,
-    :payslipDate
+    :requestFrozen,
+    :refundFrozen,
+    :payslipDate,
+    :refundPayslipDate
 
   def updatedAt
     last_refund_state_change = if object.has_refund_request?
@@ -45,6 +47,12 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     object.payslip_date.present? ? UIRotaDate.format(object.payslip_date) : nil
   end
 
+  def refundPayslipDate
+    if object.accessory_refund_request.andand.payslip_date.present?
+      UIRotaDate.format(object.accessory_refund_request.andand.payslip_date)
+    end
+  end
+
   def hasRefundRequest
     object.has_refund_request?
   end
@@ -53,7 +61,11 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     object.accessory_refund_request.current_state if object.has_refund_request?
   end
 
-  def frozen
+  def requestFrozen
     object.frozen?
+  end
+
+  def refundFrozen
+    object.accessory_refund_request.andand.frozen?
   end
 end

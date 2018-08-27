@@ -312,7 +312,7 @@ class StaffMembersController < ApplicationController
     payslip_start_date = accessory_request_filter_start_date_from_params
     payslip_end_date = accessory_request_filter_end_date_from_params
 
-    accessory_requests = staff_member.accessory_requests.includes([:finance_report, :created_by_user, :accessory, accessory_refund_request: [:staff_member, :created_by_user]])
+    accessory_requests = staff_member.accessory_requests.includes([:finance_report, :created_by_user, :accessory, accessory_refund_request: [:staff_member, :created_by_user, :finance_report]])
 
     app_download_link_data = get_app_download_link_data(staff_member)
 

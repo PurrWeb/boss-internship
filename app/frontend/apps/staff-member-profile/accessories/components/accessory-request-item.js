@@ -97,6 +97,11 @@ class AccessoryRequestItem extends React.Component {
     return onEditPayslipDate(accessoryRequest);
   };
 
+  handleEditRefundPayslipDate = () => {
+    const [onEditRefundPayslipDate, accessoryRequest] = oFetch(this.props, 'onEditRefundPayslipDate', 'accessoryRequest');
+    return onEditRefundPayslipDate(accessoryRequest);
+  }
+
   render() {
     const accessoryRequest = oFetch(this.props, 'accessoryRequest');
     const requestDate = safeMoment
@@ -110,8 +115,13 @@ class AccessoryRequestItem extends React.Component {
     const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
     const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
     const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
+    const requestFrozen = oFetch(accessoryRequest, 'requestFrozen');
     const sPayslipDate = oFetch(accessoryRequest, 'payslipDate');
     const sPayslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : null;
+    const refundFrozen = oFetch(accessoryRequest, 'refundFrozen');
+    const sRefundPayslipDate = oFetch(accessoryRequest, 'refundPayslipDate');
+    const sRefundPayslipDateText = sRefundPayslipDate ? safeMoment.uiDateParse(sRefundPayslipDate).format(utils.commonDateFormat) : null;
+
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
@@ -139,9 +149,25 @@ class AccessoryRequestItem extends React.Component {
                       Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDateText}</span>
                     </p>
                   </div>
-                  <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
+                  { !requestFrozen && <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
                     <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
+                  </div> }
+                </div>
+              </div>
+            </div>
+          )}
+          {sRefundPayslipDateText && (
+            <div className="boss-requests__details">
+              <div className="boss-requests__details-content">
+                <div className="boss-requests__details-line">
+                  <div className="boss-requests__details-value">
+                    <p className="boss-request__details-text">
+                      Refund Payslip Date: <span className="boss-requests__details-text-marked">{sRefundPayslipDateText}</span>
+                    </p>
                   </div>
+                  { !refundFrozen && <div className="boss-requests__actions" onClick={this.handleEditRefundPayslipDate}>
+                    <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
+                  </div> }
                 </div>
               </div>
             </div>

@@ -477,6 +477,22 @@ const apiRoutes = {
       },
       method: "POST"
     },
+    accessoryRequestUpdatePayslipDate: {
+      getPath(options) {
+        const accessoryRequestId = oFetch(options, 'accessoryRequestId');
+
+        return `/api/v1/accessory-requests/${accessoryRequestId}/update_payslip_date`;
+      },
+      method: "POST"
+    },
+    accessoryRequestRefundUpdatePayslipDate: {
+      getPath(options) {
+        const accessoryRequestId = oFetch(options, 'accessoryRequestId');
+
+        return `/api/v1/accessory-requests/${accessoryRequestId}/update_refund_payslip_date`;
+      },
+      method: "POST"
+    },
     staffMemberProfileOwedHoursIndex: {
       getPath: function(params){
         const staffMemberId = oFetch(params, 'staffMemberId')

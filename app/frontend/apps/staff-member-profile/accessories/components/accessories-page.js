@@ -10,6 +10,7 @@ import AccessoryRequestsList from './accessory-requests-list';
 import AccessoryRequestItem from './accessory-request-item';
 import AccessoriesFilter from './accessories-filter';
 import EditAccessoryRequest from './edit-accessory-request';
+import EditAccessoryRefundRequest from './edit-accessory-refund-request';
 
 import { appRoutes } from '~/lib/routes';
 
@@ -61,7 +62,15 @@ class AccessoriesPage extends React.Component {
   };
 
   handleEditPayslipDateSubmit = (hideModal, values) => {
-    return this.props.actions.editAccessoryRequestPayslipDate(values).then(response => {
+    const action = oFetch(this.props.actions, 'editAccessoryRequestPayslipDate');
+    return action(values).then(response => {
+      hideModal();
+    });
+  };
+
+  handleEditRefundPayslipDateSubmit = (hideModal, values) => {
+    const action = oFetch(this.props.actions, 'editAccessoryRefundRequestPayslipDate');
+    return action(values).then(response => {
       hideModal();
     });
   };
@@ -84,6 +93,16 @@ class AccessoriesPage extends React.Component {
       },
       config: { title: 'Edit Payslip Date' },
     })(EditAccessoryRequest);
+  };
+
+  openEditRefundPayslipDateModal = accessoryRequest => {
+    openContentModal({
+      submit: this.handleEditRefundPayslipDateSubmit,
+      props: {
+        accessoryRequest,
+      },
+      config: { title: 'Edit Refund Payslip Date' },
+    })(EditAccessoryRefundRequest);
   };
 
   handleFilter = ({ mPayslipStartDate, mPayslipEndDate }) => {
@@ -117,6 +136,7 @@ class AccessoriesPage extends React.Component {
                 onAccessoryRefund={this.handleRefundRequest}
                 accessoryRequest={accessoryRequest}
                 onEditPayslipDate={this.openEditPayslipDateModal}
+                onEditRefundPayslipDate={this.openEditRefundPayslipDateModal}
               />
             )}
           />

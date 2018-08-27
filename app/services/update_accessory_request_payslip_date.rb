@@ -17,7 +17,8 @@ class UpdateAccessoryRequestPayslipDate
     ability.authorize!(:update_payslip_date, :accessory_requests)
 
     staff_member = accessory_request.staff_member
-    ActiveRecord::Base.trasaction do
+    result = false
+    ActiveRecord::Base.transaction do
       old_payslip_date = accessory_request.payslip_date
       result = accessory_request.update_attributes(payslip_date: new_payslip_date)
 

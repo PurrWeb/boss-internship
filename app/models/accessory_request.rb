@@ -25,10 +25,6 @@ class AccessoryRequest < ActiveRecord::Base
     end
   end
 
-  def in_completed_state_prerequisite(accessory_request)
-    accessory_request.completed?
-  end
-
   def state_machine
     @state_machine ||= AccessoryRequestStateMachine.new(
       self,

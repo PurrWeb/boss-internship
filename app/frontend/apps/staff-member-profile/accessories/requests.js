@@ -89,9 +89,26 @@ export const editAccessoryRequestRequest = (params) => {
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'mPayslipDate');
   const sPayslipDate = mPayslipDate.format(utils.apiDateFormat);
+  const route = oFetch(apiRoutes, 'accessoryRequestUpdatePayslipDate');
 
   return http().post(
-    apiRoutes.staffMemberProfileUpdatePayslipDate.getPath({
+    route.getPath({
+      accessoryRequestId: accessoryRequestId
+    }),
+    {
+      payslipDate: sPayslipDate
+    }
+  );
+};
+
+export const editAccessoryRefundRequestRequest = (params) => {
+  const accessoryRequestId = oFetch(params, 'accessoryRequestId');
+  const mPayslipDate = oFetch(params, 'mPayslipDate');
+  const sPayslipDate = mPayslipDate.format(utils.apiDateFormat);
+  const route = oFetch(apiRoutes, 'accessoryRequestRefundUpdatePayslipDate');
+
+  return http().post(
+    route.getPath({
       accessoryRequestId: accessoryRequestId
     }),
     {

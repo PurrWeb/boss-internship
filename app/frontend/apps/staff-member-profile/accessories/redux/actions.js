@@ -9,6 +9,7 @@ import {
   refundAccessoryRequest,
   getAccessoriesRequest,
   editAccessoryRequestRequest,
+  editAccessoryRefundRequestRequest
 } from '../requests';
 export const loadInitialState = createAction(constants.LOAD_INITIAL_STATE);
 export const addAccessory = createAction(constants.ADD_ACCESSORY);
@@ -58,4 +59,13 @@ export const editAccessoryRequestPayslipDate = params => (dispatch, getState) =>
   then(response => {
     dispatch(updateAccessoryRequestInStore(response.data));
   })
+};
+
+export const editAccessoryRefundRequestPayslipDate = params => (dispatch, getState) => {
+  const accessoryRequestId = oFetch(params, 'accessoryRequestId');
+  const mPayslipDate = oFetch(params, 'payslipDate');
+  return editAccessoryRefundRequestRequest({ accessoryRequestId, mPayslipDate }).
+    then(response => {
+      dispatch(updateAccessoryRequestInStore(response.data));
+    })
 };
