@@ -45,7 +45,7 @@ const accessoriesReducer = handleActions(
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
     [constants.LOAD_ACCESSORY_REQUESTS]: (state, action) => {
-      const [accessories, accessoryRequests, payslipStartDate, payslipEndDate] = oFetch(
+      const [accessories, accessoryRequests, sPayslipStartDate, sPayslipEndDate] = oFetch(
         action.payload,
         'accessories',
         'accessoryRequests',
