@@ -107,7 +107,6 @@ class AccessoryRequestItem extends React.Component {
     const size = oFetch(accessoryRequest, 'size');
     const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
     const refundRequestStatus = oFetch(accessoryRequest, 'refundRequestStatus');
-    const requestFrozen = oFetch(accessoryRequest, 'frozen');
     const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
     const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
     const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
@@ -127,7 +126,7 @@ class AccessoryRequestItem extends React.Component {
               <span className="boss-requests__title-name">{accessoryName}</span>
               <span className="boss-requests__title-size">{size ? `(${size})` : '(N/A)'}</span>
             </h3>
-            {!requestFrozen && this.renderRequestActions(accessoryRequest)}
+            { this.renderRequestActions(accessoryRequest)}
           </div>
           <div className="boss-requests__details">
             <p
