@@ -509,6 +509,10 @@ Rails.application.routes.draw do
     get "privacy-policy", to: "pages#security_app_privacy_policy"
   end
 
+  wtl_routes = proc do
+    get 'verify', to: 'wtl/verify'
+  end
+
   clock_routes = proc do
     get "/", to: "clock/clock_in_clock_out#index"
 
@@ -548,10 +552,12 @@ Rails.application.routes.draw do
     constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
     constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
     constraints subdomain: /^([a-z0-9]+-+)?nsecurity-app/, &security_app_routes
+    constraints subdomain: /^([a-z0-9]+-+)?wtl/, &wtl
   else
     scope "", &boss_routes
     scope "/clock", &clock_routes
     scope "/nsecurity_app", &security_app_routes
+    scope '/wtl', &wtl_routes
   end
 
   root "welcome#index"
