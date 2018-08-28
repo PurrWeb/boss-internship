@@ -434,7 +434,7 @@ Rails.application.routes.draw do
             end
           end
           resources :payments, only: [:index]
-          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests' do
+          resources :staff_member_accessory_requests, only: [:create, :index], path: 'accessory-requests' do
             member do
               post :refund_request, path: 'refund'
               post :cancel_request, path: 'cancel'

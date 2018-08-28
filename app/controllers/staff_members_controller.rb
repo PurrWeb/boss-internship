@@ -307,12 +307,26 @@ class StaffMembersController < ApplicationController
       pay_rate: staff_member.pay_rate
     ).page_pay_rates.map(&:id)
 
-    venue_accessories = staff_member.master_venue.accessories.enabled
+    venue_accessories = staff_member.master_venue.accessories
 
     payslip_start_date = accessory_request_filter_start_date_from_params
     payslip_end_date = accessory_request_filter_end_date_from_params
 
-    accessory_requests = staff_member.accessory_requests.includes([:finance_report, :created_by_user, :accessory, accessory_refund_request: [:staff_member, :created_by_user, :finance_report]])
+    accessory_requests = StaffMemberProfileAccessoryRequestQuery.new(
+      staff_member: staff_member,
+      filter_params: {
+        payslip_start_date: payslip_start_date,
+        payslip_end_date:  payslip_end_date
+      }
+    ).all.
+    includes([
+      :finance_report,
+      :created_by_user,
+      :accessory,
+      accessory_refund_request: [
+        :staff_member, :created_by_user, :finance_report
+      ]
+    ])
 
     app_download_link_data = get_app_download_link_data(staff_member)
 
