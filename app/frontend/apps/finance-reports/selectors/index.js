@@ -93,8 +93,9 @@ export const getStaffTypesWithFinanceReports = createSelector(
       readyReportsJS.forEach((report) => {
         const completionDateReached = oFetch(report, 'completionDateReached');
         const hoursPending = oFetch(report, 'hoursPending');
+        const total = oFetch(report, 'total');
 
-        if (hoursPending || !completionDateReached){
+        if (hoursPending || !completionDateReached || (total < 0)){
           incompletableReadyReports.push(report)
         } else {
           completableReadyReports.push(report)
