@@ -482,6 +482,10 @@ class UserAbility
         can_view_shift_request_reviews_page?(user)
       end
 
+      can [:update_payslip_date, :update_refund_payslip_date], :accessory_requests do
+        user.payroll_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can [:create], SecurityShiftRequest do |security_shift_request|
         can_view_shift_requests_page?(user)
       end

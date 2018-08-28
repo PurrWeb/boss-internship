@@ -118,19 +118,19 @@ class UpdateFinanceReportData
 
     accessories_requests = InRangeQuery.new(
       relation: AccessoryRequest.in_state(:completed).where(staff_member: staff_member),
-      start_value: RotaShiftDate.new(finance_report_week.start_date).start_time,
-      end_value: RotaShiftDate.new(finance_report_week.end_date).end_time,
-      start_column_name: 'completed_at',
-      end_column_name: 'completed_at',
+      start_value: finance_report_week.start_date,
+      end_value: finance_report_week.end_date,
+      start_column_name: 'payslip_date',
+      end_column_name: 'payslip_date',
     ).all
     accessories_requests_cents = accessories_requests.sum(:price_cents)
 
     accessories_refunds = InRangeQuery.new(
       relation: AccessoryRefundRequest.in_state(:completed).where(staff_member: staff_member),
-      start_value: RotaShiftDate.new(finance_report_week.start_date).start_time,
-      end_value: RotaShiftDate.new(finance_report_week.end_date).end_time,
-      start_column_name: 'completed_at',
-      end_column_name: 'completed_at',
+      start_value: finance_report_week.start_date,
+      end_value: finance_report_week.end_date,
+      start_column_name: 'payslip_date',
+      end_column_name: 'payslip_date',
     ).all
     accessories_refunds_cents = accessories_refunds.sum(:price_cents)
 

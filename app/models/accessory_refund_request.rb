@@ -13,6 +13,13 @@ class AccessoryRefundRequest < ActiveRecord::Base
   validates :accessory_request, uniqueness: { scope: :staff_member, message: "can have only one refund request" }
   validates :completed_at, presence: true, if: :completed?
   validates :completed_at, absence: true, unless: :completed?
+  validates :payslip_date, presence: true, if: :completed?
+  validates :payslip_date, absence: true, unless: :completed?
+  validate do |accessory_refund_request|
+    if completed?
+      PayslipDateValidator.new(item: accessory_refund_request).validate
+    end
+  end
 
   def state_machine
     @state_machine ||= AccessoryRefundRequestStateMachine.new(

@@ -8,16 +8,19 @@ import AccessoriesContent from './accessories-content';
 import NewAccessoryRequest from './new-accessory-request';
 import AccessoryRequestsList from './accessory-requests-list';
 import AccessoryRequestItem from './accessory-request-item';
+import AccessoriesFilter from './accessories-filter';
+import EditAccessoryRequest from './edit-accessory-request';
+import EditAccessoryRefundRequest from './edit-accessory-refund-request';
+
+import { appRoutes } from '~/lib/routes';
 
 class AccessoriesPage extends React.Component {
   handleNewRequestSubmit = (closeModal, values) => {
     const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
-    return this.props.actions
-      .newAccessory({ staffMemberId, values })
-      .then(resp => {
-        closeModal();
-        return resp;
-      });
+    return this.props.actions.newAccessory({ staffMemberId, values }).then(resp => {
+      closeModal();
+      return resp;
+    });
   };
 
   handleCancelRequestSubmit = (hideModal, values) => {
@@ -58,6 +61,20 @@ class AccessoriesPage extends React.Component {
     });
   };
 
+  handleEditPayslipDateSubmit = (hideModal, values) => {
+    const action = oFetch(this.props.actions, 'editAccessoryRequestPayslipDate');
+    return action(values).then(response => {
+      hideModal();
+    });
+  };
+
+  handleEditRefundPayslipDateSubmit = (hideModal, values) => {
+    const action = oFetch(this.props.actions, 'editAccessoryRefundRequestPayslipDate');
+    return action(values).then(response => {
+      hideModal();
+    });
+  };
+
   openNewRequestModal = () => {
     openContentModal({
       submit: this.handleNewRequestSubmit,
@@ -68,14 +85,49 @@ class AccessoriesPage extends React.Component {
     })(NewAccessoryRequest);
   };
 
+  openEditPayslipDateModal = accessoryRequest => {
+    openContentModal({
+      submit: this.handleEditPayslipDateSubmit,
+      props: {
+        accessoryRequest,
+      },
+      config: { title: 'Edit Payslip Date' },
+    })(EditAccessoryRequest);
+  };
+
+  openEditRefundPayslipDateModal = accessoryRequest => {
+    openContentModal({
+      submit: this.handleEditRefundPayslipDateSubmit,
+      props: {
+        accessoryRequest,
+      },
+      config: { title: 'Edit Refund Payslip Date' },
+    })(EditAccessoryRefundRequest);
+  };
+
+  handleFilter = ({ mPayslipStartDate, mPayslipEndDate }) => {
+    const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
+
+    const webGetUrl = appRoutes.staffMemberAccessories({
+      staffMemberId,
+      mPayslipStartDate,
+      mPayslipEndDate,
+    });
+    window.history.pushState('state', 'title', `${webGetUrl}`);
+    return this.props.actions.filter({ mPayslipStartDate, mPayslipEndDate, staffMemberId });
+  };
+
   render() {
+    const [mPayslipStartDate, mPayslipEndDate] = oFetch(this.props, 'mPayslipStartDate', 'mPayslipEndDate');
     return (
       <section className="boss-board">
-        <AccessoriesHeader
-          title="Accessories"
-          onRequest={this.openNewRequestModal}
-        />
+        <AccessoriesHeader title="Accessories" onRequest={this.openNewRequestModal} />
         <AccessoriesContent>
+          <AccessoriesFilter
+            mPayslipStartDate={mPayslipStartDate}
+            mPayslipEndDate={mPayslipEndDate}
+            onFilter={this.handleFilter}
+          />
           <AccessoryRequestsList
             accessoryRequests={this.props.accessoryRequests.toJS()}
             accessoryRequestRendered={accessoryRequest => (
@@ -83,6 +135,8 @@ class AccessoriesPage extends React.Component {
                 onAccessoryCancel={this.handleCancelRequest}
                 onAccessoryRefund={this.handleRefundRequest}
                 accessoryRequest={accessoryRequest}
+                onEditPayslipDate={this.openEditPayslipDateModal}
+                onEditRefundPayslipDate={this.openEditRefundPayslipDateModal}
               />
             )}
           />

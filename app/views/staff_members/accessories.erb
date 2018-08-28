@@ -23,5 +23,7 @@
     app_download_link_data,
     Api::V1::StaffMemberProfile::AppDownloadLinkSerializer
   ),
-  permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions)
+  permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(staff_member_profile_permissions),
+  sPayslipStartDate: UIRotaDate.format(payslip_start_date),
+  sPayslipEndDate: UIRotaDate.format(payslip_end_date)
 }) %>

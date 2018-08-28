@@ -210,7 +210,7 @@ class ReportItem extends Component {
             <p className={this.getTextClassName({ alertStyles: false })}>{utils.moneyFormat(acessories)}</p>
           ) : (
             <a
-              href={appRoutes.staffMemberAccessories(staffMemberId)}
+              href={appRoutes.staffMemberAccessories({ staffMemberId })}
               className={this.getTextClassName({ alertStyles: false })}
               style={{ color: acessoriesColor }}
             >

@@ -297,14 +297,36 @@ class StaffMembersController < ApplicationController
 
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
+    if !accessories_tab_params_present?
+      return redirect_to(accessories_staff_member_path(accessories_tab_params(staff_member)))
+    end
+
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
       user: current_user,
       pay_rate: staff_member.pay_rate
     ).page_pay_rates.map(&:id)
 
-    venue_accessories = staff_member.master_venue.accessories.enabled
-    accessory_requests = staff_member.accessory_requests.includes([:finance_report, :created_by_user, :accessory, accessory_refund_request: [:staff_member]])
+    venue_accessories = staff_member.master_venue.accessories
+
+    payslip_start_date = accessory_request_filter_start_date_from_params
+    payslip_end_date = accessory_request_filter_end_date_from_params
+
+    accessory_requests = StaffMemberProfileAccessoryRequestQuery.new(
+      staff_member: staff_member,
+      filter_params: {
+        payslip_start_date: payslip_start_date,
+        payslip_end_date:  payslip_end_date
+      }
+    ).all.
+    includes([
+      :finance_report,
+      :created_by_user,
+      :accessory,
+      accessory_refund_request: [
+        :staff_member, :created_by_user, :finance_report
+      ]
+    ])
 
     app_download_link_data = get_app_download_link_data(staff_member)
 
@@ -334,7 +356,9 @@ class StaffMembersController < ApplicationController
       staff_member_profile_permissions: StaffMemberProfilePermissions.new(
         staff_member: staff_member,
         current_user: current_user
-      )
+      ),
+      payslip_start_date: payslip_start_date,
+      payslip_end_date: payslip_end_date
     }
   end
 
@@ -362,6 +386,38 @@ class StaffMembersController < ApplicationController
   end
 
   private
+  def accessories_tab_params_present?
+    accessory_request_filter_start_date_from_params.present? &&
+       accessory_request_filter_end_date_from_params.present?
+  end
+
+  def accessories_tab_params(staff_member)
+    payslip_date_start = accessory_request_filter_start_date_from_params || default_accessory_request_filter_start_date
+    payslip_date_end = accessory_request_filter_end_date_from_params || default_accessory_request_filter_end_date
+
+    {
+      staff_member_id: staff_member.id,
+      payslip_date_start: UIRotaDate.format(payslip_date_start),
+      payslip_date_end: UIRotaDate.format(payslip_date_end)
+    }
+  end
+
+  def accessory_request_filter_start_date_from_params
+    UIRotaDate.parse_if_present(params[:payslip_date_start])
+  end
+
+  def accessory_request_filter_end_date_from_params
+    UIRotaDate.parse_if_present(params[:payslip_date_end])
+  end
+
+  def default_accessory_request_filter_start_date
+    Date.new(2016, 1, 1)
+  end
+
+  def default_accessory_request_filter_end_date
+    RotaShiftDate.to_rota_date(Time.current)
+  end
+
   def holiday_tab_params_present?
     holiday_tab_filtering_by_date? || holiday_tab_filtering_by_payslip_date?
   end

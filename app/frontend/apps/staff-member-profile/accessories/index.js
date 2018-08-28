@@ -11,18 +11,26 @@ import profileReducer from '../profile-wrapper/reducers';
 
 class StaffMemberAccessoriesApp extends React.Component {
   componentWillMount() {
-    this.store = configureStore(combineReducers({
-      accessoriesPage: accessoriesReducer,
-      profile: profileReducer,
-    }));
-    this.store.dispatch(initialProfileLoad({...this.props}));
-    this.store.dispatch(loadInitialState({...this.props}));
+    this.store = configureStore(
+      combineReducers({
+        accessoriesPage: accessoriesReducer,
+        profile: profileReducer,
+      }),
+    );
+    this.store.dispatch(initialProfileLoad({ ...this.props }));
+    this.store.dispatch(
+      loadInitialState({
+        ...this.props
+      }),
+    );
   }
 
   render() {
-    return <Provider store={this.store}>
-      <AccessoriesContainer />
-    </Provider>
+    return (
+      <Provider store={this.store}>
+        <AccessoriesContainer />
+      </Provider>
+    );
   }
 }
 

@@ -309,6 +309,8 @@ Rails.application.routes.draw do
             post :reject_refund, path: 'reject-refund'
             post :undo_refund, path: 'undo-refund'
             post :complete_refund, path: 'complete-refund'
+            post :update_payslip_date
+            post :update_refund_payslip_date
           end
         end
         resources :ops_diaries, only: [:index, :create, :update, :destroy], path: 'ops-diaries' do
@@ -432,7 +434,7 @@ Rails.application.routes.draw do
             end
           end
           resources :payments, only: [:index]
-          resources :staff_member_accessory_requests, only: [:create], path: 'accessory-requests' do
+          resources :staff_member_accessory_requests, only: [:create, :index], path: 'accessory-requests' do
             member do
               post :refund_request, path: 'refund'
               post :cancel_request, path: 'cancel'

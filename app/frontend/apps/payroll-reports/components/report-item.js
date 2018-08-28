@@ -132,7 +132,7 @@ class ReportItem extends Component {
             <p className="boss-table__text">{utils.moneyFormat(acessories)}</p>
           ) : (
             <a
-              href={appRoutes.staffMemberAccessories(staffMemberId)}
+              href={appRoutes.staffMemberAccessories({ staffMemberId })}
               className="boss-table__text"
               style={{ color: acessoriesColor }}
             >
