@@ -1,0 +1,2 @@
+export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
+export const CHANGE_FILTER = 'CHANGE_FILTER';
