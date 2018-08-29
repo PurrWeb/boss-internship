@@ -510,7 +510,8 @@ Rails.application.routes.draw do
   end
 
   wtl_routes = proc do
-    get 'verify', to: 'wtl/verify'
+    get 'verify', to: 'wtl/verify#verify', as: 'wtl_verify'
+    get 'something-went-wrong', to: 'wtl/verify#something_went_wrong', as: 'wtl_something_went_wrong'
   end
 
   clock_routes = proc do
