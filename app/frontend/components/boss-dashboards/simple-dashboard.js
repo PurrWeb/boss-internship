@@ -54,6 +54,7 @@ SimpleDashboard.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
+    PropTypes.element,
   ]).isRequired,
   className: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.element]),
