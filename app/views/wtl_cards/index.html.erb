@@ -1,0 +1,11 @@
+<%= react_component('WelcomeToLiverpoolCards', {
+  accessToken: access_token,
+  cards: ActiveModel::Serializer::CollectionSerializer.new(
+    wtl_cards,
+    serializer: Api::V1::WtlCards::WtlCardSerializer,
+  ),
+  clients: ActiveModel::Serializer::CollectionSerializer.new(
+    wtl_clients,
+    serializer: Api::V1::WtlCards::WtlClientSerializer,
+  )
+}) %>
