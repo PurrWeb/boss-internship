@@ -6,6 +6,7 @@ const BossFormInput = ({
   label,
   required,
   type,
+  className,
   isCurrency = false,
   disabled = false,
   meta: { touched, error, warning },
@@ -46,7 +47,7 @@ const BossFormInput = ({
   };
 
   return (
-    <div className="boss-form__field">
+    <div className={`boss-form__field ${className && className}`}>
       {label && (
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${
