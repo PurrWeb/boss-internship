@@ -23,9 +23,6 @@ class CardItem extends React.Component {
             </div>
           </div>
           <div className="boss-check__header-actions">
-            <button className="boss-button boss-button_type_small boss-button_role_view-history-light boss-check__header-action">
-              History
-            </button>
             {disabled ? (
               <AsyncButton
                 className="boss-button boss-button_type_small boss-button_role_enable-light boss-check__header-action"

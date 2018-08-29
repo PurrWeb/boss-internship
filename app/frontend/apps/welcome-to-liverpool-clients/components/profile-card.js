@@ -88,7 +88,6 @@ class ProfileCard extends React.PureComponent {
           </div>
         </div>
         <div className="boss-check__row boss-check__row_role_buttons">
-          <button className="boss-button boss-button_type_small boss-button_role_edit boss-check__button">Edit</button>
           {disabled ? (
             <button className="boss-button boss-button_type_small boss-button_role_enable boss-check__button">
               Enable

@@ -3,11 +3,11 @@ import http from '~/lib/request-api';
 
 export const disableCardRequest = params => {
   const number = oFetch(params, 'number');
-  return http().post(`/api/wtl/v1/cards/${number}/disable`);
+  return http().post(`/api/v1/wtl_cards/${number}/disable`);
 };
 
 export const enableCardRequest = params => {
   const number = oFetch(params, 'number');
 
-  return http().post(`/api/wtl/v1/cards/${number}/enable`);
+  return http().post(`/api/v1/wtl_cards/${number}/enable`);
 };
