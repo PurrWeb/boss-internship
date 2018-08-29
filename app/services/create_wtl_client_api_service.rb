@@ -1,0 +1,41 @@
+class CreateWtlClientApiService
+  Result = Struct.new(:wtl_client, :success, :api_errors) do
+    def success?
+      success
+    end
+  end
+
+  def initialize(params:)
+    @params = params
+  end
+
+  def call
+    wtl_card = WtlCard.enabled.find_by(number: params.fetch(:card_number))
+
+    wtl_client_params = {
+      first_name: params.fetch(:first_name),
+      surname: params.fetch(:surname),
+      gender: params.fetch(:gender),
+      email: params.fetch(:email),
+      date_of_birth: params.fetch(:date_of_birth),
+      university: params.fetch(:university),
+      wtl_card: wtl_card,
+    }
+
+    wtl_client_result = CreateWtlClient.new(
+      params: wtl_client_params,
+    ).call
+
+    api_errors = nil
+
+    unless wtl_client_result.success?
+      api_errors = WtlClientApiErrors.new(wtl_client: wtl_client_result.wtl_client)
+    end
+
+    Result.new(wtl_client_result.wtl_client, wtl_client_result.success?, api_errors)
+  end
+
+  private
+
+  attr_reader :params
+end
