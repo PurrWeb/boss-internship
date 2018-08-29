@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class WtlClient < ActiveRecord::Base
   has_paper_trail
 
@@ -13,6 +14,7 @@ class WtlClient < ActiveRecord::Base
   # Validations
   validates :first_name, presence: true
   validates :surname, presence: true
+  validates :verification_token, presence: true
   validates_inclusion_of :gender, :in => WtlClient::GENDERS, :message => "a valid gender should be present"
   validates_inclusion_of :university, :in => WtlClient::UNIVERSITIES, :message => "a valid university should be present"
   validates :date_of_birth, presence: true
@@ -41,5 +43,13 @@ class WtlClient < ActiveRecord::Base
       :email,
       EmailAddress.invalid_email_address_message
     ) unless email =~ EmailAddress.email_address_regex
+  end
+
+  def verify!(now: Time.current)
+    update_attributes!(verified_at: now)
+  end
+
+  def verified?
+    verified_at.present?
   end
 end
