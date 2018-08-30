@@ -1390,6 +1390,18 @@ ActiveRecord::Schema.define(version: 20180830152720) do
 
   add_index "wtl_cards", ["number"], name: "index_wtl_cards_on_number", using: :btree
 
+  create_table "wtl_cards_histories", force: :cascade do |t|
+    t.integer  "wtl_card_id",   limit: 4, null: false
+    t.integer  "wtl_client_id", limit: 4
+    t.integer  "user_id",       limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "wtl_cards_histories", ["user_id"], name: "index_wtl_cards_histories_on_user_id", using: :btree
+  add_index "wtl_cards_histories", ["wtl_card_id"], name: "index_wtl_cards_histories_on_wtl_card_id", using: :btree
+  add_index "wtl_cards_histories", ["wtl_client_id"], name: "index_wtl_cards_histories_on_wtl_client_id", using: :btree
+
   create_table "wtl_clients", force: :cascade do |t|
     t.string   "first_name",    limit: 255,             null: false
     t.string   "surname",       limit: 255,             null: false
