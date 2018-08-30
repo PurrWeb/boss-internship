@@ -291,7 +291,11 @@ export const appRoutes = {
         let weekStartDateM = oFetch(options, 'weekStartDateM');
       return "/weekly_reports?venue_id=" + venueId +
         "&week_start=" + utils.formatRotaUrlDate(weekStartDateM);
-    }
+    },
+    wtlCardsPage: function(options) {
+        const { cardNumber } = options;
+        return `/wtl_cards${cardNumber ? `?cardNumber=${cardNumber}` : ''}`;
+    },
 }
 
 const apiRoutes = {
