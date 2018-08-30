@@ -1,5 +1,6 @@
 module Wtl
   class VerifyController < ApplicationController
+    before_action :set_new_layout
     skip_before_filter :authenticate_user!
 
     def verify
