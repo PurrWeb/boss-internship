@@ -16,7 +16,7 @@ class WtlClient < ActiveRecord::Base
   validates_inclusion_of :gender, :in => WtlClient::GENDERS, :message => "a valid gender should be present"
   validates_inclusion_of :university, :in => WtlClient::UNIVERSITIES, :message => "a valid university should be present"
   validates :date_of_birth, presence: true
-  validates :email, presence: true
+  validates :email, uniqueness: true, presence: true
   validates :wtl_card, uniqueness: true, presence: true
 
   validate :email_address_valid
