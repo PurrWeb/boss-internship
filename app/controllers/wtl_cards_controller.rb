@@ -3,7 +3,7 @@ class WtlCardsController < ApplicationController
 
   def index
     wtl_cards = WtlCard.all
-    wtl_clients = WtlClient.where(wtl_card: wtl_cards)
+    wtl_clients = WtlClient.includes([:wtl_card]).where(wtl_card: wtl_cards)
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
     render locals: {
