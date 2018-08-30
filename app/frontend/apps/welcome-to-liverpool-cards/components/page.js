@@ -9,21 +9,26 @@ import { PureToJSCardItem } from './card-item';
 import DashboardDropdownFilter from './dashboard-dropdown-filter';
 import DashboardActiveFilter from './dashboard-active-filter';
 import LoadMore from '~/components/load-more/load-more-children';
+import { appRoutes } from '~/lib/routes';
 
 class Page extends React.Component {
   componentDidMount() {
     const filter = queryString.parse(window.location.search);
     oFetch(this.props, 'changeCardNumberFilter')({
-      filter: filter.cardNumber ? filter.cardNumber : null,
+      filter: filter.card_number ? filter.card_number : null,
     });
   }
 
   handleDropdownFilterUpdate = filter => {
     oFetch(this.props, 'changeCardNumberFilter')({ filter });
     const filterQuery = queryString.stringify({
-      cardNumber: filter,
+      card_number: filter,
     });
-    window.history.pushState('state', 'title', filter ? `/wtl_cards?${filterQuery}` : '/wtl_cards');
+    window.history.pushState(
+      'state',
+      'title',
+      filter ? `${appRoutes.wtlCardsPage()}?${filterQuery}` : `${appRoutes.wtlCardsPage()}`,
+    );
   };
 
   handleActiveFilterChange = filter => {

@@ -12,7 +12,7 @@ class DashboardDropdownFilter extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.state.filter !== nextProps.cardNumberFilter) {
-      this.setState({ filter: nextProps.cardNumberFilter });
+      this.setState({ filter: nextProps.cardNumberFilter || '' });
     }
   }
 

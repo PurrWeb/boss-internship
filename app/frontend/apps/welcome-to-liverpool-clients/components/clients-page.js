@@ -18,7 +18,7 @@ class ClientsPage extends React.Component {
       name: filter.name ? filter.name : null,
       email: filter.email ? filter.email : null,
       status: filter.status ? filter.status : null,
-      cardNumber: filter.cardNumber ? filter.cardNumber : null,
+      cardNumber: filter.card_number ? filter.card_number : null,
     });
   }
 
@@ -28,7 +28,7 @@ class ClientsPage extends React.Component {
       name: filter.name ? filter.name : undefined,
       email: filter.email ? filter.email : undefined,
       status: filter.status ? filter.status : undefined,
-      cardNumber: filter.cardNumber ? filter.cardNumber : undefined,
+      card_number: filter.cardNumber ? filter.cardNumber : undefined,
     });
     this.props.history.replace({
       pathname: `/`,
