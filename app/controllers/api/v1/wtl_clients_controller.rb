@@ -8,7 +8,7 @@ module Api
         wtl_client_result = DisableWtlClientApiService.new(wtl_client: wtl_client_from_params).call
         if wtl_client_result.success?
           render json: {
-            wtlClient: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
+            client: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
           }, status: 200
         else
           render json: {
@@ -21,7 +21,7 @@ module Api
         wtl_client_result = EnableWtlClientApiService.new(wtl_client: wtl_client_from_params).call
         if wtl_client_result.success?
           render json: {
-            wtlClient: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
+            client: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
           }, status: 200
         else
           render json: {
