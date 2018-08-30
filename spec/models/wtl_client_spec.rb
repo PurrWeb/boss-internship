@@ -11,6 +11,7 @@ RSpec.describe WtlClient, type: :model do
   let!(:wrong_email) { "somewrongemail.com" }
   let!(:card_number) { "123456" }
   let!(:wrong_card_number) { "Wrong card number" }
+  let(:verification_token) { SecureRandom.hex }
 
   subject {
     described_class.new(
@@ -21,6 +22,7 @@ RSpec.describe WtlClient, type: :model do
       gender: gender,
       email: email,
       wtl_card: wtl_card,
+      verification_token: verification_token
     )
   }
 
@@ -33,6 +35,7 @@ RSpec.describe WtlClient, type: :model do
     it { should validate_presence_of(:surname) }
     it { should validate_presence_of(:date_of_birth) }
     it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:verification_token) }
     it { should validate_inclusion_of(:gender).in_array(WtlClient::GENDERS) }
     it { should validate_inclusion_of(:university).in_array(WtlClient::UNIVERSITIES) }
   end
@@ -58,6 +61,11 @@ RSpec.describe WtlClient, type: :model do
 
   it "is not valid without a gender" do
     subject.gender = nil
+    expect(subject).to_not be_valid
+  end
+
+  it 'should not be valid without verification token' do
+    subject.verification_token = nil
     expect(subject).to_not be_valid
   end
 
