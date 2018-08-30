@@ -1,8 +1,7 @@
 module Api
   module V1
     class WtlClientsController < APIController
-      def update
-      end
+      before_filter :web_token_authenticate!
 
       def disable
         wtl_client_result = DisableWtlClientApiService.new(wtl_client: wtl_client_from_params).call

@@ -1,6 +1,8 @@
 module Api
   module V1
     class WtlCardsController < APIController
+      before_filter :web_token_authenticate!
+
       def create
         wtl_card_result = CreateWtlCardApiService.new(params: wtl_card_from_params).call
         if wtl_card_result.success?
