@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
 import Immutable from 'immutable';
+import queryString from 'query-string';
 import Dashboard from './dashboard';
 import CardList from './card-list';
 import { PureToJSCardItem } from './card-item';
@@ -10,8 +11,19 @@ import DashboardActiveFilter from './dashboard-active-filter';
 import LoadMore from '~/components/load-more/load-more-children';
 
 class Page extends React.Component {
+  componentDidMount() {
+    const filter = queryString.parse(window.location.search);
+    oFetch(this.props, 'changeCardNumberFilter')({
+      filter: filter.cardNumber ? filter.cardNumber : null,
+    });
+  }
+
   handleDropdownFilterUpdate = filter => {
     oFetch(this.props, 'changeCardNumberFilter')({ filter });
+    const filterQuery = queryString.stringify({
+      cardNumber: filter,
+    });
+    window.history.pushState('state', 'title', filter ? `/wtl_cards?${filterQuery}` : '/wtl_cards');
   };
 
   handleActiveFilterChange = filter => {
@@ -29,7 +41,12 @@ class Page extends React.Component {
       <main className="boss-page-main">
         <Dashboard
           total={total}
-          dropdownFilter={<DashboardDropdownFilter onFilterUpdate={this.handleDropdownFilterUpdate} />}
+          dropdownFilter={
+            <DashboardDropdownFilter
+              onFilterUpdate={this.handleDropdownFilterUpdate}
+              cardNumberFilter={oFetch(this.props, 'cardNumberFilter')}
+            />
+          }
           activeFilter={<DashboardActiveFilter onActiveFilterChange={this.handleActiveFilterChange} />}
         />
         <LoadMore items={cards}>
@@ -56,6 +73,7 @@ Page.propTypes = {
   changeCardNumberFilter: PropTypes.func.isRequired,
   enadleCardRequested: PropTypes.func.isRequired,
   disableCardRequested: PropTypes.func.isRequired,
+  cardNumberFilter: PropTypes.string,
 };
 
 export default Page;

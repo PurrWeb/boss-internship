@@ -3,9 +3,18 @@ import oFetch from 'o-fetch';
 import PropTypes from 'prop-types';
 
 class DashboardDropdownFilter extends React.PureComponent {
-  state = {
-    filter: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      filter: oFetch(props, 'cardNumberFilter') || '',
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.filter !== nextProps.cardNumberFilter) {
+      this.setState({ filter: nextProps.cardNumberFilter });
+    }
+  }
 
   handleFilterChange = e => {
     this.setState({ filter: e.target.value });
@@ -61,6 +70,7 @@ class DashboardDropdownFilter extends React.PureComponent {
 
 DashboardDropdownFilter.propTypes = {
   onFilterUpdate: PropTypes.func.isRequired,
+  cardNumberFilter: PropTypes.string,
 };
 
 export default DashboardDropdownFilter;

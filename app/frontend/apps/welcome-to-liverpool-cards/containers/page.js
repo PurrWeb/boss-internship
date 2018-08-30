@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Page from '../components/page';
-import { getFilteredCards } from '../selectors';
+import { getFilteredCards, numberFilterSelector } from '../selectors';
 import {
   changeActiveFilter,
   changeCardNumberFilter,
@@ -11,6 +11,7 @@ import {
 const mapStateToProps = state => {
   return {
     cards: getFilteredCards(state),
+    cardNumberFilter: numberFilterSelector(state),
     total: state.get('cards').size,
   };
 };
