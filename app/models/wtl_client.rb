@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class WtlClient < ActiveRecord::Base
   has_paper_trail
 
