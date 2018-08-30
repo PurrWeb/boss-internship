@@ -1,13 +1,14 @@
 class SendWtlClientVerificationEmail
-  def initialize(wtl_client:)
+  def initialize(wtl_client:, url_helpers: Rails.application.routes.url_helpers)
     @wtl_client = wtl_client
+    @url_helpers = url_helpers
   end
-  attr_reader :wtl_client
+  attr_reader :wtl_client, :url_helpers
 
   def call
     name = wtl_client.full_name
     email_address = wtl_client.email
-    link_url = wtl_verify_path(verificationToken: wtl_client.verification_token)
+    link_url = url_helpers.wtl_verify_path(verificationToken: wtl_client.verification_token)
 
     WtlClientVerificationMailer.verification_email(
       name: name,

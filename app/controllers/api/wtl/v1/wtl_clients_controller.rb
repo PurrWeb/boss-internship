@@ -3,7 +3,7 @@ module Api
     module V1
       class WtlClientsController < ActionController::Base
         def create
-          wtl_client_result = CreateWtlClientApiService.new(params: wtl_client_from_params).call
+          wtl_client_result = CreateWtlClientApiService.new(params: wtl_client_params).call
           if wtl_client_result.success?
             render json: {
                      wtlClient: Api::Wtl::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
@@ -15,7 +15,7 @@ module Api
 
         private
 
-        def wtl_client_from_params
+        def wtl_client_params
           {
             first_name: params.fetch(:firstName),
             surname: params.fetch(:surname),
