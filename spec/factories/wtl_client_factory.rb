@@ -7,5 +7,6 @@ FactoryGirl.define do
     email "some@email.com"
     university WtlClient::UNIVERSITIES[0]
     gender WtlClient::GENDERS[0]
+    verification_token SecureRandom.hex
   end
 end
