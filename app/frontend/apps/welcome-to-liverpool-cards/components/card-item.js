@@ -6,8 +6,15 @@ import AsyncButton from 'react-async-button';
 
 class CardItem extends React.Component {
   render() {
-    const [number, fullName, disabled] = oFetch(this.props.card, 'number', 'fullName', 'disabled');
-    const [onEnable, onDisable] = oFetch(this.props, 'onEnable', 'onDisable');
+    const [card, onEnable, onDisable, onOpenHistory] = oFetch(
+      this.props,
+      'card',
+      'onEnable',
+      'onDisable',
+      'onOpenHistory',
+    );
+    const [number, fullName, disabled] = oFetch(card, 'number', 'fullName', 'disabled');
+
     return (
       <div
         className={`boss-check boss-check_role_board boss-check_page_wtl-cards-index ${
@@ -23,6 +30,12 @@ class CardItem extends React.Component {
             </div>
           </div>
           <div className="boss-check__header-actions">
+            <button
+              onClick={() => onOpenHistory(card)}
+              className="boss-button boss-button_type_small boss-button_role_view-history-light boss-check__header-action"
+            >
+              History
+            </button>
             {disabled ? (
               <AsyncButton
                 className="boss-button boss-button_type_small boss-button_role_enable-light boss-check__header-action"
@@ -49,6 +62,7 @@ CardItem.propTypes = {
   card: PropTypes.object.isRequired,
   onEnable: PropTypes.func.isRequired,
   onDisable: PropTypes.func.isRequired,
+  onOpenHistory: PropTypes.func.isRequired,
 };
 
 export default CardItem;

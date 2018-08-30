@@ -8,8 +8,10 @@ import CardList from './card-list';
 import { PureToJSCardItem } from './card-item';
 import DashboardDropdownFilter from './dashboard-dropdown-filter';
 import DashboardActiveFilter from './dashboard-active-filter';
+import CardHistoryContent from './card-history-content';
 import LoadMore from '~/components/load-more/load-more-children';
 import { appRoutes } from '~/lib/routes';
+import { openContentModal } from '~/components/modals';
 
 class Page extends React.Component {
   componentDidMount() {
@@ -29,6 +31,19 @@ class Page extends React.Component {
       'title',
       filter ? `${appRoutes.wtlCardsPage()}?${filterQuery}` : `${appRoutes.wtlCardsPage()}`,
     );
+  };
+
+  handleOpenHistory = card => {
+    openContentModal({
+      config: {
+        title: (
+          <span>
+            <span className="boss-modal-window__marked">{oFetch(card, 'number')}</span>&nbsp;History
+          </span>
+        ),
+      },
+      props: { card },
+    })(CardHistoryContent);
   };
 
   handleActiveFilterChange = filter => {
@@ -61,7 +76,12 @@ class Page extends React.Component {
               total={cards.size}
               onLoadMore={onLoadMore}
               itemRenderer={card => (
-                <PureToJSCardItem card={card} onEnable={enadleCardRequested} onDisable={disableCardRequested} />
+                <PureToJSCardItem
+                  card={card}
+                  onEnable={enadleCardRequested}
+                  onDisable={disableCardRequested}
+                  onOpenHistory={this.handleOpenHistory}
+                />
               )}
             />
           )}

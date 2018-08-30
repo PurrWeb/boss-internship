@@ -102,4 +102,54 @@ export default {
       fullName: 'John Doe10',
     },
   ],
+  history: [
+    {
+      date: '2018-07-17T10:00:00Z',
+      type: 'assigned',
+      to: 'John Doe',
+      by: 'Trulla Collier',
+    },
+    {
+      date: '2018-07-11T21:50:00Z',
+      type: 'unassigned',
+      to: null,
+      by: 'Victoria Price',
+    },
+    {
+      date: '2018-07-10T12:01:00Z',
+      type: 'assigned',
+      to: 'Melvin Ruiz',
+      by: 'Victoria Price',
+    },
+    {
+      date: '2018-07-11T09:56:00Z',
+      type: 'unassigned',
+      to: null,
+      by: 'Johny Doble',
+    },
+    {
+      date: '2017-07-16T22:10:00Z',
+      type: 'registered',
+      to: 'Maple Lockman',
+      by: null,
+    },
+    {
+      date: '2017-07-16T12:01:00Z',
+      type: 'assigned',
+      to: 'Melvin Ruiz',
+      by: 'Victoria Price',
+    },
+    {
+      date: '2016-07-16T09:56:00Z',
+      type: 'unassigned',
+      to: null,
+      by: 'Johny Doble',
+    },
+    {
+      date: '2016-07-16T22:10:00Z',
+      type: 'registered',
+      to: 'Maple Lockman',
+      by: null,
+    },
+  ],
 };
