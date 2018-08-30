@@ -2,6 +2,7 @@ import React from 'react';
 import oFetch from 'o-fetch';
 import PropTypes from 'prop-types';
 import humanize from 'string-humanize';
+import AsyncButton from 'react-async-button';
 import pureToJs from '~/hocs/pure-to-js';
 import { PENDING_VALIDATION, VALIDATED } from '../constants';
 import { appRoutes } from '~/lib/routes';
@@ -95,19 +96,19 @@ class ProfileCard extends React.PureComponent {
         </div>
         <div className="boss-check__row boss-check__row_role_buttons">
           {disabled ? (
-            <button
+            <AsyncButton
               onClick={() => enadleClientRequested({ id })}
               className="boss-button boss-button_type_small boss-button_role_enable boss-check__button"
-            >
-              Enable
-            </button>
+              text="Enable"
+              pendingText="Enabling ..."
+            />
           ) : (
-            <button
+            <AsyncButton
               onClick={() => disableClientRequested({ id })}
               className="boss-button boss-button_type_small boss-button_role_cancel boss-check__button"
-            >
-              Disable
-            </button>
+              text="Disable"
+              pendingText="Disabling ..."
+            />
           )}
         </div>
       </div>
