@@ -37,7 +37,7 @@ class LoadMore extends React.PureComponent {
 }
 
 LoadMore.propTypes = {
-  items: PropTypes.instanceOf(Immutable.List).isRequired,
+  items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(Immutable.List)]).isRequired,
   children: PropTypes.func.isRequired,
   perPage: PropTypes.number.isRequired,
 };
