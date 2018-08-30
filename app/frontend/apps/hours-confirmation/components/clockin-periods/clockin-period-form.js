@@ -197,7 +197,7 @@ class ClockInPeriodForm extends Component {
           })}
           className="boss-button boss-button_role_success boss-time-shift__button boss-time-shift__button_role_accept-shift"
         >
-          Accepted{' '}
+          Accept{' '}
           <span className="boss-time-shift__button-count">
             {acceptanceStats}
           </span>
