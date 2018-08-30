@@ -8,17 +8,22 @@ import { appRoutes } from '~/lib/routes';
 
 class ProfileCard extends React.PureComponent {
   render() {
-    const [cardNumber, fullName, emailVerified, updatedAt, gender, dateOfBirth, email, university, disabled] = oFetch(
+    const [id, cardNumber, fullName, emailVerified, gender, dateOfBirth, email, university, disabled] = oFetch(
       this.props.client,
+      'id',
       'cardNumber',
       'fullName',
       'emailVerified',
-      'updatedAt',
       'gender',
       'dateOfBirth',
       'email',
       'university',
       'disabled',
+    );
+    const [enadleClientRequested, disableClientRequested] = oFetch(
+      this.props,
+      'enadleClientRequested',
+      'disableClientRequested',
     );
     return (
       <div className="boss-check boss-check_role_board boss-check_page_wtl-clients-profile">
@@ -90,11 +95,17 @@ class ProfileCard extends React.PureComponent {
         </div>
         <div className="boss-check__row boss-check__row_role_buttons">
           {disabled ? (
-            <button className="boss-button boss-button_type_small boss-button_role_enable boss-check__button">
+            <button
+              onClick={() => enadleClientRequested({ id })}
+              className="boss-button boss-button_type_small boss-button_role_enable boss-check__button"
+            >
               Enable
             </button>
           ) : (
-            <button className="boss-button boss-button_type_small boss-button_role_cancel boss-check__button">
+            <button
+              onClick={() => disableClientRequested({ id })}
+              className="boss-button boss-button_type_small boss-button_role_cancel boss-check__button"
+            >
               Disable
             </button>
           )}
@@ -106,6 +117,8 @@ class ProfileCard extends React.PureComponent {
 
 ProfileCard.propTypes = {
   client: PropTypes.object.isRequired,
+  enadleClientRequested: PropTypes.func.isRequired,
+  disableClientRequested: PropTypes.func.isRequired,
 };
 
 export default ProfileCard;

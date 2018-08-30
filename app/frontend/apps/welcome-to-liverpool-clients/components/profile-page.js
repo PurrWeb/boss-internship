@@ -8,7 +8,12 @@ import NotFound from './not-found';
 
 class ProfilePage extends React.Component {
   render() {
-    const client = oFetch(this.props, 'client');
+    const [client, enadleClientRequested, disableClientRequested] = oFetch(
+      this.props,
+      'client',
+      'enadleClientRequested',
+      'disableClientRequested',
+    );
     if (!client) {
       return <NotFound />;
     }
@@ -37,7 +42,11 @@ class ProfilePage extends React.Component {
         </SimpleDashboard>
         <div className="boss-page-main__content">
           <div className="boss-page-main__inner">
-            <ProfileCard client={client} />
+            <ProfileCard
+              client={client}
+              enadleClientRequested={enadleClientRequested}
+              disableClientRequested={disableClientRequested}
+            />
           </div>
         </div>
       </main>
@@ -47,6 +56,8 @@ class ProfilePage extends React.Component {
 
 ProfilePage.propTypes = {
   client: PropTypes.object,
+  enadleClientRequested: PropTypes.func.isRequired,
+  disableClientRequested: PropTypes.func.isRequired,
 };
 
 export default withRouter(ProfilePage);

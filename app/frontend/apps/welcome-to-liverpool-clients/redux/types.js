@@ -1,2 +1,5 @@
 export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
+
+export const ENABLE_CLIENT = 'ENABLE_CLIENT';
+export const DISABLE_CLIENT = 'DISABLE_CLIENT';
