@@ -553,7 +553,7 @@ Rails.application.routes.draw do
     constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
     constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
     constraints subdomain: /^([a-z0-9]+-+)?nsecurity-app/, &security_app_routes
-    constraints subdomain: /^([a-z0-9]+-+)?wtl/, &wtl
+    constraints subdomain: /^([a-z0-9]+-+)?wtl/, &wtl_routes
   else
     scope "", &boss_routes
     scope "/clock", &clock_routes
