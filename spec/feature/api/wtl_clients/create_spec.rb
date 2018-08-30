@@ -14,7 +14,8 @@ RSpec.describe "Create wtl client API endpoint" do
   let!(:wrong_gender) { "Wrong gender" }
   let!(:email) { "some@email.com" }
   let!(:wrong_email) { "somewrongemail.com" }
-  let!(:card_number) { "123456" }
+  let!(:existing_card_number) { "123456" }
+  let!(:card_number) { "123457" }
   let!(:wrong_card_number) { "Wrong card number" }
 
   let!(:valid_params) do
@@ -117,7 +118,7 @@ RSpec.describe "Create wtl client API endpoint" do
             "dateOfBirth" => ["can't be blank"],
             "email" => ["can't be blank"],
             "university" => ["a valid university should be present"],
-            "cardNumber" => ["card number must be present", "card number is not a valid"],
+            "cardNumber" => ["can't be blank"],
           },
         })
       end
@@ -150,9 +151,41 @@ RSpec.describe "Create wtl client API endpoint" do
         expect(json).to eq({
           "errors" => {
             "email" => ["must be a valid email address"],
-            "cardNumber" => ["card number is not a valid"],
+            "cardNumber" => ["can't be blank"],
             "gender" => ["a valid gender should be present"],
             "university" => ["a valid university should be present"],
+          },
+        })
+      end
+    end
+
+    context "with already assigned card" do
+      let!(:existing_wtl_card) { FactoryGirl.create(:wtl_card, number: existing_card_number) }
+      let!(:existing_wtl_client) { FactoryGirl.create(:wtl_client, wtl_card: existing_wtl_card) }
+
+      let(:params) do
+        valid_params.merge({
+          cardNumber: existing_card_number,
+        })
+      end
+
+      before do
+        response
+      end
+
+      it "should return unprocessable_entity status" do
+        expect(response.status).to eq(unprocessable_entity_status)
+      end
+
+      it 'it shouldn\'t create wtl client' do
+        expect(WtlClient.count).to eq(1)
+      end
+
+      it "should return errors json" do
+        json = JSON.parse(response.body)
+        expect(json).to eq({
+          "errors" => {
+            "cardNumber" => ["has already been taken"],
           },
         })
       end

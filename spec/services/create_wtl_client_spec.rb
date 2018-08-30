@@ -18,7 +18,7 @@ describe CreateWtlClient do
       email: email,
       date_of_birth: date_of_birth,
       university: university,
-      card_number: card_number,
+      wtl_card: wtl_card,
     }
   end
 
@@ -50,7 +50,7 @@ describe CreateWtlClient do
   end
 
   describe "when invalid params given" do
-    let(:params) { valid_params.merge({first_name: nil, card_number: invalid_card_number}) }
+    let(:params) { valid_params.merge({first_name: nil, wtl_card: nil}) }
     let!(:result) { service.call }
 
     it "service response should be invalid" do

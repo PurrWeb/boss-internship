@@ -20,7 +20,7 @@ RSpec.describe WtlClient, type: :model do
       university: university,
       gender: gender,
       email: email,
-      card_number: card_number,
+      wtl_card: wtl_card,
     )
   }
 
@@ -87,12 +87,7 @@ RSpec.describe WtlClient, type: :model do
   end
 
   it "is not valid without a card_number" do
-    subject.card_number = nil
-    expect(subject).to_not be_valid
-  end
-
-  it "is not valid with wrong card_number" do
-    subject.card_number = wrong_card_number
+    subject.wtl_card = nil
     expect(subject).to_not be_valid
   end
 end
