@@ -14,11 +14,7 @@ class WtlClientApiErrors
     result[:email] = wtl_client.errors[:email] if wtl_client.errors[:email].present?
     result[:dateOfBirth] = wtl_client.errors[:date_of_birth] if wtl_client.errors[:date_of_birth].present?
     result[:university] = wtl_client.errors[:university] if wtl_client.errors[:university].present?
-    result[:cardNumber] = wtl_client.errors[:card_number] if wtl_client.errors[:card_number].present?
-    if wtl_client.errors[:wtl_card].present?
-      result[:cardNumber] ||= []
-      result[:cardNumber] << wtl_client.errors[:wtl_card]
-    end
+    result[:cardNumber] = wtl_client.errors[:wtl_card] if wtl_client.errors[:wtl_card].present?
 
     result
   end
