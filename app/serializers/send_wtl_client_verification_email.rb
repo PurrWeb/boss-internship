@@ -5,9 +5,9 @@ class SendWtlClientVerificationEmail
   attr_reader :wtl_client
 
   def call
-    name = wtl_client.name
+    name = wtl_client.full_name
     email_address = wtl_client.email
-    link_url = wtl_verify_path(verification_code: wtl_client.verification_code)
+    link_url = wtl_verify_path(verificationToken: wtl_client.verification_token)
 
     WtlClientVerificationMailer.verification_email(
       name: name,
