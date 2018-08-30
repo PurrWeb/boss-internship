@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import humanize from 'string-humanize';
 import pureToJs from '~/hocs/pure-to-js';
 import { PENDING_VALIDATION, VALIDATED } from '../constants';
+import { appRoutes } from '~/lib/routes';
 
 class ProfileCard extends React.PureComponent {
   render() {
@@ -79,7 +80,7 @@ class ProfileCard extends React.PureComponent {
               </div>
               <div className="boss-check__info-cell">
                 <p className="boss-check__text boss-check__text_role_primary">
-                  <a href="#" className="boss-check__link">
+                  <a href={appRoutes.wtlCardsPage({ cardNumber })} className="boss-check__link">
                     {cardNumber}
                   </a>
                 </p>

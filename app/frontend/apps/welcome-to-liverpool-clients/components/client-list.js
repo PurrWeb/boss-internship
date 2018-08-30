@@ -24,7 +24,19 @@ class ClientList extends React.Component {
 
   render() {
     const [clients, onLoadMore, total] = oFetch(this.props, 'clients', 'onLoadMore', 'total');
-
+    if (clients.size === 0) {
+      return (
+        <div className="boss-page-main__content">
+          <div className="boss-page-main__inner">
+            <div className="boss-check  boss-check_role_board boss-check_page_wtl-cards-index">
+              <div className="boss-check__header">
+                <div className="boss-page-main__text-placeholder">There are no clients to show.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">

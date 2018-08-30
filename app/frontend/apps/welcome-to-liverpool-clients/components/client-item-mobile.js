@@ -7,6 +7,7 @@ import safeMoment from '~/lib/safe-moment';
 import utils from '~/lib/utils';
 import humanize from 'string-humanize';
 import { PENDING_VALIDATION, VALIDATED } from '../constants';
+import { appRoutes } from '~/lib/routes';
 
 class ClientItemMobile extends React.Component {
   render() {
@@ -56,7 +57,7 @@ class ClientItemMobile extends React.Component {
               </div>
               <div className="boss-check__info-cell">
                 <p className="boss-check__text boss-check__text_role_primary">
-                  <a href="#" className="boss-check__link">
+                  <a href={appRoutes.wtlCardsPage({ cardNumber })} className="boss-check__link">
                     {cardNumber}
                   </a>
                 </p>

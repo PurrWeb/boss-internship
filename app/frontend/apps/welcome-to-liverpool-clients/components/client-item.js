@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import humanize from 'string-humanize';
 import pureToJs from '~/hocs/pure-to-js';
 import { VALIDATED, PENDING_VALIDATION } from '../constants';
+import { appRoutes } from '~/lib/routes';
 
 class ClientItem extends React.Component {
   render() {
@@ -36,7 +37,7 @@ class ClientItem extends React.Component {
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__text">
-              <a href="#" className="boss-table__link">
+              <a href={appRoutes.wtlCardsPage({ cardNumber })} className="boss-table__link">
                 {cardNumber}
               </a>
             </p>
