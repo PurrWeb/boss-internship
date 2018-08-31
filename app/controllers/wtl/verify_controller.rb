@@ -10,7 +10,7 @@ module Wtl
         return redirect_to wtl_something_went_wrong_path(message: 'There was an issue with your validation token.')
       end
       if wtl_client.verified?
-        return redirect_to wtl_something_went_wrong_path(message: 'This account has already been validated.')
+        return redirect_to wtl_something_went_wrong_path(message: 'This account has already been verified.')
       end
 
       wtl_client.verify!
