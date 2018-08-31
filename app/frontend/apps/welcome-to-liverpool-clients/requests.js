@@ -11,7 +11,8 @@ export const enableClientRequest = params => {
   return http().post(`/api/v1/wtl_clients/${id}/enable`);
 };
 
-export const fetchClientHistory = params => {
+export const updateClientProfileRequest = params => {
   const id = oFetch(params, 'id');
-  return http().get(`/api/v1/wtl_clients/${id}/history`);
+
+  return http().post(`/api/v1/wtl_clients/${id}`, params);
 };

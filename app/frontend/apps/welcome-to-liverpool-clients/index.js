@@ -7,6 +7,7 @@ import reducers from './redux/reducers';
 import { loadInitialData } from './redux/actions';
 import ClientsPage from './routes/clients-page';
 import ProfilePage from './routes/profile-page';
+import ProfileEdit from './routes/profile-edit';
 
 export default class WelcomeToLiverpoolClients extends Component {
   componentWillMount() {
@@ -26,6 +27,11 @@ export default class WelcomeToLiverpoolClients extends Component {
         <Router>
           <Switch>
             <Route exact path="/" render={props => <ClientsPage />} />
+            <Route
+              exact
+              path="/profile/:clientId?/edit"
+              render={props => <ProfileEdit clientId={props.match.params.clientId} />}
+            />
             <Route
               exact
               path="/profile/:clientId?"

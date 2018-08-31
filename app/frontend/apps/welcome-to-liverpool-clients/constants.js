@@ -12,3 +12,13 @@ export const STATUS_OPTIONS = [
     value: PENDING_VALIDATION,
   },
 ];
+
+export const CREATED = 'create';
+export const REGISTERED = 'registered';
+export const UPDATED = 'update';
+
+export const HISTORY_EVENT_MAP = {
+  [CREATED]: 'Registered ',
+  [REGISTERED]: 'Registered to ',
+  [UPDATED]: 'Updated by ',
+};

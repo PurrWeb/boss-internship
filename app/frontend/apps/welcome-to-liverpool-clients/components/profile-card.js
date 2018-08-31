@@ -6,8 +6,21 @@ import AsyncButton from 'react-async-button';
 import pureToJs from '~/hocs/pure-to-js';
 import { PENDING_VALIDATION, VALIDATED } from '../constants';
 import { appRoutes } from '~/lib/routes';
+import { openWarningModal } from '~/components/modals';
 
 class ProfileCard extends React.PureComponent {
+  handleDisable = () => {
+    const [disableClientRequested, id] = oFetch(this.props, 'disableClientRequested', 'client.id');
+    openWarningModal({
+      submit: hideModal => disableClientRequested({ id }).then(hideModal),
+      config: {
+        title: 'WARNING !!!',
+        text: 'Are You Sure?',
+        buttonText: 'Disable',
+      },
+    });
+  };
+
   render() {
     const [id, cardNumber, fullName, emailVerified, gender, dateOfBirth, email, university, disabled] = oFetch(
       this.props.client,
@@ -21,11 +34,7 @@ class ProfileCard extends React.PureComponent {
       'university',
       'disabled',
     );
-    const [enadleClientRequested, disableClientRequested] = oFetch(
-      this.props,
-      'enadleClientRequested',
-      'disableClientRequested',
-    );
+    const [enableClientRequested, history] = oFetch(this.props, 'enableClientRequested', 'history');
     return (
       <div className="boss-check boss-check_role_board boss-check_page_wtl-clients-profile">
         <div className="boss-check__row">
@@ -95,16 +104,24 @@ class ProfileCard extends React.PureComponent {
           </div>
         </div>
         <div className="boss-check__row boss-check__row_role_buttons">
+          {!disabled && (
+            <button
+              onClick={() => history.push(`/profile/${id}/edit`)}
+              className="boss-button boss-button_type_small boss-button_role_edit boss-check__button"
+            >
+              Edit
+            </button>
+          )}
           {disabled ? (
             <AsyncButton
-              onClick={() => enadleClientRequested({ id })}
+              onClick={() => enableClientRequested({ id })}
               className="boss-button boss-button_type_small boss-button_role_enable boss-check__button"
               text="Enable"
               pendingText="Enabling ..."
             />
           ) : (
             <AsyncButton
-              onClick={() => disableClientRequested({ id })}
+              onClick={this.handleDisable}
               className="boss-button boss-button_type_small boss-button_role_cancel boss-check__button"
               text="Disable"
               pendingText="Disabling ..."
@@ -118,7 +135,7 @@ class ProfileCard extends React.PureComponent {
 
 ProfileCard.propTypes = {
   client: PropTypes.object.isRequired,
-  enadleClientRequested: PropTypes.func.isRequired,
+  enableClientRequested: PropTypes.func.isRequired,
   disableClientRequested: PropTypes.func.isRequired,
 };
 

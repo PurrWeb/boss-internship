@@ -57,6 +57,51 @@ export default {
       email: 'john.doe@example.com',
       fullName: 'John Doe1',
       updatedAt: '2018-01-01T10:00:00Z',
+      history: {
+        '2018-08-31T10:05:49.000+01:00': {
+          by: 'System',
+          to: null,
+          event: 'create',
+          changeset: { state: null, number: [null, '123456'] },
+        },
+        '2018-08-31T10:19:31.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['enabled', 'disabled'], number: null },
+        },
+        '2018-08-31T10:19:38.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['disabled', 'enabled'], number: null },
+        },
+        '2018-08-31T10:20:16.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['enabled', 'disabled'], number: null },
+        },
+        '2018-08-31T10:20:21.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['disabled', 'enabled'], number: null },
+        },
+        '2018-08-31T11:02:33.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['enabled', 'disabled'], number: null },
+        },
+        '2018-08-29T11:02:48.000+01:00': {
+          by: 'Dev User',
+          to: null,
+          event: 'update',
+          changeset: { state: ['disabled', 'enabled'], number: null },
+        },
+        '2018-08-28T10:15:43.000+01:00': { by: null, to: 'John Doe', event: 'registered', changeset: {} },
+      },
     },
     {
       id: 2,
@@ -173,96 +218,6 @@ export default {
       university: 'John Moores University',
       disabled: false,
       email: 'john.doe@example.com',
-    },
-  ],
-
-  history: [
-    {
-      date: '2018-01-01T13:42:00Z',
-      fields: [
-        {
-          fieldName: 'Name',
-          prevValue: 'Johny',
-          value: 'John',
-        },
-        {
-          fieldName: 'Email',
-          prevValue: 'johny.doe@example.com',
-          value: ' john.doe@example.com',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2018-01-01T10:18:00Z',
-      fields: [
-        {
-          fieldName: 'Card Number',
-          prevValue: '115000',
-          value: '110000',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2018-01-01T11:18:00Z',
-      fields: [
-        {
-          fieldName: 'Card Number',
-          prevValue: '115000',
-          value: '110000',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2018-01-16T11:18:00Z',
-      fields: [
-        {
-          fieldName: 'University',
-          prevValue: 'University of Liverpool',
-          value: 'John Moores University',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2017-01-16T11:18:00Z',
-      fields: [
-        {
-          fieldName: 'University',
-          prevValue: 'University of Liverpool',
-          value: 'John Moores University',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2017-01-15T11:18:00Z',
-      fields: [
-        {
-          fieldName: 'University',
-          prevValue: 'University of Liverpool',
-          value: 'John Moores University',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
-    },
-    {
-      date: '2017-01-11T11:18:00Z',
-      fields: [
-        {
-          fieldName: 'University',
-          prevValue: 'University of Liverpool',
-          value: 'John Moores University',
-        },
-        {
-          fieldName: 'Card Number',
-          prevValue: '115000',
-          value: '110000',
-        },
-      ],
-      updatedBy: 'Trulla Collier',
     },
   ],
 };

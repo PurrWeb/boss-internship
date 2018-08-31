@@ -10,72 +10,59 @@ import ProfileHistoryList from './profile-history-list';
 import ProfileHistoryItem from './profile-history-item';
 import NotFound from './not-found';
 import LoadMore from '~/components/load-more/load-more-children';
-import { fetchClientHistory } from '../requests';
 import safeMoment from '~/lib/safe-moment';
-import utils from '~/lib/utils';
 
-class ProfilePage extends React.Component {
+class ProfilePage extends React.PureComponent {
   state = {
-    loading: false,
-    historyList: [],
-    filteredHistoryList: [],
+    startDate: null,
+    endDate: null,
   };
 
-  async componentDidMount() {
-    const client = oFetch(this.props, 'client');
-    if (!client) {
-      return;
-    }
-    this.setState({ loading: true });
-
-    try {
-      const response = await fetchClientHistory({ id: oFetch(client, 'id') });
-      const historyList = oFetch(response, 'data.history');
-      this.setState({
-        historyList,
-        filteredHistoryList: historyList,
-        loading: false,
-      });
-    } catch (error) {
-      this.setState({
-        loading: false,
-      });
-    }
-  }
-
-  renderLoader() {
-    return (
-      <section className="boss-board">
-        <div className="boss-spinner" />
-      </section>
-    );
-  }
-
   handleFilter = (startDate, endDate) => {
-    if (startDate && endDate) {
-      const mStartDate = safeMoment.uiDateParse(startDate);
-      const mEndDate = safeMoment.uiDateParse(endDate);
-      const filteredHistoryList = this.state.historyList.filter(historyItem => {
-        const mDate = safeMoment.iso8601Parse(historyItem.date);
-        return mDate.isSameOrAfter(mStartDate) && mDate.isSameOrBefore(mEndDate);
+    this.setState({ startDate, endDate });
+  };
+
+  getFilteredHistory = () => {
+    const { startDate, endDate } = this.state;
+    const history = oFetch(this.props, 'client.history');
+    const historyArray = Object.keys(history)
+      .map(date => ({ ...history[date], date }))
+      .sort((a, b) => {
+        const mA = safeMoment.iso8601Parse(a.date);
+        const mB = safeMoment.iso8601Parse(b.date);
+        return mB - mA;
       });
-      this.setState({ filteredHistoryList });
+    if (startDate && endDate) {
+      const mStartDate = safeMoment
+        .uiDateParse(startDate)
+        .clone()
+        .hours(0);
+      const mEndDate = safeMoment
+        .uiDateParse(endDate)
+        .clone()
+        .add(1, 'd')
+        .hours(0);
+      const filteredHistoryList = historyArray.filter(historyItem => {
+        const mDate = safeMoment.iso8601Parse(historyItem.date);
+        return mDate.isSameOrAfter(mStartDate) && mDate.isBefore(mEndDate);
+      });
+      return filteredHistoryList;
     } else {
-      this.setState({ filteredHistoryList: this.state.historyList });
+      return historyArray;
     }
   };
 
   render() {
-    const [client, enadleClientRequested, disableClientRequested] = oFetch(
+    const [client, enableClientRequested, disableClientRequested] = oFetch(
       this.props,
       'client',
-      'enadleClientRequested',
+      'enableClientRequested',
       'disableClientRequested',
     );
     if (!client) {
       return <NotFound />;
     }
-    const [loading, filteredHistoryList] = oFetch(this.state, 'loading', 'filteredHistoryList');
+    const filteredHistoryList = this.getFilteredHistory();
     const disabled = oFetch(client, 'disabled');
     return (
       <main className="boss-page-main">
@@ -103,25 +90,22 @@ class ProfilePage extends React.Component {
           <div className="boss-page-main__inner">
             <ProfileCard
               client={client}
-              enadleClientRequested={enadleClientRequested}
+              enableClientRequested={enableClientRequested}
               disableClientRequested={disableClientRequested}
+              history={this.props.history}
             />
             <ProfileHistory>
               <ProfileHistoryFilter onFilter={this.handleFilter} />
-              {loading ? (
-                this.renderLoader()
-              ) : (
-                <LoadMore items={filteredHistoryList}>
-                  {({ visibleItems, onLoadMore }) => (
-                    <ProfileHistoryList
-                      total={filteredHistoryList.length}
-                      historyList={visibleItems}
-                      onLoadMore={onLoadMore}
-                      itemRenderer={historyItem => <ProfileHistoryItem historyItem={historyItem} />}
-                    />
-                  )}
-                </LoadMore>
-              )}
+              <LoadMore items={filteredHistoryList}>
+                {({ visibleItems, onLoadMore }) => (
+                  <ProfileHistoryList
+                    total={filteredHistoryList.length}
+                    historyList={visibleItems}
+                    onLoadMore={onLoadMore}
+                    itemRenderer={historyItem => <ProfileHistoryItem historyItem={historyItem} />}
+                  />
+                )}
+              </LoadMore>
             </ProfileHistory>
           </div>
         </div>
@@ -132,7 +116,7 @@ class ProfilePage extends React.Component {
 
 ProfilePage.propTypes = {
   client: PropTypes.object,
-  enadleClientRequested: PropTypes.func.isRequired,
+  enableClientRequested: PropTypes.func.isRequired,
   disableClientRequested: PropTypes.func.isRequired,
 };
 

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import pureToJs from '~/hocs/pure-to-js';
-import ProfilePage from '../components/profile-page';
+import ProfileEdit from '../components/profile-edit';
 import { getClientById } from '../selectors';
-import { enableClientRequested, disableClientRequested } from '../redux/actions';
+import { updateClientProfileRequested } from '../redux/actions';
 
 const mapStateToProps = (state, ownProps) => {
   const client = getClientById(state, ownProps) ? getClientById(state, ownProps) : null;
@@ -12,8 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  enableClientRequested,
-  disableClientRequested,
+  updateClientProfileRequested,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(pureToJs(ProfilePage));
+export default connect(mapStateToProps, mapDispatchToProps)(pureToJs(ProfileEdit));

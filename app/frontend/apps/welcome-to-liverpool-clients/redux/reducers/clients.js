@@ -14,16 +14,20 @@ export default handleActions(
     [types.ENABLE_CLIENT]: (state, action) => {
       const client = oFetch(action, 'payload.client');
       const clientId = oFetch(client, 'id');
-      const disabled = oFetch(client, 'disabled');
       const clientIndex = state.findIndex(client => client.get('id') === clientId);
-      return state.update(clientIndex, client => client.set('disabled', disabled));
+      return state.update(clientIndex, c => Immutable.fromJS(client));
     },
     [types.DISABLE_CLIENT]: (state, action) => {
       const client = oFetch(action, 'payload.client');
       const clientId = oFetch(client, 'id');
-      const disabled = oFetch(client, 'disabled');
       const clientIndex = state.findIndex(client => client.get('id') === clientId);
-      return state.update(clientIndex, client => client.set('disabled', disabled));
+      return state.update(clientIndex, c => Immutable.fromJS(client));
+    },
+    [types.UPDATE_CLIENT_PROFILE]: (state, action) => {
+      const client = oFetch(action, 'payload.client');
+      const clientId = oFetch(client, 'id');
+      const clientIndex = state.findIndex(client => client.get('id') === clientId);
+      return state.update(clientIndex, c => Immutable.fromJS(client));
     },
   },
   initialState,
