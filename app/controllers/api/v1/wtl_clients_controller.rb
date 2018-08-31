@@ -11,6 +11,22 @@ module Api
         }.to_json
       end
 
+      def update
+        wtl_client_result = UpdateWtlClientApiService
+          .new(wtl_client: wtl_client_from_params, requester: current_user)
+          .call(params: params)
+
+        if wtl_client_result.success?
+          render json: {
+                   client: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
+                 }, status: 200
+        else
+          render json: {
+                   errors: wtl_client_result.api_errors.errors,
+                 }, status: wtl_client_result.api_errors.response_status
+        end
+      end
+
       def disable
         wtl_client_result = DisableWtlClientApiService.new(wtl_client: wtl_client_from_params).call
         if wtl_client_result.success?
