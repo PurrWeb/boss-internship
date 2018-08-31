@@ -6,8 +6,10 @@ import { updateClientProfileRequested } from '../redux/actions';
 
 const mapStateToProps = (state, ownProps) => {
   const client = getClientById(state, ownProps) ? getClientById(state, ownProps) : null;
+  const universities = state.get('universities');
   return {
     client,
+    universities,
   };
 };
 

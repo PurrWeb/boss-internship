@@ -95,9 +95,13 @@ class ProfileCard extends React.PureComponent {
               </div>
               <div className="boss-check__info-cell">
                 <p className="boss-check__text boss-check__text_role_primary">
-                  <a href={appRoutes.wtlCardsPage({ cardNumber })} className="boss-check__link">
-                    {cardNumber}
-                  </a>
+                  {cardNumber ? (
+                    <a href={appRoutes.wtlCardsPage({ cardNumber })} className="boss-check__link">
+                      {cardNumber}
+                    </a>
+                  ) : (
+                    'not assigned'
+                  )}
                 </p>
               </div>
             </div>

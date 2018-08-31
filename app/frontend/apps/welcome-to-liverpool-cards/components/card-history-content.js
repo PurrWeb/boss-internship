@@ -54,7 +54,7 @@ class CardHistoryContent extends React.PureComponent {
             <span className="boss-overview__text-faded"> {HISTORY_EVENTS_MAP[event]} </span>
             {(event === ASSIGNED || event === REGISTERED) && <span className="boss-overview__text-faded"> to </span>}
             <span className="boss-overview__text-marked">{to}</span>
-            {event === UNASSIGNED && <span className="boss-overview__text-faded">by</span>}
+            {(event === UNASSIGNED || event === ASSIGNED) && <span className="boss-overview__text-faded"> by </span>}
             <span className="boss-overview__text-marked">{by}</span>
           </p>
         </li>

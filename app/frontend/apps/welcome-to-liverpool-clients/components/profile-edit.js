@@ -17,6 +17,7 @@ class ProfileEdit extends React.Component {
 
   render() {
     const client = oFetch(this.props, 'client');
+    const universities = oFetch(this.props, 'universities');
     if (!client) {
       return <NotFound />;
     }
@@ -55,7 +56,11 @@ class ProfileEdit extends React.Component {
         </SimpleDashboard>
         <div className="boss-page-main__content">
           <div className="boss-page-main__inner">
-            <ProfileEditForm initialValues={initialValues} onFormSubmit={this.handleEditSubmit} />
+            <ProfileEditForm
+              universities={universities}
+              initialValues={initialValues}
+              onFormSubmit={this.handleEditSubmit}
+            />
           </div>
         </div>
       </main>

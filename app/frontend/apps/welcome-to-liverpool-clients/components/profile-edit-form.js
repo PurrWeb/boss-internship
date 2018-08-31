@@ -36,16 +36,14 @@ const genderOptions = [
   },
 ];
 
-const universityOptions = [
-  {
-    value: 'The University of Liverpool',
-    label: 'The University of Liverpool',
-  },
-];
-
 class ProfileEditForm extends React.Component {
   render() {
     const { submitting, handleSubmit } = this.props;
+
+    const universityOptions = this.props.universities.map(university => {
+      return { label: university, value: university };
+    });
+
     return (
       <div className="boss-page-main__group boss-page-main__group_adjust_wtl-eсp-form">
         <form onSubmit={handleSubmit} className="toss-form">
