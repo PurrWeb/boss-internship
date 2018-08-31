@@ -17,7 +17,7 @@ class CreateWtlClientApiService
       surname: params.fetch(:surname),
       gender: params.fetch(:gender),
       email: params.fetch(:email),
-      date_of_birth: params.fetch(:date_of_birth),
+      date_of_birth: UIRotaDate.safe_parse(params.fetch(:date_of_birth)),
       university: params.fetch(:university),
       wtl_card: wtl_card,
     }
