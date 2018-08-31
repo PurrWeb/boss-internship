@@ -3,5 +3,6 @@
   clients: ActiveModel::Serializer::CollectionSerializer.new(
     wtl_clients,
     serializer: Api::V1::WtlClients::WtlClientSerializer,
-  )
+  ),
+  universities: universities,
 }) %>

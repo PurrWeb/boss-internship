@@ -9,6 +9,7 @@ class WtlClientsController < ApplicationController
     render locals: {
       access_token: access_token.token,
       wtl_clients: wtl_clients,
+      universities: WtlClient::UNIVERSITIES,
     }
   end
 end
