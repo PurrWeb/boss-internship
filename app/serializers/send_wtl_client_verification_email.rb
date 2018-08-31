@@ -8,7 +8,7 @@ class SendWtlClientVerificationEmail
   def call
     name = wtl_client.full_name
     email_address = wtl_client.email
-    link_url =  "#{ENV.fetch("WTL_VERIFY_EMAIL_ROOT_URL")}/verify?verificationCode=#{wtl_client.verification_token}"
+    link_url =  "#{ENV.fetch("WTL_VERIFY_EMAIL_ROOT_URL")}/verify?verificationToken=#{wtl_client.verification_token}"
 
     WtlClientVerificationMailer.verification_email(
       name: name,
