@@ -1,7 +1,7 @@
 class WtlClient < ActiveRecord::Base
   has_paper_trail
 
-  UNIVERSITIES = ["The University of Liverpool"]
+  UNIVERSITIES = ["The University of Liverpool", "John Moores University"]
   GENDERS = ["male", "female", "other"]
 
   enum email_status: [:unverified, :verified]
@@ -19,12 +19,19 @@ class WtlClient < ActiveRecord::Base
   validates :date_of_birth, presence: true
   validates :email, uniqueness: {message: "Account suspended"}
   validates :email, presence: true
-  validates :wtl_card, uniqueness: true, presence: true
+  validates :wtl_card, presence: true, if: :from_registration?
+  validates :wtl_card, uniqueness: true
 
   validate :email_address_valid
   validate :card_not_disabled
 
-  delegate :number, to: :wtl_card, prefix: :card
+  delegate :number, to: :wtl_card, prefix: :card, allow_nil: true
+
+  attr_writer :from_registration
+
+  def from_registration?
+    @from_registration == false ? false : true
+  end
 
   def age(from: Time.current.utc)
     if date_of_birth.present?
