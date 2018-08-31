@@ -2,6 +2,14 @@ module Api
   module V1
     class WtlClientsController < APIController
       before_filter :web_token_authenticate!
+      skip_before_filter :set_paper_trail_whodunnit
+
+      def user_for_paper_trail
+        {
+          id: current_user.id,
+          full_name: current_user.full_name,
+        }.to_json
+      end
 
       def disable
         wtl_client_result = DisableWtlClientApiService.new(wtl_client: wtl_client_from_params).call
