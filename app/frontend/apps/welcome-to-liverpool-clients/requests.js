@@ -10,3 +10,8 @@ export const enableClientRequest = params => {
   const id = oFetch(params, 'id');
   return http().post(`/api/v1/wtl_clients/${id}/enable`);
 };
+
+export const fetchClientHistory = params => {
+  const id = oFetch(params, 'id');
+  return http().get(`/api/v1/wtl_clients/${id}/history`);
+};

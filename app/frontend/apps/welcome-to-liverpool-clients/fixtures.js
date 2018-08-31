@@ -175,4 +175,94 @@ export default {
       email: 'john.doe@example.com',
     },
   ],
+
+  history: [
+    {
+      date: '2018-01-01T13:42:00Z',
+      fields: [
+        {
+          fieldName: 'Name',
+          prevValue: 'Johny',
+          value: 'John',
+        },
+        {
+          fieldName: 'Email',
+          prevValue: 'johny.doe@example.com',
+          value: ' john.doe@example.com',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2018-01-01T10:18:00Z',
+      fields: [
+        {
+          fieldName: 'Card Number',
+          prevValue: '115000',
+          value: '110000',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2018-01-01T11:18:00Z',
+      fields: [
+        {
+          fieldName: 'Card Number',
+          prevValue: '115000',
+          value: '110000',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2018-01-16T11:18:00Z',
+      fields: [
+        {
+          fieldName: 'University',
+          prevValue: 'University of Liverpool',
+          value: 'John Moores University',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2017-01-16T11:18:00Z',
+      fields: [
+        {
+          fieldName: 'University',
+          prevValue: 'University of Liverpool',
+          value: 'John Moores University',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2017-01-15T11:18:00Z',
+      fields: [
+        {
+          fieldName: 'University',
+          prevValue: 'University of Liverpool',
+          value: 'John Moores University',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+    {
+      date: '2017-01-11T11:18:00Z',
+      fields: [
+        {
+          fieldName: 'University',
+          prevValue: 'University of Liverpool',
+          value: 'John Moores University',
+        },
+        {
+          fieldName: 'Card Number',
+          prevValue: '115000',
+          value: '110000',
+        },
+      ],
+      updatedBy: 'Trulla Collier',
+    },
+  ],
 };
