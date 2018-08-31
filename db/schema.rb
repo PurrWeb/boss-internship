@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180830152720) do
+ActiveRecord::Schema.define(version: 20180831124749) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1412,7 +1412,7 @@ ActiveRecord::Schema.define(version: 20180830152720) do
     t.string   "university",         limit: 255,             null: false
     t.integer  "email_status",       limit: 4,   default: 0, null: false
     t.integer  "status",             limit: 4,   default: 0, null: false
-    t.integer  "wtl_card_id",        limit: 4,               null: false
+    t.integer  "wtl_card_id",        limit: 4
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.string   "verification_token", limit: 255,             null: false
