@@ -8,27 +8,29 @@ class WtlClientApiErrors
   attr_accessor :response_status
 
   def errors
-    if wtl_client.email.present? && WtlClient.where(email: wtl_client.email).present?
-      @response_status = 403
-      return {
-               headline: "Already registered!",
-               descirption: "It seems like you are already registered with this Email.",
-             }
-    end
-    if wtl_client.wtl_card.present?
-      if wtl_client.wtl_card.disabled?
-        @response_status = 403
-        return {
-                 headline: "Card disabled!",
-                 descirption: "It seems like your card is disabled.",
-               }
-      end
-      if WtlClient.where(wtl_card: wtl_client.wtl_card).present?
+    if wtl_client.from_registration?
+      if wtl_client.email.present? && WtlClient.where(email: wtl_client.email).present?
         @response_status = 403
         return {
                  headline: "Already registered!",
-                 descirption: "It seems like you are already registered with this card number",
+                 descirption: "It seems like you are already registered with this Email.",
                }
+      end
+      if wtl_client.wtl_card.present?
+        if wtl_client.wtl_card.disabled?
+          @response_status = 403
+          return {
+                   headline: "Card disabled!",
+                   descirption: "It seems like your card is disabled.",
+                 }
+        end
+        if WtlClient.where(wtl_card: wtl_client.wtl_card).present?
+          @response_status = 403
+          return {
+                   headline: "Already registered!",
+                   descirption: "It seems like you are already registered with this card number",
+                 }
+        end
       end
     end
 
