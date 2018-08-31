@@ -31,6 +31,7 @@ class WtlCardHistoryService
         by: user.andand.full_name,
         to: client.andand.full_name,
         event: history_event(client: client, user: user),
+        changeset: {},
       }
       acc
     end
