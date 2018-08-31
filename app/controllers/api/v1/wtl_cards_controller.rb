@@ -2,6 +2,14 @@ module Api
   module V1
     class WtlCardsController < APIController
       before_filter :web_token_authenticate!
+      skip_before_filter :set_paper_trail_whodunnit
+
+      def user_for_paper_trail
+        {
+          id: current_user.id,
+          full_name: current_user.full_name,
+        }.to_json
+      end
 
       def create
         wtl_card_result = CreateWtlCardApiService.new(params: wtl_card_from_params).call

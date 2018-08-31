@@ -2,7 +2,7 @@ class WtlCardsController < ApplicationController
   before_action :set_new_layout, only: [:index]
 
   def index
-    wtl_cards = WtlCard.all
+    wtl_cards = WtlCard.includes([versions: [:item]]).all
     wtl_clients = WtlClient.includes([:wtl_card]).where(wtl_card: wtl_cards)
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 

@@ -16,13 +16,13 @@ class CreateWtlClient
     ActiveRecord::Base.transaction do
       verification_token = SecureRandom.hex
       wtl_client = WtlClient.new(params.merge(
-        verification_token: verification_token
+        verification_token: verification_token,
       ))
       success = wtl_client.save
       if success
         register_wtl_card_result = RegisterWtlCard.new(
           wtl_client: wtl_client,
-          wtl_card: wtl_client.wtl_card
+          wtl_card: wtl_client.wtl_card,
         ).call
         success = register_wtl_card_result.success?
       end
