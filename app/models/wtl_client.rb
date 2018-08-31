@@ -17,10 +17,12 @@ class WtlClient < ActiveRecord::Base
   validates_inclusion_of :gender, :in => WtlClient::GENDERS, :message => "a valid gender should be present"
   validates_inclusion_of :university, :in => WtlClient::UNIVERSITIES, :message => "a valid university should be present"
   validates :date_of_birth, presence: true
-  validates :email, uniqueness: true, presence: true
+  validates :email, uniqueness: {message: "Account suspended"}
+  validates :email, presence: true
   validates :wtl_card, uniqueness: true, presence: true
 
   validate :email_address_valid
+  validate :card_not_disabled
 
   delegate :number, to: :wtl_card, prefix: :card
 
@@ -33,6 +35,15 @@ class WtlClient < ActiveRecord::Base
 
   def full_name
     "#{first_name} #{surname}"
+  end
+
+  def card_not_disabled
+    return unless wtl_card.present?
+
+    errors.add(
+      :wtl_card,
+      "Card is disabled"
+    ) if wtl_card.disabled?
   end
 
   def email_address_valid

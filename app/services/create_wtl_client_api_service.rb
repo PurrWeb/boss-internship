@@ -10,7 +10,7 @@ class CreateWtlClientApiService
   end
 
   def call
-    wtl_card = WtlCard.enabled.find_by(number: params.fetch(:card_number))
+    wtl_card = WtlCard.find_by(number: params.fetch(:card_number))
 
     wtl_client_params = {
       first_name: params.fetch(:first_name),
@@ -29,7 +29,12 @@ class CreateWtlClientApiService
     api_errors = nil
 
     unless wtl_client_result.success?
-      api_errors = WtlClientApiErrors.new(wtl_client: wtl_client_result.wtl_client)
+      wtl_client = wtl_client_result.wtl_client
+      if wtl_client.wtl_card.blank? && params.fetch(:card_number).present?
+        wtl_client.errors.add(:wtl_card, "Card doesn't exist")
+      end
+
+      api_errors = WtlClientApiErrors.new(wtl_client: wtl_client)
     end
 
     Result.new(wtl_client_result.wtl_client, wtl_client_result.success?, api_errors)

@@ -9,7 +9,9 @@ module Api
                      wtlClient: Api::Wtl::V1::WtlClients::WtlClientSerializer.new(wtl_client_result.wtl_client),
                    }, status: 200
           else
-            render json: {errors: wtl_client_result.api_errors.errors}, status: 422
+            render json: {
+              errors: wtl_client_result.api_errors.errors,
+            }, status: wtl_client_result.api_errors.response_status
           end
         end
 
