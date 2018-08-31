@@ -14,16 +14,14 @@ export default handleActions(
     [types.ENABLE_CARD]: (state, action) => {
       const card = oFetch(action, 'payload.card');
       const cardNumber = oFetch(card, 'number');
-      const disabled = oFetch(card, 'disabled');
       const cardIndex = state.findIndex(card => card.get('number') === cardNumber);
-      return state.update(cardIndex, card => card.set('disabled', disabled));
+      return state.update(cardIndex, c => Immutable.fromJS(card));
     },
     [types.DISABLE_CARD]: (state, action) => {
       const card = oFetch(action, 'payload.card');
       const cardNumber = oFetch(card, 'number');
-      const disabled = oFetch(card, 'disabled');
       const cardIndex = state.findIndex(card => card.get('number') === cardNumber);
-      return state.update(cardIndex, card => card.set('disabled', disabled));
+      return state.update(cardIndex, c => Immutable.fromJS(card));
     },
   },
   initialState,
