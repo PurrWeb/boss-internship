@@ -23,7 +23,7 @@ class WtlCardHistoryService
       acc
     end
 
-    result2 = WtlCardsHistory.where(wtl_card: wtl_card).inject({}) do |acc, history|
+    result2 = WtlCardsHistory.includes([:wtl_client, :user, :wtl_card]).where(wtl_card: wtl_card).inject({}) do |acc, history|
       client = history.wtl_client
       user = history.user
       created_at = history.created_at
