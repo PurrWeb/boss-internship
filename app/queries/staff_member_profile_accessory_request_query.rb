@@ -6,12 +6,27 @@ class StaffMemberProfileAccessoryRequestQuery
   attr_reader :staff_member, :filter_params
 
   def all
-    InRangeQuery.new({
-      relation: staff_member.accessory_requests,
-      start_value: filter_params.fetch(:payslip_start_date),
-      end_value: filter_params.fetch(:payslip_end_date),
-      start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date'
-    }).all
+    accessory_requests = AccessoryRequest.arel_table
+    query = AccessoryRequest.where(
+      accessory_requests.grouping(
+        accessory_requests[:staff_member_id].eq(staff_member.id).
+        and(
+          accessory_requests[:payslip_date].eq(nil)
+        )
+      ).or(
+        accessory_requests.grouping(
+          accessory_requests[:staff_member_id].eq(staff_member.id)
+          .and(
+            accessory_requests[:payslip_date].lteq(filter_params.fetch(:payslip_end_date)).
+            and(
+              accessory_requests[:payslip_date].gteq(filter_params.fetch(:payslip_start_date))
+            )
+          )
+
+        )
+      )
+    )
+
+    query.all
   end
 end
