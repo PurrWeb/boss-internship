@@ -23,14 +23,11 @@ describe StaffMemberProfileAccessoryRequestQuery do
         accessory_type: accessory.accessory_type
       ).tap do |accessory_request|
         accessory_request.transition_to!(:accepted, requster_user_id: user.id)
-        accessory_request.transition_to!(:completed, requster_user_id: user.id)
-        accessory_request.update_attributes!(payslip_date: existing_request_payslip_date)
       end
     end
 
-    context 'staff member matches but not payslip date' do
+    context 'request with no payslip date' do
       let(:existing_request_staff_member) { staff_member }
-      let(:existing_request_payslip_date) { today }
       let(:filter_params) do
         {
           payslip_start_date: today - 1.week,
@@ -38,40 +35,62 @@ describe StaffMemberProfileAccessoryRequestQuery do
         }
       end
 
-
-      it 'should not match' do
-        expect(query.all.count).to eq(0)
-      end
-    end
-
-    context 'payslip date matches but not staff member' do
-      let(:other_staff_member) { FactoryGirl.create(:staff_member) }
-      let(:existing_request_staff_member) { other_staff_member }
-      let(:existing_request_payslip_date) { today }
-      let(:filter_params) do
-        {
-          payslip_start_date: today - 1.day,
-          payslip_end_date: today + 1.day
-        }
-      end
-
-      it 'should not match' do
-        expect(query.all.count).to eq(0)
-      end
-    end
-
-    context 'request matches' do
-      let(:existing_request_staff_member) { staff_member }
-      let(:existing_request_payslip_date) { today }
-      let(:filter_params) do
-        {
-          payslip_start_date: today - 1.day,
-          payslip_end_date: today + 1.day
-        }
-      end
-
-      it 'should not match' do
+      it 'should match' do
         expect(query.all.count).to eq(1)
+      end
+    end
+
+    context 'existing request with payslip date' do
+      before do
+        existing_request.transition_to!(:completed, requster_user_id: user.id)
+        existing_request.update_attributes!(payslip_date: existing_request_payslip_date)
+      end
+
+      context 'staff member matches but not payslip date' do
+        let(:existing_request_staff_member) { staff_member }
+        let(:existing_request_payslip_date) { today }
+        let(:filter_params) do
+          {
+            payslip_start_date: today - 1.week,
+            payslip_end_date: today - 1.week
+          }
+        end
+
+
+        it 'should not match' do
+          expect(query.all.count).to eq(0)
+        end
+      end
+
+      context 'payslip date matches but not staff member' do
+        let(:other_staff_member) { FactoryGirl.create(:staff_member) }
+        let(:existing_request_staff_member) { other_staff_member }
+        let(:existing_request_payslip_date) { today }
+        let(:filter_params) do
+          {
+            payslip_start_date: today - 1.day,
+            payslip_end_date: today + 1.day
+          }
+        end
+
+        it 'should not match' do
+          expect(query.all.count).to eq(0)
+        end
+      end
+
+      context 'request matches' do
+        let(:existing_request_staff_member) { staff_member }
+        let(:existing_request_payslip_date) { today }
+        let(:filter_params) do
+          {
+            payslip_start_date: today - 1.day,
+            payslip_end_date: today + 1.day
+          }
+        end
+
+        it 'should not match' do
+          expect(query.all.count).to eq(1)
+        end
       end
     end
   end
