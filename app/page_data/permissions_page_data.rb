@@ -180,8 +180,8 @@ class PermissionsPageData
       ],
     }
 
-    admin_wtl = {
-      name: "Admin: WTL",
+    customers = {
+      name: "Customers",
       color: "#e67e22",
       items: [
         {
