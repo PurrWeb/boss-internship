@@ -56,8 +56,23 @@ export default class RotaOverviewChartInner extends Component {
       if(this.props.chartData.length > 0) {
         return (<div className="rota-overview-chart__controls">
           <span className="rota-overview-chart__controls-label">Highlight:&nbsp;</span>
-          <button style={{marginRight: '10px'}} className="boss-button boss-button_type_small rota-overview-chart__controls-button" onClick={() => this.setState({rotasInfo: true, rotasTime: false})}>Staff Counts</button>
-          <button className="boss-button boss-button_type_small rota-overview-chart__controls-button" onClick={() => this.setState({rotasInfo: false, rotasTime: true})}>Shift Info</button>
+          <button
+            style={{ marginRight: '10px' }}
+            className={`boss-button boss-button_type_small boss-button_role_highlight rota-overview-chart__controls-button ${
+              this.state.rotasInfo ? 'boss-button_state_active' : ''
+            }`}
+            onClick={() => this.setState({ rotasInfo: true, rotasTime: false })}
+          >
+            Staff Counts
+          </button>
+          <button
+            className={`boss-button boss-button_type_small boss-button_role_highlight rota-overview-chart__controls-button ${
+              this.state.rotasTime ? 'boss-button_state_active' : ''
+            }`}
+            onClick={() => this.setState({ rotasInfo: false, rotasTime: true })}
+          >
+            Shift Info
+          </button>
         </div>);
       }
     }
