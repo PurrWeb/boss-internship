@@ -23,7 +23,6 @@ class WtlClient < ActiveRecord::Base
   validates :wtl_card, uniqueness: true
 
   validate :email_address_valid
-  validate :card_not_disabled, on: :create
 
   delegate :number, to: :wtl_card, prefix: :card, allow_nil: true
 
@@ -42,15 +41,6 @@ class WtlClient < ActiveRecord::Base
 
   def full_name
     "#{first_name} #{surname}"
-  end
-
-  def card_not_disabled
-    return unless wtl_card.present?
-
-    errors.add(
-      :wtl_card,
-      "Card is disabled"
-    ) if wtl_card.disabled?
   end
 
   def email_address_valid
