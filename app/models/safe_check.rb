@@ -141,6 +141,8 @@ class SafeCheck < ActiveRecord::Base
        till_float_cents: "Till Float",
        total_float_cents: "Total Float",
        out_to_order_cents: "Out to order",
+       ash_cash_cents: "Ash Cash",
+       security_plus_cents: "Security Plus",
      }.fetch(field)
    end
 
