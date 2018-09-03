@@ -18,6 +18,11 @@ class ProfilePage extends React.PureComponent {
     endDate: null,
   };
 
+  componentDidMount() {
+    const fullName = oFetch(this.props, 'client.fullName');
+    document.title = `${fullName} Profile`;
+  }
+
   handleFilter = (startDate, endDate) => {
     this.setState({ startDate, endDate });
   };
