@@ -381,7 +381,6 @@
                           <span class="boss-form__label-text">Other</span>
                           <span class="boss-form__units">
                               <span class="boss-form__units-value">£</span>
-                              <!-- <input name="other" type="text" class="boss-form__input" placeholder="0"> -->
                               <%= form.number_field(
                                 :other_cents,
                                 prepend: '£',
@@ -411,7 +410,6 @@
                           <span class="boss-form__label-text">Payouts</span>
                           <span class="boss-form__units">
                               <span class="boss-form__units-value">£</span>
-                              <!-- <input name="payouts" type="text" class="boss-form__input" placeholder="0"> -->
                               <%= form.number_field(
                                 :payouts_cents,
                                 prepend: '£',
@@ -438,7 +436,6 @@
                           <span class="boss-form__label-text">Out to Order</span>
                           <span class="boss-form__units">
                             <span class="boss-form__units-value">£</span>
-                            <!-- <input name="out-to-order" type="text" class="boss-form__input" placeholder="0"> -->
                             <%= form.number_field(
                               :out_to_order_cents,
                               prepend: '£',
@@ -460,6 +457,97 @@
                         </div>
                       <% end %>
                   </div>
+              </div>
+
+              <div id="received-change-block" class="boss-form__group boss-form__group_role_board-outline js-received-change">
+                <div class="boss-form__row boss-form__row_justify_end boss-form__row_layout_wrap-xs">
+                    <div class="boss-form__field boss-form__field_layout_max">
+                        <% if safe_check.errors[:received_change].present? %>
+                        <div class="boss-form__error boss-form__error_no-space">
+                            <p class="boss-form__error-text">
+                            <%= safe_check.errors[:received_change].join(', ') %>
+                            </p>
+                        </div>
+                        <% end %>
+                    </div>
+                    <div class="boss-form__field boss-form__field_layout_actual">
+                        <label class="boss-form__checkbox-label">
+                            <%= form.check_box(
+                              :received_change,
+                              onchange: 'onReceivedChange()',
+                              class: ['boss-form__checkbox-input']
+                            ) %>
+                            <span class="boss-form__checkbox-label-text boss-form__checkbox-label-text_layout_reverse boss-form__checkbox-label-text_no-wrap">Received change</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="received-change-row" class="boss-form__row">
+                    <div class="boss-form__field boss-form__field_layout_half">
+                      <label class="boss-form__label">
+                        <span class="boss-form__label-text">Still out to order</span>
+                      </label>
+                      <p class="boss-form__value">
+                        <span id="js-still-out-to-order-calculation-float-value">
+                          <%= number_to_currency(
+                            safe_check.pound_value_for(:total_float_cents).to_int_if_whole,
+                            unit: '£',
+                            precision: 2
+                          ) %>
+                        </span>
+                      </p>
+                    </div>
+                    <div class="boss-form__field boss-form__field_layout_half">
+                        <label class="boss-form__label">
+                            <span class="boss-form__label-text">Ash Cash</span>
+                            <span class="boss-form__units">
+                                <span class="boss-form__units-value">£</span>
+                                <!-- <input name="ash-cash" type="number" class="boss-form__input" placeholder="0"> -->
+                                <%= form.number_field(
+                                  :ash_cash_cents,
+                                  prepend: '£',
+                                  value: safe_check.pound_value_for(:ash_cash_cents).to_int_if_whole,
+                                  label: SafeCheck.label_for(:ash_cash_cents),
+                                  step: 0.01,
+                                  class: ['boss-form__input', 'js-total-calculation-ash-cash-value', 'js-total-calculation-watch-field']
+                              ) %>
+                            </span>
+                        </label>
+                         <% if (safe_check.errors[:ash_cash_cents]).present? %>
+                          <div class="boss-form__error">
+                            <p class="boss-form__error-text">
+                              <span class="boss-form__error-line">
+                                <%= safe_check.errors[:ash_cash_cents].join(', ') %>
+                              </span>
+                            </p>
+                          </div>
+                        <% end %>
+                    </div>
+                    <div class="boss-form__field boss-form__field_layout_half">
+                        <label class="boss-form__label">
+                            <span class="boss-form__label-text">Security Plus</span>
+                            <span class="boss-form__units">
+                                <span class="boss-form__units-value">£</span>
+                              <%= form.number_field(
+                                :security_plus_cents,
+                                prepend: '£',
+                                value: safe_check.pound_value_for(:security_plus_cents).to_int_if_whole,
+                                label: SafeCheck.label_for(:security_plus_cents),
+                                step: 0.01,
+                                class: ['boss-form__input', 'js-total-calculation-security-plus-value', 'js-total-calculation-watch-field']
+                              ) %>
+                            </span>
+                        </label>
+                        <% if (safe_check.errors[:security_plus_cents]).present? %>
+                          <div class="boss-form__error">
+                            <p class="boss-form__error-text">
+                              <span class="boss-form__error-line">
+                                <%= safe_check.errors[:security_plus_cents].join(', ') %>
+                              </span>
+                            </p>
+                          </div>
+                        <% end %>
+                    </div>
+                </div>
               </div>
 
               <div class="boss-form__row">
@@ -561,3 +649,21 @@
       </div>
   </div>
 </div>
+
+<script>
+    window.onload = onReceivedChange();
+
+    function onReceivedChange() {
+      var checkBox = document.getElementById("received-change");
+      var ashCashInput = document.getElementById("safe_check_ash_cash_cents");
+      var securityPlusInput = document.getElementById("safe_check_security_plus_cents");
+      var outToOrder = document.getElementById("safe_check_out_to_order_cents");
+      if(checkBox.checked) {
+        ashCashInput.disabled = false;
+        securityPlusInput.disabled = false;
+      } else {
+        ashCashInput.disabled = true;
+        securityPlusInput.disabled = true;
+      }
+    }
+</script>
