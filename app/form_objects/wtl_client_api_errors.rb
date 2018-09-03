@@ -15,8 +15,8 @@ class WtlClientApiErrors
         if wtl_client.wtl_card.disabled?
           @response_status = 403
           return {
-                   headline: "Card disabled!",
-                   descirption: "It seems like your card is disabled.",
+                   headline: "Something went wrong!",
+                   descirption: "We couldn't register you because of an issue with your email address or card.",
                  }
         end
         if existing_client.present?
