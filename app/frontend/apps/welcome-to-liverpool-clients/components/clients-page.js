@@ -20,6 +20,7 @@ class ClientsPage extends React.Component {
       status: filter.status ? filter.status : null,
       cardNumber: filter.card_number ? filter.card_number : null,
     });
+    document.title = 'Welcome to Liverpool Clients';
   }
 
   handleDropdownFilterUpdate = filter => {
