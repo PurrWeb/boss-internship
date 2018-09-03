@@ -36,7 +36,11 @@ class ProfileCard extends React.PureComponent {
     );
     const [enableClientRequested, history] = oFetch(this.props, 'enableClientRequested', 'history');
     return (
-      <div className="boss-check boss-check_role_board boss-check_page_wtl-clients-profile">
+      <div
+        className={`boss-check boss-check_role_board boss-check_page_wtl-clients-profile ${
+          disabled ? 'boss-check_state_alert' : ''
+        }`}
+      >
         <div className="boss-check__row">
           <div className="boss-check__cell">
             <h3 className="boss-check__title boss-check__title_role_user">{fullName}</h3>

@@ -11,16 +11,21 @@ import { appRoutes } from '~/lib/routes';
 
 class ClientItemMobile extends React.Component {
   render() {
-    const [cardNumber, fullName, emailVerified, updatedAt, id] = oFetch(
+    const [cardNumber, fullName, emailVerified, updatedAt, id, disabled] = oFetch(
       this.props.client,
       'cardNumber',
       'fullName',
       'emailVerified',
       'updatedAt',
       'id',
+      'disabled',
     );
     return (
-      <div className="boss-check boss-check_role_board boss-check_page_wtl-clients-index boss-check_highlight_accent-red">
+      <div
+        className={`boss-check boss-check_role_board boss-check_page_wtl-clients-index ${
+          disabled ? 'boss-check_state_alert' : ''
+        }`}
+      >
         <div className="boss-check__row">
           <div className="boss-check__cell">
             <h3 className="boss-check__title boss-check__title_role_user">{fullName}</h3>

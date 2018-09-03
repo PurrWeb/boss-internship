@@ -9,15 +9,16 @@ import { appRoutes } from '~/lib/routes';
 
 class ClientItem extends React.Component {
   render() {
-    const [cardNumber, fullName, emailVerified, id] = oFetch(
+    const [cardNumber, fullName, emailVerified, id, disabled] = oFetch(
       this.props.client,
       'cardNumber',
       'fullName',
       'emailVerified',
       'id',
+      'disabled',
     );
     return (
-      <div className="boss-table__row">
+      <div className={`boss-table__row ${disabled ? 'boss-table__row_state_alert' : ''}`}>
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__text">{fullName}</p>
