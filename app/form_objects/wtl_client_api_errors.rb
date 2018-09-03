@@ -10,21 +10,8 @@ class WtlClientApiErrors
 
   def errors
     if wtl_client.from_registration?
-      if wtl_client.wtl_card.blank? && card_number.present?
-        @response_status = 403
-        return {
-                 headline: "Card or email problem!",
-                 descirption: "This card could not be registered because there was a problem with your card or email address.",
-               }
-      end
-      if wtl_client.email.present? && WtlClient.where(email: wtl_client.email).present?
-        @response_status = 403
-        return {
-                 headline: "Already registered!",
-                 descirption: "It seems like you are already registered with this Email.",
-               }
-      end
       if wtl_client.wtl_card.present?
+        existing_client = WtlClient.where(wtl_card: wtl_client.wtl_card).first
         if wtl_client.wtl_card.disabled?
           @response_status = 403
           return {
@@ -32,11 +19,32 @@ class WtlClientApiErrors
                    descirption: "It seems like your card is disabled.",
                  }
         end
-        if WtlClient.where(wtl_card: wtl_client.wtl_card).present?
+        if existing_client.present?
+          @response_status = 403
+          if existing_client.email == wtl_client.email
+            if existing_client.verified?
+              return {
+                       headline: "Already registered!",
+                       descirption: "You are already registered. Your card is ready to use.",
+                     }
+            else
+              return {
+                       headline: "Already registered!",
+                       descirption: "You are already registered. Verify your email address by visting the link in your verification email to complete the process and use your card.",
+                     }
+            end
+          end
+          return {
+                   headline: "Card or email problem!",
+                   descirption: "There was a problem with your email address or card number.",
+                 }
+        end
+      else
+        if card_number.present?
           @response_status = 403
           return {
-                   headline: "Already registered!",
-                   descirption: "It seems like you are already registered with this card number",
+                   headline: "Card or email problem!",
+                   descirption: "This card could not be registered because there was a problem with your card or email address.",
                  }
         end
       end
