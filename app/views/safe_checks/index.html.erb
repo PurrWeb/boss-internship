@@ -102,6 +102,18 @@
                   ) %>
                 </p>
               </div>
+              <% if safe_check.ash_cash_cents.present? %>
+                <div class="boss-corner boss-corner_position_top-right boss-corner_color_accent-green">
+                  <p class="boss-corner__label boss-corner__label_size_l">ASH</p>
+                </div>
+              <% end %>
+
+              <% if safe_check.security_plus_cents.present? %>
+                <div class="boss-corner boss-corner_position_bottom-right boss-corner_color_accent-purple">
+                    <p class="boss-corner__label boss-corner__label_size_l">S+</p>
+                </div>
+              <% end %>
+
             </div>
 
             <div class="boss-table__cell">
