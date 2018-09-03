@@ -11,7 +11,7 @@ import DashboardActiveFilter from './dashboard-active-filter';
 import CardHistoryContent from './card-history-content';
 import LoadMore from '~/components/load-more/load-more-children';
 import { appRoutes } from '~/lib/routes';
-import { openContentModal } from '~/components/modals';
+import { openContentModal, openWarningModal } from '~/components/modals';
 
 class Page extends React.Component {
   componentDidMount() {
@@ -19,6 +19,7 @@ class Page extends React.Component {
     oFetch(this.props, 'changeCardNumberFilter')({
       filter: filter.card_number ? filter.card_number : null,
     });
+    document.title = 'Welcome to Liverpool Cards';
   }
 
   handleDropdownFilterUpdate = filter => {
@@ -49,14 +50,21 @@ class Page extends React.Component {
   handleActiveFilterChange = filter => {
     oFetch(this.props, 'changeActiveFilter')({ filter });
   };
+
+  handleDisableCard = ({ number }) => {
+    const disableCardRequested = oFetch(this.props, 'disableCardRequested');
+    openWarningModal({
+      submit: hideModal => disableCardRequested({ number }).then(hideModal),
+      config: {
+        title: 'WARNING !!!',
+        text: 'Are You Sure?',
+        buttonText: 'Disable',
+      },
+    });
+  };
+
   render() {
-    const [cards, total, enadleCardRequested, disableCardRequested] = oFetch(
-      this.props,
-      'cards',
-      'total',
-      'enadleCardRequested',
-      'disableCardRequested',
-    );
+    const [cards, total, enadleCardRequested] = oFetch(this.props, 'cards', 'total', 'enadleCardRequested');
     return (
       <main className="boss-page-main">
         <Dashboard
@@ -79,7 +87,7 @@ class Page extends React.Component {
                 <PureToJSCardItem
                   card={card}
                   onEnable={enadleCardRequested}
-                  onDisable={disableCardRequested}
+                  onDisable={this.handleDisableCard}
                   onOpenHistory={this.handleOpenHistory}
                 />
               )}
