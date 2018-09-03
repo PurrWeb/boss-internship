@@ -1,14 +1,22 @@
 class WtlClientApiErrors
-  def initialize(wtl_client:)
+  def initialize(wtl_client:, card_number: nil)
     @wtl_client = wtl_client
+    @card_number = card_number
     @response_status = 422
   end
 
-  attr_reader :wtl_client
+  attr_reader :wtl_client, :card_number
   attr_accessor :response_status
 
   def errors
     if wtl_client.from_registration?
+      if wtl_client.wtl_card.blank? && card_number.present?
+        @response_status = 403
+        return {
+                 headline: "Card or email problem!",
+                 descirption: "This card could not be registered because there was a problem with your card or email address.",
+               }
+      end
       if wtl_client.email.present? && WtlClient.where(email: wtl_client.email).present?
         @response_status = 403
         return {

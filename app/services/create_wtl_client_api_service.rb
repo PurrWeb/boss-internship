@@ -34,7 +34,7 @@ class CreateWtlClientApiService
         wtl_client.errors.add(:wtl_card, "Card doesn't exist")
       end
 
-      api_errors = WtlClientApiErrors.new(wtl_client: wtl_client)
+      api_errors = WtlClientApiErrors.new(wtl_client: wtl_client, card_number: params.fetch(:card_number))
     end
 
     Result.new(wtl_client_result.wtl_client, wtl_client_result.success?, api_errors)
