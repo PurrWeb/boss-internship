@@ -23,7 +23,7 @@ class WtlClient < ActiveRecord::Base
   validates :wtl_card, uniqueness: true
 
   validate :email_address_valid
-  validate :card_not_disabled
+  validate :card_not_disabled, on: :create
 
   delegate :number, to: :wtl_card, prefix: :card, allow_nil: true
 
