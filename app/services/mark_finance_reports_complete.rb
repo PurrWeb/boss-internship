@@ -5,17 +5,17 @@ class MarkFinanceReportsComplete
   attr_reader :finance_reports
 
   def call
-    unsaveable_reports = finance_reports.reject do |report|
-      report.ready? || report.completion_date_reached? || (finance_report.total_cents >= 0)
+    unsaveable_reports = finance_reports.reject do |finance_report|
+      finance_report.ready? || finance_report.completion_date_reached? || (finance_report.total_cents >= 0)
     end
     if unsaveable_reports.length > 0
-      raise "Attempt to complete incompletable finanace report for staff members with ids: #{ unsaveable_reports.map{ |report| report.staff_member_id }.join(', ') }"
+      raise "Attempt to complete incompletable finanace report for staff members with ids: #{ unsaveable_reports.map{ |finance_report| finance_report.staff_member_id }.join(', ') }"
     end
 
     ActiveRecord::Base.transaction do
-      finance_reports.each do |report|
-        report.allow_mark_completed = true
-        report.mark_completed!
+      finance_reports.each do |finance_report|
+        finance_report.allow_mark_completed = true
+        finance_report.mark_completed!
       end
     end
   end
