@@ -55,7 +55,8 @@ class FinanceReportsController < ApplicationController
 
     staff_types = StaffType.
       joins(:staff_members).
-      merge(staff_members)
+      merge(staff_members).
+      uniq
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 

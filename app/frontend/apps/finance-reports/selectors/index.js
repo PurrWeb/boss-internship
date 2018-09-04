@@ -74,8 +74,8 @@ export const getWeekDates = createSelector(startDateSelector, startDate => {
 export const getStaffTypesWithFinanceReports = createSelector(
   getStaffTypesWithStaffMembers,
   getReportsWithCalculations,
-  (staffTypes, financeReports) =>
-    staffTypes.map(staffType => {
+  (staffTypes, financeReports) => {
+    return staffTypes.map(staffType => {
       const reports = financeReports.filter(financeReport =>
         staffType.get('staffMembers').has(financeReport.get('staffMemberId')),
       );
@@ -102,19 +102,21 @@ export const getStaffTypesWithFinanceReports = createSelector(
         }
       });
 
+      const staffTypeEmpty = reportsJS.length == 0;
       const noIncompletableReportsExist = incompletableReadyReports.length === 0;
       const completeableReportsExist = completableReadyReports.length > 0;
 
-      const allReady = noIncompletableReportsExist && completeableReportsExist;
+      const allReady = staffTypeEmpty || (noIncompletableReportsExist && completeableReportsExist);
       return staffType
         .set('total', total)
         .set('reports', reports)
         .set('allReady', allReady);
-    }),
+    })
+  }
 );
 
-export const getAllReady = createSelector(getStaffTypesWithFinanceReports, staffTypesWithFinanceReports =>
-  staffTypesWithFinanceReports.reduce((acc, staffType) => {
-    return acc || staffType.get('allReady');
-  }, false),
-);
+export const getAllReady = createSelector(getStaffTypesWithFinanceReports, (staffTypesWithFinanceReports) => {
+  return staffTypesWithFinanceReports.every((staffType) => {
+    return staffType.get('allReady') == true;
+  });
+});
