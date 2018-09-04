@@ -58,7 +58,7 @@ const holidaysReducer = handleActions({
       startPayslipDate,
       endPayslipDate,
     } = action.payload;
-
+    window.boss.accessToken = accessToken;
     const permissionsData = oFetch(action.payload, 'permissionsData');
 
     return state
