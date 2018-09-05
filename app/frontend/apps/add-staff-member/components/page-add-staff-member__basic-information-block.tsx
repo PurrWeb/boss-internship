@@ -3,12 +3,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors, FieldState, ErrorsObject} from 'react-redux-form';
-import DatePicker from 'react-datepicker';
+import BossDatePicker from '../../../components/react-dates/boss-date-picker';
 import * as Select from 'react-select';
-import {pipe, omit, values, find} from 'ramda';
-import * as moment from 'moment';
+
 // tslint:disable-next-line:no-require-imports
-const CalendarCustomInput = require('../../../components/boss-form/calendar-custom-input').default;
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, BasicInformationFormFields} from '../../../interfaces/store-models';
@@ -155,22 +153,11 @@ class Component extends React.Component<PropsFromConnect, State> {
               <span className="boss-form__label-text">Date of Birth</span>
             </label>
             <Control
-                component={DatePicker}
-                className="boss-form__input"
+                component={BossDatePicker}
                 model=".dateOfBirth"
                 mapProps={{
-                  customInput: () => (<CalendarCustomInput />),
-                  allowSameDay: () => true,
-                  withPortal: () => 'withPortal',
-                  calendarClassName: () => 'date-picker',
-                  className: setInputClass,
-                  locale: () => 'en-gb',
-                  selected: (props) => props.viewValue,
-                  showMonthDropdown: () => true,
-                  showYearDropdown: () => true,
-                  dropdownMode: () => 'select',
-                  dateFormat: () => 'DD-MM-YYYY',
-                  onChange: (props) => {
+                  date: (props) => props.viewValue,
+                  onApply: (props) => {
                     return props.onChange;
                   }
                 }}

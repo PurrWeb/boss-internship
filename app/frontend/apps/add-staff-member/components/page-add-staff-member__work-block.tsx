@@ -4,7 +4,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Control, Form, Errors} from 'react-redux-form';
 import * as Select from 'react-select';
-import DatePicker from 'react-datepicker';
+import BossDatePicker from '../../../components/react-dates/boss-date-picker';
 
 import {PropsExtendedByConnect} from '../../../interfaces/component';
 import {StoreStructure, WorkFormFields} from '../../../interfaces/store-models';
@@ -12,8 +12,7 @@ import {OfType} from '../../../interfaces/index';
 import {setInputClass, renderErrorsBlock, renderErrorComponent} from '../../../helpers/renderers';
 import {isRequiredField, formatInvalid} from '../../../constants/form-errors';
 import {isNationalInsuranceNumber, isPinCode, isNotEmptyInput, isNotEmptyInput as isFilled} from '../../../helpers';
-import workInfoBlockValidated from '../../../action-creators/work-info-block-validated';
-import steppingBackRegistration from '../../../action-creators/stepping-back-registration';
+
 import {OptionData} from '../../../interfaces/common-data-types';
 import {
   PinCodeInputValidators,
@@ -101,16 +100,11 @@ class Component extends React.Component<PropsFromConnect, State> {
           <span className="boss-form__label-text">Sia Badge Expiry Date</span>
         </label>
         <Control.text
-          component={DatePicker}
-          className="boss-form__input"
+          component={BossDatePicker}
           model=".siaBadgeExpiryDate"
           mapProps={{
-            withPortal: () => 'withPortal',
-            calendarClassName: () => 'date-picker',
-            className: setInputClass,
-            locale: () => 'en-gb',            
-            selected: (props) => props.viewValue,
-            onChange: (props) => {
+            date: (props) => props.viewValue,
+            onApply: (props) => {
               return props.onChange;
             }
           }}
