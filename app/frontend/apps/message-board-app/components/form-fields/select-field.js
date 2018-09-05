@@ -1,7 +1,5 @@
 import React from "react";
 import Select from "react-select";
-import CalendarCustomInput from "~/components/boss-form/calendar-custom-input";
-import safeMoment from "~/lib/safe-moment";
 
 class SelectField extends React.Component {
   selectedValue() {

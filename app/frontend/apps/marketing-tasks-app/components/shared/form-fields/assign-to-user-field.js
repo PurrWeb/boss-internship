@@ -1,8 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import TimePicker from 'rc-time-picker';
-import CalendarCustomInput from '~/components/boss-form/calendar-custom-input';
-import safeMoment from "~/lib/safe-moment";
 
 class AssignToUserField extends React.Component {
   renderOption(option) {
