@@ -52,7 +52,7 @@ export const search = (currentPage) => (dispatch, getState) => {
     page: page,
   };
   const newParams = utils.insertUrlParams(params);
-  axios.get('/api/v1/checklist_submissions', {
+  return axios.get('/api/v1/checklist_submissions', {
     params: params,
     headers: {
       Authorization: `Token token="${accessToken}"`
