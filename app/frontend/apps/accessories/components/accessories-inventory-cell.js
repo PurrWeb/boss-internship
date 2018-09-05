@@ -19,10 +19,11 @@ class AccessoriesInventoryCell extends Component {
     );
   }
 }
+
 AccessoriesInventoryCell.propTypes = {
   title: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
-  actionRenderer: PropTypes.func.isRequired,
+  actionRenderer: PropTypes.func,
 };
 
 export default AccessoriesInventoryCell;

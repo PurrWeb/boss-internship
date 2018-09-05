@@ -15,24 +15,28 @@ import AccessoriesInventoryCell from './accessories-inventory-cell';
 
 class AccessoriesList extends React.Component {
   renderEnabledButtons(accessory) {
+    const canEdit = oFetch(this.props, 'permissions.edit');
+    const canDisable = oFetch(this.props, 'permissions.disable');
     return (
       <BossCheckCardActions>
-        <button className="boss-button boss-button_role_edit" onClick={() => this.props.onEdit(accessory)}>
+        {canEdit && <button className="boss-button boss-button_role_edit" onClick={() => this.props.onEdit(accessory)}>
           Edit
-        </button>
-        <button className="boss-button boss-button_role_disable" onClick={() => this.props.onDisable(accessory)}>
+        </button>}
+        {canDisable && <button className="boss-button boss-button_role_disable" onClick={() => this.props.onDisable(accessory)}>
           Disable
-        </button>
+        </button>}
       </BossCheckCardActions>
     );
   }
 
   renderDisabledButtons(accessory) {
+    const canEnable = oFetch(this.props, 'permissions.enable');
+
     return (
       <BossCheckCardActions>
-        <button className="boss-button boss-button_role_restore" onClick={() => this.props.onRestore(accessory)}>
+        {canEnable && <button className="boss-button boss-button_role_restore" onClick={() => this.props.onRestore(accessory)}>
           Restore
-        </button>
+        </button>}
       </BossCheckCardActions>
     );
   }
@@ -50,6 +54,8 @@ class AccessoriesList extends React.Component {
   }
 
   renderAccessories(accessories) {
+    const canInventory = oFetch(this.props, 'permissions.inventory');
+
     return accessories.map((accessory, index) => {
       const price = numeral(oFetch(accessory, 'priceCents') / 100).format('0,0.00');
       const isEnabled = oFetch(accessory, 'enabled');
@@ -73,17 +79,23 @@ class AccessoriesList extends React.Component {
           <BossCheckCardRow title="Current requests" text={pendingRequestCount} />
           <BossCheckCardRow title="Current refunds" text={pendingRefundCount} />
           <BossCheckSimpleRow>
-            <AccessoriesInventoryCell
-              title="Free Items"
-              count={oFetch(accessory, 'freeItems')}
-              actionRenderer={() => {
-                return (
-                  <button onClick={() => onEditFreeItems(accessory)} className="boss-check__link">
-                    <span className="boss-check__text boss-check__text_role_edit boss-check__text_role_link">Edit</span>
-                  </button>
-                );
-              }}
-            />
+            {canInventory ? (
+              <AccessoriesInventoryCell
+                title="Free Items"
+                count={oFetch(accessory, 'freeItems')}
+                actionRenderer={() => {
+                  return (
+                    <button onClick={() => onEditFreeItems(accessory)} className="boss-check__link">
+                      <span className="boss-check__text boss-check__text_role_edit boss-check__text_role_link">Edit</span>
+                    </button>
+                  );
+                }}
+              />) : (
+                <AccessoriesInventoryCell
+                  title="Free Items"
+                  count={oFetch(accessory, 'freeItems')}
+                />
+              )}
             <AccessoriesInventoryCell title="Booked Items" count={oFetch(accessory, 'booked')} />
             <AccessoriesInventoryCell title="Refunds" count={oFetch(accessory, 'refunded')} />
           </BossCheckSimpleRow>

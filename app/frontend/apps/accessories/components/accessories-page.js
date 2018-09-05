@@ -139,19 +139,23 @@ class AccessoriesPage extends React.Component {
   }
 
   render() {
+    const permissions = oFetch(this.props, 'permissions');
+    const canCreate = oFetch(permissions, 'create');
+
     const accessories = this.getAccessories();
     const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
     return (
       <div>
         <SimpleDashboard title="Accessories">
           <DashboardActions>
-            <button className="boss-button boss-button_role_add" onClick={this.handleAddAccessory}>
+            {canCreate && <button className="boss-button boss-button_role_add" onClick={this.handleAddAccessory}>
               Add Accessory
-            </button>
+            </button>}
           </DashboardActions>
           <DashboardFilter onFilter={this.handleFilter} component={AccessoriesFilter} />
         </SimpleDashboard>
         <AccessoriesList
+          permissions={permissions}
           accessories={this.getAccessories()}
           totalCount={this.props.pagination.totalCount}
           isShowLoadMore={isShowLoadMore}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import oFetch from 'o-fetch';
 
 import configureStore from '~/apps/store';
 import reducers from './redux/reducers';
 import {loadInitialState} from './redux/actions';
-
 import AccessoriesPageContainer from './containers/accessories-page-container';
 
 class AccessoriesApp extends React.Component {
@@ -18,7 +18,7 @@ class AccessoriesApp extends React.Component {
   render() {
     return(
       <Provider store={this.store}>
-        <AccessoriesPageContainer />
+        <AccessoriesPageContainer permissions={oFetch(this.props, 'permissions')} />
       </Provider>
     )
   }
