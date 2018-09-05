@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
 import utils from "~/lib/utils";
@@ -9,8 +9,6 @@ class HolidaysFilter extends React.Component {
     super(props);
 
     this.state = {
-      focusedInputDate: null,
-      focusedInputPayslipDate: null,
       startDate: oFetch(props, 'startDate'),
       endDate: oFetch(props, 'endDate'),
       startPayslipDate: oFetch(props, 'startPayslipDate'),
@@ -43,8 +41,6 @@ class HolidaysFilter extends React.Component {
 
   render() {
     const {
-      focusedInputDate,
-      focusedInputPayslipDate,
       startDate,
       endDate,
       startPayslipDate,
@@ -60,21 +56,13 @@ class HolidaysFilter extends React.Component {
           <div className="boss-form__row boss-form__row_align_center boss-form__row_desktop boss-form__row_position_last">
             <div className="boss-form__field boss-form__field_layout_quarter">Date: </div>
             <div className="boss-form__field boss-form__field_layout_max boss-form__field_no-label">
-              <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon date-range-picker_no-label">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  showClearDates
-                  isOutsideRange={() => false}
-                  displayFormat={'DD-MM-YYYY'}
-                  startDate={startDate}
-                  keepOpenOnDateSelect={false}
-                  endDate={endDate}
-                  onDatesChange={this.onDatesChange}
-                  focusedInput={focusedInputDate}
-                  onFocusChange={focusedInput => this.setState({ focusedInputDate: focusedInput })}
+              <div className="date-control date-control_type_icon date-control_type_interval-fluid date-range-picker_no-label">
+                <BossDateRangePicker
                   startDateId="startDate"
                   endDateId="endDate"
+                  startDate={startDate}
+                  endDate={endDate}
+                  onApply={this.onDatesChange}
                 />
               </div>
             </div>
@@ -85,21 +73,13 @@ class HolidaysFilter extends React.Component {
           <div className="boss-form__row boss-form__row_align_center boss-form__row_desktop boss-form__row_position_last">
             <div className="boss-form__field boss-form__field_layout_quarter">Payslip Date: </div>
             <div className="boss-form__field boss-form__field_layout_max boss-form__field_no-label">
-              <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon date-range-picker_no-label">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  showClearDates
-                  isOutsideRange={() => false}
-                  displayFormat={'DD-MM-YYYY'}
-                  startDate={startPayslipDate}
-                  keepOpenOnDateSelect={false}
-                  endDate={endPayslipDate}
-                  onDatesChange={this.onPayslipDatesChange}
-                  focusedInput={focusedInputPayslipDate}
-                  onFocusChange={focusedInput => this.setState({ focusedInputPayslipDate: focusedInput })}
+              <div className="date-control date-control_type_icon date-control_type_interval-fluid date-range-picker_no-label">
+                <BossDateRangePicker
                   startDateId="startPayslipDate"
                   endDateId="endPayslipDate"
+                  startDate={startPayslipDate}
+                  endDate={endPayslipDate}
+                  onApply={this.onPayslipDatesChange}
                 />
               </div>
             </div>
@@ -117,21 +97,13 @@ class HolidaysFilter extends React.Component {
               <p className="boss-form__label">Date: </p>
             </div>
             <div className="boss-form__field boss-form__field_layout_max">
-              <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon date-range-picker_no-label">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  showClearDates
-                  isOutsideRange={() => false}
-                  displayFormat={'DD-MM-YYYY'}
-                  startDate={startDate}
-                  keepOpenOnDateSelect={false}
-                  endDate={endDate}
-                  onDatesChange={this.onDatesChange}
-                  focusedInput={focusedInputDate}
-                  onFocusChange={focusedInput => this.setState({ focusedInputDate: focusedInput })}
+              <div className="date-control date-control_type_icon date-control_type_interval-fluid date-range-picker_no-label">
+                <BossDateRangePicker
                   startDateId="startDate"
                   endDateId="endDate"
+                  startDate={startDate}
+                  endDate={endDate}
+                  onApply={this.onDatesChange}
                 />
               </div>
             </div>
@@ -141,21 +113,13 @@ class HolidaysFilter extends React.Component {
               <p className="boss-form__label">Payslip Date: </p>
             </div>
             <div className="boss-form__field boss-form__field_layout_max">
-              <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon date-range-picker_no-label">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  showClearDates
-                  isOutsideRange={() => false}
-                  displayFormat={'DD-MM-YYYY'}
-                  startDate={startPayslipDate}
-                  keepOpenOnDateSelect={false}
-                  endDate={endPayslipDate}
-                  onDatesChange={this.onPayslipDatesChange}
-                  focusedInput={focusedInputPayslipDate}
-                  onFocusChange={focusedInput => this.setState({ focusedInputPayslipDate: focusedInput })}
+              <div className="date-control date-control_type_icon date-control_type_interval-fluid date-range-picker_no-label">
+                <BossDateRangePicker
                   startDateId="startPayslipDate"
                   endDateId="endPayslipDate"
+                  startDate={startPayslipDate}
+                  endDate={endPayslipDate}
+                  onApply={this.onPayslipDatesChange}
                 />
               </div>
             </div>
