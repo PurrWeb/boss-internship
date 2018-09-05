@@ -2,8 +2,7 @@ import React from 'react';
 import { appRoutes } from "~/lib/routes";
 import oFetch from 'o-fetch';
 import safeMoment from "~/lib/safe-moment";
-import DatePicker from 'react-datepicker';
-import CalendarCustomInput from '~/components/boss-form/calendar-custom-input';
+import BossDatePicker from '~/components/react-dates/boss-date-picker';
 
 class DailyReportsDashboard extends React.Component {
   render() {
@@ -26,25 +25,15 @@ class DailyReportsDashboard extends React.Component {
                 <form className="boss-form">
                   <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
                     <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min boss-form__field_position_last">
-                      <DatePicker
-                        customInput={<CalendarCustomInput />}
-                        withPortal="withPortal"
-                        calendarClassName="date-picker"
-                        showMonthDropdown
-                        showYearDropdown
-                        locale="en-gb"
-                        dropdownMode="select"
-                        selected={dateM}
-                        onChange={
-                          (date) => {
-                            window.location.href = appRoutes.dailyReportsPage({
-                              venueId: venueId,
-                              dateM: safeMoment.uiDateParse(date)
-                            })
-                          }
-                        }
-                        dateFormat="DD-MM-YYYY"
-                        allowSameDay
+                      <BossDatePicker 
+                        id="date"
+                        date={dateM}
+                        onApply={(date) => {
+                          window.location.href = appRoutes.dailyReportsPage({
+                            venueId: venueId,
+                            dateM: safeMoment.uiDateParse(date)
+                          })
+                        }}
                       />
                     </div>
                   </div>
