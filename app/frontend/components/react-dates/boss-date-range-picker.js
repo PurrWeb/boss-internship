@@ -88,21 +88,24 @@ class BossDateRangePicker extends PureComponent {
   };
 
   render() {
-    const [startDateId, endDateId, numberOfMonths, isOutsideRange] = oFetch(
+    const [startDateId, endDateId, numberOfMonths, isOutsideRange, readOnly, showClearDates] = oFetch(
       this.props,
       'startDateId',
       'endDateId',
       'numberOfMonths',
       'isOutsideRange',
+      'readOnly',
+      'showClearDates',
     );
     const [focusedInput, startDate, endDate] = oFetch(this.state, 'focusedInput', 'startDate', 'endDate');
     return (
       <DateRangePicker
+        readOnly={readOnly}
         initialVisibleMonth={this.initialVisibleMonth}
         numberOfMonths={numberOfMonths}
         firstDayOfWeek={1}
         withPortal
-        showClearDates
+        showClearDates={showClearDates}
         isOutsideRange={isOutsideRange || this.isOutsideRange}
         displayFormat={utils.commonDateFormat}
         startDate={startDate}
@@ -129,11 +132,15 @@ BossDateRangePicker.propTypes = {
   onApply: PropTypes.func.isRequired,
   numberOfMonths: PropTypes.number,
   isOutsideRange: PropTypes.func,
+  readOnly: PropTypes.bool,
+  showClearDates: PropTypes.bool,
 };
 
 BossDateRangePicker.defaultProps = {
   numberOfMonths: 1,
   isOutsideRange: null,
+  readOnly: false,
+  showClearDates: true,
 };
 
 export default BossDateRangePicker;
