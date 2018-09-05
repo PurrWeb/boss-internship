@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 import PropTypes from 'prop-types';
 import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
@@ -10,7 +10,6 @@ class AccessoriesFilter extends React.Component {
     super(props);
 
     this.state = {
-      focusedInputPayslipDate: null,
       mPayslipStartDate: oFetch(props, 'mPayslipStartDate'),
       mPayslipEndDate: oFetch(props, 'mPayslipEndDate'),
     };
@@ -34,7 +33,7 @@ class AccessoriesFilter extends React.Component {
   };
 
   render() {
-    const { focusedInputPayslipDate, mPayslipStartDate, mPayslipEndDate } = this.state;
+    const { mPayslipStartDate, mPayslipEndDate } = this.state;
 
     return (
       <div className="boss-board__manager-filter">
@@ -46,21 +45,13 @@ class AccessoriesFilter extends React.Component {
                 <p className="boss-form__label">
                   <span className="boss-form__label-text">Payslip date</span>
                 </p>
-                <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon">
-                  <DateRangePicker
-                    numberOfMonths={1}
-                    withPortal
-                    showClearDates
-                    isOutsideRange={() => false}
-                    displayFormat={'DD-MM-YYYY'}
-                    startDate={mPayslipStartDate}
-                    keepOpenOnDateSelect={false}
-                    endDate={mPayslipEndDate}
-                    onDatesChange={this.onPayslipDatesChange}
-                    focusedInput={focusedInputPayslipDate}
-                    onFocusChange={focusedInput => this.setState({ focusedInputPayslipDate: focusedInput })}
+                <div className="date-control date-control_type_icon date-control_type_interval-fluid">
+                  <BossDateRangePicker
                     startDateId="payslipStartDate"
                     endDateId="payslipEndDate"
+                    startDate={mPayslipStartDate}
+                    endDate={mPayslipEndDate}
+                    onApply={this.onPayslipDatesChange}
                   />
                 </div>
               </div>
