@@ -29,6 +29,7 @@ window.debug.selectors = selectors;
 window.React = React;
 window.ReactDOM = ReactDOM;
 
+require('react-dates/lib/css/_datepicker.css');
 
 // ToDo: Need to remove this condition, after fix old layout issues
 if (window.boss.currentLayout !== 'oldLayout') {
