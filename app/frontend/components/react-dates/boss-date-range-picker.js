@@ -125,8 +125,8 @@ class BossDateRangePicker extends PureComponent {
 }
 
 BossDateRangePicker.propTypes = {
-  startDateId: PropTypes.string.isRequired,
-  endDateId: PropTypes.string.isRequired,
+  startDateId: PropTypes.string,
+  endDateId: PropTypes.string,
   startDate: PropTypes.instanceOf(moment),
   endDate: PropTypes.instanceOf(moment),
   onApply: PropTypes.func.isRequired,
@@ -141,6 +141,8 @@ BossDateRangePicker.defaultProps = {
   isOutsideRange: null,
   readOnly: false,
   showClearDates: true,
+  startDateId: 'startDateId',
+  endDateId: 'endDateId',
 };
 
 export default BossDateRangePicker;

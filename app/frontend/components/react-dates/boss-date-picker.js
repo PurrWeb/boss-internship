@@ -101,7 +101,7 @@ class BossDatePicker extends PureComponent {
 }
 
 BossDatePicker.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   date: PropTypes.oneOfType([PropTypes.instanceOf(moment), PropTypes.string]),
   onApply: PropTypes.func.isRequired,
   className: PropTypes.string,
@@ -117,6 +117,7 @@ BossDatePicker.defaultProps = {
   isOutsideRange: null,
   showClearDate: false,
   invalid: false,
+  id: 'date',
 };
 
 export default BossDatePicker;
