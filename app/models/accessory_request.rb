@@ -21,7 +21,7 @@ class AccessoryRequest < ActiveRecord::Base
   validates :finance_report, presence: true, if: :requires_finance_report?
   validate do |accessory_request|
     if completed?
-      PayslipDateValidator.new(item: accessory_request).validate_all
+      PayslipDateValidator.new(item: accessory_request, allow_past_payslip_date_manupulation: @allow_past_payslip_date_manupulation).validate_all
     end
   end
 
@@ -60,6 +60,12 @@ class AccessoryRequest < ActiveRecord::Base
 
   def frozen?
     finance_report.andand.done?
+  end
+
+  def allowing_past_payslip_date_manupulation
+    @allow_past_payslip_date_manupulation = true
+    yield self
+    @allow_past_payslip_date_manupulation = false
   end
 
   delegate \

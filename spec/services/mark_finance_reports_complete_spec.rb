@@ -15,7 +15,7 @@ describe MarkFinanceReportsComplete do
   context 'valid ready finance report is supplied' do
     let(:finance_report) do
       travel_to finance_report_create_time do
-        FactoryGirl.create(:finance_report, staff_member: staff_member).tap do |fr|
+        FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue).tap do |fr|
           fr.mark_ready!
         end
       end
@@ -31,7 +31,7 @@ describe MarkFinanceReportsComplete do
   context 'requiring update finance report is supplied' do
     let(:finance_report) do
       travel_to finance_report_create_time do
-        FactoryGirl.create(:finance_report, staff_member: staff_member)
+        FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue)
       end
     end
     let(:finance_reports) { [finance_report] }
@@ -56,7 +56,7 @@ describe MarkFinanceReportsComplete do
 
   context 'early finance report is supplied' do
     let(:finance_report) do
-      FactoryGirl.create(:finance_report, staff_member: staff_member).tap do |fr|
+      FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue).tap do |fr|
         fr.mark_ready!
       end
     end
@@ -85,7 +85,7 @@ describe MarkFinanceReportsComplete do
   context 'complete finance report is supplied' do
     let(:finance_report) do
       travel_to finance_report_create_time do
-        FactoryGirl.create(:finance_report, staff_member: staff_member).tap do |fr|
+        FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue).tap do |fr|
           fr.mark_ready!
           fr.allow_mark_completed = true
           fr.mark_completed!
@@ -117,7 +117,7 @@ describe MarkFinanceReportsComplete do
   context 'incomplete ready finance report is supplied' do
     let(:finance_report) do
       travel_to finance_report_create_time do
-        FactoryGirl.create(:finance_report, staff_member: staff_member)
+        FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue)
       end
     end
     let(:finance_reports) { [finance_report] }
@@ -154,8 +154,9 @@ describe MarkFinanceReportsComplete do
       )
     end
     let(:finance_report) do
+      result = nil
       travel_to finance_report_create_time do
-        FactoryGirl.create(:finance_report, staff_member: staff_member).tap do |fr|
+        result = FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue).tap do |fr|
           fr.mark_ready!
           accessory_request.update_attributes!(
             finance_report: fr
@@ -163,12 +164,13 @@ describe MarkFinanceReportsComplete do
           accessory_request.state_machine.transition_to!(:accepted)
           accessory_request.state_machine.transition_to!(:completed)
           accessory_request.update_attributes!(payslip_date: fr.week_start)
-          UpdateFinanceReportData.new(
-            requester: user,
-            finance_report: fr
-          ).call
         end
+        UpdateFinanceReportData.new(
+          requester: user,
+          finance_report: result
+        ).call
       end
+      result
     end
     let(:finance_reports) { [finance_report] }
 
@@ -189,23 +191,46 @@ describe MarkFinanceReportsComplete do
       specify 'finance report should be negative' do
         expect(finance_report.total_cents).to be < (0)
       end
-    end
 
-    it 'should raise error' do
-      expect {
-        call_service
-      }.to raise_error(
-        MarkFinanceReportsComplete.incompletable_report_attempt_error_message(staff_member_ids: finance_reports.map{|fr| fr.staff_member.id})
-      )
-    end
-
-    specify 'finance report should not be completed' do
-      begin
-        call_service
-      rescue
-        #swallow errors
+      specify 'finance report should not exist for the next week' do
+        expect(
+          FinanceReport.find_by(
+            staff_member: staff_member,
+            week_start: finance_report.week_start + 1.week,
+            venue: finance_report.venue
+          )
+        ).to_not be_present
       end
-      expect(finance_report.reload.done?).to eq(false)
+    end
+
+    specify 'finance report should complete' do
+      call_service
+      expect(finance_report.reload.done?).to eq(true)
+    end
+
+    it 'should set report total to zero' do
+      call_service
+      expect(finance_report.reload.done?).to eq(true)
+    end
+
+    it 'should create finance report for next week' do
+      call_service
+      expect(
+        FinanceReport.find_by(
+          staff_member: staff_member,
+          week_start: finance_report.week_start + 1.week,
+          venue: finance_report.venue
+        )
+      ).to be_present
+    end
+
+    it 'should move accessory into next weeks finance report' do
+      call_service
+      expect(
+        accessory_request.reload.payslip_date
+      ).to eq(
+        finance_report.week_start + 1.week
+      )
     end
   end
 
@@ -213,7 +238,7 @@ describe MarkFinanceReportsComplete do
     let(:finance_reports) do
       travel_to finance_report_create_time do
         Array.new(2) do |index|
-          FactoryGirl.create(:finance_report, staff_member: staff_member).tap do |fr|
+          FactoryGirl.create(:finance_report, staff_member: staff_member, venue: staff_member.master_venue).tap do |fr|
             fr.mark_ready!
           end
         end
