@@ -501,14 +501,13 @@
                             <span class="boss-form__label-text">Ash Cash</span>
                             <span class="boss-form__units">
                                 <span class="boss-form__units-value">£</span>
-                                <!-- <input name="ash-cash" type="number" class="boss-form__input" placeholder="0"> -->
                                 <%= form.number_field(
                                   :ash_cash_cents,
                                   prepend: '£',
                                   value: safe_check.pound_value_for(:ash_cash_cents).to_int_if_whole,
                                   label: SafeCheck.label_for(:ash_cash_cents),
                                   step: 0.01,
-                                  class: ['boss-form__input', 'js-total-calculation-ash-cash-value', 'js-total-calculation-watch-field']
+                                class: ['boss-form__input', 'js-total-calulation-ash-cash-value', 'js-total-calculation-watch-field']
                               ) %>
                             </span>
                         </label>

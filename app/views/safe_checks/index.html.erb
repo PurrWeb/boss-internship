@@ -96,19 +96,19 @@
                 <p class="boss-table__label">Out to Order</p>
                 <p class="boss-table__text">
                   <%= number_to_currency(
-                    safe_check.pound_value_for(:out_to_order_cents),
+                    safe_check.pound_value_for(:out_to_order_cents) - (safe_check.pound_value_for(:ash_cash_cents) + safe_check.pound_value_for(:security_plus_cents)),
                     unit: '£',
                     precision: 2
                   ) %>
                 </p>
               </div>
-              <% if safe_check.ash_cash_cents.present? %>
+              <% if safe_check.ash_cash_cents > 0 %>
                 <div class="boss-corner boss-corner_position_top-right boss-corner_color_accent-green">
                   <p class="boss-corner__label boss-corner__label_size_l">ASH</p>
                 </div>
               <% end %>
 
-              <% if safe_check.security_plus_cents.present? %>
+              <% if safe_check.security_plus_cents > 0 %>
                 <div class="boss-corner boss-corner_position_bottom-right boss-corner_color_accent-purple">
                     <p class="boss-corner__label boss-corner__label_size_l">S+</p>
                 </div>
