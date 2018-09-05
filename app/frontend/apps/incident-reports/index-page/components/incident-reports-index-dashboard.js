@@ -90,7 +90,7 @@ class IncidentReportsIndexDashboard extends React.PureComponent {
   }
 
   handleUpdate = (filterParams) => {
-    this.props.actions.handleFilter(filterParams)
+    return this.props.actions.handleFilter(filterParams)
   }
 
   renderFilter() {
