@@ -66,17 +66,18 @@ class BossDatePicker extends PureComponent {
   isOutsideRange = () => false;
 
   render() {
-    const [id, className, numberOfMonths, isOutsideRange, showClearDate] = oFetch(
+    const [id, className, numberOfMonths, isOutsideRange, showClearDate, invalid] = oFetch(
       this.props,
       'id',
       'className',
       'numberOfMonths',
       'isOutsideRange',
       'showClearDate',
+      'invalid',
     );
     const [focused, date] = oFetch(this.state, 'focused', 'date');
     return (
-      <div className={className}>
+      <div className={`${className} ${invalid ? 'date-control_state_error' : ''}`}>
         <SingleDatePicker
           numberOfMonths={numberOfMonths}
           firstDayOfWeek={1}
@@ -107,6 +108,7 @@ BossDatePicker.propTypes = {
   numberOfMonths: PropTypes.number,
   isOutsideRange: PropTypes.func,
   showClearDate: PropTypes.bool,
+  invalid: PropTypes.bool,
 };
 
 BossDatePicker.defaultProps = {
@@ -114,6 +116,7 @@ BossDatePicker.defaultProps = {
   numberOfMonths: 1,
   isOutsideRange: null,
   showClearDate: false,
+  invalid: false,
 };
 
 export default BossDatePicker;
