@@ -13,7 +13,7 @@ import ReportItem from './report-item';
 class Page extends Component {
   handleDateChange = selection => {
     this.goToPayrollReportsPage({
-      startDate: oFetch(selection, 'startDate'),
+      startDate: oFetch(selection, 'startUIDate'),
       venueId: oFetch(this.props, 'venueId'),
     });
   };

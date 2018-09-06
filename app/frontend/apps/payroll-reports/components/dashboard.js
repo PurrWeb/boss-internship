@@ -5,7 +5,7 @@ import utils from '~/lib/utils';
 import safeMoment from '~/lib/safe-moment';
 import classNames from 'classnames';
 import Popover from 'react-popover';
-import WeekPicker from '~/components/week-picker';
+import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import PayRatesFilter from './pay-rates-filter';
 import { appRoutes } from '~/lib/routes';
 
@@ -21,9 +21,10 @@ class Dashboard extends Component {
   renderCalendar() {
     return (
       <div className="boss-popover__inner">
-        <WeekPicker
-          selectionStartDate={safeMoment.uiDateParse(this.props.startDate).toDate()}
+        <BossWeekPicker
+          selectionStartUIDate={this.props.startDate}
           onChange={selection => this.props.onDateChange(selection)}
+          onCancelClick={this.togglePopover}
         />
       </div>
     );
@@ -64,7 +65,7 @@ class Dashboard extends Component {
                   place="below"
                   tipSize={0.01}
                   onOuterAction={this.togglePopover}
-                  className="boss-popover boss-popover_context_dashboard-calendar boss-popover_state_opened"
+                  className="boss-popover boss-popover_context_dashboard-week-picker boss-popover_state_opened"
                   style={{ marginTop: '10px' }}
                 >
                   <p className={popoverClass} onClick={this.togglePopover}>

@@ -142,7 +142,7 @@ export const appRoutes = {
     payrollReports: (options) => {
         const startDate = oFetch(options, "startDate");
         const venueId = oFetch(options, "venueId");
-        return `/payroll_reports/${utils.formatRotaUrlDate(startDate)}?venue_id=${venueId}`;
+        return `/payroll_reports/${startDate}?venue_id=${venueId}`;
     },
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
