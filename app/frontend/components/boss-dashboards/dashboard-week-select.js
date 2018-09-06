@@ -42,7 +42,7 @@ class DashboardWeekSelect extends React.Component {
                   place="below"
                   tipSize={0.01}
                   onOuterAction={this.togglePopover}
-                  className="boss-popover boss-popover_context_dashboard-calendar boss-popover_state_opened"
+                  className="boss-popover boss-popover_context_dashboard-week-picker boss-popover_state_opened"
                   style={{ marginTop: '10px' }}
                 >
                   <p className={popoverClass} onClick={this.togglePopover}>
@@ -65,6 +65,7 @@ class DashboardWeekSelect extends React.Component {
         <WeekPicker
           selectionStartDate={safeMoment.uiDateParse(this.props.startDate).toDate()}
           onChange={selection => this.props.onDateChange(selection)}
+          onCancelClick={this.togglePopover}
         />
       </div>
     );

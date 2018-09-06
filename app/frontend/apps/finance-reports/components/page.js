@@ -11,19 +11,18 @@ import ReportList from './report-list';
 import { PureJSReportItem } from './report-item';
 import Confirm from './confirm';
 import * as _ from 'lodash';
-import { FINANCE_REPORT_STATUS_DONE_STATUS } from '../constants';
 
 class Page extends Component {
   handleDateChange = selection => {
     this.goToFinanceReportsPage({
-      startDate: oFetch(selection, 'startDate'),
+      startDate: oFetch(selection, 'startUIDate'),
       venueId: oFetch(this.props, 'venueId'),
     });
   };
 
   goToFinanceReportsPage({ startDate, venueId }) {
     location.href = appRoutes.financeReports({
-      startDate,
+     startDate,
       venueId,
     });
   }
