@@ -13,7 +13,7 @@ import { GRANULARITY } from '../selectors';
 class SecurityRotaOverviewPage extends Component {
   handleDateChage = selection => {
     this.goToOverviewPage({
-      startDate: selection.startDate,
+      startDate: selection.startUIDate,
     });
   };
 
@@ -49,7 +49,7 @@ class SecurityRotaOverviewPage extends Component {
           <DashboardActions>
             <a
               href={appRoutes.securityRotaPdfDownload({
-                date: safeMoment.uiDateParse(this.props.date).toDate(),
+                date: this.props.date,
               })}
               className="boss-button boss-button_role_pdf-download boss-page-dashboard__button"
             >

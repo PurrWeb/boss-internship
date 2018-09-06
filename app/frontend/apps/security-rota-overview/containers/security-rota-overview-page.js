@@ -27,7 +27,6 @@ const mapStateToProps = state => {
   const groups = getGroups(state).filter(group =>
     venueStaffCountListIds.includes(group.venue),
   );
-
   return {
     date,
     startDate: state.getIn(['securityRotaOverview', 'startDate']),

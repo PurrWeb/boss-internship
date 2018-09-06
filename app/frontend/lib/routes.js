@@ -73,7 +73,7 @@ export const appRoutes = {
         var date = oFetch(options, "date");
         return [
             '/security_rotas.pdf?',
-            'date=' + utils.formatRotaUrlDate(date)
+            'date=' + date
         ].join("");
     },
     financeReportsPdfDownload: function(options){
@@ -96,7 +96,7 @@ export const appRoutes = {
     },
     securityRotaOverview: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security_rotas?highlight_date=${utils.formatRotaUrlDate(startDate)}`;
+        return `/security_rotas?highlight_date=${startDate}`;
     },
     securityShiftRequestReviews: (options) => {
         const startDate = oFetch(options, "startDate");
