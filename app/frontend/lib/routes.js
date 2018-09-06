@@ -104,7 +104,7 @@ export const appRoutes = {
     },
     securityShiftRequests: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security-shift-requests/${utils.formatRotaUrlDate(startDate)}`;
+        return `/security-shift-requests/${startDate}`;
     },
     securityRotaShiftRequests: (options) => {
         const startDate = oFetch(options, "startDate");
