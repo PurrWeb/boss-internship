@@ -13,9 +13,9 @@ import SecurityShiftRequestItem from './security-shift-request-item';
 import WeekFilter from './requests-week-filter';
 
 class SecurityShiftRequestReviewsPage extends Component {
-  handleDateChage = ({ startDate }) => {
+  handleDateChage = ({ startUIDate }) => {
     location.href = appRoutes.securityShiftRequestReviews({
-      startDate,
+      startDate: startUIDate,
     });
   };
 
