@@ -183,12 +183,12 @@ export const appRoutes = {
           venueId;
     },
     holidays: function(options) {
-        var date = oFetch(options, "date");
+        var startDate = oFetch(options, "startDate");
         var venueId = options.venueId; // venueId is optional
 
         var parts = [
             "holidays?",
-            "date=" + utils.formatRotaUrlDate(date)
+            "date=" + startDate
         ];
         if (venueId !== undefined && venueId !== null) {
             parts.push("&venue=" + venueId);
@@ -275,7 +275,7 @@ export const appRoutes = {
         var venueId = options.venueId; //optional
         var parts = [
           "/holidays.csv?" +
-          'date=' + utils.formatRotaUrlDate(date)
+          'date=' + date
         ];
         if (venueId !== null && venueId !== undefined){
             parts.push('&venue=' + venueId);
