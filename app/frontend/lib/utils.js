@@ -43,6 +43,23 @@ function replaceFunctionPropsWithStrings(obj){
     })
 }
 
+function formatJSDateToUIDate(date) {
+  if (!date) {
+    throw new Error(`no date supplyed to formatJSDateToUIDate`);
+  }
+  if (!(date instanceof Date)) {
+    throw new Error(`date is not instance of Date`);
+  }
+  let month = '' + (date.getMonth() + 1);
+  let day = '' + date.getDate();
+  let year = date.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [day, month, year].join('-');
+};
+
 const API_DATE_FORMAT = 'DD-MM-YYYY';
 var utils =  {
     moneyFormat(amount) {
@@ -422,8 +439,8 @@ var utils =  {
       return shift(Math.round(shift(number, precision, false)), precision, true);
     },
     formatDateForHoliday(holiday) {
-      let startDate = safeMoment.uiDateParse(oFetch(holiday, 'start_date'));
-      let endDate = safeMoment.uiDateParse(oFetch(holiday, 'end_date'));
+      let startDate = safeMoment.uiDateParse(formatJSDateToUIDate(oFetch(holiday, 'start_date')));
+      let endDate = safeMoment.uiDateParse(formatJSDateToUIDate(oFetch(holiday, 'end_date')));
       let dates;
 
       if (startDate === endDate) {
