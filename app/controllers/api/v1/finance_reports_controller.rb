@@ -12,25 +12,29 @@ module Api
 
         finance_reports = FinanceReport.
           where(
-            staff_member: staff_members,
-            week_start: week.start_date,
-            venue: venue
-          )
+          staff_member: staff_members,
+          week_start: week.start_date,
+          venue: venue,
+        )
 
         finance_reports = finance_reports.
           includes(
-            :hours_acceptance_periods,
-            :holidays,
-            :owed_hours,
-            :accessory_requests,
-            :accessory_refund_requests
-          )
+          :hours_acceptance_periods,
+          :holidays,
+          :owed_hours,
+          :accessory_requests,
+          :accessory_refund_requests
+        )
 
         MarkFinanceReportsComplete.new(finance_reports: finance_reports).call
 
         render(
-          json: {},
-          status: 200
+          json: {financeReports: ActiveModel::Serializer::CollectionSerializer.new(
+            finance_reports,
+            serializer: Api::V1::FinanceReports::FinanceReportSerializer,
+            scope: {ability: current_ability},
+          )},
+          status: 200,
         )
       end
 
@@ -43,24 +47,30 @@ module Api
 
         finance_reports = FinanceReport.
           where(
-            staff_member: staff_member,
-            venue: venue,
-            week_start: week.start_date
-          ).includes(
-            :hours_acceptance_periods,
-            :holidays,
-            :owed_hours,
-            :accessory_requests,
-            :accessory_refund_requests
-          )
+          staff_member: staff_member,
+          venue: venue,
+          week_start: week.start_date,
+        ).includes(
+          :hours_acceptance_periods,
+          :holidays,
+          :owed_hours,
+          :accessory_requests,
+          :accessory_refund_requests
+        )
 
-        raise 'mutiple finance reports returned for single complete' if finance_reports.count != 1
+        raise "mutiple finance reports returned for single complete" if finance_reports.count != 1
 
         MarkFinanceReportsComplete.new(finance_reports: finance_reports).call
 
         render(
-          json: {},
-          status: 200
+          json: {
+            financeReports: ActiveModel::Serializer::CollectionSerializer.new(
+              finance_reports,
+              serializer: Api::V1::FinanceReports::FinanceReportSerializer,
+              scope: {ability: current_ability},
+            ),
+          },
+          status: 200,
         )
       end
 
@@ -79,7 +89,7 @@ module Api
       end
 
       def staff_members_from_params
-        ids = params.fetch("staffMemberIds").map {|id_param| Integer(id_param) }
+        ids = params.fetch("staffMemberIds").map { |id_param| Integer(id_param) }
         StaffMember.where(id: ids)
       end
     end
