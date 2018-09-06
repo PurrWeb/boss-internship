@@ -1,7 +1,7 @@
 import React from 'react';
 import oFetch from 'o-fetch';
 
-class EditFreeItemsHistory extends React.Component {
+class EditFreeItemsHistoryList extends React.Component {
   renderItems(accessoryHistory) {
     const itemRenderer = oFetch(this.props, 'itemRenderer');
 
@@ -38,4 +38,4 @@ class EditFreeItemsHistory extends React.Component {
   }
 }
 
-export default EditFreeItemsHistory;
+export default EditFreeItemsHistoryList;

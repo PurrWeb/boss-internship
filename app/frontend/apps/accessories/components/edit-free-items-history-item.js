@@ -11,14 +11,24 @@ class EditFreeItemsHistory extends React.Component {
     const staffMemberFullName = oFetch(historyItem, 'staffMember.fullName');
     const staffMemberId = oFetch(historyItem, 'staffMember.id');
     const delta = oFetch(historyItem, 'delta');
+    const isRefunded = delta > 0;
     const amountOfItems = Math.abs(delta);
 
     return (
       <p className="boss-timeline__text boss-timeline__text_role_header">
         <span className="boss-timeline__text-marked">{amountOfItems}</span>
-        <span className="boss-timeline__text-faded"> item assigned to </span>
+        <span className="boss-timeline__text-faded">
+          {' '}
+          item{' '}
+          {isRefunded ? (
+            <span className="boss-timeline__text-marked">refunded</span>
+          ) : (
+            <span className="boss-timeline__text-marked">assigned</span>
+          )}
+          {isRefunded ? ' from ' : ' to '}
+        </span>
         <span className="boss-timeline__text-marked">
-          <a target="_blank" href={appRoutes.staffMemberAccessories(staffMemberId)}>
+          <a target="_blank" href={appRoutes.staffMemberAccessories({ staffMemberId })}>
             {staffMemberFullName}
           </a>
         </span>

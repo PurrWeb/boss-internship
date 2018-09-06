@@ -56,9 +56,7 @@ export const loadInitialData = () => (dispatch, getState) => {
 export const loadData = () => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
-  const currentPage = parseInt(
-    getState().getIn(['accessoryRequestsPage', 'pagination', 'pageNumber']),
-  );
+  const currentPage = parseInt(getState().getIn(['accessoryRequestsPage', 'pagination', 'pageNumber']));
 
   return loadDataRequest({
     venueId: currentVenue,
@@ -132,10 +130,7 @@ export const completeAccessoryRequest = ({ requestId, accessoryId }) => (dispatc
   });
 };
 
-export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return acceptAccessoryRefundRequestRequest({
@@ -155,10 +150,7 @@ export const undoAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispa
   });
 };
 
-export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return rejectAccessoryRefundRequestRequest({
@@ -175,16 +167,14 @@ export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
   });
 };
 
-export const completeAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const completeAccessoryRefundRequest = ({ requestId, accessoryId, reusable }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return completeAccessoryRefundRequestRequest({
     venueId: currentVenue,
     accessoryId,
     requestId,
+    reusable,
   }).then(completeResponse => {
     dispatch(removeRefundRequestFromStore(completeResponse.data));
     if (dispatch(checkRequestsCountEmpty(accessoryId))) {

@@ -16,7 +16,7 @@ class ContentModal extends React.Component {
           base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window ${modalClassName}`,
         }}
       >
-        <button onClick={onClose} type="button" className="boss-modal-window__close" />
+        <button onClick={onClose} className="boss-modal-window__close-inner" />
         <div className="boss-modal-window__header">{title}</div>
         <div className="boss-modal-window__content">{children}</div>
       </Modal>
@@ -30,11 +30,17 @@ function openContentModal(
   onSubmit,
   onClose,
   wrapper,
+  closeCallback,
 ) {
+  const whenCloseClicked = () => {
+    closeCallback();
+    onClose();
+  };
+
   return function(Component) {
     ReactDOM.render(
-      <ContentModal show={true} title={title} onClose={onClose} modalClassName={modalClassName}>
-        <Component onSubmit={onSubmit} onClose={onClose} {...props} />
+      <ContentModal show={true} title={title} onClose={whenCloseClicked} modalClassName={modalClassName}>
+        <Component onSubmit={onSubmit} onClose={whenCloseClicked} {...props} />
       </ContentModal>,
       wrapper,
     );

@@ -209,8 +209,8 @@ module Api
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_refund_request: refund_request_from_params
-        ).complete
+          accessory_refund_request: refund_request_from_params,
+        ).complete(reusable: params.fetch(:reusable))
 
         if result.success?
           render(

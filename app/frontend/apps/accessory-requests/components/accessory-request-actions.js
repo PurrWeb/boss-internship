@@ -42,7 +42,11 @@ class AccessoryRequestActions extends Component {
       currentStatus: 'completed',
       requestPendind: true,
     });
-    this.props.onCompleteRequest();
+    this.props.onCompleteRequest().then(resp => {
+      if (resp === 'cancel') {
+        this.setState({ currentStatus: 'accepted', requestPendind: false });
+      }
+    });
   };
 
   renderDoneUndoButtons(canComplete, canUndo) {
