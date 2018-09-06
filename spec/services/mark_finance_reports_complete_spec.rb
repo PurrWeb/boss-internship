@@ -208,9 +208,20 @@ describe MarkFinanceReportsComplete do
       expect(finance_report.reload.done?).to eq(true)
     end
 
+    specify 'finance report should be valid' do
+      call_service
+      expect(finance_report.reload).to be_valid
+    end
+
+
     it 'should set report total to zero' do
       call_service
-      expect(finance_report.reload.done?).to eq(true)
+      expect(finance_report.reload.total_cents).to eq(0)
+    end
+
+    it 'should set report accessories_cents to zero' do
+      call_service
+      expect(finance_report.reload.accessories_cents).to eq(0)
     end
 
     it 'should create finance report for next week' do
