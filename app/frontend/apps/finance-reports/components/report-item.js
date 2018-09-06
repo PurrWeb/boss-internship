@@ -127,8 +127,6 @@ class ReportItem extends Component {
       effectiveStatus = 'pending';
     } else if((effectiveStatus === 'ready') && hoursPending) {
       effectiveStatus = 'incomplete';
-    } else if((effectiveStatus === 'ready') && (total < 0)) {
-      effectiveStatus = 'invalid';
     }
 
     const isIncomplete = hoursPending || !completionDateReached || (total < 0);
@@ -225,7 +223,9 @@ class ReportItem extends Component {
           <p className={`${this.getTextClassName({ alertStyles: false })} boss-table__text_role_important`}>{totalHoursCount}</p>
         </div>
         <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
-          <p className={this.getTextClassName({ alertStyles: false })}>{utils.moneyFormat(total)}</p>
+          <p className={this.getTextClassName({ alertStyles: false })} style={total < 0 ? { color: 'red'} : {}}>
+            {utils.moneyFormat(total)}
+          </p>
         </div>
         {holidayDaysCount === 0 ? (
           <div className={holidayDaysCountClassName} style={cellStyle}>
@@ -283,7 +283,7 @@ ReportItem.propTypes = {
     staffMemberName: PropTypes.string.isRequired,
     acessories: PropTypes.number.isRequired,
     payRateDescription: PropTypes.string.isRequired,
-    status: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
   }).isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   onMarkCompleted: PropTypes.func.isRequired,
