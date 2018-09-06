@@ -6,7 +6,7 @@ class PayslipDateValidator
   end
   attr_reader :item, :now
 
-  def validate
+  def validate_date_change
     payslip_date_moved_to_past = false
     if item.payslip_date_changed?
       current_rota_date = RotaShiftDate.to_rota_date(now)
