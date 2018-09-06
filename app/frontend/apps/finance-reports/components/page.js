@@ -8,7 +8,7 @@ import { openConfirmationModal, openWarningModal } from '~/components/modals';
 import Dashboard from './dashboard';
 import CardList from './card-list';
 import ReportList from './report-list';
-import ReportItem from './report-item';
+import { PureJSReportItem } from './report-item';
 import Confirm from './confirm';
 import * as _ from 'lodash';
 import { FINANCE_REPORT_STATUS_DONE_STATUS } from '../constants';
@@ -126,19 +126,6 @@ class Page extends Component {
       )
       .toJS();
 
-    const reportsIds = staffTypesWithFinanceReports
-      .reduce(
-        (acc, staffType) =>
-          acc.concat(
-            staffType
-              .get('reports')
-              .filter(report => report.getIn(['status']) === 'ready')
-              .map(report => report.get('frontendId')),
-          ),
-        Immutable.List(),
-      )
-      .toJS();
-
     const reportsTotals = staffTypesWithFinanceReports.reduce(
       (acc, staffType) =>
         acc.concat(
@@ -170,7 +157,7 @@ class Page extends Component {
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}
           onMarkAllPageCompleted={() =>
-            this.handleOpenMarkAllCompletedModal({ reportsIds, staffMemberIds, isNegativeTotal })
+            this.handleOpenMarkAllCompletedModal({ staffMemberIds, isNegativeTotal })
           }
           allReady={allReady}
           itemRenderer={staffType => {
@@ -183,29 +170,18 @@ class Page extends Component {
               })
               .map(report => oFetch(report, 'staffMemberId'));
 
-            const reportsIds = reportsJS
-              .filter(report => report => {
-                return oFetch(report, 'status') === 'ready';
-              })
-              .map(report => oFetch(report, 'frontendId'));
             const isNegativeTotal = !!reportsJS.find(report => oFetch(report, 'total') < 0);
             return (
               <ReportList
                 staffType={staffType}
                 startDate={startDate}
                 onMarkAllCompleted={() =>
-                  this.handleOpenMarkAllCompletedModal({ reportsIds, staffMemberIds, isNegativeTotal })
+                  this.handleOpenMarkAllCompletedModal({ staffMemberIds, isNegativeTotal })
                 }
                 itemRenderer={report => {
-                  const staffMemberId = oFetch(report, 'staffMemberId');
-                  const reportsId = oFetch(report, 'frontendId');
-                  const total = oFetch(report, 'total');
-                  const isNegativeTotal = total < 0;
                   return (
-                    <ReportItem
-                      onMarkCompleted={() =>
-                        this.handleOpenMarkCompletedModal({ staffMemberId, reportsId, isNegativeTotal })
-                      }
+                    <PureJSReportItem
+                      onMarkCompleted={this.handleOpenMarkCompletedModal}
                       weekDates={weekDates}
                       report={report}
                       startDate={startDate}
