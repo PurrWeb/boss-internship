@@ -21,7 +21,7 @@ class AccessoryRequest < ActiveRecord::Base
   validates :payslip_date, absence: true, unless: :completed?
   validate do |accessory_request|
     if completed?
-      PayslipDateValidator.new(item: accessory_request).validate_date_change
+      PayslipDateValidator.new(item: accessory_request).validate_all
     end
   end
 
