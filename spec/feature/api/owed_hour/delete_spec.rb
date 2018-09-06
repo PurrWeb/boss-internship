@@ -35,8 +35,17 @@ RSpec.describe 'Destroy owed hour API endpoint' do
       staff_member: staff_member,
       date: old_date,
       payslip_date: old_pay_slip_week.start_date,
+      finance_report: finance_report,
       starts_at: old_starts_at,
       ends_at: old_ends_at,
+    )
+  end
+  let(:finance_report) do
+    FactoryGirl.create(
+      :finance_report,
+      staff_member: staff_member,
+      venue: staff_member.master_venue,
+      week_start: old_pay_slip_week.start_date
     )
   end
   let(:access_token) do
@@ -62,7 +71,7 @@ RSpec.describe 'Destroy owed hour API endpoint' do
     end
   end
 
-  context 'when valid params supplied' do    
+  context 'when valid params supplied' do
     before do
       response
     end
@@ -79,7 +88,7 @@ RSpec.describe 'Destroy owed hour API endpoint' do
       expect(staff_member.owed_hours.count).to eq(1)
       expect(staff_member.owed_hours.first.disabled?).to eq(true)
     end
-  end    
+  end
 
   private
   def app

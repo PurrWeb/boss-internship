@@ -17,7 +17,7 @@ describe HolidayDateValidator do
   let(:now) { RotaWeek.new(Time.current.to_date).start_date }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:validator) { HolidayDateValidator.new(holiday) }
-  let(:payslip_date) { now }
+  let(:payslip_date) { RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date }
 
   around(:each) do |example|
     travel_to now do
@@ -34,22 +34,6 @@ describe HolidayDateValidator do
     it 'should not raise error' do
       validator.validate
       expect(holiday.errors.keys).to eq([])
-    end
-  end
-
-  context 'payslip date is in the past' do
-    let(:future_week) { RotaWeek.new(now + 3.weeks) }
-    let(:future_week_start ) { future_week.start_date }
-    let(:start_date) { future_week_start }
-    let(:end_date) { future_week_start + 1.day}
-    let(:payslip_date) { now - 3.weeks }
-
-    it 'should raise error' do
-      validator.validate
-      expect(holiday.errors.keys).to eq([:base])
-      expect(holiday.errors[:base]).to eq(
-        [HolidayDateValidator::PAYSLIP_DATE_IN_PAST_CREATION_VALIDATION_MESSAGE]
-      )
     end
   end
 
@@ -297,6 +281,8 @@ describe HolidayDateValidator do
         staff_member: holiday.staff_member,
         starts_at: owed_hour_starts_at,
         ends_at: owed_hour_ends_at,
+        payslip_date: holiday.payslip_date,
+        finance_report: holiday.finance_report,
         minutes: 120
       )
     end
@@ -358,6 +344,14 @@ describe HolidayDateValidator do
         venue: venue
       )
     end
+    let(:finance_report) do
+      FactoryGirl.create(
+        :finance_report,
+        staff_member: clock_in_day.staff_member,
+        venue: clock_in_day.staff_member.master_venue,
+        week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+      )
+    end
     let(:hour_acceptance_period) do
       HoursAcceptancePeriod.create!(
         creator: user,
@@ -366,7 +360,8 @@ describe HolidayDateValidator do
         ends_at: hour_acceptance_period_ends_at,
         status: 'accepted',
         accepted_at: now,
-        accepted_by: user
+        accepted_by: user,
+        finance_report: finance_report
       )
     end
 

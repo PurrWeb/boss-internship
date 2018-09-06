@@ -14,6 +14,14 @@ describe OwedHour do
       let(:starts_at) { RotaShiftDate.new(date).start_time }
       let(:ends_at) { starts_at + 2.hours }
       let(:minutes) { (ends_at - starts_at) / 60 }
+      let(:finance_report) do
+        FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: payslip_week.start_date
+        )
+      end
       let(:owed_hour) do
         OwedHour.new(
           staff_member: staff_member,
@@ -23,7 +31,8 @@ describe OwedHour do
           ends_at: ends_at,
           minutes: minutes,
           creator: user,
-          note: note
+          note: note,
+          finance_report: finance_report
         )
       end
 
@@ -37,12 +46,18 @@ describe OwedHour do
         specify 'should not be valid' do
           owed_hour.validate_as_creation = true
           expect(owed_hour.save).to eq(false)
-          expect(owed_hour.errors[:payslip_date]).to eq(["can't be in the past"])
+          expect(owed_hour.errors[:payslip_date]).to eq([PayslipDateValidator::PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE])
         end
       end
 
       context 'owed_hour aready exists at conflicting time' do
         before do
+          finance_report = FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: payslip_week.start_date
+          )
           OwedHour.create!(
             staff_member: staff_member,
             payslip_date: payslip_week.start_date,
@@ -51,7 +66,8 @@ describe OwedHour do
             ends_at: ends_at,
             minutes: minutes,
             creator: user,
-            note: note
+            note: note,
+            finance_report: finance_report
           )
         end
 
@@ -67,6 +83,7 @@ describe OwedHour do
 
       context 'accepted HoursAcceptancePeriod aready exists at conflicting time' do
         before do
+          accepted_at_time = RotaShiftDate.new(date).start_time
           clock_in_day = ClockInDay.create!(
             staff_member: staff_member,
             date: date,
@@ -74,14 +91,21 @@ describe OwedHour do
             venue: staff_member.master_venue
           )
 
+          finance_report = FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(clock_in_day.date).start_date
+          )
           HoursAcceptancePeriod.create!(
             status: HoursAcceptancePeriod::ACCEPTED_STATE,
             accepted_by_id: user.id,
-            accepted_at: now,
+            accepted_at: accepted_at_time,
             clock_in_day: clock_in_day,
             starts_at: starts_at,
             ends_at: ends_at,
-            creator: user
+            creator: user,
+            finance_report: finance_report
           )
         end
 
@@ -153,6 +177,15 @@ describe OwedHour do
       let(:starts_at) { RotaShiftDate.new(date).start_time }
       let(:ends_at) { starts_at + 2.hours }
       let(:minutes) { (ends_at - starts_at) / 60 }
+      let(:finance_report) do
+        FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: payslip_week.start_date,
+          requiring_update: true
+        )
+      end
       let(:owed_hour) do
         OwedHour.create!(
           staff_member: staff_member,
@@ -162,14 +195,15 @@ describe OwedHour do
           ends_at: ends_at,
           minutes: minutes,
           creator: user,
-          note: note
+          note: note,
+          finance_report: finance_report
         )
       end
 
-      context 'changing payslip date tot the past' do
+      context 'changing payslip date to the past' do
         specify 'should not be valid' do
           expect(owed_hour.update_attributes(payslip_date: payslip_week.start_date - 4.weeks)).to eq(false)
-          expect(owed_hour.errors[:payslip_date]).to eq(["can't be in the past"])
+          expect(owed_hour.errors[:payslip_date]).to include(PayslipDateValidator::PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE)
         end
       end
     end

@@ -57,7 +57,16 @@ RSpec.describe 'Update owed hour API endpoint' do
       date: old_date,
       starts_at: old_starts_at,
       ends_at: old_ends_at,
-      payslip_date: old_payslip_date
+      payslip_date: old_payslip_date,
+      finance_report: finance_report
+    )
+  end
+  let(:finance_report) do
+    FactoryGirl.create(
+      :finance_report,
+      staff_member: staff_member,
+      venue: staff_member.master_venue,
+      week_start: RotaWeek.new(old_payslip_date).start_date
     )
   end
   let(:access_token) do

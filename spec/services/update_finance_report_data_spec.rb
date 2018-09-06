@@ -156,6 +156,12 @@ describe UpdateFinanceReportData do
       travel_to start_of_day do
         owed_hour_date = start_date - 3.weeks
         owed_hour_start_time = RotaShiftDate.new(owed_hour_date).start_time
+        finance_report = FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: current_week.start_date
+        )
         OwedHour.create!(
           date: start_date - 3.weeks,
           starts_at: owed_hour_start_time,
@@ -164,6 +170,7 @@ describe UpdateFinanceReportData do
           minutes: owed_hour_minutes,
           payslip_date: current_week.start_date,
           creator: user,
+          finance_report: finance_report,
           note: 'Foo'
         )
       end

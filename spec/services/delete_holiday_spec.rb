@@ -10,7 +10,7 @@ RSpec.describe 'DeleteHoliday service'  do
       :finance_report,
       staff_member: staff_member,
       venue: venue,
-      week_start: current_week.start_date
+      week_start: payslip_date
     ).tap do |report|
       report.mark_ready!
     end
@@ -76,8 +76,12 @@ RSpec.describe 'DeleteHoliday service'  do
   end
 
   context 'holiday is frozen' do
+    let(:payslip_date) { RotaWeek.new(start_date).start_date }
     let(:finance_report) do
-      FactoryGirl.create(:finance_report).tap do |finance_report|
+      FactoryGirl.create(
+        :finance_report,
+        week_start: payslip_date
+      ).tap do |finance_report|
         finance_report.mark_ready!
         finance_report.allow_mark_completed = true
         finance_report.mark_completed!
@@ -88,6 +92,7 @@ RSpec.describe 'DeleteHoliday service'  do
         :holiday,
         start_date: start_date,
         end_date: end_date,
+        payslip_date: payslip_date,
         finance_report: finance_report
       )
     end

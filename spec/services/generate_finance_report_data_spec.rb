@@ -62,6 +62,13 @@ describe GenerateFinanceReportData do
         venue: venue,
         creator: user
       )
+
+      finance_report = FactoryGirl.create(
+        :finance_report,
+        staff_member: staff_member,
+        venue: staff_member.master_venue,
+        week_start: RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
+      )
       HoursAcceptancePeriod.create!(
         clock_in_day: clock_in_day,
         starts_at: shift_starts_at,
@@ -69,17 +76,25 @@ describe GenerateFinanceReportData do
         creator: user,
         status: HoursAcceptancePeriod::ACCEPTED_STATE,
         accepted_at: Time.current,
+        finance_report: finance_report,
         accepted_by: user
       )
     end
 
     travel_to RotaShiftDate.new(holiday_create_date).start_time do
+      holiday_finance_report = FactoryGirl.create(
+        :finance_report,
+        staff_member: staff_member,
+        venue: staff_member.master_venue,
+        week_start: RotaWeek.new(holiday_payslip_date).start_date
+      )
       Holiday.create!(
         staff_member: staff_member,
         start_date: holiday_start_date,
         end_date: holiday_end_date,
         holiday_type: Holiday::PAID_HOLIDAY_TYPE,
         payslip_date: holiday_payslip_date,
+        finance_report: holiday_finance_report,
         creator: user
       )
     end
@@ -103,6 +118,13 @@ describe GenerateFinanceReportData do
       request.transition_to!(:completed)
     end
 
+    finance_report = FactoryGirl.create(
+      :finance_report,
+      staff_member: staff_member,
+      venue: staff_member.master_venue,
+      week_start: RotaWeek.new(owed_hours_payslip_date).start_date
+    )
+
     travel_to RotaShiftDate.new(owed_hour_create_date).start_time do
       OwedHour.create!(
         staff_member: staff_member,
@@ -112,7 +134,8 @@ describe GenerateFinanceReportData do
         ends_at: owed_hour_ends_at,
         creator: user,
         note: 'Blah Blah',
-        payslip_date: owed_hours_payslip_date
+        payslip_date: owed_hours_payslip_date,
+        finance_report: finance_report
       )
     end
   end

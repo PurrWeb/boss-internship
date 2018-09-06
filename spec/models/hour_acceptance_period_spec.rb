@@ -2,8 +2,17 @@ require 'rails_helper'
 
 describe HoursAcceptancePeriod do
   describe 'validations' do
-    let(:date) { RotaShiftDate.to_rota_date(Time.current) }
+    let(:now) { Time.current }
+    let(:date) { RotaShiftDate.to_rota_date(now) }
     let(:start_of_day) { RotaShiftDate.new(date).start_time }
+    let(:finance_report) do
+      FactoryGirl.create(
+        :finance_report,
+        staff_member: staff_member,
+        venue: staff_member.master_venue,
+        week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+      )
+    end
     let(:period) do
       HoursAcceptancePeriod.new(
         clock_in_day: clock_in_day,
@@ -12,7 +21,8 @@ describe HoursAcceptancePeriod do
         creator: user,
         accepted_by: user,
         accepted_at: Time.now.utc,
-        status: HoursAcceptancePeriod::ACCEPTED_STATE
+        status: HoursAcceptancePeriod::ACCEPTED_STATE,
+        finance_report: finance_report
       )
     end
     let(:period_without_acceptor) do
@@ -21,7 +31,8 @@ describe HoursAcceptancePeriod do
         starts_at: starts_at,
         ends_at: ends_at,
         creator: user,
-        status: HoursAcceptancePeriod::ACCEPTED_STATE
+        status: HoursAcceptancePeriod::ACCEPTED_STATE,
+        finance_report: finance_report
       )
     end
     let(:starts_at) { start_of_day + 1.hour }
@@ -91,6 +102,14 @@ describe HoursAcceptancePeriod do
       let(:existing_period_clock_in_day) { clock_in_day }
       let(:existing_period_starts_at) { starts_at }
       let(:existing_period_ends_at) { ends_at }
+      let(:existing_period_finance_report) do
+        FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+        )
+      end
       let(:existing_period) do
         HoursAcceptancePeriod.create!(
           clock_in_day: existing_period_clock_in_day,
@@ -99,7 +118,8 @@ describe HoursAcceptancePeriod do
           creator: user,
           accepted_by: user,
           accepted_at: Time.now.utc,
-          status: HoursAcceptancePeriod::ACCEPTED_STATE
+          status: HoursAcceptancePeriod::ACCEPTED_STATE,
+          finance_report: existing_period_finance_report
         )
       end
 
@@ -194,6 +214,12 @@ describe HoursAcceptancePeriod do
       before do
         minutes = (ends_at - starts_at) / 60
 
+        finance_report = FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: RotaWeek.new(date).start_date
+        )
         OwedHour.create!(
           date: date,
           staff_member: staff_member,
@@ -202,7 +228,8 @@ describe HoursAcceptancePeriod do
           payslip_date: date,
           minutes: minutes,
           creator: user,
-          note: 'test note'
+          note: 'test note',
+          finance_report: finance_report
         )
       end
 
@@ -222,7 +249,8 @@ describe HoursAcceptancePeriod do
   end
 
   describe 'payable hours' do
-    let(:date) { Time.current.to_date }
+    let(:now) { Time.current }
+    let(:date) { now.to_date }
     let(:start_of_day) { RotaShiftDate.new(date).start_time }
     let(:period) do
       HoursAcceptancePeriod.create!(

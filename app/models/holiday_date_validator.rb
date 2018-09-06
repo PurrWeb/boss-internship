@@ -1,6 +1,4 @@
 class HolidayDateValidator
-  PAYSLIP_DATE_IN_PAST_CREATION_VALIDATION_MESSAGE = "can't create holidays with payslip date the past"
-  PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE = "can't change holiday payslip date to be in the past"
   DATE_IN_PAST_CREATION_VALIDATION_MESSAGE = "can't be changed to date in the past"
 
   def initialize(holiday)
@@ -11,28 +9,6 @@ class HolidayDateValidator
 
   def validate
     return unless holiday.enabled?
-
-    payslip_date_validations_failed = false
-    if payslip_date_present?
-      if holiday.validate_as_creation
-        if holiday.payslip_date < RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
-          holiday.errors.add(:base, PAYSLIP_DATE_IN_PAST_CREATION_VALIDATION_MESSAGE)
-          payslip_date_validations_failed = true
-        end
-      else
-        payslip_date_moved_to_past = false
-        if holiday.payslip_date_changed?
-          current_rota_date = RotaShiftDate.to_rota_date(now)
-          current_week = RotaWeek.new(current_rota_date)
-          payslip_date_week = RotaWeek.new(holiday.payslip_date)
-          payslip_date_moved_to_past = payslip_date_week.start_date < current_week.start_date
-        end
-
-        if payslip_date_moved_to_past
-          holiday.errors.add(:payslip_date, PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE)
-        end
-      end
-    end
 
     date_validations_failed = false
     if dates_present?
@@ -48,7 +24,7 @@ class HolidayDateValidator
     end
 
     # Don't bother with the rest if we have more major issues
-    return if payslip_date_validations_failed || date_validations_failed
+    return if date_validations_failed
 
     if dates_present? && holiday.staff_member.present?
       staff_member_holidays = Holiday.
@@ -132,10 +108,6 @@ class HolidayDateValidator
 
   def dates_present?
     holiday.start_date.present? && holiday.end_date.present?
-  end
-
-  def payslip_date_present?
-    holiday.payslip_date.present?
   end
 
   def dates_changed?(holiday)

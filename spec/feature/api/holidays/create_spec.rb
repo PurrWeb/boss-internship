@@ -101,6 +101,7 @@ RSpec.describe 'Create holiday API endpoint' do
         valid_params.merge({
           start_date: '',
           end_date: '',
+          payslipDate: '',
           holiday_type: ''
         })
       end
@@ -123,7 +124,6 @@ RSpec.describe 'Create holiday API endpoint' do
           "errors" => {
             "startDate" => ["can't be blank"],
             "endDate" => ["can't be blank"],
-            "payslipDate" => ["can't be blank"],
             "holidayType" => ["is required"]
           }
         })

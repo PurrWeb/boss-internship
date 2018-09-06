@@ -12,7 +12,7 @@ class OwedHour < ActiveRecord::Base
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
   validates :payslip_date, presence: true, if: :enabled?
-  validate :finance_report, presence: true, if: :enabled?
+  validates :finance_report, presence: true, if: :enabled?
 
   validate :date_valid
   validate :times_valid

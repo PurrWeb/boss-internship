@@ -1,6 +1,6 @@
 class PayslipDateValidator
-  PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE = "can't change holiday payslip date to be in the past"
-  PAYSLIP_DATE_MISMATCH_VALIDATION_MESSAGE = 'Must mastch related finance report'
+  PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE = "can't change payslip date to be in the past"
+  PAYSLIP_DATE_MISMATCH_VALIDATION_MESSAGE = 'Must match related finance report'
   def initialize(item:, now: Time.current)
     @item = item
     @now = now
@@ -20,7 +20,7 @@ class PayslipDateValidator
 
   def validate_date_change
     payslip_date_moved_to_past = false
-    if item.payslip_date_changed?
+    if item.payslip_date.present? && item.payslip_date_changed?
       current_rota_date = RotaShiftDate.to_rota_date(now)
       current_week = RotaWeek.new(current_rota_date)
       payslip_date_week = RotaWeek.new(item.payslip_date)
