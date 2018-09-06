@@ -90,7 +90,7 @@ module Api
       end
 
       def update_free_items
-        authorize!(:edit_free_items, :accessory)
+        authorize!(:accessory_inventory, :accessory)
 
         result = AccessoriesApiService.new(
           requester: current_user,

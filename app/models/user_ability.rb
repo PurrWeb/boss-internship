@@ -87,10 +87,6 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
-      can [:edit_free_items], :accessory do
-        user.has_effective_access_level?(AccessLevel.admin_access_level)
-      end
-
       can :view, :api_keys_page do
         user.area_manager? ||
         user.has_effective_access_level?(AccessLevel.admin_access_level)
