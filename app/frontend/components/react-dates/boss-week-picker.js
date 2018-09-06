@@ -12,7 +12,8 @@ class BossWeekPicker extends PureComponent {
   constructor(props) {
     super(props);
     const selectionStartUIDate = oFetch(props, 'selectionStartUIDate');
-    const selectionStartDate = safeMoment.uiDateParse(selectionStartUIDate);
+    const selectionStartDate = safeMoment.uiDateParse(selectionStartUIDate).startOf('isoWeek');
+
     this.state = {
       focusedInput: START_DATE,
       startDate: selectionStartDate,
@@ -58,7 +59,7 @@ class BossWeekPicker extends PureComponent {
 
   handleCancelChanges = () => {
     const selectionStartUIDate = oFetch(this.props, 'selectionStartUIDate');
-    const selectionStartDate = safeMoment.uiDateParse(selectionStartUIDate);
+    const selectionStartDate = safeMoment.uiDateParse(selectionStartUIDate).startOf('isoWeek');
     this.setState(
       {
         startDate: selectionStartDate,
