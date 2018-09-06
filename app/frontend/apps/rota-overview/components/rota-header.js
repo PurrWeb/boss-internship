@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import utils from '~/lib/utils';
 import safeMoment from "~/lib/safe-moment";
 
 import {confirmation} from '~/lib/confirm-utils';
@@ -22,8 +22,8 @@ class RotaHeader extends React.Component {
   }
 
   render() {
-    const startDate = safeMoment.uiDateParse(this.props.startDate).format('Do MMMM YYYY');
-    const endDate = safeMoment.uiDateParse(this.props.endDate).format('Do MMMM YYYY');
+    const startDate = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.props.startDate)).format('Do MMMM YYYY');
+    const endDate = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.props.endDate)).format('Do MMMM YYYY');
     const venueName = this.props.venue.name;
     var hasBeenPublished = this.props.rota.status === ROTA_PUBLISHED_STATUS;
 

@@ -520,7 +520,8 @@ var utils =  {
         const endsAt = oFetch(item, 'endsAt');
         return acc + this.getTimeDiff(startsAt, endsAt);
       }, 0);
-    }
+    },
+    formatJSDateToUIDate,
 }
 
 export default utils;

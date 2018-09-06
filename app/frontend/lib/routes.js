@@ -147,7 +147,7 @@ export const appRoutes = {
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
-            "/rotas?venue_id=" + venueId + "&highlight_date=" + utils.formatRotaUrlDate(startDate),
+            "/rotas?venue_id=" + venueId + "&highlight_date=" + startDate,
         ].join("");
     },
     changeOrdersIndex: function(options){

@@ -10,13 +10,10 @@ import utils from "~/lib/utils"
 import rotaStatusTitles from "~/lib/rota-status-titles"
 import { selectStaffTypesWithShifts } from "~/redux/selectors"
 import WeeklyRotaForecast from "./containers/weekly-rota-forecast"
-import WeekPicker from "~/components/week-picker"
-import VenueDropdown from "~/components/venue-dropdown"
+import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import RotaHeader from "./components/rota-header";
 import RotaCurrentDay from "./components/rota-current-day"
-import VenuesSelect from '~/components/select-venue';
 import actionCreators from "~/redux/actions";
-import { processVenueRotaOverviewObject } from "~/lib/backend-data/process-backend-objects"
 import oFetch from "o-fetch";
 
 const ROTA_PUBLISHED_STATUS = "published"
@@ -63,7 +60,7 @@ class RotaOverviewPage extends Component {
             staff: utils.indexByClientId(rotaDetailsObject.staff_members)
         });
 
-        let currentWeek = this.generateWeek(rotaDetails.date);
+        let currentWeek = this.generateWeek(utils.formatJSDateToUIDate(rotaDetails.date));
 
         return <div className="boss-page-main">
           <RotaHeader startDate={this.props.startDate} venue={this.props.venue} rota={this.props.storeRotas} endDate={this.props.endDate} pdfHref={pdfHref}/>
@@ -74,14 +71,15 @@ class RotaOverviewPage extends Component {
                     <section className="boss-board boss-board_layout_double">
                       <div className="boss-board__calendar">
                         <div className="boss-board__calendar-inner">
-                          <WeekPicker
-                            selectionStartDate={rotaDetails.date}
+                          <BossWeekPicker
+                            selectionStartUIDate={utils.formatJSDateToUIDate(rotaDetails.date)}
                             onChange={(selection) => {
                               this.goToOverviewPage({
-                                startDate: selection.startDate,
+                                startDate: selection.startUIDate,
                                 venueClientId: this.props.venue.id
                               });
                             }}
+                            onCancelClick={() => {}}
                           />
                         </div>
                         { storeRota.status === ROTA_PUBLISHED_STATUS &&
@@ -140,7 +138,7 @@ class RotaOverviewPage extends Component {
       let day = startOfWeek;
 
       while (day <= endOfWeek) {
-        days.push(day.toDate());
+        days.push(day.format(utils.commonDateFormat));
         day = day.clone().add(1, 'd');
       }
       return days;
@@ -151,7 +149,7 @@ class RotaOverviewPage extends Component {
         </div>
     }
     renderTabList(week){
-      const highlightDate = safeMoment.uiDateParse(this.state.highlightDate);
+      const highlightDate = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.state.highlightDate));
       return week.map((item, index) => {
         const modifiedItem = safeMoment.uiDateParse(item);
         const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
