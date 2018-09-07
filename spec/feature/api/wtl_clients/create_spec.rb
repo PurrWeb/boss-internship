@@ -22,7 +22,7 @@ RSpec.describe "Create wtl client API endpoint" do
     {
       firstName: first_name,
       surname: surname,
-      dateOfBirth: date_of_birth,
+      dateOfBirth: UIRotaDate.format(date_of_birth),
       university: university,
       gender: gender,
       email: email,
@@ -139,7 +139,7 @@ RSpec.describe "Create wtl client API endpoint" do
       end
 
       it "should return unprocessable_entity status" do
-        expect(response.status).to eq(unprocessable_entity_status)
+        expect(response.status).to eq(forbidden_status)
       end
 
       it 'it shouldn\'t create wtl client' do
@@ -150,16 +150,14 @@ RSpec.describe "Create wtl client API endpoint" do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "errors" => {
-            "email" => ["must be a valid email address"],
-            "cardNumber" => ["can't be blank"],
-            "gender" => ["a valid gender should be present"],
-            "university" => ["a valid university should be present"],
-          },
+            "headline" => "Card or email problem!",
+            "descirption" => "This card could not be registered because there was a problem with your card or email address."
+          }
         })
       end
     end
 
-    context "with already assigned card" do
+    context "with your already assigned card" do
       let!(:existing_wtl_card) { FactoryGirl.create(:wtl_card, number: existing_card_number) }
       let!(:existing_wtl_client) { FactoryGirl.create(:wtl_client, wtl_card: existing_wtl_card) }
 
@@ -174,7 +172,7 @@ RSpec.describe "Create wtl client API endpoint" do
       end
 
       it "should return unprocessable_entity status" do
-        expect(response.status).to eq(unprocessable_entity_status)
+        expect(response.status).to eq(forbidden_status)
       end
 
       it 'it shouldn\'t create wtl client' do
@@ -185,8 +183,9 @@ RSpec.describe "Create wtl client API endpoint" do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "errors" => {
-            "cardNumber" => ["has already been taken"],
-          },
+            "headline" => "Already registered!",
+            "descirption" => "You are already registered. Verify your email address by visting the link in your verification email to complete the process and use your card."
+          }
         })
       end
     end
@@ -208,5 +207,9 @@ RSpec.describe "Create wtl client API endpoint" do
 
   def unprocessable_entity_status
     422
+  end
+
+  def forbidden_status
+    403
   end
 end

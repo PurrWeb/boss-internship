@@ -16,7 +16,7 @@ describe CreateWtlClientApiService do
       surname: surname,
       gender: gender,
       email: email,
-      date_of_birth: date_of_birth,
+      date_of_birth: UIRotaDate.format(date_of_birth),
       university: university,
       card_number: card_number,
     }
