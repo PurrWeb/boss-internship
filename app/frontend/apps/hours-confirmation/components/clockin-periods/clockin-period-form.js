@@ -294,12 +294,35 @@ class ClockInPeriodForm extends Component {
       </div>
     );
   };
+  
+  renderBaseError = errors => {
+    if (Array.isArray(errors)) {
+      return errors.map((error, index) => (
+        <li key={index.toString()} className="boss-user-summary__review-item boss-user-summary__review-item_space_extra">
+          <div className="boss-alert">
+            <p className="boss-alert__text">
+              <span className="boss-alert__text-marked">{error}</span>
+            </p>
+          </div>
+        </li>
+      ));
+    } else {
+      return (
+        <div className="boss-modal-window__alert">
+          <div className="boss-alert boss-alert_role_area boss-alert_context_above">
+            <p className="boss-alert__text">{errors}</p>
+          </div>
+        </div>
+      )
+    }
+  };
 
   render() {
-    const { period, handleSubmit } = this.props;
+    const { period, handleSubmit, error } = this.props;
     const date = oFetch(period, 'date');
     return (
       <form className="boss-time-shift__form">
+      { error && this.renderBaseError(error) }
         <div className="boss-time-shift__log">
           <div className="boss-time-shift__group">
             <Fields
