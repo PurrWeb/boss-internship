@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import safeMoment from "~/lib/safe-moment";
-
+import utils from '~/lib/utils';
 import notify from '~/components/global-notification';
 
 import {
@@ -44,10 +44,14 @@ export const saveIncidentReport = (values) => (dispatch, getState) => {
   let incidentTime = null;
 
   if (values.date && values.time) {
-    incidentTime = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    incidentTime = newDate.hour(values.time.hour()).minute(values.time.minute()).toISOString().split('.')[0] + 'Z';
   }
-
-  return saveIncidentReportRequest({values: {...values, incidentTime}, venueId})
+  const newValues = { ...values, incidentTime };
+  delete newValues.date;
+  delete newValues.time;
+  return saveIncidentReportRequest({values: newValues, venueId})
     .then((resp) => {
       dispatch(updateIncidentReport(resp.data))
       dispatch(hideEditReport());
