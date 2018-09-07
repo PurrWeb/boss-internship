@@ -2,11 +2,11 @@ class WtlClient < ActiveRecord::Base
   has_paper_trail
 
   UNIVERSITIES = [
-    "University of Liverpool",
-    "Liverpool John Moores University",
-    "Liverpool Hope University",
-    "Edge Hill University",
-    "Liverpool Institute for Performing Arts"
+    "university_of_liverpool",
+    "liverpool_john_moores",
+    "liverpool_hope_university",
+    "edge_hill_university",
+    "liverpool_institute_for_performing_arts"
   ]
   GENDERS = ["male", "female", "other"]
 
