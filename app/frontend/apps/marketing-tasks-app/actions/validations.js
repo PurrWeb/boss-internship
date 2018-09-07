@@ -1,7 +1,6 @@
-import constants from '../constants';
 import { createAction } from 'redux-actions';
 import safeMoment from "~/lib/safe-moment"
-import { CREATE_DASHBOARD_MESSAGE, SET_FRONTEND_STATE } from '../constants';
+import utils from '~/lib/utils';
 import notify from '~/components/global-notification';
 
 import {
@@ -64,7 +63,9 @@ export const createMusicTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return createMusicTaskRequest({ values: { ...values, start_time }})
@@ -86,7 +87,9 @@ export const editMusicTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return editMusicTaskRequest({ values: { ...values, start_time }})
@@ -110,10 +113,14 @@ export const createSportsTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute()).toISOString().split('.')[0] + 'Z';
   }
-
-  return createSportsTaskRequest({ values: { ...values, start_time }})
+  const newValues = { ...values, start_time };
+  delete newValues.date;
+  delete newValues.time;
+  return createSportsTaskRequest({ values: newValues })
     .then((resp) => {
       // window.scrollTo(0, 0);
       notify('Task Created Successfully', {
@@ -132,10 +139,14 @@ export const editSportsTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute()).toISOString().split('.')[0] + 'Z';
   }
-
-  return editSportsTaskRequest({ values: { ...values, start_time }})
+  const newValues = { ...values, start_time };
+  delete newValues.date;
+  delete newValues.time;
+  return editSportsTaskRequest({ values: newValues })
     .then((resp) => {
       // window.scrollTo(0, 0);
       notify('Task Edited Successfully', {
@@ -156,7 +167,9 @@ export const createArtworkTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return createArtworkTaskRequest({ values: { ...values, start_time }})
@@ -178,7 +191,9 @@ export const editArtworkTask = (values) => (dispatch, getState) => {
   let start_time = '';
 
   if (values.date && values.time) {
-    start_time = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    start_time = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return editArtworkTaskRequest({ values: { ...values, start_time }})
