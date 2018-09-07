@@ -1,7 +1,13 @@
 class WtlClient < ActiveRecord::Base
   has_paper_trail
 
-  UNIVERSITIES = ["The University of Liverpool", "John Moores University"]
+  UNIVERSITIES = [
+    "University of Liverpool",
+    "Liverpool John Moores University",
+    "Liverpool Hope University",
+    "Edge Hill University",
+    "Liverpool Institute for Performing Arts"
+  ]
   GENDERS = ["male", "female", "other"]
 
   enum email_status: [:unverified, :verified]
