@@ -342,6 +342,23 @@ class PermissionsPageData
       ],
     }
 
+    admin_wtl = {
+      name: "Admin: WTL",
+      color: "#e67e22",
+      items: [
+        {
+          description: "WTL Cards",
+          permitted: true,
+          path: @path.wtl_cards_path,
+        },
+        {
+          description: "WTL Clients",
+          permitted: true,
+          path: @path.wtl_clients_path,
+        },
+      ],
+    }
+
     dev_section = {
       name: "Dev",
       color: "#f39c12",
