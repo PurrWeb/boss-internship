@@ -86,3 +86,5 @@ For this project to run properly the follow environment variables must be set
 `USE_SUBDOMAINS` # when true assumes that each app's requests will come on a different subdomain based on our naming convention seen in `config/routes.rb`. When false apps requests will be mounted on the root. An example would be the `clock` subdomain which is mapped to `/clock` when this is false. Using `example.com` as the domain, `clock.example.com/foo` when true is the same as `example.com/clock/foo` when false)
 
 `SECRET_KEY_BASE`
+
+`WTL_VERIFY_EMAIL_ROOT_URL` # Root url for wtl verification emails

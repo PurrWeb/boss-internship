@@ -40,6 +40,12 @@ import './vendors/owl.carousel';
 import 'react-tippy/dist/tippy.css';
 import './lib/load-underscore-mixins';
 
+import WelcomeToLiverpoolClients from './apps/welcome-to-liverpool-clients';
+registerComponent('WelcomeToLiverpoolClients', WelcomeToLiverpoolClients);
+
+import WelcomeToLiverpoolCards from './apps/welcome-to-liverpool-cards';
+registerComponent('WelcomeToLiverpoolCards', WelcomeToLiverpoolCards);
+
 import PayrollReportsApp from './apps/payroll-reports';
 registerComponent('PayrollReportsApp', PayrollReportsApp);
 
@@ -57,6 +63,7 @@ registerComponent('SecurityShiftRequestReviewsApp', SecurityShiftRequestReviewsA
 
 import DevsApp from './apps/devs';
 registerComponent('DevsApp', DevsApp);
+
 import AccessoriesApp from './apps/accessories';
 registerComponent('AccessoriesApp', AccessoriesApp);
 

@@ -350,6 +350,7 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-cors (1.0.2)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -544,6 +545,7 @@ DEPENDENCIES
   prawn-table
   pry-rails
   quiet_assets
+  rack-cors
   rails (~> 4.2.0)
   rb-fsevent
   react_webpack_rails

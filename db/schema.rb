@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180830152720) do
+ActiveRecord::Schema.define(version: 20180831124749) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1350,12 +1350,13 @@ ActiveRecord::Schema.define(version: 20180830152720) do
   add_index "venues_users", ["enabled"], name: "index_venues_users_on_enabled", using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  limit: 255,        null: false
-    t.integer  "item_id",    limit: 4,          null: false
-    t.string   "event",      limit: 255,        null: false
-    t.string   "whodunnit",  limit: 255
-    t.text     "object",     limit: 4294967295
+    t.string   "item_type",      limit: 255,        null: false
+    t.integer  "item_id",        limit: 4,          null: false
+    t.string   "event",          limit: 255,        null: false
+    t.string   "whodunnit",      limit: 255
+    t.text     "object",         limit: 4294967295
     t.datetime "created_at"
+    t.text     "object_changes", limit: 4294967295
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
@@ -1380,6 +1381,46 @@ ActiveRecord::Schema.define(version: 20180830152720) do
 
   add_index "vouchers", ["venue_id", "enabled"], name: "index_vouchers_on_venue_id_and_enabled", using: :btree
   add_index "vouchers", ["venue_id"], name: "index_vouchers_on_venue_id", using: :btree
+
+  create_table "wtl_cards", force: :cascade do |t|
+    t.string   "number",     limit: 255,             null: false
+    t.integer  "state",      limit: 4,   default: 1, null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "wtl_cards", ["number"], name: "index_wtl_cards_on_number", using: :btree
+
+  create_table "wtl_cards_histories", force: :cascade do |t|
+    t.integer  "wtl_card_id",   limit: 4, null: false
+    t.integer  "wtl_client_id", limit: 4
+    t.integer  "user_id",       limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "wtl_cards_histories", ["user_id"], name: "index_wtl_cards_histories_on_user_id", using: :btree
+  add_index "wtl_cards_histories", ["wtl_card_id"], name: "index_wtl_cards_histories_on_wtl_card_id", using: :btree
+  add_index "wtl_cards_histories", ["wtl_client_id"], name: "index_wtl_cards_histories_on_wtl_client_id", using: :btree
+
+  create_table "wtl_clients", force: :cascade do |t|
+    t.string   "first_name",         limit: 255,             null: false
+    t.string   "surname",            limit: 255,             null: false
+    t.string   "gender",             limit: 255,             null: false
+    t.date     "date_of_birth",                              null: false
+    t.string   "email",              limit: 255,             null: false
+    t.string   "university",         limit: 255,             null: false
+    t.integer  "email_status",       limit: 4,   default: 0, null: false
+    t.integer  "status",             limit: 4,   default: 0, null: false
+    t.integer  "wtl_card_id",        limit: 4
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.string   "verification_token", limit: 255,             null: false
+    t.datetime "verified_at"
+  end
+
+  add_index "wtl_clients", ["verification_token"], name: "index_wtl_clients_on_verification_token", unique: true, using: :btree
+  add_index "wtl_clients", ["wtl_card_id"], name: "index_wtl_clients_on_wtl_card_id", using: :btree
 
   add_foreign_key "accessory_refund_requests", "users", column: "created_by_user_id"
   add_foreign_key "accessory_requests", "users", column: "created_by_user_id"

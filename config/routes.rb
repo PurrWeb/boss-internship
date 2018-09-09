@@ -1,21 +1,23 @@
 Rails.application.routes.draw do
   boss_routes = proc do
-    get '/', to: 'welcome#index'
+    get "/", to: "welcome#index"
 
     # The priority is based upon order of creation: first created -> highest priority.
     # See how all your routes lay out with "rake routes".
     devise_for :users, path: "auth", controllers: {
-      sessions: 'users/sessions',
-      confirmations: 'users/confirmations',
-      unlocks: 'users/unlocks',
-      passwords: 'users/passwords'
-    }
+                         sessions: "users/sessions",
+                         confirmations: "users/confirmations",
+                         unlocks: "users/unlocks",
+                         passwords: "users/passwords",
+                       }
+    resources :wtl_cards, only: [:index]
+    resources :wtl_clients, only: [:index]
     resources :security_venues, only: [:index]
-    resources :security_shift_requests, only: [:index, :show], path: 'security-shift-requests'
-    resources :security_shift_request_reviews, only: [:index, :show], path: 'security-shift-request-reviews'
-    resources :ops_diaries, only: [:index], path: 'ops-diaries'
+    resources :security_shift_requests, only: [:index, :show], path: "security-shift-requests"
+    resources :security_shift_request_reviews, only: [:index, :show], path: "security-shift-request-reviews"
+    resources :ops_diaries, only: [:index], path: "ops-diaries"
     resources :accessories, only: [:index]
-    resources :accessory_requests, only: [:index], path: 'accessory-requests'
+    resources :accessory_requests, only: [:index], path: "accessory-requests"
     resources :machines, only: [:index]
     resources :machine_refloats, only: [:index]
 
@@ -80,7 +82,7 @@ Rails.application.routes.draw do
     resource :venue_dashboard, only: [:show]
     resource :message_board, only: [:show]
     resources :holidays, only: [:index, :edit, :update]
-    resources :holiday_requests, only: [:index], path: 'holiday-requests'
+    resources :holiday_requests, only: [:index], path: "holiday-requests"
 
     resources :staff_members, only: [:show, :new, :index] do
       resources :hours_overview, only: :show
@@ -175,7 +177,7 @@ Rails.application.routes.draw do
     resources :incident_reports, only: [:index, :show]
 
     resources :api_keys, only: [:index, :create, :destroy]
-    get 'dev/secruity_app_sse_test', to: 'sse_tests#secruity_app_sse_test', as: 'secruity_app_sse_test_dev'
+    get "dev/secruity_app_sse_test", to: "sse_tests#secruity_app_sse_test", as: "secruity_app_sse_test_dev"
 
     resources :hours_confirmation, only: [:index] do
       collection do
@@ -195,9 +197,14 @@ Rails.application.routes.draw do
       end
     end
 
+    namespace :api, defaults: {format: "json"} do
+      namespace :wtl do
+        namespace :v1 do
+          resources :wtl_clients, only: [:create], path: "clients"
+        end
+      end
 
-    namespace :api, defaults: { format: 'json' } do
-      namespace :security_app, path: 'security-app' do
+      namespace :security_app, path: "security-app" do
         namespace :v1 do
           resources :init, only: :index
           resource :tests, only: [] do
@@ -205,15 +212,15 @@ Rails.application.routes.draw do
             post :post
           end
           resource :sessions, only: [] do
-            post :new, path: 'new'
+            post :new, path: "new"
             post :renew
-            post :forgot_password, path: 'forgot-password'
-            get :ably_auth, path: 'ably-auth'
+            post :forgot_password, path: "forgot-password"
+            get :ably_auth, path: "ably-auth"
           end
         end
       end
 
-      namespace :clocking_app, path: 'clocking-app' do
+      namespace :clocking_app, path: "clocking-app" do
         namespace :v1 do
           resources :init, only: [] do
             collection do
@@ -231,22 +238,22 @@ Rails.application.routes.draw do
           resources :sessions, only: [] do
             collection do
               post :index
-              get :ably_auth, path: 'ably-auth'
+              get :ably_auth, path: "ably-auth"
             end
           end
 
           resources :clocking, only: [] do
             collection do
-              post :clock_in, path: 'clock-in'
-              post :clock_out, path: 'clock-out'
-              post :start_break, path: 'start-break'
-              post :end_break, path: 'end-break'
+              post :clock_in, path: "clock-in"
+              post :clock_out, path: "clock-out"
+              post :start_break, path: "start-break"
+              post :end_break, path: "end-break"
             end
           end
 
           resources :staff_members, only: [] do
             member do
-              post :change_pin, path: 'change-pin'
+              post :change_pin, path: "change-pin"
             end
           end
 
@@ -255,13 +262,27 @@ Rails.application.routes.draw do
       end
 
       namespace :v1 do
-        get 'version', to: 'version#version'
+        get "version", to: "version#version"
+
+        resources :wtl_cards, only: [:create] do
+          member do
+            post :disable
+            post :enable
+          end
+        end
+
+        resources :wtl_clients, only: [:update] do
+          member do
+            post :disable
+            post :enable
+          end
+        end
 
         resources :venue_dashboard_forecasts, only: [:show]
 
         resources :security_venues, only: [:create, :update]
 
-        resources :security_shift_requests, only: [:create, :update, :destroy], path: 'security-shift-requests' do
+        resources :security_shift_requests, only: [:create, :update, :destroy], path: "security-shift-requests" do
           member do
             post :accept
             post :reject
@@ -277,43 +298,43 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :security_venue_shifts, only: [:create, :update, :destroy], path: 'security-venue-shifts'
-        resources :security_rota_shifts, only: [:create, :update, :destroy], path: 'security-rota-shifts'
+        resources :security_venue_shifts, only: [:create, :update, :destroy], path: "security-venue-shifts"
+        resources :security_rota_shifts, only: [:create, :update, :destroy], path: "security-rota-shifts"
 
         resources :staff_vetting, only: [] do
           collection do
-            get :staff_without_email, path: 'staff-without-email'
-            get :staff_without_ni_number, path: 'staff-without-ni-number'
-            get :staff_without_address, path: 'staff-without-address'
-            get :staff_without_photo, path: 'staff-without-photo'
-            get :staff_with_expired_sia_badge, path: 'staff-with-expired-sia-badge'
-            get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
-            get :staff_with_bounced_email, path: 'staff-with-bounced-email'
+            get :staff_without_email, path: "staff-without-email"
+            get :staff_without_ni_number, path: "staff-without-ni-number"
+            get :staff_without_address, path: "staff-without-address"
+            get :staff_without_photo, path: "staff-without-photo"
+            get :staff_with_expired_sia_badge, path: "staff-with-expired-sia-badge"
+            get :staff_on_wrong_payrate, path: "staff-on-wrong-payrate"
+            get :staff_with_bounced_email, path: "staff-with-bounced-email"
           end
         end
 
-        resources :holiday_requests, only: [:create, :destroy, :update], path: 'holiday-requests' do
+        resources :holiday_requests, only: [:create, :destroy, :update], path: "holiday-requests" do
           member do
             post :accept
             post :reject
           end
         end
 
-        resources :accessory_requests, only: [:index, :create, :update, :destroy], path: 'accessory-requests'  do
+        resources :accessory_requests, only: [:index, :create, :update, :destroy], path: "accessory-requests" do
           member do
             post :accept
             post :reject
             post :undo
             post :complete
-            post :accept_refund, path: 'accept-refund'
-            post :reject_refund, path: 'reject-refund'
-            post :undo_refund, path: 'undo-refund'
-            post :complete_refund, path: 'complete-refund'
+            post :accept_refund, path: "accept-refund"
+            post :reject_refund, path: "reject-refund"
+            post :undo_refund, path: "undo-refund"
+            post :complete_refund, path: "complete-refund"
             post :update_payslip_date
             post :update_refund_payslip_date
           end
         end
-        resources :ops_diaries, only: [:index, :create, :update, :destroy], path: 'ops-diaries' do
+        resources :ops_diaries, only: [:index, :create, :update, :destroy], path: "ops-diaries" do
           member do
             post :enable
             post :disable
@@ -386,7 +407,7 @@ Rails.application.routes.draw do
           resources :questionnaire_responses
         end
 
-        resources :vouchers, only: [:index, :create, :destroy ] do
+        resources :vouchers, only: [:index, :create, :destroy] do
           member do
             post :redeem
           end
@@ -405,7 +426,7 @@ Rails.application.routes.draw do
         resources :venues, only: :show do
           resources :rota_forecasts, only: [:show] do
             member do
-              get  :weekly
+              get :weekly
               post :update
             end
           end
@@ -418,7 +439,7 @@ Rails.application.routes.draw do
             collection do
               post :publish
             end
-            resources :rota_shifts,   only: [:create]
+            resources :rota_shifts, only: [:create]
           end
         end
         resources :holidays, only: :show
@@ -434,10 +455,10 @@ Rails.application.routes.draw do
             end
           end
           resources :payments, only: [:index]
-          resources :staff_member_accessory_requests, only: [:create, :index], path: 'accessory-requests' do
+          resources :staff_member_accessory_requests, only: [:create, :index], path: "accessory-requests" do
             member do
-              post :refund_request, path: 'refund'
-              post :cancel_request, path: 'cancel'
+              post :refund_request, path: "refund"
+              post :cancel_request, path: "cancel"
             end
           end
           resources :owed_hours, only: [:index, :update, :destroy, :create]
@@ -456,9 +477,9 @@ Rails.application.routes.draw do
             post :reset_password
           end
         end
-        resources :staff_types,   only: :show
-        resources :rota_shifts,   only: [:show, :destroy, :update]
-        resources :rotas,         only: :show
+        resources :staff_types, only: :show
+        resources :rota_shifts, only: [:show, :destroy, :update]
+        resources :rotas, only: :show
         resources :sessions, only: [:create]
         resources :security_rotas, only: [] do
           member do
@@ -470,7 +491,7 @@ Rails.application.routes.draw do
             post :clock_out
           end
         end
-        resources 'pool_hall', only: [] do
+        resources "pool_hall", only: [] do
           collection do
             post :sync
           end
@@ -485,17 +506,22 @@ Rails.application.routes.draw do
   end
 
   security_app_routes = proc do
-    get 'privacy-policy', to: 'pages#security_app_privacy_policy'
+    get "privacy-policy", to: "pages#security_app_privacy_policy"
+  end
+
+  wtl_routes = proc do
+    get 'verify', to: 'wtl/verify#verify', as: 'wtl_verify'
+    get 'something-went-wrong', to: 'wtl/verify#something_went_wrong', as: 'wtl_something_went_wrong'
   end
 
   clock_routes = proc do
-    get '/', to: 'clock/clock_in_clock_out#index'
+    get "/", to: "clock/clock_in_clock_out#index"
 
-    resources :clock_in_clock_out, module: 'clock', only: [:index]
+    resources :clock_in_clock_out, module: "clock", only: [:index]
 
-    namespace :api, defaults: { format: 'json' } do
+    namespace :api, defaults: {format: "json"} do
       namespace :v1 do
-        get 'version', to: 'version#version'
+        get "version", to: "version#version"
 
         resources :sessions, only: [:create]
         resources :clock_in_clock_out, only: [:index]
@@ -527,11 +553,13 @@ Rails.application.routes.draw do
     constraints subdomain: /^([a-z0-9]+-+)?boss/, &boss_routes
     constraints subdomain: /^([a-z0-9]+-+)?clock/, &clock_routes
     constraints subdomain: /^([a-z0-9]+-+)?nsecurity-app/, &security_app_routes
+    constraints subdomain: /^([a-z0-9]+-+)?wtl/, &wtl_routes
   else
     scope "", &boss_routes
     scope "/clock", &clock_routes
     scope "/nsecurity_app", &security_app_routes
+    scope '/wtl', &wtl_routes
   end
 
-  root 'welcome#index'
+  root "welcome#index"
 end

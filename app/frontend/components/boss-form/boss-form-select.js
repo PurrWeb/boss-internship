@@ -6,6 +6,7 @@ import { List, Map } from 'immutable';
 
 const BossFormSelect = ({
   label,
+  className,
   options,
   optionValue,
   optionLabel,
@@ -69,7 +70,7 @@ const BossFormSelect = ({
   };
 
   return (
-    <div className="boss-form__field">
+    <div className={`boss-form__field ${className && className}`}>
       {label && (
         <label htmlFor={name} className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${
