@@ -19,10 +19,12 @@ class Holiday < ActiveRecord::Base
   validates :end_date, presence: true
   validates :creator, presence: true
   validates :staff_member, presence: true
-  validates :payslip_date, presence: true
+  validates :payslip_date, presence: true, if: :paid?
+  validates :finance_report, presence: true, if: :paid?
   validates :holiday_type, inclusion: { in: HOLIDAY_TYPES, message: 'is required' }
 
   validate do |holiday|
+    PayslipDateValidator.new(item: holiday).validate_all
     HolidayDateValidator.new(holiday).validate
     HolidayCapValidator.new(holiday).validate
   end

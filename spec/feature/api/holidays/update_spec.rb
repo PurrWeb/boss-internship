@@ -137,7 +137,7 @@ RSpec.describe 'Update holiday API endpoint' do
         start_date: '',
         end_date: '',
         payslip_date: '',
-        holiday_type: ''
+        holiday_type: Holiday::PAID_HOLIDAY_TYPE
       })
     end
 
@@ -151,8 +151,7 @@ RSpec.describe 'Update holiday API endpoint' do
         "errors" => {
           "startDate" => ["can't be blank"],
           "endDate" => ["can't be blank"],
-          "payslipDate" => ["can't be blank"],
-          "holidayType" => ["is required"]
+          "payslipDate" => ["can't be blank"]
         }
       })
     end

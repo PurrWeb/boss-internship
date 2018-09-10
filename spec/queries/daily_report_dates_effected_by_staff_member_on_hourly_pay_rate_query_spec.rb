@@ -103,6 +103,14 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user
           )
         end
+        let(:hours_acceptance_period_finance_report) do
+          FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+          )
+        end
         let(:hours_acceptance) do
           HoursAcceptancePeriod.create!(
             clock_in_day: clock_in_day,
@@ -111,7 +119,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
             accepted_by: user,
             accepted_at: Time.now.utc,
-            status: acceptance_period_status
+            status: acceptance_period_status,
+            finance_report: hours_acceptance_period_finance_report
           )
         end
 
@@ -138,6 +147,14 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user
           )
         end
+        let(:hours_acceptance_period_finance_report) do
+          FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+          )
+        end
         let(:hours_acceptance) do
           HoursAcceptancePeriod.create!(
             clock_in_day: clock_in_day,
@@ -146,7 +163,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
             accepted_by: user,
             accepted_at: Time.now.utc,
-            status: acceptance_period_status
+            status: acceptance_period_status,
+            finance_report: hours_acceptance_period_finance_report
           )
         end
 
@@ -173,6 +191,14 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             creator: user
           )
         end
+        let(:hours_acceptance_period_finance_report) do
+          FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+          )
+        end
         let(:hours_acceptance) do
           HoursAcceptancePeriod.create!(
             clock_in_day: clock_in_day,
@@ -181,7 +207,8 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             ends_at: RotaShiftDate.new(date).start_time + 3.hours,
             accepted_by: user,
             accepted_at: Time.now.utc,
-            status: acceptance_period_status
+            status: acceptance_period_status,
+            finance_report: hours_acceptance_period_finance_report
           )
         end
 

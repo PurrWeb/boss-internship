@@ -39,6 +39,13 @@ describe AccruedHolidayEstimate do
           creator: user
         )
 
+        finance_report = FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+        )
+
         HoursAcceptancePeriod.create!(
           creator: user,
           starts_at: shift_date.start_time,
@@ -46,7 +53,8 @@ describe AccruedHolidayEstimate do
           clock_in_day: clock_in_day,
           accepted_by: user,
           accepted_at: Time.now.utc,
-          status: HoursAcceptancePeriod::ACCEPTED_STATE
+          status: HoursAcceptancePeriod::ACCEPTED_STATE,
+          finance_report: finance_report
         )
 
         hours_created_in_year = hours_created_in_year + 10
@@ -95,6 +103,13 @@ describe AccruedHolidayEstimate do
             creator: user
           )
 
+          finance_report = FactoryGirl.create(
+            :finance_report,
+            staff_member: clock_in_day.staff_member,
+            venue: clock_in_day.staff_member.master_venue,
+            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
+          )
+
           HoursAcceptancePeriod.create!(
             creator: user,
             starts_at: shift_date.start_time,
@@ -102,7 +117,8 @@ describe AccruedHolidayEstimate do
             clock_in_day: clock_in_day,
             accepted_by: user,
             accepted_at: Time.now.utc,
-            status: HoursAcceptancePeriod::ACCEPTED_STATE
+            status: HoursAcceptancePeriod::ACCEPTED_STATE,
+            finance_report: finance_report
           )
 
           hours_created_previous_year = hours_created_previous_year + 10
@@ -132,6 +148,14 @@ describe AccruedHolidayEstimate do
       travel_to(create_date) do
         while minutes_created < owed_hours_minutes
           minutes_to_create = [1200, owed_hours_minutes - minutes_created].min
+          payslip_date = create_date + 1.week
+
+          finance_report = FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(payslip_date).start_date
+          )
 
           OwedHour.create!(
             minutes: minutes_to_create,
@@ -140,7 +164,8 @@ describe AccruedHolidayEstimate do
             creator: user,
             starts_at: rota_shift_date.start_time,
             ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
-            payslip_date: create_date + 1.week,
+            payslip_date: payslip_date,
+            finance_report: finance_report,
             note: 'Test minutes'
           )
 
@@ -181,6 +206,13 @@ describe AccruedHolidayEstimate do
           travel_to(create_date) do
             while minutes_created < owed_minutes_previous_year
               minutes_to_create = [1200, owed_minutes_previous_year - minutes_created].min
+              payslip_date = create_date + 1.week
+              finance_report = FactoryGirl.create(
+                :finance_report,
+                staff_member: staff_member,
+                venue: staff_member.master_venue,
+                week_start: RotaWeek.new(payslip_date).start_date
+              )
 
               OwedHour.create!(
                 minutes: minutes_to_create,
@@ -190,7 +222,8 @@ describe AccruedHolidayEstimate do
                 note: 'Test minutes',
                 starts_at: rota_shift_date.start_time,
                 ends_at: rota_shift_date.start_time + minutes_to_create.minutes,
-                payslip_date: create_date + 1.week
+                finance_report: finance_report,
+                payslip_date: payslip_date
               )
 
               date += 1.day

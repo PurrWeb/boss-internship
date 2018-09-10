@@ -2,7 +2,14 @@ require 'rails_helper'
 
 describe HolidayCapValidator do
   include ActiveSupport::Testing::TimeHelpers
-
+  let(:finance_report) do
+    FactoryGirl.create(
+      :finance_report,
+      staff_member: staff_member,
+      venue: staff_member.master_venue,
+      week_start: RotaWeek.new(payslip_date).start_date
+    )
+  end
   let(:holiday) do
     FactoryGirl.build(
       :holiday,
@@ -10,7 +17,8 @@ describe HolidayCapValidator do
       staff_member: staff_member,
       start_date: start_date,
       end_date: end_date,
-      payslip_date: payslip_date
+      payslip_date: payslip_date,
+      finance_report: finance_report
     ).tap do |holiday|
       holiday.validate_as_creation = true
     end
@@ -48,13 +56,21 @@ describe HolidayCapValidator do
         previous_holiday_start_date = call_time + index.days
 
         travel_to(previous_holiday_start_date - 1.week) do
+          previous_holiday_finance_report = FactoryGirl.create(
+            :finance_report,
+            staff_member: staff_member,
+            venue: staff_member.master_venue,
+            week_start: RotaWeek.new(previous_holiday_start_date).start_date
+          )
+
           Holiday.create!(
             holiday_type: Holiday::PAID_HOLIDAY_TYPE,
             staff_member: staff_member,
             creator: user,
             start_date: previous_holiday_start_date,
             end_date: previous_holiday_start_date,
-            payslip_date: previous_holiday_start_date
+            payslip_date: previous_holiday_start_date,
+            finance_report: previous_holiday_finance_report
           )
         end
       end
@@ -104,13 +120,21 @@ describe HolidayCapValidator do
           before do
             holiday_number.times do |index|
               previous_holiday_start_date = future_tax_year.start_date + index.days
+              previous_holiday_finance_report = FactoryGirl.create(
+                  :finance_report,
+                  staff_member: staff_member,
+                  venue: staff_member.master_venue,
+                  week_start: RotaWeek.new(previous_holiday_start_date).start_date
+                )
+
               Holiday.create!(
                 holiday_type: Holiday::PAID_HOLIDAY_TYPE,
                 staff_member: staff_member,
                 creator: user,
                 start_date: previous_holiday_start_date,
                 end_date: previous_holiday_start_date,
-                payslip_date: previous_holiday_start_date
+                payslip_date: previous_holiday_start_date,
+                finance_report: previous_holiday_finance_report
               )
             end
           end

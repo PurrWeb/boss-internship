@@ -10,6 +10,7 @@ FactoryGirl.define do
     staff_member
     association :creator, factory: :user
     holiday_type { Holiday::PAID_HOLIDAY_TYPE }
+    finance_report { FactoryGirl.build(:finance_report, staff_member: staff_member, week_start: RotaWeek.new(payslip_date).start_date, venue: staff_member.master_venue) }
 
     trait :disabled do
       after(:create) do |holiday|

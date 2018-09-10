@@ -23,8 +23,17 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :status, inclusion: { in: STATES, message: 'is required' }
   validates :accepted_at, presence: true, if: :accepted?
   validates :accepted_by, presence: true, if: :accepted?
+  validates :finance_report, presence: true, if: :accepted?
+  validate :finance_repot_matches_date
 
   include PeriodTimeValidations
+
+  #validation
+  def finance_repot_matches_date
+    if accepted? && accepted_at.present? && finance_report.present?
+      errors.add(:accepted_at, 'must match finance report') if RotaWeek.new(RotaShiftDate.to_rota_date(accepted_at)).start_date != finance_report.week_start
+    end
+  end
 
   def times_overlap_validations
     HoursAcceptancePeriodTimeOverlapValidator.new(self).validate if enabled?

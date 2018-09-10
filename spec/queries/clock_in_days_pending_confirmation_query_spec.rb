@@ -23,6 +23,13 @@ describe ClockInDaysPendingConfirmationQuery do
 
   context 'clock in day has accepted hours acceptance' do
     before do
+      finance_report = FactoryGirl.create(
+        :finance_report,
+        staff_member: staff_member,
+        venue: staff_member.master_venue,
+        week_start: RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
+      )
+
       HoursAcceptancePeriod.create!(
         clock_in_day: clock_in_day,
         starts_at: start_of_day,
@@ -30,6 +37,7 @@ describe ClockInDaysPendingConfirmationQuery do
         status: 'accepted',
         accepted_by: user,
         accepted_at: Time.now.utc,
+        finance_report: finance_report,
         creator: user
       )
     end
