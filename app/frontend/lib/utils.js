@@ -439,8 +439,8 @@ var utils =  {
       return shift(Math.round(shift(number, precision, false)), precision, true);
     },
     formatDateForHoliday(holiday) {
-      let startDate = safeMoment.uiDateParse(formatJSDateToUIDate(oFetch(holiday, 'start_date')));
-      let endDate = safeMoment.uiDateParse(formatJSDateToUIDate(oFetch(holiday, 'end_date')));
+      let startDate = safeMoment.uiDateParse(oFetch(holiday, 'start_date'));
+      let endDate = safeMoment.uiDateParse(oFetch(holiday, 'end_date'));
       let dates;
 
       if (startDate === endDate) {
