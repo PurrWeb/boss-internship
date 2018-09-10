@@ -55,7 +55,7 @@ export const updateEmploymentDetails = payload => {
     sage_id,
     hours_preference_note: hours_preference,
     day_preference_note: day_preference,
-    starts_at: safeMoment.iso8601Parse(starts_at).format('DD-MM-YYYY'),
+    starts_at: starts_at.format("DD-MM-YYYY"),
     employment_status,
     pay_rate_id: pay_rate,
     other_venue_ids: other_venues,
@@ -98,7 +98,7 @@ export const updatePersonalDetails = payload => {
     5000,
   ).post(`/api/v1/staff_members/${staffMemberId}/update_personal_details`, {
     gender: gender ? gender.toLowerCase() : null,
-    date_of_birth: date_of_birth ? safeMoment.uiDateParse(date_of_birth).format('DD-MM-YYYY') : null,
+    date_of_birth: date_of_birth ? date_of_birth.format("DD-MM-YYYY") : null,
     first_name,
     surname,
   });
