@@ -24,7 +24,7 @@ class DashboardDateSelect extends React.Component {
   };
 
   onDateChange = date => {
-    this.setState({ date: safeMoment.uiDateParse(date) }, () => {
+    this.setState({ date }, () => {
       this.props.onDateChange(date);
     });
   };

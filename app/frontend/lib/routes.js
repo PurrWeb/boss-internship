@@ -296,7 +296,7 @@ export const appRoutes = {
     },
     hoursConfirmationDayPage: function(options){
         var [date, venueId] = oFetch(options, "date", "venueId");
-        return "/hours_confirmation?date=" + utils.formatRotaUrlDate(date)
+        return "/hours_confirmation?date=" + date.format(utils.commonDateFormat)
             + "&venue_id=" + venueId
     },
     checklistsPage: function(options){
