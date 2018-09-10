@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 import AsyncButton from 'react-async-button';
 import utils from '~/lib/utils';
 
 class ProfileHistoryFilter extends React.Component {
   state = {
-    focusedInputDate: null,
     startDate: null,
     endDate: null,
   };
@@ -26,7 +25,7 @@ class ProfileHistoryFilter extends React.Component {
   };
 
   render() {
-    const { focusedInputDate, startDate, endDate } = this.state;
+    const { startDate, endDate } = this.state;
     return (
       <div className="boss-board__manager-filter">
         <div className="boss-form">
@@ -37,19 +36,11 @@ class ProfileHistoryFilter extends React.Component {
                 <p className="boss-form__label">
                   <span className="boss-form__label-text">Revision date</span>
                 </p>
-                <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon">
-                  <DateRangePicker
-                    numberOfMonths={1}
-                    withPortal
-                    showClearDates
-                    isOutsideRange={() => false}
-                    displayFormat={'DD-MM-YYYY'}
+                <div className="date-control date-control_type_icon date-control_type_interval">
+                  <BossDateRangePicker
                     startDate={startDate}
-                    keepOpenOnDateSelect={false}
                     endDate={endDate}
-                    onDatesChange={this.onDatesChange}
-                    focusedInput={focusedInputDate}
-                    onFocusChange={focusedInput => this.setState({ focusedInputDate: focusedInput })}
+                    onApply={this.onDatesChange}
                     startDateId="startDate"
                     endDateId="endDate"
                   />
