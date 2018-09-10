@@ -20,17 +20,9 @@ class UpdateFinanceReportData
     staff_member_clock_in_days = ClockInDay.
       where(staff_member: staff_member)
 
-    clock_in_days = InRangeQuery.new(
-      relation: staff_member_clock_in_days,
-      start_value: finance_report_week.start_date,
-      end_value: finance_report_week.end_date,
-      start_column_name: 'date',
-      end_column_name: 'date'
-    ).all
-
     hours_acceptance_periods = HoursAcceptancePeriod.
       accepted.
-      where(clock_in_day: clock_in_days).
+      where(finance_report: finance_report).
       includes(:clock_in_day)
 
     monday_hours_count = 0
@@ -81,18 +73,10 @@ class UpdateFinanceReportData
     finance_report.sunday_hours_count = sunday_hours_count
     finance_report.total_hours_count = approved_hours_count
 
-    staff_member_holidays = Holiday.
+    holidays = Holiday.
       paid.
       in_state(:enabled).
-      where(staff_member: staff_member)
-
-    holidays = InRangeQuery.new(
-      relation: staff_member_holidays,
-      start_value: finance_report_week.start_date,
-      end_value: finance_report_week.end_date,
-      start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date'
-    ).all
+      where(finance_report: finance_report)
 
     holiday_days_count = holidays.inject(0) do |sum, holiday|
       sum + holiday.days
@@ -100,13 +84,9 @@ class UpdateFinanceReportData
 
     finance_report.holiday_days_count = holiday_days_count
 
-    owed_hours = InRangeQuery.new(
-      relation: OwedHour.enabled.where(staff_member: staff_member),
-      start_value: finance_report_week.start_date,
-      end_value: finance_report_week.end_date,
-      start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date'
-    ).all
+    owed_hours = OwedHour.
+      enabled.
+      where(finance_report: finance_report)
 
     owed_hours_minute_count = owed_hours.inject(0) do |sum, owed_hour|
       sum + owed_hour.minutes
@@ -116,22 +96,14 @@ class UpdateFinanceReportData
 
     finance_report.owed_hours_minute_count = owed_hours_minute_count
 
-    accessories_requests = InRangeQuery.new(
-      relation: AccessoryRequest.in_state(:completed).where(staff_member: staff_member),
-      start_value: finance_report_week.start_date,
-      end_value: finance_report_week.end_date,
-      start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date',
-    ).all
+    accessories_requests = AccessoryRequest.
+      in_state(:completed).
+      where(finance_report: finance_report)
     accessories_requests_cents = accessories_requests.sum(:price_cents)
 
-    accessories_refunds = InRangeQuery.new(
-      relation: AccessoryRefundRequest.in_state(:completed).where(staff_member: staff_member),
-      start_value: finance_report_week.start_date,
-      end_value: finance_report_week.end_date,
-      start_column_name: 'payslip_date',
-      end_column_name: 'payslip_date',
-    ).all
+    accessories_refunds = AccessoryRefundRequest.
+      in_state(:completed).
+      where(finance_report: finance_report)
     accessories_refunds_cents = accessories_refunds.sum(:price_cents)
 
     finance_report.accessories_cents = accessories_refunds_cents - accessories_requests_cents
