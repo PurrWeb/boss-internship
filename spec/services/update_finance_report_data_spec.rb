@@ -156,12 +156,6 @@ describe UpdateFinanceReportData do
       travel_to start_of_day do
         owed_hour_date = start_date - 3.weeks
         owed_hour_start_time = RotaShiftDate.new(owed_hour_date).start_time
-        finance_report = FactoryGirl.create(
-          :finance_report,
-          staff_member: staff_member,
-          venue: staff_member.master_venue,
-          week_start: current_week.start_date
-        )
         OwedHour.create!(
           date: start_date - 3.weeks,
           starts_at: owed_hour_start_time,
@@ -232,7 +226,7 @@ describe UpdateFinanceReportData do
         accessory: accessory,
         accessory_type: accessory.accessory_type,
         staff_member: staff_member,
-        price_cents: accessory.price_cents,
+        price_cents: accessory.price_cents
       )
     end
     before do
@@ -241,6 +235,10 @@ describe UpdateFinanceReportData do
         accessory_request
         accessory_request.transition_to!(:accepted)
         accessory_request.transition_to!(:completed)
+        accessory_request.update_attributes!(
+          payslip_date: finance_report.week_start,
+          finance_report: finance_report
+        )
       end
     end
 
@@ -284,10 +282,20 @@ describe UpdateFinanceReportData do
           accessory: accessory,
           accessory_type: accessory.accessory_type,
           staff_member: staff_member,
-          price_cents: accessory.price_cents,
+          price_cents: accessory.price_cents
         )
         accessory_request.transition_to!(:accepted)
         accessory_request.transition_to!(:completed)
+        old_finance_report = FactoryGirl.create(
+          :finance_report,
+          staff_member: staff_member,
+          venue: staff_member.master_venue,
+          week_start: finance_report.week_start - 2.weeks
+        )
+        accessory_request.update_attributes!(
+          payslip_date: old_finance_report.week_start,
+          finance_report: old_finance_report
+        )
       end
 
       accessory_refund_request = AccessoryRefundRequest.create!(
@@ -297,6 +305,10 @@ describe UpdateFinanceReportData do
       )
       accessory_refund_request.transition_to!(:accepted)
       accessory_refund_request.transition_to!(:completed)
+      accessory_refund_request.update_attributes!(
+        payslip_date: finance_report.week_start,
+        finance_report: finance_report
+      )
     end
 
     let(:expected_values) do
