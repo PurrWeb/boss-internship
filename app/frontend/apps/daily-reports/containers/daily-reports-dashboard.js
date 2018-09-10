@@ -17,8 +17,8 @@ class DailyReportsDashboard extends React.Component {
           <div className="boss-page-dashboard__group">
             <div className="boss-page-dashboard__sub-group">
               <h1 className="boss-page-dashboard__title">
-                <span className="boss-page-dashboard__title-text">Daily reports for </span>
-                <span className="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked">{ venueName }</span>
+                <span className="boss-page-dashboard__title-text">Daily reports for&nbsp;</span>
+                <span className="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked">{ venueName }&nbsp;</span>
                 <span className="boss-page-dashboard__title-text boss-page-dashboard__title-text_marked">{ dateM.format('DD MMM YYYY') }</span>
               </h1>
               <div className="boss-page-dashboard__controls-group">
@@ -31,7 +31,7 @@ class DailyReportsDashboard extends React.Component {
                         onApply={(date) => {
                           window.location.href = appRoutes.dailyReportsPage({
                             venueId: venueId,
-                            dateM: safeMoment.uiDateParse(date)
+                            dateM: date
                           })
                         }}
                       />
