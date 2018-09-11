@@ -19,8 +19,8 @@ class Holiday < ActiveRecord::Base
   validates :end_date, presence: true
   validates :creator, presence: true
   validates :staff_member, presence: true
-  validates :payslip_date, presence: true, if: :paid?
-  validates :finance_report, presence: true, if: :paid?
+  validates :payslip_date, presence: true, if: :requires_finance_report?
+  validates :finance_report, presence: true, if: :requires_finance_report?
   validates :holiday_type, inclusion: { in: HOLIDAY_TYPES, message: 'is required' }
 
   validate do |holiday|
@@ -30,6 +30,12 @@ class Holiday < ActiveRecord::Base
   end
 
   attr_accessor :validate_as_creation, :source_request, :validate_as_assignment
+
+  def requires_finance_report?
+    staff_member.present? &&
+      staff_member.can_have_finance_reports? &&
+      paid?
+  end
 
   def self.paid
     where(holiday_type: PAID_HOLIDAY_TYPE)

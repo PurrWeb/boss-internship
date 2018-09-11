@@ -23,14 +23,20 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :status, inclusion: { in: STATES, message: 'is required' }
   validates :accepted_at, presence: true, if: :accepted?
   validates :accepted_by, presence: true, if: :accepted?
-  validates :finance_report, presence: true, if: :accepted?
+  validates :finance_report, presence: true, if: :requires_finance_report?
   validate :finance_repot_matches_date
 
   include PeriodTimeValidations
 
+  def requires_finance_report?
+    staff_member.present? &&
+      staff_member.can_have_finance_reports? &&
+      accepted?
+  end
+
   #validation
   def finance_repot_matches_date
-    if accepted? && accepted_at.present? && finance_report.present?
+    if accepted_at.present? && finance_report.present?
       errors.add(:accepted_at, 'must match finance report') if RotaWeek.new(RotaShiftDate.to_rota_date(accepted_at)).start_date != finance_report.week_start
     end
   end
