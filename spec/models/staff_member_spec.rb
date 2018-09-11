@@ -13,6 +13,32 @@ describe StaffMember do
   end
 
   describe 'scopes' do
+    describe 'StaffMember#can_have_finance_reports' do
+      context 'staff member is not security' do
+        let!(:existing_staff_member) do
+          FactoryGirl.create(:staff_member)
+        end
+
+        it 'should be returned' do
+          expect(
+            StaffMember.can_have_finance_reports
+          ).to include(existing_staff_member)
+        end
+      end
+
+      context 'staff member is not security' do
+        let!(:existing_staff_member) do
+          FactoryGirl.create(:staff_member, :security)
+        end
+
+        it 'should not be returned' do
+          expect(
+            StaffMember.can_have_finance_reports
+          ).to_not include(existing_staff_member)
+        end
+      end
+    end
+
     describe 'StaffMember#for_venue' do
       context 'with matching master venues' do
         let(:venue_1) { FactoryGirl.create(:venue) }
