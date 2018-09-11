@@ -113,6 +113,11 @@ class UpdateHoursAcceptancePeriod
       end
       api_errors = nil
       unless result
+        unsupported_errors = []
+        unsupported_errors << "paysliip_date: #{hour_acceptance_period.errors[:payslip_date]}" if hour_acceptance_period.errors[:payslip_date].present?
+        unsupported_errors << "finance_report: #{hour_acceptance_period.errors[:finance_report]}" if hour_acceptance_period.errors[:finance_report].present?
+        raise unsupported_errors.join(", ") if unsupported_errors.present?
+
         api_errors = HourAcceptancePeriodApiErrors.new(hour_acceptance_period: hours_acceptance_period, breaks: breaks)
       end
       Result.new(result, hours_acceptance_period, breaks, api_errors)
