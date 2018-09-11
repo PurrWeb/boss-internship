@@ -108,6 +108,13 @@ describe GenerateFinanceReportData do
         user_requestable: false
       )
 
+      accessory_request_finance_report = FactoryGirl.create(
+        :finance_report,
+        staff_member: staff_member,
+        venue: staff_member.master_venue,
+        week_start: RotaWeek.new(accessory_request_payslip_date).start_date
+      )
+
       request = AccessoryRequest.create!(
         accessory: accessory,
         staff_member: staff_member,
@@ -116,6 +123,10 @@ describe GenerateFinanceReportData do
       )
       request.transition_to!(:accepted)
       request.transition_to!(:completed)
+      request.update_attributes!(
+        payslip_date: accessory_request_payslip_date,
+        finance_report: accessory_request_finance_report
+      )
     end
 
     finance_report = FactoryGirl.create(
@@ -150,6 +161,7 @@ describe GenerateFinanceReportData do
     let(:owed_hour_create_week) { previous_week }
     let(:owed_hour_create_date) { owed_hour_create_week.start_date + 3.days }
     let(:owed_hours_payslip_date) { previous_week.start_date }
+    let(:accessory_request_payslip_date) { previous_week.start_date }
 
     it 'should return correct finance report' do
       finance_report = result.report
@@ -191,6 +203,7 @@ describe GenerateFinanceReportData do
     let(:owed_hour_create_week) { past_week }
     let(:owed_hour_create_date) { owed_hour_create_week.start_date + 3.days }
     let(:owed_hours_payslip_date) { previous_week.start_date }
+    let(:accessory_request_payslip_date) { previous_week.start_date }
 
     it 'should return correct finance report' do
       finance_report = result.report
