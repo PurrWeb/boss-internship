@@ -11,7 +11,7 @@ describe ReviveStaffMember do
     )
   end
   let(:starts_at) do
-    {staff_member: "params"}
+    { staff_member: "params" }
   end
   let(:service) do
     ReviveStaffMember.new(
@@ -55,7 +55,7 @@ describe ReviveStaffMember do
       specify 'staff member is updated' do
         expect(staff_member).to(
           receive(:assign_attributes).
-            with(starts_at)
+            with(starts_at: starts_at)
         )
         expect(staff_member).to receive(:save).and_return(update_result)
         service.call
