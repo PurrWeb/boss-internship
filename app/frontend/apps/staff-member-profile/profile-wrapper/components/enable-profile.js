@@ -9,19 +9,21 @@ import EnableProfileForm from './enable-profile-form';
 class EnableProfile extends React.Component {
   handleSubmit = (values, dispatch) => {
     return this.props.onSubmit(values.toJS(), dispatch).catch(resp => {
-      const errors = resp.response.data.errors;
+      if (resp.response && resp.response.data) {
+        const errors = resp.response.data.errors;
 
-      if (errors) {
-        let base = {};
+        if (errors) {
+          let base = {};
 
-        if (errors.base) {
-          base = {
-            _error: errors.base,
-          };
+          if (errors.base) {
+            base = {
+              _error: errors.base,
+            };
+          }
+          throw new SubmissionError({ ...errors, ...base });
         }
-        throw new SubmissionError({ ...errors, ...base });
       }
-      return resp;
+      throw resp;
     });
   };
 
