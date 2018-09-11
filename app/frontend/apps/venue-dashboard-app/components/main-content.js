@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 import oFetch from 'o-fetch';
 
 import MessageCarousel from './message-carousel';
@@ -12,15 +11,13 @@ export default class MainContent extends React.Component {
     const renderWeatherWidget = oFetch(this.props, 'renderWeatherWidget');
 
     if (!currentVenue) {
-      return(
-        <div></div>
-      )
+      return null;
     }
 
     return (
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner boss-page-main__inner_opaque boss-page-main__inner_space_large">
-          <MessageCarousel { ...this.props } />
+          <MessageCarousel {...this.props} />
 
           <section className="boss-board boss-board_context_stack boss-board_role_panel">
             <header className="boss-board__header">
@@ -29,17 +26,16 @@ export default class MainContent extends React.Component {
             <div className="boss-board__main">
               <div className="boss-board__manager">
                 <div className="boss-board__manager-weather">
-                  { renderWeatherWidget && <WeatherWidget
-                    venueId={oFetch(currentVenue, 'id')}
-                    accessToken={accessToken}
-                  /> }
-                  { !renderWeatherWidget && <p>Disabled</p> }
+                  {renderWeatherWidget && (
+                    <WeatherWidget venueId={oFetch(currentVenue, 'id')} accessToken={accessToken} />
+                  )}
+                  {!renderWeatherWidget && <p>Disabled</p>}
                 </div>
               </div>
             </div>
           </section>
         </div>
       </div>
-    )
+    );
   }
 }

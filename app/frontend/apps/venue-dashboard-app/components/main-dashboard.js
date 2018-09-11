@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 
 export default class MainDashboard extends React.Component {
   render() {
@@ -13,6 +12,6 @@ export default class MainDashboard extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
