@@ -42,6 +42,10 @@ class ChangeClockInStatus
       result = false
       errors[:base] ||= []
       errors[:base] << "illegal attempt to transistion from #{clock_in_day.current_clock_in_state} to #{state}"
+    elsif state == :clocked_in && staff_member.owed_hours_time_overlapped?(time: at)
+      result = false
+      errors[:base] ||= []
+      errors[:base] << "overlapped with existing owed hour"
     else
       ActiveRecord::Base.transaction(requires_new: nested) do
         if clock_in_day.new_record?
