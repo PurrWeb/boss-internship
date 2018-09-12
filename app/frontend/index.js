@@ -64,6 +64,12 @@ registerComponent('SecurityShiftRequestReviewsApp', SecurityShiftRequestReviewsA
 import DevsApp from './apps/devs';
 registerComponent('DevsApp', DevsApp);
 
+import InvitesAcceptPage from './components/invites/invites-accept';
+registerComponent('InvitesAcceptPage', InvitesAcceptPage);
+
+import InvitesApp from './apps/invites';
+registerComponent('InvitesApp', InvitesApp);
+
 import AccessoriesApp from './apps/accessories';
 registerComponent('AccessoriesApp', AccessoriesApp);
 
