@@ -12,6 +12,8 @@ class ContentModal extends React.Component {
       children,
       title,
       onClose,
+      modalRoleClassName,
+      closeButtonOverflowed,
     } = this.props;
 
     return (
@@ -19,10 +21,14 @@ class ContentModal extends React.Component {
         isOpen={show}
         contentLabel="Modal"
         className={{
-          base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window boss-modal-window_role_edit`,
+          base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window ${modalRoleClassName}`,
         }}
       >
-        <button onClick={onClose} className="boss-modal-window__close-inner"></button>
+        {closeButtonOverflowed ? (
+          <button onClick={onClose} type="button" className="boss-modal-window__close" />
+          ) : (
+            <button onClick={onClose} className="boss-modal-window__close-inner" />
+          )}
         <div className="boss-modal-window__header">
           {title}
         </div>
@@ -35,7 +41,11 @@ class ContentModal extends React.Component {
 }
 
 function openContentModal(
-  {title: title = 'Content Modal'},
+  {
+    title: title = 'Content Modal',
+    modalRoleClassName: modalRoleClassName = 'boss-modal-window_role_edit',
+    closeButtonOverflowed: closeButtonOverflowed = false,
+  },
   props = {},
   onSubmit,
   onClose,
@@ -46,6 +56,8 @@ function openContentModal(
       <ContentModal
         show={true}
         title={title}
+        modalRoleClassName={modalRoleClassName}
+        closeButtonOverflowed={closeButtonOverflowed}
         onClose={onClose}
       >
         <Component onSubmit={onSubmit} {...props} />
