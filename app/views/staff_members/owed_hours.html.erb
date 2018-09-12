@@ -8,7 +8,10 @@
 
  <%= react_component(
     'StaffMemberOwedHoursApp',{
-      owedHours: owed_hours,
+      owedHours: ActiveModel::Serializer::CollectionSerializer.new(
+        owed_hours,
+        serializer: Api::V1::StaffMemberProfile::OwedHourSerializer,
+      ),
       staffMember: staff_member,
       accessToken: access_token,
       staffTypes: ActiveModel::Serializer::CollectionSerializer.new(

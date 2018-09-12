@@ -1,6 +1,6 @@
 import { fromJS, Map, List } from 'immutable';
 import { handleActions } from 'redux-actions';
-import safeMoment from "~/lib/safe-moment";
+import safeMoment from '~/lib/safe-moment';
 import oFetch from 'o-fetch';
 
 import {
@@ -28,97 +28,105 @@ const initialState = fromJS({
   endDate: null,
   payslipStartDate: null,
   payslipEndDate: null,
-  permissionsData: fromJS({})
+  permissionsData: fromJS({}),
 });
 
-const owedHoursReducer = handleActions({
-  [INITIAL_LOAD]: (state, action) => {
-    const {
-      staffMember,
-      accessToken,
-      owedHours,
-      startDate,
-      endDate,
-      payslipStartDate,
-      payslipEndDate,
-    } = action.payload;
+const owedHoursReducer = handleActions(
+  {
+    [INITIAL_LOAD]: (state, action) => {
+      const {
+        staffMember,
+        accessToken,
+        owedHours,
+        startDate,
+        endDate,
+        payslipStartDate,
+        payslipEndDate,
+      } = action.payload;
 
-    const permissionsData = oFetch(action.payload, 'permissionsData');
-    const canEnable = oFetch(permissionsData, 'canEnable');
-    const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
-    const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
+      const permissionsData = oFetch(action.payload, 'permissionsData');
+      const canEnable = oFetch(permissionsData, 'canEnable');
+      const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
+      const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
 
-    return state
-      .set('staffMember', fromJS(staffMember))
-      .set('accessToken', fromJS(accessToken))
-      .set('owedHours', fromJS(owedHours))
-      .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
-      .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
-      .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
-      .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
-      .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }))
-  },
-  [ADD_NEW_OWED_HOUR]: (state) => {
-    return state
-      .set('newOwedHour', true);
-  },
-  [ADD_OWED_HOURS_SUCCESS]: (state, action) => {
-    const owedHours = fromJS(action.payload);
+      return state
+        .set('staffMember', fromJS(staffMember))
+        .set('accessToken', fromJS(accessToken))
+        .set('owedHours', fromJS(owedHours))
+        .set('owedHours', fromJS(owedHours))
+        .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
+        .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
+        .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
+        .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
+        .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }));
+    },
+    [ADD_NEW_OWED_HOUR]: state => {
+      return state.set('newOwedHour', true);
+    },
+    [ADD_OWED_HOURS_SUCCESS]: (state, action) => {
+      const owedHour = oFetch(action, 'payload.owedHour');
+      const owedHourId = oFetch(owedHour, 'id');
+      const index = state.get('owedHours').findIndex(item => item.get('id') === owedHourId);
+      const permissions = oFetch(action, 'payload.permissions');
 
-    return state
-      .set('owedHours', owedHours);
-  },
-  [OPEN_EDIT_OWED_HOURS_MODAL]: (state, action) => {
-    return state
-      .set('editedOwedHours', fromJS(action.payload))
-      .set('editOwedHour', true);
-  },
-  [CLOSE_EDIT_OWED_HOURS_MODAL]: (state, action) => {
-    return state
-      .set('editedOwedHours', fromJS({}))
-      .set('editOwedHour', false);
-  },
-  [EDIT_OWED_HOURS_SUCCESS]: (state, action) => {
-    return state
-      .set('owedHours', fromJS(action.payload))
-  },
-  [CLOSE_OWED_HOURS_MODAL]: (state) => {
-    return state
-      .set('newOwedHour', false)
-  },
-  [CANCEL_ADD_NEW_OWED_HOUR]: (state) => {
-    return state
-      .set('newOwedHour', false)
-  },
-  [DELETE_OWED_HOURS]: (state, action) => {
-    const owedHours = action.payload;
+      return state
+        .update('owedHours', owedHours => owedHours.set(index, fromJS(owedHour)))
+        .updateIn(['permissionsData', 'owedHoursPermissions'], owedHoursPermissions =>
+          owedHoursPermissions.set(owedHourId, fromJS(permissions)),
+        );
+    },
+    [OPEN_EDIT_OWED_HOURS_MODAL]: (state, action) => {
+      return state.set('editedOwedHours', fromJS(action.payload)).set('editOwedHour', true);
+    },
+    [CLOSE_EDIT_OWED_HOURS_MODAL]: (state, action) => {
+      return state.set('editedOwedHours', fromJS({})).set('editOwedHour', false);
+    },
+    [EDIT_OWED_HOURS_SUCCESS]: (state, action) => {
+      const oldOwedHourId = oFetch(action, 'payload.id');
+      const owedHour = oFetch(action, 'payload.data.owedHour');
+      const owedHourId = oFetch(owedHour, 'id');
+      if (oldOwedHourId === owedHourId) {
+        return state;
+      }
+      const permissions = oFetch(action, 'payload.data.permissions');
 
-    return state
-      .set('owedHours', fromJS(owedHours));
+      return state
+        .update('owedHours', owedHours => {
+          return owedHours.filter(owedHour => owedHour.get('id') !== oldOwedHourId).push(fromJS(owedHour));
+        })
+        .updateIn(['permissionsData', 'owedHoursPermissions'], owedHoursPermissions =>
+          owedHoursPermissions.set(owedHourId, fromJS(permissions)),
+        );
+    },
+    [CLOSE_OWED_HOURS_MODAL]: state => {
+      return state.set('newOwedHour', false);
+    },
+    [CANCEL_ADD_NEW_OWED_HOUR]: state => {
+      return state.set('newOwedHour', false);
+    },
+    [DELETE_OWED_HOURS]: (state, action) => {
+      const owedHourId = action.payload;
+
+      return state.update('owedHours', owedHours => owedHours.filter(owedHour => owedHour.get('id') !== owedHourId));
+    },
+    [FILTER]: (state, action) => {
+      const { owedHours, startDate, endDate, payslipStartDate, payslipEndDate } = action.payload;
+
+      const permissionsData = oFetch(action.payload, 'permissionsData');
+      const canEnable = oFetch(permissionsData, 'canEnable');
+      const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
+      const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
+
+      return state
+        .set('owedHours', fromJS(owedHours || []))
+        .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
+        .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
+        .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
+        .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
+        .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }));
+    },
   },
-  [FILTER]: (state, action) => {
-    const {
-      owedHours,
-      startDate,
-      endDate,
-      payslipStartDate,
-      payslipEndDate,
-    } = action.payload;
-
-    const permissionsData = oFetch(action.payload, 'permissionsData');
-    const canEnable = oFetch(permissionsData, 'canEnable');
-    const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
-    const canCreateOwedHours = oFetch(permissionsData, 'owedHoursTab.canCreateOwedHours');
-
-    return state
-      .set('owedHours', fromJS(owedHours || []))
-      .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
-      .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
-      .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
-      .set('payslipEndDate', payslipEndDate ? safeMoment.uiDateParse(payslipEndDate) : null)
-      .set('permissionsData', fromJS({ canEnable, owedHoursPermissions, canCreateOwedHours }))
-
-  }
-}, initialState);
+  initialState,
+);
 
 export default owedHoursReducer;

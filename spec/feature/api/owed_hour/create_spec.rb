@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Create owed hour API endpoint' do
+RSpec.describe "Create owed hour API endpoint" do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -30,7 +30,7 @@ RSpec.describe 'Create owed hour API endpoint' do
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      user: user
+      user: user,
     ).persist!
   end
   let(:url) do
@@ -44,7 +44,7 @@ RSpec.describe 'Create owed hour API endpoint' do
       date: UIRotaDate.format(date),
       startsAt: starts_at_offset,
       endsAt: ends_at_offset,
-      note: "TEST"
+      note: "TEST",
     }
   end
   let(:empty_params) do
@@ -52,11 +52,11 @@ RSpec.describe 'Create owed hour API endpoint' do
       date: nil,
       startsAt: nil,
       endsAt: nil,
-      note: nil
+      note: nil,
     }
   end
 
-  context 'when empty params supplied' do
+  context "when empty params supplied" do
     let(:params) do
       empty_params
     end
@@ -65,7 +65,7 @@ RSpec.describe 'Create owed hour API endpoint' do
       response
     end
 
-    it 'should return validation errors' do
+    it "should return validation errors" do
       json = JSON.parse(response.body)
 
       expect(json["errors"]["date"]).to eq(["can't be blank"])
@@ -75,41 +75,35 @@ RSpec.describe 'Create owed hour API endpoint' do
     end
   end
 
-  context 'when valid params supplied' do
+  context "when valid params supplied" do
     let(:params) do
       valid_params
     end
-    
+
     before do
       response
     end
 
-    it 'should return ok status' do
+    it "should return ok status" do
       expect(response.status).to eq(ok_status)
     end
 
-    it 'should return all owed hour data grouped by week' do
+    it "should return all owed hour data grouped by week" do
       response_json = JSON.parse(response.body)
-      expect(response_json.class).to eq(Array)
-      expect(response_json.count).to eq(1)
-      week_json = response_json.first
-
-      expect(week_json.keys).to eq(["week", "owedHours"])
+      expect(response_json.class).to eq(Hash)
+      expect(response_json.keys).to eq(["owedHour", "permissions"])
     end
 
-    it 'should create the owed hour' do
+    it "should create the owed hour" do
       json = JSON.parse(response.body)
 
-
-      owed_hours_json = json.first.fetch("owedHours")
-      expect(owed_hours_json.count).to eq(1)
-
-      owed_hour_json = owed_hours_json.first
+      owed_hour_json = json["owedHour"]
       expect(owed_hour_json.fetch("id")).to eq(staff_member.owed_hours.last.id)
     end
   end
 
   private
+
   def app
     Rails.application
   end

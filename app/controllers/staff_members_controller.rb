@@ -6,14 +6,14 @@ class StaffMembersController < ApplicationController
 
     staff_member_index_filter = StaffMemberIndexFilter.new(
       user: current_user,
-      params: params
+      params: params,
     )
 
     query = if current_user.security_manager?
-      staff_member_index_filter.security_manager_staff_member_index_query
-    else
-      staff_member_index_filter.staff_member_index_query
-    end
+              staff_member_index_filter.security_manager_staff_member_index_query
+            else
+              staff_member_index_filter.staff_member_index_query
+            end
 
     staff_members = query.
       all.
@@ -26,7 +26,7 @@ class StaffMembersController < ApplicationController
 
     render locals: {
       staff_members: staff_members,
-      filter: staff_member_index_filter
+      filter: staff_member_index_filter,
     }
   end
 
@@ -45,7 +45,7 @@ class StaffMembersController < ApplicationController
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
       accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
         user: current_user,
-        pay_rate: staff_member.pay_rate
+        pay_rate: staff_member.pay_rate,
       ).page_pay_rates.map(&:id)
 
       app_download_link_data = get_app_download_link_data(staff_member)
@@ -59,20 +59,20 @@ class StaffMembersController < ApplicationController
         pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
           PayRate.all,
           serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-          scope: current_user
+          scope: current_user,
         ),
         gender_values: StaffMember::GENDERS,
         accessible_venue_ids: Venue.all.pluck(:id),
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
-          current_user: current_user
-        )
+          current_user: current_user,
+        ),
       }
     else
-      render 'reduced_show', locals: {
-        staff_member: staff_member
-      }
+      render "reduced_show", locals: {
+                               staff_member: staff_member,
+                             }
     end
   end
 
@@ -104,23 +104,23 @@ class StaffMembersController < ApplicationController
       filtered_holiday_requests = index_query.holiday_requests.includes([:creator])
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
-       relation: staff_member.active_holidays,
-       tax_year: tax_year,
-       staff_member_start_date: staff_member.starts_at
+        relation: staff_member.active_holidays,
+        tax_year: tax_year,
+        staff_member_start_date: staff_member.starts_at,
       ).all.includes(:finance_report)
 
       paid_holiday_days = holidays_in_tax_year.paid.to_a.sum { |holiday| holiday.days }
       unpaid_holiday_days = holidays_in_tax_year.unpaid.to_a.sum { |holiday| holiday.days }
       estimated_accrued_holiday_days = AccruedHolidayEstimate.new(
         staff_member: staff_member,
-        tax_year: tax_year
+        tax_year: tax_year,
       ).call
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
       accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
         user: current_user,
-        pay_rate: staff_member.pay_rate
+        pay_rate: staff_member.pay_rate,
       ).page_pay_rates.map(&:id)
 
       app_download_link_data = get_app_download_link_data(staff_member)
@@ -132,12 +132,12 @@ class StaffMembersController < ApplicationController
         holidays: ActiveModel::Serializer::CollectionSerializer.new(
           filtered_holidays.includes(:holiday_request),
           serializer: Api::V1::StaffMemberProfile::HolidaySerializer,
-          scope: current_user
+          scope: current_user,
         ),
         holiday_requests: ActiveModel::Serializer::CollectionSerializer.new(
           filtered_holiday_requests,
           serializer: Api::V1::StaffMemberProfile::HolidayRequestSerializer,
-          scope: current_user
+          scope: current_user,
         ),
         paid_holiday_days: paid_holiday_days,
         unpaid_holiday_days: unpaid_holiday_days,
@@ -154,22 +154,22 @@ class StaffMembersController < ApplicationController
         pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
           PayRate.all,
           serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-          scope: current_user
+          scope: current_user,
         ),
         accessible_pay_rates: accessible_pay_rate_ids,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
           current_user: current_user,
           holidays: filtered_holidays,
-          holiday_requests: filtered_holiday_requests
+          holiday_requests: filtered_holiday_requests,
         ),
-        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
+        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level),
       }
     else
       flash.now[:alert] = "You're not authorized to view all of this staff member's details. Contact an admin for further assistance."
-      render 'reduced_show', locals: {
-        staff_member: staff_member
-      }
+      render "reduced_show", locals: {
+                               staff_member: staff_member,
+                             }
     end
   end
 
@@ -186,17 +186,16 @@ class StaffMembersController < ApplicationController
         start_date: owed_hours_tab_start_date_from_params,
         end_date: owed_hours_tab_end_date_from_params,
         payslip_start_date: owed_hours_tab_payslip_start_date_from_params,
-        payslip_end_date: owed_hours_tab_payslip_end_date_from_params
+        payslip_end_date: owed_hours_tab_payslip_end_date_from_params,
       )
 
       owed_hours = index_query.all.includes(creator: [:name])
 
       access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-      serialized_owed_hours = OwedHourWeekView.new(owed_hours: owed_hours).serialize
 
       accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
         user: current_user,
-        pay_rate: staff_member.pay_rate
+        pay_rate: staff_member.pay_rate,
       ).page_pay_rates.map(&:id)
 
       app_download_link_data = get_app_download_link_data(staff_member)
@@ -204,7 +203,7 @@ class StaffMembersController < ApplicationController
       render locals: {
         staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
         app_download_link_data: app_download_link_data,
-        owed_hours: serialized_owed_hours,
+        owed_hours: owed_hours,
         access_token: access_token.token,
         staff_types: StaffType.all,
         venues: Venue.all,
@@ -213,7 +212,7 @@ class StaffMembersController < ApplicationController
         pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
           PayRate.all,
           serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-          scope: current_user
+          scope: current_user,
         ),
         accessible_pay_rate_ids: accessible_pay_rate_ids,
         venues: Venue.all,
@@ -228,7 +227,7 @@ class StaffMembersController < ApplicationController
           current_user: current_user,
           owed_hours: owed_hours,
         ),
-        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level)
+        is_admin_plus: current_user.has_effective_access_level?(AccessLevel.admin_access_level),
       }
     end
   end
@@ -248,7 +247,7 @@ class StaffMembersController < ApplicationController
       staff_member: staff_member,
       start_date: payment_filter_start_date_from_params,
       end_date: payment_filter_end_date_from_params,
-      status_filter: payment_filter_status_filter_from_params
+      status_filter: payment_filter_status_filter_from_params,
     ).
       all.
       includes([:created_by_user, staff_member: :name])
@@ -272,20 +271,20 @@ class StaffMembersController < ApplicationController
         pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
           profile_dashboard_data.pay_rates,
           serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-          scope: current_user
+          scope: current_user,
         ),
         gender_values: profile_dashboard_data.gender_values,
         accessible_venue_ids: profile_dashboard_data.accessible_venue_ids,
         accessible_pay_rate_ids: profile_dashboard_data.accessible_pay_rate_ids,
         staff_member_profile_permissions: StaffMemberProfilePermissions.new(
           staff_member: staff_member,
-          current_user: current_user
-        )
+          current_user: current_user,
+        ),
       }
     else
-      render 'reduced_show', locals: {
-        staff_member: staff_member
-      }
+      render "reduced_show", locals: {
+                               staff_member: staff_member,
+                             }
     end
   end
 
@@ -304,7 +303,7 @@ class StaffMembersController < ApplicationController
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
     accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
       user: current_user,
-      pay_rate: staff_member.pay_rate
+      pay_rate: staff_member.pay_rate,
     ).page_pay_rates.map(&:id)
 
     venue_accessories = staff_member.master_venue.accessories
@@ -316,16 +315,16 @@ class StaffMembersController < ApplicationController
       staff_member: staff_member,
       filter_params: {
         payslip_start_date: payslip_start_date,
-        payslip_end_date:  payslip_end_date
-      }
+        payslip_end_date: payslip_end_date,
+      },
     ).all.
-    includes([
+      includes([
       :finance_report,
       :created_by_user,
       :accessory,
       accessory_refund_request: [
-        :staff_member, :created_by_user, :finance_report
-      ]
+        :staff_member, :created_by_user, :finance_report,
+      ],
     ])
 
     app_download_link_data = get_app_download_link_data(staff_member)
@@ -341,7 +340,7 @@ class StaffMembersController < ApplicationController
       pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
         PayRate.all,
         serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-        scope: current_user
+        scope: current_user,
       ),
       venue_accessories: ActiveModel::Serializer::CollectionSerializer.new(
         venue_accessories,
@@ -355,10 +354,10 @@ class StaffMembersController < ApplicationController
       accessible_pay_rates: accessible_pay_rate_ids,
       staff_member_profile_permissions: StaffMemberProfilePermissions.new(
         staff_member: staff_member,
-        current_user: current_user
+        current_user: current_user,
       ),
       payslip_start_date: payslip_start_date,
-      payslip_end_date: payslip_end_date
+      payslip_end_date: payslip_end_date,
     }
   end
 
@@ -378,17 +377,18 @@ class StaffMembersController < ApplicationController
       pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
         pay_rates,
         serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
-        scope: current_user
+        scope: current_user,
       ),
       staff_types: staff_types,
-      gender_values: gender_values
+      gender_values: gender_values,
     }
   end
 
   private
+
   def accessories_tab_params_present?
     accessory_request_filter_start_date_from_params.present? &&
-       accessory_request_filter_end_date_from_params.present?
+      accessory_request_filter_end_date_from_params.present?
   end
 
   def accessories_tab_params(staff_member)
@@ -398,7 +398,7 @@ class StaffMembersController < ApplicationController
     {
       staff_member_id: staff_member.id,
       payslip_date_start: UIRotaDate.format(payslip_date_start),
-      payslip_date_end: UIRotaDate.format(payslip_date_end)
+      payslip_date_end: UIRotaDate.format(payslip_date_end),
     }
   end
 
@@ -436,7 +436,7 @@ class StaffMembersController < ApplicationController
       start_date: UIRotaDate.format(holiday_start_date_from_params || tax_year.start_date),
       end_date: UIRotaDate.format(holiday_end_date_from_params || tax_year.end_date),
       payslip_start_date: holiday_tab_payslip_start_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_start_date_from_params) : nil,
-      payslip_end_date: holiday_tab_payslip_end_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_end_date_from_params) : nil
+      payslip_end_date: holiday_tab_payslip_end_date_from_params.present? ? UIRotaDate.format(holiday_tab_payslip_end_date_from_params) : nil,
     }
   end
 
@@ -449,7 +449,7 @@ class StaffMembersController < ApplicationController
       staff_member_id: staff_member.id,
       start_date: payment_filter_start_date_from_params || UIRotaDate.format(default_payment_filter_start_date),
       end_date: payment_filter_end_date_from_params || UIRotaDate.format(default_payment_filter_end_date),
-      status_filter: payment_filter_status_filter_from_params || default_payment_filter_status_filter
+      status_filter: payment_filter_status_filter_from_params || default_payment_filter_status_filter,
     }
   end
 
@@ -457,7 +457,7 @@ class StaffMembersController < ApplicationController
     {
       start_date: payment_filter_start_date_from_params,
       end_date: payment_filter_end_date_from_params,
-      status_filter: payment_filter_status_filter_from_params
+      status_filter: payment_filter_status_filter_from_params,
     }
   end
 
@@ -510,19 +510,19 @@ class StaffMembersController < ApplicationController
   end
 
   def holiday_start_date_from_params
-    UIRotaDate.parse_if_present(params['start_date'])
+    UIRotaDate.parse_if_present(params["start_date"])
   end
 
   def holiday_end_date_from_params
-    UIRotaDate.parse_if_present(params['end_date'])
+    UIRotaDate.parse_if_present(params["end_date"])
   end
 
   def holiday_tab_payslip_start_date_from_params
-    UIRotaDate.parse_if_present(params['payslip_start_date'])
+    UIRotaDate.parse_if_present(params["payslip_start_date"])
   end
 
   def holiday_tab_payslip_end_date_from_params
-    UIRotaDate.parse_if_present(params['payslip_end_date'])
+    UIRotaDate.parse_if_present(params["payslip_end_date"])
   end
 
   def get_app_download_link_data(staff_member)
