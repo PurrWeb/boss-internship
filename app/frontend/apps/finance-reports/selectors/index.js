@@ -95,7 +95,7 @@ export const getStaffTypesWithFinanceReports = createSelector(
         const hoursPending = oFetch(report, 'hoursPending');
         const total = oFetch(report, 'total');
 
-        if (hoursPending || !completionDateReached || (total < 0)){
+        if (hoursPending || !completionDateReached){
           incompletableReadyReports.push(report)
         } else {
           completableReadyReports.push(report)

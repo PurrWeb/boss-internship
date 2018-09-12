@@ -14,21 +14,19 @@ export default handleActions(
         financeReport.set('frontendId', financeReport.get('id') === null ? uuid() : financeReport.get('id')),
       );
     },
-    [types.MARK_REPORT_COMPLETED]: (state, action) => {
-      const reportsId = oFetch(action, 'payload.reportsId');
-      const reportIndex = state.findIndex(report => report.get('frontendId') === reportsId);
-      return state.setIn([reportIndex, 'status'], 'done');
-    },
     [types.MARK_REPORTS_COMPLETED]: (state, action) => {
-      const reportsIds = oFetch(action, 'payload.reportsIds');
+      const updatedFinanceReports = oFetch(action, 'payload.financeReports');
 
-      return state.map(financeReport => {
-        if (!reportsIds.includes(financeReport.get('frontendId'))) {
-          return financeReport;
-        }
-        return financeReport.setIn(['status'], 'done');
-      })
-
+      const newFinanseReports = state.withMutations(reports => {
+        updatedFinanceReports.forEach(report => {
+          const reportIndex = state.findIndex(r => r.get('frontendId') === report.id);
+          if (reportIndex === -1) {
+            throw new Error(`Can't find finance report with id: ${report.id}`);
+          }
+          reports.set(reportIndex, Immutable.fromJS({...report, frontendId: report.id}));
+        });
+      });
+      return newFinanseReports;
     },
   },
   initialState,

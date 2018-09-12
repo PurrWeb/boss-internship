@@ -4,11 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import { appRoutes } from '~/lib/routes';
 import oFetch from 'o-fetch';
-import { openConfirmationModal } from '~/components/modals';
+import { openConfirmationModal, openWarningModal } from '~/components/modals';
 import Dashboard from './dashboard';
 import CardList from './card-list';
 import ReportList from './report-list';
-import ReportItem from './report-item';
+import { PureJSReportItem } from './report-item';
 import Confirm from './confirm';
 import * as _ from 'lodash';
 import { FINANCE_REPORT_STATUS_DONE_STATUS } from '../constants';
@@ -34,11 +34,27 @@ class Page extends Component {
   };
 
   handleOpenMarkCompletedModal = params => {
-    openConfirmationModal({
-      submit: this.handleMarkComplete,
-      config: { title: 'WARNING !!!' },
-      props: { params },
-    })(Confirm);
+    const isNegativeTotal = oFetch(params, 'isNegativeTotal');
+    if (isNegativeTotal) {
+      openWarningModal({
+        submit: this.handleMarkComplete,
+        config: {
+          title: 'Are You Sure?',
+          text: [
+            'You are attempting to complete a finance report with a negative total.',
+            'If you choose to proceed all accessory requests will be removed and moved to the next available finance report.',
+          ],
+          buttonText: 'Continue and move Accessory Requests',
+        },
+        props: params,
+      });
+    } else {
+      openConfirmationModal({
+        submit: this.handleMarkComplete,
+        config: { title: 'WARNING !!!' },
+        props: { params },
+      })(Confirm);
+    }
   };
 
   handleMarkComplete = (hideModal, values) => {
@@ -50,11 +66,27 @@ class Page extends Component {
   };
 
   handleOpenMarkAllCompletedModal = params => {
-    openConfirmationModal({
-      submit: this.handleMarkAllComplete,
-      config: { title: 'WARNING !!!' },
-      props: { params },
-    })(Confirm);
+    const isNegativeTotal = oFetch(params, 'isNegativeTotal');
+    if (isNegativeTotal) {
+      openWarningModal({
+        submit: this.handleMarkAllComplete,
+        config: {
+          title: 'Are You Sure?',
+          text: [
+            'You are attempting to complete a finance report with a negative total.',
+            'If you choose to proceed all accessory requests will be removed and moved to the next available finance report.',
+          ],
+          buttonText: 'Continue and move Accessory Requests',
+        },
+        props: params,
+      });
+    } else {
+      openConfirmationModal({
+        submit: this.handleMarkAllComplete,
+        config: { title: 'WARNING !!!' },
+        props: { params },
+      })(Confirm);
+    }
   };
 
   handleMarkAllComplete = (hideModal, values) => {
@@ -65,7 +97,7 @@ class Page extends Component {
       .catch(hideModal);
   };
 
-  canExportToCSV(options){
+  canExportToCSV(options) {
     return true;
   }
 
@@ -83,17 +115,28 @@ class Page extends Component {
 
     const staffMemberIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status']) === 'ready').map(report => report.get('staffMemberId'))),
+        (acc, staffType) =>
+          acc.concat(
+            staffType
+              .get('reports')
+              .filter(report => report.getIn(['status']) === 'ready')
+              .map(report => report.get('staffMemberId')),
+          ),
         Immutable.List(),
       )
       .toJS();
 
-    const reportsIds = staffTypesWithFinanceReports
-      .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.getIn(['status']) === 'ready').map(report => report.get('frontendId'))),
-        Immutable.List(),
-      )
-      .toJS();
+    const reportsTotals = staffTypesWithFinanceReports.reduce(
+      (acc, staffType) =>
+        acc.concat(
+          staffType
+            .get('reports')
+            .filter(report => report.getIn(['status']) === 'ready')
+            .map(report => report.get('total')),
+        ),
+      Immutable.List(),
+    );
+    const isNegativeTotal = !!reportsTotals.find(total => total < 0);
 
     const canExportToCSV = this.canExportToCSV({ staffTypesWithFinanceReports });
 
@@ -113,33 +156,32 @@ class Page extends Component {
         />
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}
-          onMarkAllPageCompleted={() => this.handleOpenMarkAllCompletedModal({ reportsIds, staffMemberIds })}
+          onMarkAllPageCompleted={() =>
+            this.handleOpenMarkAllCompletedModal({ staffMemberIds, isNegativeTotal })
+          }
           allReady={allReady}
           itemRenderer={staffType => {
             const staffTypeJS = staffType.toJS();
             const reportsJS = oFetch(staffTypeJS, 'reports');
 
-            const staffMemberIds = reportsJS.filter((report) => {
-              return oFetch(report, 'status') === 'ready'
-            })
-            .map(report => oFetch(report, 'staffMemberId'));
+            const staffMemberIds = reportsJS
+              .filter(report => {
+                return oFetch(report, 'status') === 'ready';
+              })
+              .map(report => oFetch(report, 'staffMemberId'));
 
-            const reportsIds = reportsJS.filter(report => (report) => {
-              return oFetch(report, 'status') === 'ready'
-            })
-            .map(report => oFetch(report, 'frontendId'));
-
+            const isNegativeTotal = !!reportsJS.find(report => oFetch(report, 'total') < 0);
             return (
               <ReportList
                 staffType={staffType}
                 startDate={startDate}
-                onMarkAllCompleted={() => this.handleOpenMarkAllCompletedModal({ reportsIds, staffMemberIds })}
+                onMarkAllCompleted={() =>
+                  this.handleOpenMarkAllCompletedModal({ staffMemberIds, isNegativeTotal })
+                }
                 itemRenderer={report => {
-                  const staffMemberId = oFetch(report, 'staffMemberId');
-                  const reportsId = oFetch(report, 'frontendId');
                   return (
-                    <ReportItem
-                      onMarkCompleted={() => this.handleOpenMarkCompletedModal({ staffMemberId, reportsId })}
+                    <PureJSReportItem
+                      onMarkCompleted={this.handleOpenMarkCompletedModal}
                       weekDates={weekDates}
                       report={report}
                       startDate={startDate}

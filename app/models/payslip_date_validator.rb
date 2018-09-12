@@ -1,11 +1,13 @@
 class PayslipDateValidator
   PAYSLIP_DATE_IN_PAST_UPDATE_VALIDATION_MESSAGE = "can't change payslip date to be in the past"
   PAYSLIP_DATE_MISMATCH_VALIDATION_MESSAGE = 'Must match related finance report'
-  def initialize(item:, now: Time.current)
+
+  def initialize(item:, now: Time.current, allow_past_payslip_date_manupulation: false)
     @item = item
     @now = now
+    @allow_past_payslip_date_manupulation = allow_past_payslip_date_manupulation
   end
-  attr_reader :item, :now
+  attr_reader :item, :now, :allow_past_payslip_date_manupulation
 
   def validate_all
     validate_finance_report_match
@@ -19,6 +21,8 @@ class PayslipDateValidator
   end
 
   def validate_date_change
+    return if allow_past_payslip_date_manupulation
+
     payslip_date_moved_to_past = false
     if item.payslip_date.present? && item.payslip_date_changed?
       current_rota_date = RotaShiftDate.to_rota_date(now)

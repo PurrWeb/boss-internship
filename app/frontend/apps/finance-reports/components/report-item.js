@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import humanize from 'string-humanize';
 import oFetch from 'o-fetch';
 import classNames from 'classnames';
 import utils from '~/lib/utils';
 import safeMoment from '~/lib/safe-moment';
 import { appRoutes } from '~/lib/routes';
 import { Tooltip } from 'react-tippy';
-
+import pureToJs from '~/hocs/pure-to-js';
 const cellStyle = { flexDirection: 'row', alignItems: 'center' };
 
 class ReportItem extends Component {
@@ -36,7 +36,7 @@ class ReportItem extends Component {
       saturdayHoursCount,
       sundayHoursCount,
     ].map((dayHoursCount, index) => {
-      const weekDate = weekDates.get(index);
+      const weekDate = weekDates[index];
       if (hoursPending === true && daysNeedingCompletion[weekDate]) {
         const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
         return (
@@ -108,6 +108,7 @@ class ReportItem extends Component {
     const payRateDescription = oFetch(report, 'payRateDescription');
     const totalHoursCount = utils.round(oFetch(report, 'totalHoursCount') + owedHours, 2);
     const total = utils.round(oFetch(report, 'total'), 2);
+    const isNegativeTotal = total < 0;
     const holidayDaysCount = oFetch(report, 'holidayDaysCount');
     const onMarkCompleted = oFetch(this.props, 'onMarkCompleted');
     const staffMemberId = oFetch(report, 'staffMemberId');
@@ -127,15 +128,13 @@ class ReportItem extends Component {
       effectiveStatus = 'pending';
     } else if((effectiveStatus === 'ready') && hoursPending) {
       effectiveStatus = 'incomplete';
-    } else if((effectiveStatus === 'ready') && (total < 0)) {
-      effectiveStatus = 'invalid';
     }
 
-    const isIncomplete = hoursPending || !completionDateReached || (total < 0);
-
+    const isIncomplete = hoursPending || !completionDateReached;
+    const isRequiringUpdate = effectiveStatus === 'requiring_update';
     const statusClassName = classNames({
       'boss-table__text': true,
-      'boss-table__text_role_pending-status': effectiveStatus === 'ready',
+      'boss-table__text_role_pending-status': effectiveStatus === 'ready' || isRequiringUpdate,
       'boss-table__text_role_alert-status': isIncomplete,
       'boss-table__text_role_success-status': status === 'done',
     });
@@ -225,7 +224,9 @@ class ReportItem extends Component {
           <p className={`${this.getTextClassName({ alertStyles: false })} boss-table__text_role_important`}>{totalHoursCount}</p>
         </div>
         <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
-          <p className={this.getTextClassName({ alertStyles: false })}>{utils.moneyFormat(total)}</p>
+          <p className={this.getTextClassName({ alertStyles: false })} style={total < 0 ? { color: 'red'} : {}}>
+            {utils.moneyFormat(total)}
+          </p>
         </div>
         {holidayDaysCount === 0 ? (
           <div className={holidayDaysCountClassName} style={cellStyle}>
@@ -247,11 +248,11 @@ class ReportItem extends Component {
           </p>
         </div>
         <div className="boss-table__cell">
-          <p className={statusClassName}>{effectiveStatus}</p>
+          <p className={statusClassName}>{humanize(effectiveStatus)}</p>
           { effectiveStatus === 'ready' && (
             <div className="boss-table__actions">
               <button
-                onClick={onMarkCompleted}
+                onClick={() => onMarkCompleted({ staffMemberId, isNegativeTotal })}
                 className="boss-button boss-button_type_extra-small boss-button_role_confirm-light boss-table__action"
               >
                 Mark Completed
@@ -283,10 +284,12 @@ ReportItem.propTypes = {
     staffMemberName: PropTypes.string.isRequired,
     acessories: PropTypes.number.isRequired,
     payRateDescription: PropTypes.string.isRequired,
-    status: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
   }).isRequired,
-  weekDates: ImmutablePropTypes.list.isRequired,
+  weekDates: PropTypes.array.isRequired,
   onMarkCompleted: PropTypes.func.isRequired,
 };
 
 export default ReportItem;
+
+export const PureJSReportItem = pureToJs(ReportItem);

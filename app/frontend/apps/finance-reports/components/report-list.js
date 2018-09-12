@@ -33,7 +33,7 @@ class ReportList extends Component {
     const itemRenderer = oFetch(this.props, 'itemRenderer');
     const staffType = oFetch(this.props, 'staffType');
     return staffType.get('reports').map(report => {
-      return React.cloneElement(itemRenderer(report.toJS()), {
+      return React.cloneElement(itemRenderer(report), {
         key: report.get('frontendId').toString(),
       });
     });

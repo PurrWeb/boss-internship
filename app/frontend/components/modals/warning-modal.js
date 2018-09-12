@@ -16,6 +16,7 @@ class WarningModal extends React.Component {
       onClose,
       onSubmit,
       props,
+      buttonClassName,
     } = this.props;
 
     return (
@@ -34,7 +35,7 @@ class WarningModal extends React.Component {
             {_.isArray(text) ? (
               text.map((message, key) => (
                 <span key={key} className="boss-modal-window__message-text">
-                  {text}
+                  {message}
                 </span>
               ))
             ) : (
@@ -43,7 +44,7 @@ class WarningModal extends React.Component {
           </div>
           <div className="boss-modal-window__actions">
             <AsyncButton
-              className="boss-button boss-button_role_cancel"
+              className={buttonClassName}
               text={buttonText}
               onClick={() => onSubmit(props)}
             />
@@ -55,7 +56,7 @@ class WarningModal extends React.Component {
 }
 
 function openWarningModal(
-  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm' },
+  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm', buttonClassName = 'boss-button boss-button_role_cancel' },
   props = {},
   onSubmit,
   onClose,
@@ -67,6 +68,7 @@ function openWarningModal(
       title={title || 'Warning modal'}
       text={text || 'Are you sure'}
       buttonText={buttonText || 'Confirm'}
+      buttonClassName={buttonClassName}
       onClose={onClose}
       onSubmit={onSubmit}
       props={props}
