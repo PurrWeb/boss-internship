@@ -173,6 +173,10 @@ class StaffMember < ActiveRecord::Base
     where(id: ids.uniq)
   end
 
+  def self.can_have_finance_reports
+    joins("LEFT JOIN `staff_types` as `has_finance_reports_staff_types` on `has_finance_reports_staff_types`.id = `staff_members`.staff_type_id").where('`has_finance_reports_staff_types`.role != ?', StaffType::SECURITY_ROLE)
+  end
+
   def self.security
     joins(:staff_type).merge(StaffType.security)
   end

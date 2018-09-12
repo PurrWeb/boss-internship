@@ -43,7 +43,16 @@ describe StaffMemberProfileAccessoryRequestQuery do
     context 'existing request with payslip date' do
       before do
         existing_request.transition_to!(:completed, requster_user_id: user.id)
-        existing_request.update_attributes!(payslip_date: existing_request_payslip_date)
+        existing_request_finance_report = FactoryGirl.create(
+          :finance_report,
+          staff_member: existing_request.staff_member,
+          venue: existing_request.staff_member.master_venue,
+          week_start: RotaWeek.new(existing_request_payslip_date).start_date
+        )
+        existing_request.update_attributes!(
+          payslip_date: existing_request_payslip_date,
+          finance_report: existing_request_finance_report
+        )
       end
 
       context 'staff member matches but not payslip date' do

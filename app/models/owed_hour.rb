@@ -11,8 +11,8 @@ class OwedHour < ActiveRecord::Base
   validates :staff_member, presence: true
   validates :note, presence: true
   validates :disabled_by, presence: true, if: :disabled?
-  validates :payslip_date, presence: true, if: :enabled?
-  validates :finance_report, presence: true, if: :enabled?
+  validates :payslip_date, presence: true, if: :requires_finance_report?
+  validates :finance_report, presence: true, if: :requires_finance_report?
 
   validate :date_valid
   validate :times_valid
@@ -23,6 +23,12 @@ class OwedHour < ActiveRecord::Base
   end
 
   attr_accessor :validate_as_creation
+
+  def requires_finance_report?
+    staff_member.present? &&
+      staff_member.can_have_finance_reports? &&
+      enabled?
+  end
 
   #validation
   def date_valid
