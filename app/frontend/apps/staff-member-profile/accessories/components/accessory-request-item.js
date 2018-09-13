@@ -31,6 +31,15 @@ const REFUND_REQUEST_STATUS_CLASS_PREFIXES = {
 class AccessoryRequestItem extends React.Component {
   state = {
     isRefundsTimelineOpened: false,
+    processing: false,
+  };
+
+  setProcessingState = (args, action) => {
+    this.setState({ processing: true }, () => {
+      action(args).then(() => {
+        this.setState({ processing: false });
+      });
+    });
   };
 
   renderRequestActions(accessoryRequest) {
@@ -51,7 +60,7 @@ class AccessoryRequestItem extends React.Component {
           {(!hasRefundRequest || refundRequestStatusRejected) &&
             isRefundable && (
               <button
-                onClick={() => onAccessoryRefund(accessoryRequestId)}
+                onClick={() => this.setProcessingState(accessoryRequestId, this.props.onAccessoryRefund)}
                 className={`boss-requests__action boss-requests__action_role_request`}
               >
                 Request refund
@@ -66,7 +75,7 @@ class AccessoryRequestItem extends React.Component {
           {isCancelable && (
             <button
               className={`boss-requests__action boss-requests__action_role_cancel`}
-              onClick={() => onAccessoryCancel(accessoryRequestId)}
+              onClick={() => this.setProcessingState(accessoryRequestId, this.props.onAccessoryCancel)}
             >
               Cancel
             </button>
@@ -107,9 +116,13 @@ class AccessoryRequestItem extends React.Component {
   };
 
   handleEditRefundPayslipDate = () => {
-    const [onEditRefundPayslipDate, accessoryRequest] = oFetch(this.props, 'onEditRefundPayslipDate', 'accessoryRequest');
+    const [onEditRefundPayslipDate, accessoryRequest] = oFetch(
+      this.props,
+      'onEditRefundPayslipDate',
+      'accessoryRequest',
+    );
     return onEditRefundPayslipDate(accessoryRequest);
-  }
+  };
 
   render() {
     const accessoryRequest = oFetch(this.props, 'accessoryRequest');
@@ -129,78 +142,93 @@ class AccessoryRequestItem extends React.Component {
     const sPayslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : null;
     const refundFrozen = oFetch(accessoryRequest, 'refundFrozen');
     const sRefundPayslipDate = oFetch(accessoryRequest, 'refundPayslipDate');
-    const sRefundPayslipDateText = sRefundPayslipDate ? safeMoment.uiDateParse(sRefundPayslipDate).format(utils.commonDateFormat) : null;
-
+    const sRefundPayslipDateText = sRefundPayslipDate
+      ? safeMoment.uiDateParse(sRefundPayslipDate).format(utils.commonDateFormat)
+      : null;
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
           <div className="boss-requests__date">{requestDate}</div>
-          <div className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}>
-            {hasRefundRequest
-              ? REFUND_REQUEST_STATUSES[refundRequestStatus]
-              : constants.ACCESSORY_REQUEST_STATUS[status]}
-          </div>
-        </div>
-        <div className="boss-requests__content">
-          <div className="boss-requests__header">
-            <h3 className="boss-requests__title">
-              <span className="boss-requests__title-name">{accessoryName}</span>
-              <span className="boss-requests__title-size">{size ? `(${size})` : '(N/A)'}</span>
-            </h3>
-            { this.renderRequestActions(accessoryRequest)}
-          </div>
-          {sPayslipDateText && (
-            <div className="boss-requests__details">
-              <div className="boss-requests__details-content">
-                <div className="boss-requests__details-line">
-                  <div className="boss-requests__details-value">
-                    <p className="boss-request__details-text">
-                      Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDateText}</span>
-                    </p>
-                  </div>
-                  { !requestFrozen && <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
-                    <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
-                  </div> }
-                </div>
-              </div>
+          {!this.state.processing && (
+            <div className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}>
+              {hasRefundRequest
+                ? REFUND_REQUEST_STATUSES[refundRequestStatus]
+                : constants.ACCESSORY_REQUEST_STATUS[status]}
             </div>
           )}
-          {sRefundPayslipDateText && (
-            <div className="boss-requests__details">
-              <div className="boss-requests__details-content">
-                <div className="boss-requests__details-line">
-                  <div className="boss-requests__details-value">
-                    <p className="boss-request__details-text">
-                      Refund Payslip Date: <span className="boss-requests__details-text-marked">{sRefundPayslipDateText}</span>
-                    </p>
-                  </div>
-                  { !refundFrozen && <div className="boss-requests__actions" onClick={this.handleEditRefundPayslipDate}>
-                    <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
-                  </div> }
-                </div>
-              </div>
+          {this.state.processing && (
+            <div className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}>
+              Processing ...
             </div>
           )}
-          <div className="boss-requests__details">
-            <p
-              className={`boss-requests__details-switch ${
-                this.state.isRefundsTimelineOpened
-                  ? 'boss-requests__details-switch_role_cancel'
-                  : 'boss-requests__details-switch_role_list'
-              }`}
-              onClick={this.toggleRefundTimeline}
-            >
-              {this.state.isRefundsTimelineOpened ? 'Hide' : 'Show timeline'}
-            </p>
-            <Collapse
-              isOpened={this.state.isRefundsTimelineOpened}
-              className="boss-requests__details-dropdown"
-              style={{ display: 'block' }}
-            >
-              <div className="boss-requests__details-content">{this.renderTimeline(accessoryRequest)}</div>
-            </Collapse>
-          </div>
         </div>
+        {!this.state.processing && (
+          <div className="boss-requests__content">
+            <div className="boss-requests__header">
+              <h3 className="boss-requests__title">
+                <span className="boss-requests__title-name">{accessoryName}</span>
+                <span className="boss-requests__title-size">{size ? `(${size})` : '(N/A)'}</span>
+              </h3>
+              {this.renderRequestActions(accessoryRequest)}
+            </div>
+            {sPayslipDateText && (
+              <div className="boss-requests__details">
+                <div className="boss-requests__details-content">
+                  <div className="boss-requests__details-line">
+                    <div className="boss-requests__details-value">
+                      <p className="boss-request__details-text">
+                        Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDateText}</span>
+                      </p>
+                    </div>
+                    {!requestFrozen && (
+                      <div className="boss-requests__actions" onClick={this.handleEditPayslipDate}>
+                        <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {sRefundPayslipDateText && (
+              <div className="boss-requests__details">
+                <div className="boss-requests__details-content">
+                  <div className="boss-requests__details-line">
+                    <div className="boss-requests__details-value">
+                      <p className="boss-request__details-text">
+                        Refund Payslip Date:{' '}
+                        <span className="boss-requests__details-text-marked">{sRefundPayslipDateText}</span>
+                      </p>
+                    </div>
+                    {!refundFrozen && (
+                      <div className="boss-requests__actions" onClick={this.handleEditRefundPayslipDate}>
+                        <p className="boss-requests__action boss-requests__action_role_edit">Edit</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="boss-requests__details">
+              <p
+                className={`boss-requests__details-switch ${
+                  this.state.isRefundsTimelineOpened
+                    ? 'boss-requests__details-switch_role_cancel'
+                    : 'boss-requests__details-switch_role_list'
+                }`}
+                onClick={this.toggleRefundTimeline}
+              >
+                {this.state.isRefundsTimelineOpened ? 'Hide' : 'Show timeline'}
+              </p>
+              <Collapse
+                isOpened={this.state.isRefundsTimelineOpened}
+                className="boss-requests__details-dropdown"
+                style={{ display: 'block' }}
+              >
+                <div className="boss-requests__details-content">{this.renderTimeline(accessoryRequest)}</div>
+              </Collapse>
+            </div>
+          </div>
+        )}
       </li>
     );
   }

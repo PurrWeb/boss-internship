@@ -10,22 +10,8 @@ import AccessoryRequestItem from './accessory-request-item';
 import ReusableModalContent from './reusable-modal-content';
 
 class AccessoryListItem extends Component {
-  onCompleteAccessoryRefundRequest = ({ accessoryId, requestId }) => {
-    return new Promise((resolve, reject) => {
-      openContentModal({
-        submit: (handleClose, { reusable }) => {
-          handleClose();
-          this.props.actions.completeAccessoryRefundRequest({ accessoryId, requestId, reusable }).then(resp => {
-            resolve();
-          });
-        },
-        config: { title: 'Accept Accessory Request' },
-        props: {},
-        closeCallback: () => {
-          resolve('cancel');
-        },
-      })(ReusableModalContent);
-    });
+  onCompleteAccessoryRefundRequest = ({ accessoryId, requestId, reusable }) => {
+    return this.props.actions.completeAccessoryRefundRequest({ accessoryId, requestId, reusable });
   };
 
   render() {

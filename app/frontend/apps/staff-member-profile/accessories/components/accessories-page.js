@@ -1,7 +1,7 @@
 import React from 'react';
 import oFetch from 'o-fetch';
 
-import { openContentModal, openWarningModal } from '~/components/modals';
+import { openContentModal, openWarningModal, MODAL_TYPE2 } from '~/components/modals';
 
 import AccessoriesHeader from './accessories-header';
 import AccessoriesContent from './accessories-content';
@@ -11,6 +11,7 @@ import AccessoryRequestItem from './accessory-request-item';
 import AccessoriesFilter from './accessories-filter';
 import EditAccessoryRequest from './edit-accessory-request';
 import EditAccessoryRefundRequest from './edit-accessory-refund-request';
+import ReusableModalContent from './reusable-modal-content';
 
 import { appRoutes } from '~/lib/routes';
 
@@ -23,42 +24,48 @@ class AccessoriesPage extends React.Component {
     });
   };
 
-  handleCancelRequestSubmit = (hideModal, values) => {
+  handleCancelRequestSubmit = (hideModal, values, resolve) => {
     return this.props.actions.cancelAccessory(values).then(response => {
       hideModal();
+      resolve();
     });
   };
 
   handleCancelRequest = accessoryRequestId => {
     const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
-    openWarningModal({
-      submit: this.handleCancelRequestSubmit,
-      config: {
-        title: 'WARNING !!!',
-        text: 'Are You Sure, you want to cances accessory request?',
-        buttonText: 'Cancel request',
-      },
-      props: { accessoryRequestId, staffMemberId },
+    return new Promise((resolve, reject) => {
+      openWarningModal({
+        submit: (...args) => this.handleCancelRequestSubmit(...args, resolve),
+        config: {
+          title: 'WARNING !!!',
+          text: 'Are You Sure, you want to cances accessory request?',
+          buttonText: 'Cancel request',
+        },
+        closeCallback: () => resolve(),
+        props: { accessoryRequestId, staffMemberId },
+      });
     });
   };
 
   handleRefundRequest = accessoryRequestId => {
     const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
-    openWarningModal({
-      submit: this.handleRefundRequestSubmit,
-      config: {
-        title: 'WARNING !!!',
-        text: 'Are you sure you want to request a refund?',
-        buttonText: 'Refund request',
-      },
-      props: { accessoryRequestId, staffMemberId },
+    return new Promise((resolve, reject) => {
+      openContentModal({
+        submit: (handleClose, { reusable }) => {
+          handleClose();
+          this.handleRefundRequestSubmit({ accessoryRequestId, staffMemberId, reusable }).then(resp => {
+            resolve();
+          });
+        },
+        config: { title: 'Refund Accessory Request', type: MODAL_TYPE2 },
+        props: {},
+        closeCallback: () => resolve(),
+      })(ReusableModalContent);
     });
   };
 
-  handleRefundRequestSubmit = (hideModal, values) => {
-    return this.props.actions.refundAccessory(values).then(response => {
-      hideModal();
-    });
+  handleRefundRequestSubmit = values => {
+    return this.props.actions.refundAccessory(values);
   };
 
   handleEditPayslipDateSubmit = (hideModal, values) => {

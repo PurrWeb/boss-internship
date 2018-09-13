@@ -9,7 +9,7 @@ import {
   refundAccessoryRequest,
   getAccessoriesRequest,
   editAccessoryRequestRequest,
-  editAccessoryRefundRequestRequest
+  editAccessoryRefundRequestRequest,
 } from '../requests';
 export const loadInitialState = createAction(constants.LOAD_INITIAL_STATE);
 export const addAccessory = createAction(constants.ADD_ACCESSORY);
@@ -40,7 +40,8 @@ export const cancelAccessory = params => (dispatch, getState) => {
 export const refundAccessory = params => (dispatch, getState) => {
   const staffMemberId = oFetch(params, 'staffMemberId');
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
-  return refundAccessoryRequest(staffMemberId, accessoryRequestId).then(response => {
+  const reusable = oFetch(params, 'reusable');
+  return refundAccessoryRequest({ staffMemberId, accessoryRequestId, reusable }).then(response => {
     dispatch(updateAccessoryRequestInStore(response.data));
   });
 };
@@ -55,17 +56,15 @@ export const editAccessoryRequestPayslipDate = params => (dispatch, getState) =>
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'payslipDate');
-  return editAccessoryRequestRequest({ accessoryRequestId, mPayslipDate }).
-  then(response => {
+  return editAccessoryRequestRequest({ accessoryRequestId, mPayslipDate }).then(response => {
     dispatch(updateAccessoryRequestInStore(response.data));
-  })
+  });
 };
 
 export const editAccessoryRefundRequestPayslipDate = params => (dispatch, getState) => {
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'payslipDate');
-  return editAccessoryRefundRequestRequest({ accessoryRequestId, mPayslipDate }).
-    then(response => {
-      dispatch(updateAccessoryRequestInStore(response.data));
-    })
+  return editAccessoryRefundRequestRequest({ accessoryRequestId, mPayslipDate }).then(response => {
+    dispatch(updateAccessoryRequestInStore(response.data));
+  });
 };

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import oFetch from 'o-fetch'
+import oFetch from 'o-fetch';
 import globalNotification from '~/components/global-notification';
 import { apiRoutes } from '~/lib/routes';
 import utils from '~/lib/utils';
@@ -71,8 +71,10 @@ export const cancelAccessoryRequest = (staffMemberId, accessoryRequestId) => {
   return http().post(`/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/cancel`);
 };
 
-export const refundAccessoryRequest = (staffMemberId, accessoryRequestId) => {
-  return http().post(`/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/refund`);
+export const refundAccessoryRequest = ({ staffMemberId, accessoryRequestId, reusable }) => {
+  return http().post(`/api/v1/staff_members/${staffMemberId}/accessory-requests/${accessoryRequestId}/refund`, {
+    reusable,
+  });
 };
 
 export const getAccessoriesRequest = (staffMemberId, mPayslipStartDate, mPayslipEndDate) => {
@@ -85,7 +87,7 @@ export const getAccessoriesRequest = (staffMemberId, mPayslipStartDate, mPayslip
   return http().get(apiGetUrl);
 };
 
-export const editAccessoryRequestRequest = (params) => {
+export const editAccessoryRequestRequest = params => {
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'mPayslipDate');
   const sPayslipDate = mPayslipDate.format(utils.apiDateFormat);
@@ -93,15 +95,15 @@ export const editAccessoryRequestRequest = (params) => {
 
   return http().post(
     route.getPath({
-      accessoryRequestId: accessoryRequestId
+      accessoryRequestId: accessoryRequestId,
     }),
     {
-      payslipDate: sPayslipDate
-    }
+      payslipDate: sPayslipDate,
+    },
   );
 };
 
-export const editAccessoryRefundRequestRequest = (params) => {
+export const editAccessoryRefundRequestRequest = params => {
   const accessoryRequestId = oFetch(params, 'accessoryRequestId');
   const mPayslipDate = oFetch(params, 'mPayslipDate');
   const sPayslipDate = mPayslipDate.format(utils.apiDateFormat);
@@ -109,10 +111,10 @@ export const editAccessoryRefundRequestRequest = (params) => {
 
   return http().post(
     route.getPath({
-      accessoryRequestId: accessoryRequestId
+      accessoryRequestId: accessoryRequestId,
     }),
     {
-      payslipDate: sPayslipDate
-    }
+      payslipDate: sPayslipDate,
+    },
   );
 };

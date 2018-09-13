@@ -13,7 +13,17 @@ class AccessoryRequestItem extends Component {
     const onUndoRequest = oFetch(this.props, 'onUndoRequest');
     const onCompleteRequest = oFetch(this.props, 'onCompleteRequest');
 
-    const [accessoryId, avatarUrl, fullName, accessorySize, staffMember, requestId, requestStatus, frozen] = oFetch(
+    const [
+      accessoryId,
+      avatarUrl,
+      fullName,
+      accessorySize,
+      staffMember,
+      requestId,
+      requestStatus,
+      frozen,
+      reusable,
+    ] = oFetch(
       data,
       'accessoryId',
       'avatarUrl',
@@ -23,6 +33,7 @@ class AccessoryRequestItem extends Component {
       'requestId',
       'requestStatus',
       'frozen',
+      'reusable',
     );
 
     return (
@@ -47,6 +58,9 @@ class AccessoryRequestItem extends Component {
         </BossTableCell>
         <BossTableCell>
           <p className="boss-table__text">Size: {accessorySize}</p>
+          {reusable === true && (
+            <p className="boss-table__text boss-table__text_indicator_checkbox-checked">Reusable:</p>
+          )}
         </BossTableCell>
         <BossTableCell>
           {!frozen && (
@@ -75,6 +89,7 @@ class AccessoryRequestItem extends Component {
                 onCompleteRequest({
                   requestId: requestId,
                   accessoryId: accessoryId,
+                  reusable,
                 })
               }
             />

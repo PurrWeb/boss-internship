@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 export default class ReusableModalContent extends Component {
   render() {
-    console.log(this.props);
     return (
       <div className="boss-modal-window__form">
         <div className="boss-form">
