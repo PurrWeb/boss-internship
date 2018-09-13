@@ -301,22 +301,22 @@ export const filter = (sStartDate, sEndDate, sStartPayslipDate, sEndPayslipDate)
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const mStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
   const mEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
-  const mPayslipStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
-  const mPayslipEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
+  const mPayslipStartDate = sStartPayslipDate && safeMoment.uiDateParse(sStartPayslipDate);
+  const mPayslipEndDate = sEndPayslipDate && safeMoment.uiDateParse(sEndPayslipDate);
   const getApiUrl = apiRoutes.staffMemberProfileHolidaysIndex.getPath({
     staffMemberId: staffMemberId,
     mStartDate: mStartDate,
     mEndDate: mEndDate,
     mPayslipStartDate: mPayslipStartDate,
-    mPayslipEndDate: mPayslipEndDate
-  })
+    mPayslipEndDate: mPayslipEndDate,
+  });
   const getWebUrl = appRoutes.staffMemberProfileHolidaysTab({
     staffMemberId: staffMemberId,
     mStartDate: mStartDate,
     mEndDate: mEndDate,
     mPayslipStartDate: mPayslipStartDate,
-    mPayslipEndDate: mPayslipEndDate
-  })
+    mPayslipEndDate: mPayslipEndDate,
+  });
   return axios
     .get(
       getApiUrl,

@@ -4,10 +4,10 @@ class HolidayRequestsController < ApplicationController
   def index
     # authorize!(:view, :holiday_requests_page)
     pending_holiday_requests = HolidayRequest
-      .includes([creator: [:name]])
+      .includes([:staff_member, creator: [:name]])
       .in_state(:pending)
     staff_members = StaffMember
-      .includes([:name])
+      .includes([:name, :staff_type, :master_venue])
       .joins(:holiday_requests)
       .where({ holiday_requests: { id: pending_holiday_requests.pluck(:id) } })
       .distinct
