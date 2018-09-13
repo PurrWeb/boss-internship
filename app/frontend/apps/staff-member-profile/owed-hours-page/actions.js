@@ -23,7 +23,7 @@ export const deleteOwedHours = owedHourId => (dispatch, getState) => {
   const accessToken = getState().getIn(['profile', 'accessToken']);
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
 
-  axios
+  return axios
     .delete(`/api/v1/staff_members/${staffMemberId}/owed_hours/${owedHourId}`, {
       headers: {
         Authorization: `Token token="${accessToken}"`,
@@ -142,8 +142,8 @@ export const filter = (sStartDate, sEndDate, sPayslipStartDate, sPayslipEndDate)
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);
   const mStartDate = sStartDate && safeMoment.uiDateParse(sStartDate);
   const mEndDate = sEndDate && safeMoment.uiDateParse(sEndDate);
-  const mPayslipStartDate = mPayslipStartDate && safeMoment.uiDateParse(mPayslipStartDate);
-  const mPayslipEndDate = mPayslipEndDate && safeMoment.uiDateParse(mPayslipEndDate);
+  const mPayslipStartDate = sPayslipStartDate && safeMoment.uiDateParse(sPayslipStartDate);
+  const mPayslipEndDate = sPayslipEndDate && safeMoment.uiDateParse(sPayslipEndDate);
   const apiGetUrl = apiRoutes.staffMemberProfileOwedHoursIndex.getPath({
     staffMemberId: staffMemberId,
     mStartDate: mStartDate,

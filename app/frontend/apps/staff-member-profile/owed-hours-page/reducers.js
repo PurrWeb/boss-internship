@@ -53,7 +53,6 @@ const owedHoursReducer = handleActions(
         .set('staffMember', fromJS(staffMember))
         .set('accessToken', fromJS(accessToken))
         .set('owedHours', fromJS(owedHours))
-        .set('owedHours', fromJS(owedHours))
         .set('startDate', startDate ? safeMoment.uiDateParse(startDate) : null)
         .set('endDate', endDate ? safeMoment.uiDateParse(endDate) : null)
         .set('payslipStartDate', payslipStartDate ? safeMoment.uiDateParse(payslipStartDate) : null)
@@ -66,11 +65,10 @@ const owedHoursReducer = handleActions(
     [ADD_OWED_HOURS_SUCCESS]: (state, action) => {
       const owedHour = oFetch(action, 'payload.owedHour');
       const owedHourId = oFetch(owedHour, 'id');
-      const index = state.get('owedHours').findIndex(item => item.get('id') === owedHourId);
       const permissions = oFetch(action, 'payload.permissions');
 
       return state
-        .update('owedHours', owedHours => owedHours.set(index, fromJS(owedHour)))
+        .update('owedHours', owedHours => owedHours.push(fromJS(owedHour)))
         .updateIn(['permissionsData', 'owedHoursPermissions'], owedHoursPermissions =>
           owedHoursPermissions.set(owedHourId, fromJS(permissions)),
         );
