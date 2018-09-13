@@ -1,8 +1,7 @@
 import React from 'react';
-import humanize from 'string-humanize';
 import safeMoment from "~/lib/safe-moment";
 import oFetch from 'o-fetch';
-import confirm from '~/lib/confirm-utils';
+import { openWarningModal } from '~/components/modals';
 
 import OwedHoursMobileItem from './owed-hours-mobile-item';
 
@@ -53,13 +52,19 @@ const ActionsCell = ({
   }
 
   const onDelete = (owedHourId) => {
-    confirm('Are you sure ?', {
-      title: 'Delete owed hours',
-      actionButtonText: 'Delete',
-    }).then(() => {
-      deleteOwedHours(owedHourId);
+    openWarningModal({
+      submit: (hideModal) => deleteOwedHours(owedHourId).then(hideModal),
+      config: {
+        title: 'Delete owed hours',
+        text: 'Are You Sure?',
+        buttonText: 'Delete',
+      },
     });
-  }
+    // return confirm('Are you sure ?', {
+    //   title: 'Delete owed hours',
+    //   actionButtonText: 'Delete',
+    // }).then();
+  };
 
   const isEditable = oFetch(owedHourPermissions, 'isEditable');
   const isDeletable = oFetch(owedHourPermissions, 'isDeletable');
