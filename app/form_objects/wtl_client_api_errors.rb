@@ -57,6 +57,7 @@ class WtlClientApiErrors
     result[:gender] = wtl_client.errors[:gender] if wtl_client.errors[:gender].present?
     result[:email] = wtl_client.errors[:email] if wtl_client.errors[:email].present?
     result[:dateOfBirth] = wtl_client.errors[:date_of_birth] if wtl_client.errors[:date_of_birth].present?
+    result[:phoneNumber] = wtl_client.errors[:phone_number] if wtl_client.errors[:phone_number].present?
     result[:university] = wtl_client.errors[:university] if wtl_client.errors[:university].present?
     result[:cardNumber] = wtl_client.errors[:wtl_card] if wtl_client.errors[:wtl_card].present?
 

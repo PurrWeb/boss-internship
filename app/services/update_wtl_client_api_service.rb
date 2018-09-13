@@ -20,6 +20,7 @@ class UpdateWtlClientApiService
       email: params.fetch(:email),
       date_of_birth: UIRotaDate.safe_parse(params.fetch(:dateOfBirth)),
       university: params.fetch(:university),
+      phone_number: params.fetch(:phoneNumber),
       wtl_card: wtl_card,
     }
     wtl_client.from_registration = false
