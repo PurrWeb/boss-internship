@@ -65,15 +65,8 @@ export const loadData = () => (dispatch, getState) => {
 };
 
 export const updatePages = () => (dispatch, getState) => {
-  return dispatch(loadData()).then(loadDataResponse => {
-    const { accessories } = loadDataResponse.data;
-    if (accessories.length === 0) return;
-    const lastAccessory = accessories[accessories.length - 1];
-    const data = {
-      ...loadDataResponse.data,
-      accessories: [lastAccessory],
-    };
-    dispatch(loadInitialAccessoryRequests(data));
+  return dispatch(loadData()).then(resp => {
+    dispatch(loadInitialAccessoryRequests(resp.data));
   });
 };
 
