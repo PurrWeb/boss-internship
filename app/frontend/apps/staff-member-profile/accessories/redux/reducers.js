@@ -41,9 +41,7 @@ const accessoriesReducer = handleActions(
     },
     [constants.UPDATE_ACCESSORY_REQUEST]: (state, action) => {
       const request = oFetch(action.payload, 'accessoryRequest');
-      const index = state.get('accessoryRequests').findIndex((item) => {
-        item.get('id') === oFetch(request, 'id')
-      });
+      const index = state.get('accessoryRequests').findIndex(item => item.get('id') === oFetch(request, 'id'));
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
     [constants.LOAD_ACCESSORY_REQUESTS]: (state, action) => {
