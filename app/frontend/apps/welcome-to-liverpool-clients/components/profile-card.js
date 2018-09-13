@@ -22,7 +22,18 @@ class ProfileCard extends React.PureComponent {
   };
 
   render() {
-    const [id, cardNumber, fullName, emailVerified, gender, dateOfBirth, email, university, disabled] = oFetch(
+    const [
+      id,
+      cardNumber,
+      fullName,
+      emailVerified,
+      gender,
+      dateOfBirth,
+      email,
+      university,
+      disabled,
+      phoneNumber,
+    ] = oFetch(
       this.props.client,
       'id',
       'cardNumber',
@@ -33,6 +44,7 @@ class ProfileCard extends React.PureComponent {
       'email',
       'university',
       'disabled',
+      'phoneNumber',
     );
     const [enableClientRequested, history] = oFetch(this.props, 'enableClientRequested', 'history');
     return (
@@ -107,6 +119,14 @@ class ProfileCard extends React.PureComponent {
                     'not assigned'
                   )}
                 </p>
+              </div>
+            </div>
+            <div className="boss-check__info-row">
+              <div className="boss-check__info-cell">
+                <p className="boss-check__text">Phone Number</p>
+              </div>
+              <div className="boss-check__info-cell">
+                <p className="boss-check__text boss-check__text_role_primary">{phoneNumber}</p>
               </div>
             </div>
           </div>
