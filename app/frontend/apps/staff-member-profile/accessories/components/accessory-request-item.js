@@ -36,9 +36,13 @@ class AccessoryRequestItem extends React.Component {
 
   setProcessingState = (args, action) => {
     this.setState({ processing: true }, () => {
-      action(args).then(() => {
-        this.setState({ processing: false });
-      });
+      action(args)
+        .then(() => {
+          this.setState({ processing: false });
+        })
+        .catch(() => {
+          this.setState({ processing: false });
+        });
     });
   };
 
@@ -176,7 +180,11 @@ class AccessoryRequestItem extends React.Component {
                 <div className="boss-requests__details-content">
                   <div className="boss-requests__details-line">
                     <div className="boss-requests__details-value">
-                      <p className="boss-request__details-text">
+                      <p
+                        className={`boss-request__details-text ${
+                          requestFrozen ? 'boss-requests__details-text_indicator_frozen' : ''
+                        }`}
+                      >
                         Payslip Date: <span className="boss-requests__details-text-marked">{sPayslipDateText}</span>
                       </p>
                     </div>
@@ -194,7 +202,11 @@ class AccessoryRequestItem extends React.Component {
                 <div className="boss-requests__details-content">
                   <div className="boss-requests__details-line">
                     <div className="boss-requests__details-value">
-                      <p className="boss-request__details-text">
+                      <p
+                        className={`boss-request__details-text ${
+                          refundFrozen ? 'boss-requests__details-text_indicator_frozen' : ''
+                        }`}
+                      >
                         Refund Payslip Date:{' '}
                         <span className="boss-requests__details-text-marked">{sRefundPayslipDateText}</span>
                       </p>
