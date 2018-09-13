@@ -1,6 +1,5 @@
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
-import { reducer as formReducer } from 'redux-form/immutable';
 import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 

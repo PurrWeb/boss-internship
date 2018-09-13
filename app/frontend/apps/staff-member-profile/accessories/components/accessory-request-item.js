@@ -130,8 +130,9 @@ class AccessoryRequestItem extends React.Component {
 
   render() {
     const accessoryRequest = oFetch(this.props, 'accessoryRequest');
+    const timeline = oFetch(accessoryRequest, 'timeline');
     const requestDate = safeMoment
-      .iso8601Parse(oFetch(accessoryRequest, 'updatedAt'))
+      .iso8601Parse(oFetch(timeline[timeline.length - 1], 'createdAt'))
       .format(utils.humanDateFormatWithTime());
     const status = oFetch(accessoryRequest, 'status');
     const accessoryName = oFetch(accessoryRequest, 'accessoryName');
