@@ -33,13 +33,11 @@ class OwedHoursFilter extends React.Component {
 
   onUpdate = () => {
     const { startDate, endDate, payslipStartDate, payslipEndDate } = this.state;
-    if (startDate && endDate) {
-      const formatedStartDate = startDate.format('DD-MM-YYYY');
-      const formatedEndDate = endDate.format('DD-MM-YYYY');
-      const formatedStartPayslipDate = payslipStartDate && payslipStartDate.format('DD-MM-YYYY');
-      const formatedEndPayslipDate = payslipEndDate && payslipEndDate.format('DD-MM-YYYY');
-      return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
-    }
+    const formatedStartDate = startDate && startDate.format('DD-MM-YYYY');
+    const formatedEndDate = endDate && endDate.format('DD-MM-YYYY');
+    const formatedStartPayslipDate = payslipStartDate && payslipStartDate.format('DD-MM-YYYY');
+    const formatedEndPayslipDate = payslipEndDate && payslipEndDate.format('DD-MM-YYYY');
+    return this.props.filter(formatedStartDate, formatedEndDate, formatedStartPayslipDate, formatedEndPayslipDate);
   };
 
   render() {

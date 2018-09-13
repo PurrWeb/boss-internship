@@ -504,8 +504,8 @@ const apiRoutes = {
         const mEndDate = params.mEndDate;
         const mPayslipStartDate = params.mPayslipStartDate;
         const mPayslipEndDate = params.mPayslipEndDate;
-        const filteringByDate = mStartDate !== undefined && mEndDate !== undefined;
-        const filteringByPayslipDate = mPayslipStartDate !== undefined && mPayslipEndDate !== undefined;
+        const filteringByDate = mStartDate && mEndDate;
+        const filteringByPayslipDate = mPayslipStartDate && mPayslipEndDate;
 
         let result = "/api/v1/staff_members/" + staffMemberId + "/owed_hours";
         if(filteringByDate || filteringByPayslipDate){
@@ -514,7 +514,7 @@ const apiRoutes = {
             result = result + "start_date=" + mStartDate.format(utils.apiDateFormat) + "&end_date=" + mEndDate.format(utils.apiDateFormat);
           }
           if(filteringByPayslipDate){
-            if(filteringByPayslipDate){
+            if(filteringByDate){
               result = result + "&"
             }
             result = result + "payslip_start_date=" + mPayslipStartDate.format(utils.apiDateFormat) + "&payslip_end_date=" + mPayslipEndDate.format(utils.apiDateFormat);
