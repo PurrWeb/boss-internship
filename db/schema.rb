@@ -35,15 +35,16 @@ ActiveRecord::Schema.define(version: 20180924181537) do
   end
 
   create_table "accessory_refund_requests", force: :cascade do |t|
-    t.integer  "accessory_request_id", limit: 4, null: false
-    t.integer  "staff_member_id",      limit: 4, null: false
+    t.integer  "accessory_request_id", limit: 4,                 null: false
+    t.integer  "staff_member_id",      limit: 4,                 null: false
     t.integer  "price_cents",          limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "created_by_user_id",   limit: 4
     t.datetime "completed_at"
     t.integer  "finance_report_id",    limit: 4
     t.date     "payslip_date"
+    t.boolean  "reusable",                       default: false, null: false
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
