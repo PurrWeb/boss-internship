@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180910105605) do
+ActiveRecord::Schema.define(version: 20180913145912) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -35,15 +35,16 @@ ActiveRecord::Schema.define(version: 20180910105605) do
   end
 
   create_table "accessory_refund_requests", force: :cascade do |t|
-    t.integer  "accessory_request_id", limit: 4, null: false
-    t.integer  "staff_member_id",      limit: 4, null: false
+    t.integer  "accessory_request_id", limit: 4,                 null: false
+    t.integer  "staff_member_id",      limit: 4,                 null: false
     t.integer  "price_cents",          limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "created_by_user_id",   limit: 4
     t.datetime "completed_at"
     t.integer  "finance_report_id",    limit: 4
     t.date     "payslip_date"
+    t.boolean  "reusable",                       default: false, null: false
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
@@ -79,6 +80,19 @@ ActiveRecord::Schema.define(version: 20180910105605) do
   add_index "accessory_requests", ["created_by_user_id"], name: "index_accessory_requests_on_created_by_user_id", using: :btree
   add_index "accessory_requests", ["finance_report_id"], name: "index_accessory_requests_on_finance_report_id", using: :btree
   add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
+
+  create_table "accessory_restocks", force: :cascade do |t|
+    t.integer  "accessory_id",         limit: 4,             null: false
+    t.integer  "count",                limit: 4, default: 0, null: false
+    t.integer  "delta",                limit: 4,             null: false
+    t.integer  "created_by_user_id",   limit: 4,             null: false
+    t.integer  "accessory_request_id", limit: 4
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "accessory_restocks", ["accessory_id"], name: "index_accessory_restocks_on_accessory_id", using: :btree
+  add_index "accessory_restocks", ["created_by_user_id"], name: "index_accessory_restocks_on_created_by_user_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255
@@ -1080,6 +1094,8 @@ ActiveRecord::Schema.define(version: 20180910105605) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "payouts_cents",            limit: 4,   null: false
+    t.integer  "ash_cash_cents",           limit: 4,   null: false
+    t.integer  "security_plus_cents",      limit: 4,   null: false
   end
 
   add_index "safe_checks", ["created_at", "venue_id"], name: "index_safe_checks_on_created_at_and_venue_id", using: :btree
@@ -1417,6 +1433,7 @@ ActiveRecord::Schema.define(version: 20180910105605) do
     t.datetime "updated_at",                                 null: false
     t.string   "verification_token", limit: 255,             null: false
     t.datetime "verified_at"
+    t.string   "phone_number",       limit: 255,             null: false
   end
 
   add_index "wtl_clients", ["verification_token"], name: "index_wtl_clients_on_verification_token", unique: true, using: :btree
