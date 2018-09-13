@@ -24,18 +24,18 @@ class AccessoriesPage extends React.Component {
     });
   };
 
-  handleCancelRequestSubmit = (hideModal, values, resolve) => {
-    return this.props.actions.cancelAccessory(values).then(response => {
-      hideModal();
-      resolve();
-    });
-  };
-
   handleCancelRequest = accessoryRequestId => {
     const staffMemberId = oFetch(this.props.staffMember.toJS(), 'id');
     return new Promise((resolve, reject) => {
       openWarningModal({
-        submit: (...args) => this.handleCancelRequestSubmit(...args, resolve),
+        submit: (hideModal, values) =>
+          this.props.actions
+            .cancelAccessory(values)
+            .then(response => {
+              hideModal();
+              resolve(response);
+            })
+            .catch(reject),
         config: {
           title: 'WARNING !!!',
           text: 'Are You Sure, you want to cances accessory request?',
@@ -53,9 +53,9 @@ class AccessoriesPage extends React.Component {
       openContentModal({
         submit: (handleClose, { reusable }) => {
           handleClose();
-          this.handleRefundRequestSubmit({ accessoryRequestId, staffMemberId, reusable }).then(resp => {
-            resolve();
-          });
+          this.props.actions.refundAccessory({ accessoryRequestId, staffMemberId, reusable })
+            .then(resolve)
+            .catch(reject);
         },
         config: { title: 'Refund Accessory Request', type: MODAL_TYPE2 },
         props: {},
@@ -64,14 +64,11 @@ class AccessoriesPage extends React.Component {
     });
   };
 
-  handleRefundRequestSubmit = values => {
-    return this.props.actions.refundAccessory(values);
-  };
-
   handleEditPayslipDateSubmit = (hideModal, values) => {
     const action = oFetch(this.props.actions, 'editAccessoryRequestPayslipDate');
     return action(values).then(response => {
       hideModal();
+      return response;
     });
   };
 
@@ -79,6 +76,7 @@ class AccessoriesPage extends React.Component {
     const action = oFetch(this.props.actions, 'editAccessoryRefundRequestPayslipDate');
     return action(values).then(response => {
       hideModal();
+      return response;
     });
   };
 
