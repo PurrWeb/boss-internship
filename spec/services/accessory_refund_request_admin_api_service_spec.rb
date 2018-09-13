@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "AccessoryRefundRequestAdminApiService" do
+RSpec.describe "AccessoryRefundRequestAdminApiService", :accessories do
   let(:now) { Time.current }
   let!(:venue) { FactoryGirl.create(:venue) }
   let!(:user) { FactoryGirl.create(:user, :admin) }

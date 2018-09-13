@@ -171,7 +171,6 @@ module Api
           requster_user: current_user,
           accessory_refund_request: refund_request_from_params,
         ).reject
-
         if result.success?
           render(
             json: {
@@ -298,7 +297,7 @@ module Api
 
       def refund_request_from_params
         result = AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory_from_params.present?
-        ActiveRecord::Associations::Preloader.new.preload(result, {staff_member: [:master_venue]}) if result
+        ActiveRecord::Associations::Preloader.new.preload(result, {staff_member: [:master_venue], accessory_request: [:accessory]}) if result
         result
       end
 

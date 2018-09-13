@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Disable accessory API endpoint' do
+RSpec.describe "Disable accessory API endpoint", :accessories do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -14,7 +14,7 @@ RSpec.describe 'Disable accessory API endpoint' do
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      user: user
+      user: user,
     ).persist!
   end
   let(:url) do
@@ -34,14 +34,14 @@ RSpec.describe 'Disable accessory API endpoint' do
     }
   end
 
-  context 'before call' do
-    it 'no disabled accessories for venue should exist' do
+  context "before call" do
+    it "no disabled accessories for venue should exist" do
       accessory.reload
       expect(venue.accessories.disabled.count).to eq(0)
     end
   end
 
-  context 'when deliting' do
+  context "when deliting" do
     let(:params) do
       valid_params
     end
@@ -50,21 +50,22 @@ RSpec.describe 'Disable accessory API endpoint' do
       response
     end
 
-    it 'should return ok status' do
+    it "should return ok status" do
       expect(response.status).to eq(ok_status)
     end
 
-    it 'no active accessories for venue should exist after disabling' do
+    it "no active accessories for venue should exist after disabling" do
       expect(venue.accessories.enabled.count).to eq(0)
     end
 
-    it 'disabled accessory for venue should exist after disabling' do
+    it "disabled accessory for venue should exist after disabling" do
       expect(venue.accessories.disabled.count).to eq(1)
       expect(venue.accessories.first.disabled?).to eq(true)
     end
   end
 
   private
+
   def app
     Rails.application
   end

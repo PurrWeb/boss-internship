@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Staff member create accessory requests API endpoint' do
+RSpec.describe "Staff member create accessory requests API endpoint", :accessories do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -12,24 +12,26 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, :ops_manager, venues: [venue]) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
-  let(:accessory) { FactoryGirl.create(
-    :accessory,
-    venue: venue,
-    user_requestable: true,
-    accessory_type: Accessory.accessory_types[:uniform],
-    size: 'S,M,L,XL,XXL'
-  ) }
+  let(:accessory) {
+    FactoryGirl.create(
+      :accessory,
+      venue: venue,
+      user_requestable: true,
+      accessory_type: Accessory.accessory_types[:uniform],
+      size: "S,M,L,XL,XXL",
+    )
+  }
   let(:now) { Time.current }
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      user: user
+      user: user,
     ).persist!
   end
   let(:valid_params) do
     {
       accessoryId: accessory.id,
-      size: 'XL',
+      size: "XL",
     }
   end
 
@@ -37,14 +39,14 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
     post(url_helpers.api_v1_staff_member_staff_member_accessory_requests_path(staff_member), params)
   end
 
-  context 'before call' do
-    it 'no accessories requests should exist' do
+  context "before call" do
+    it "no accessories requests should exist" do
       expect(staff_member.accessory_requests.count).to eq(0)
     end
   end
 
-  context 'create accessory request' do
-    context ' with valid params' do
+  context "create accessory request" do
+    context " with valid params" do
       let(:params) do
         valid_params
       end
@@ -53,17 +55,16 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
         create_response
       end
 
-      it 'should return ok status' do
+      it "should return ok status" do
         expect(create_response.status).to eq(ok_status)
       end
 
-      it 'should create accessory request' do
+      it "should create accessory request" do
         expect(staff_member.accessory_requests.count).to eq(1)
       end
 
       it 'it should return created accessory data' do
         json = JSON.parse(create_response.body)
-
         accessory_request = staff_member.accessory_requests.first
         accessory_request_json = json.fetch("accessoryRequest")
         timeline_json = accessory_request_json.fetch("timeline")
@@ -96,7 +97,7 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
       end
     end
 
-    context ' with invalid params' do
+    context " with invalid params" do
       let(:params) do
         valid_params.merge({accessoryId: nil})
       end
@@ -105,18 +106,19 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
         create_response
       end
 
-      it 'should return 422 status' do
+      it "should return 422 status" do
         expect(create_response.status).to eq(unprocessable_entity_status)
       end
 
-      it 'should return create accessory errors' do
+      it "should return create accessory errors" do
         json = JSON.parse(create_response.body)
-        expect(json).to eq({"errors"=>{"accessoryId"=>["can't be blank"]}})
+        expect(json).to eq({"errors" => {"accessoryId" => ["can't be blank"]}})
       end
     end
   end
 
   private
+
   def app
     Rails.application
   end
