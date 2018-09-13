@@ -35,10 +35,16 @@ const accessoryRequestsReducer = handleActions(
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
     [constants.REMOVE_REQUEST]: (state, action) => {
-      const request = action.payload;
-      return state.updateIn(['accessoryRequests'], accessoryRequests => {
-        return accessoryRequests.filter(item => item.get('id') !== request.id);
-      });
+      const request = oFetch(action.payload, 'accessoryRequest');
+      const accessory = oFetch(action.payload, 'accessory');
+      return state
+        .updateIn(['accessoryRequests'], accessoryRequests => {
+          return accessoryRequests.filter(item => item.get('id') !== oFetch(request, 'id'));
+        })
+        .updateIn(['accessories'], accessories => {
+          const accessoryIndex = accessories.findIndex(item => item.get('id') === oFetch(accessory, 'id'));
+          return accessories.set(accessoryIndex, fromJS(accessory));
+        });
     },
     [constants.UPDATE_REFUND_REQUEST]: (state, action) => {
       const request = action.payload;
@@ -46,10 +52,16 @@ const accessoryRequestsReducer = handleActions(
       return state.setIn(['accessoryRefundRequests', index], fromJS(request));
     },
     [constants.REMOVE_REFUND_REQUEST]: (state, action) => {
-      const request = action.payload;
-      return state.updateIn(['accessoryRefundRequests'], accessoryRefundRequests => {
-        return accessoryRefundRequests.filter(item => item.get('id') !== request.id);
-      });
+      const request = oFetch(action.payload, 'accessoryRefundRequest');
+      const accessory = oFetch(action.payload, 'accessory');
+      return state
+        .updateIn(['accessoryRefundRequests'], accessoryRefundRequests => {
+          return accessoryRefundRequests.filter(item => item.get('id') !== oFetch(request, 'id'));
+        })
+        .updateIn(['accessories'], accessories => {
+          const accessoryIndex = accessories.findIndex(item => item.get('id') === oFetch(accessory, 'id'));
+          return accessories.set(accessoryIndex, fromJS(accessory));
+        });
     },
     [constants.REMOVE_ACCESSORY]: (state, action) => {
       const accessoryId = action.payload;

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BossCheckCardActions from './boss-check-card-actions';
 import BossCheckRow from './boss-check-row';
+import BossCheckRow2 from './boss-check-row-2';
 import BossCheckSimpleRow from './boss-check-simple-row';
 import BossCheckCardRow from './boss-check-card-row';
 import BossCheckCardCollapsibleGroup from './boss-check-card-collapsible-group';
@@ -24,32 +25,41 @@ class BossCheckCard extends React.PureComponent {
     React.Children.forEach(this.props.children, (child, i) => {
       if (child.type === BossCheckCardActions) {
         actionsButtons = child;
-      };
-      if (child.type === BossCheckCardRow) {
-        children = [...children, React.cloneElement(child, {
-          key: `cardRow${i}`
-        })];
       }
-      if (child.type === BossCheckRow) {
-        checkRows = [...checkRows, React.cloneElement(child, {
-          key: `row${i}`
-        })];
+      if (child.type === BossCheckCardRow) {
+        children = [
+          ...children,
+          React.cloneElement(child, {
+            key: `cardRow${i}`,
+          }),
+        ];
+      }
+      if (child.type === BossCheckRow || child.type === BossCheckRow2) {
+        checkRows = [
+          ...checkRows,
+          React.cloneElement(child, {
+            key: `row${i}`,
+          }),
+        ];
       }
       if (child.type === BossCheckSimpleRow) {
         simpleRow = child;
       }
       if (child.type === BossCheckCardCollapsibleGroup) {
-        children = [...children, React.cloneElement(child, {
-          key: `collapsibleGroup${i}`
-        })];
+        children = [
+          ...children,
+          React.cloneElement(child, {
+            key: `collapsibleGroup${i}`,
+          }),
+        ];
       }
     });
 
-    return {children, checkRows, actionsButtons, simpleRow};
+    return { children, checkRows, actionsButtons, simpleRow };
   }
 
   render() {
-    const {children, checkRows, actionsButtons, simpleRow} = this.prepareChildren();
+    const { children, checkRows, actionsButtons, simpleRow } = this.prepareChildren();
     return (
       <div className="boss-check boss-check_role_board">
         <BossCheckRow
@@ -57,16 +67,14 @@ class BossCheckCard extends React.PureComponent {
           title={this.props.title}
           status={this.props.status}
         />
-        { checkRows }
+        {checkRows}
         <div className="boss-check__row boss-check__row_marked">
-          <div className="boss-check__info-table">
-            { children }
-          </div>
+          <div className="boss-check__info-table">{children}</div>
         </div>
-        { simpleRow }
-        { actionsButtons }
+        {simpleRow}
+        {actionsButtons}
       </div>
-    )
+    );
   }
 }
 
@@ -74,12 +82,12 @@ BossCheckCard.propTypes = {
   title: PropTypes.string.isRequired,
   status: PropTypes.string,
   className: PropTypes.string,
-  children: PropTypes.array.isRequired
-}
+  children: PropTypes.array.isRequired,
+};
 
 BossCheckCard.defaultProps = {
   className: '',
-  status: ''
-}
+  status: '',
+};
 
 export default BossCheckCard;

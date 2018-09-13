@@ -45,6 +45,7 @@ class AccessoryRequestsPage extends React.Component {
         <AccessoryList
           accessories={this.getAccessories()}
           accessoryRequests={accessoryRequestsJs}
+          venue={this.props.venues.find(venue => venue.get('id') === this.props.currentVenue).toJS()}
           accessoryRefundRequests={accessoryRefundRequestsJs}
           staffMembers={staffMembersJs}
           onLoadMoreClick={this.handleLoadMore}
