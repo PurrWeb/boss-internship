@@ -48,8 +48,7 @@ class UpdateHoursAcceptancePeriod
         accepting = (status == HoursAcceptancePeriod::ACCEPTED_STATE) && (old_status != HoursAcceptancePeriod::ACCEPTED_STATE)
         unaccecpting = (old_status == HoursAcceptancePeriod::ACCEPTED_STATE) && (status != HoursAcceptancePeriod::ACCEPTED_STATE)
 
-        clock_in_day = hours_acceptance_period.clock_in_day
-        week = RotaWeek.new(clock_in_day.date)
+        week = RotaWeek.new(RotaShiftDate.to_rota_date(call_time))
         staff_member = hours_acceptance_period.staff_member
         if staff_member.can_have_finance_reports?
           if accepting
@@ -114,7 +113,7 @@ class UpdateHoursAcceptancePeriod
       api_errors = nil
       unless result
         unsupported_errors = []
-        unsupported_errors << "paysliip_date: #{hours_acceptance_period.errors[:payslip_date]}" if hours_acceptance_period.errors[:payslip_date].present?
+        unsupported_errors << "accepted_at: #{hours_acceptance_period.errors[:accepted_at]}" if hours_acceptance_period.errors[:accepted_at].present?
         unsupported_errors << "finance_report: #{hours_acceptance_period.errors[:finance_report]}" if hours_acceptance_period.errors[:finance_report].present?
         raise unsupported_errors.join(", ") if unsupported_errors.present?
 
