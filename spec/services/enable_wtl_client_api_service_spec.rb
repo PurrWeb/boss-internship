@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe EnableWtlClientApiService do
+describe EnableWtlClientApiService, :wtl do
   let!(:wtl_client) { FactoryGirl.create(:wtl_client, status: 1) }
 
   let(:service) do
