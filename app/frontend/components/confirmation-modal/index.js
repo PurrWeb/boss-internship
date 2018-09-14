@@ -1,5 +1,6 @@
 import React from "react"
-import { connect } from "react-redux"
+import Modal from 'react-modal';
+import { connect } from 'react-redux';
 import {ModalDialog, ModalContainer} from "react-modal-dialog"
 import actionCreators from "~/redux/actions"
 import oFetch from "o-fetch"
@@ -12,12 +13,12 @@ class ConfirmationModal extends React.Component {
             pin: ""
         }
     }
-    componentDidUpdate(){
+    componentDidUpdate = () => {
         if (!this.props.isVisible) {
             return;
         }
     }
-    onAddNoteSubmit(event) {
+    onAddNoteSubmit = (event) => {
         event.preventDefault();
 
         const form = event.target;
@@ -37,12 +38,17 @@ class ConfirmationModal extends React.Component {
         // at all.
         if (this.props.confirmationType === "PIN") {
 
-            return <ModalContainer onClick={() => this.cancel()}>
-                <ModalDialog className="boss-modal-window test-window-enter-pin" onClose={() => this.cancel()}>
-                    <div className="boss-modal-window__header">
-                        {this.props.modalOptions.title}
-                    </div>
-
+            return <Modal
+            isOpen={true}
+            contentLabel="Modal"
+            className={{
+              base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window boss-modal-window_role_action`,
+            }}
+          >
+            <button onClick={this.cancel} className="boss-modal-window__close" />
+            <div className="boss-modal-window__header">
+                {this.props.modalOptions.title}
+            </div>
                     <div className="boss-modal-window__content" data-test-marker-pin-modal>
                         <form
                             className="boss-modal-window__form"
@@ -60,17 +66,21 @@ class ConfirmationModal extends React.Component {
                             </button>
                         </form>
                     </div>
-
-                </ModalDialog>
-            </ModalContainer>;
+         </Modal>;
         } else if (this.props.confirmationType === "WRONG_PIN") {
             return (
-                <ModalContainer onClick={() => this.closeModal()}>
-                    <ModalDialog className="boss-modal-window" onClose={() => this.closeModal()}>
-                        <div className="boss-modal-window__header boss-modal-window__header_error">
-                            {this.props.modalOptions.title}
-                        </div>
 
+                        <Modal
+            isOpen={true}
+            contentLabel="Modal"
+            className={{
+              base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window boss-modal-window_role_error`,
+            }}
+          >
+            <button onClick={this.closeModal} className="boss-modal-window__close" />
+            <div className="boss-modal-window__header">
+                {this.props.modalOptions.title}
+            </div>
                         <div className="boss-modal-window__content boss-modal-window__content_role_error" data-test-marker-pin-modal>
                             <div className="boss-modal-window__message-block boss-modal-window__message-block_role_error">
                                 <span className="boss-modal-window__message-text">Your Insert Pin Has been Wrong</span>
@@ -85,17 +95,22 @@ class ConfirmationModal extends React.Component {
                             </button>
                         </div>
 
-                    </ModalDialog>
-                </ModalContainer>
+                   </Modal>
             );
         } else if (this.props.confirmationType === "ADD_NOTE") {
             return (
-                <ModalContainer onClick={() => this.closeModal()}>
-                    <ModalDialog className="boss-modal-window test-window-add-note" onClose={() => this.closeModal()}>
+                <Modal
+            isOpen={true}
+            contentLabel="Modal"
+            className={{
+              base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window boss-modal-window_role_warning`,
+            }}
+          >
+            <button onClick={this.closeModal} className="boss-modal-window__close" />
 
                         <form
                                 className="boss-form"
-                                onSubmit={this.onAddNoteSubmit.bind(this)}
+                                onSubmit={this.onAddNoteSubmit}
                                 action=""
                         >
                             <div className="boss-modal-window__header boss-modal-window__header_add-note">
@@ -122,14 +137,13 @@ class ConfirmationModal extends React.Component {
                             </div>
                         </form>
 
-                    </ModalDialog>
-                </ModalContainer>
+                      </Modal>
             );
         } else {
             throw new Error("Modal confirmation type '" + this.props.modalOptions.confirmationType + "' is not supported");
         }
     }
-    complete(){
+    complete = () => {
         // Not sure why, but if you hit enter twice quickly it
         // completes twice before hiding the modal
         if (!this.props.isVisible) {
@@ -140,17 +154,17 @@ class ConfirmationModal extends React.Component {
             pin: this.state.pin
         });
     }
-    closeModal() {
+    closeModal = () => {
         this.props.cancelConfirmationModal();
     }
-    cancel(){
+    cancel = () => {
         if (!this.props.isVisible) {
             return;
         }
         this.resetPinInputState();
         this.closeModal();
     }
-    resetPinInputState(){
+    resetPinInputState = () => {
         this.setState({pin: ""})
     }
 }
