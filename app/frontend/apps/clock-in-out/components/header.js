@@ -29,17 +29,17 @@ export default class Header extends React.Component {
     render(){
         const {userIsManagerOrSupervisor} = this.props;
         const returnToStaffTypeSelectorCell = userIsManagerOrSupervisor ? null : (
-            <div className="header__select-type-cell">
-                <a href="#"
-                   className="header__select-type-text"
+            <div className="boss-header__select-type-cell">
+                <button
+                   className="boss-header__select-type-text"
                    onClick={this.onClickReturnToStaffTypeSelector}
                 >
                     Select a Different Staff Type
-                </a>
+                </button>
             </div>
         );
         const leaveManagerModeCell = userIsManagerOrSupervisor ? (
-            <div className="header__leave-manager-mode-cell">
+            <div className="boss-header__leave-manager-mode-cell">
                 <LeaveManagerModeButton
                     leaveManagerModeInProgress={this.props.leaveManagerModeInProgress}
                     leaveManagerMode={this.props.leaveManagerMode} />
@@ -47,24 +47,24 @@ export default class Header extends React.Component {
         ) : null;
 
         const reloadPageButton = (
-            <a href="#"
-               className="header__reload-button"
+            <button
+               className="boss-header__reload-button"
                onClick={this.onClickReload}
             >
                 Reload
-            </a>
+            </button>
         );
 
         return (
-            <div className="header__container">
-                <div className="header">
+            <div className="boss-header__container">
+                <div className="boss-header">
                     {returnToStaffTypeSelectorCell}
                     {leaveManagerModeCell}
-                    <div className="header__name-cell">
-                        <div className="header__name">{this.props.venue.name}</div>
-                        <div className="header__date">{safeMoment.uiDateParse(this.props.rota.date).format("ddd D MMMM YYYY")}</div>
+                    <div className="boss-header__name-cell">
+                        <div className="boss-header__name">{this.props.venue.name}</div>
+                        <div className="boss-header__date">{safeMoment.uiDateParse(this.props.rota.date).format("ddd D MMMM YYYY")}</div>
                     </div>
-                    <div className="header__reload-cell">
+                    <div className="boss-header__reload-cell">
                         {reloadPageButton}
                     </div>
                 </div>
