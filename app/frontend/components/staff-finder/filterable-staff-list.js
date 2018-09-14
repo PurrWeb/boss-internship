@@ -44,23 +44,23 @@ class FilterableStaffList extends Component {
     getNewStyleTableContent() {
         const staffListItems = this.getStaffListItems();
         const notesCol = this.props.toShowNotes ? (
-            <div className="info-table__th info-table__th_notes">notes</div>
+            <div className="boss-info-table__th boss-info-table__th_notes">notes</div>
         ) : null;
 
         return staffListItems.length ? (
-            <div className="main-content__results-table-container">
-                <div className="info-table">
-                    <div className="info-table__header">
-                        <div className="info-table__th info-table__th_name">name</div>
-                        <div className="info-table__th info-table__th_rotaed">rotaed</div>
+            <div className="boss-main-content__results-table-container">
+                <div className="boss-info-table">
+                    <div className="boss-info-table__header">
+                        <div className="boss-info-table__th boss-info-table__th_name">name</div>
+                        <div className="boss-info-table__th boss-info-table__th_rotaed">rotaed</div>
                         {notesCol}
-                        <div className="info-table__th info-table__th_status">status</div>
+                        <div className="boss-info-table__th boss-info-table__th_status">status</div>
                     </div>
                     {staffListItems}
                 </div>
             </div>
         ) : (
-            <div className="info-table__nothing-found-message">
+            <div className="boss-info-table__nothing-found-message">
                 No Staff Members Found
             </div>
         );
@@ -72,7 +72,7 @@ class FilterableStaffList extends Component {
         const tableContent = this.getTableContent();
 
         return this.props.isNewDesign ? (
-            <div className="main-content__results-table-container">
+            <div className="boss-main-content__results-table-container">
                 {tableContent}
             </div>
         ) : (
