@@ -1,0 +1,52 @@
+.info-table__tr_state_on-holiday {
+  background-color: #f0f0f0;
+}
+
+.info-table__tr_state_on-holiday .info-table__td:first-child {
+  position: relative;
+}
+
+.info-table__tr_state_on-holiday .info-table__td:first-child:after {
+  margin: 0;
+  padding: 0;
+  color: #4c4c4c;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  -webkit-font-feature-settings: normal;
+  font-feature-settings: normal;
+  font-variant: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  white-space: normal;
+  word-spacing: normal;
+  content: 'On Holiday';
+  position: absolute;
+  top: 10px;
+  left: 100px;
+  display: block;
+  padding-left: 24px;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 600;
+  color: #ed7f7e;
+  white-space: nowrap;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiB2aWV3Qm94PSIwIDAgMzIgMzIiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNlZDdmN2U7fQo8L3N0eWxlPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjQgMTkuOTk5bC01LjcxMy01LjcxMyAxMy43MTMtMTAuMjg2LTQtNC0xNy4xNDEgNi44NTgtNS4zOTctNS4zOTdjLTEuNTU2LTEuNTU2LTMuNzI4LTEuOTI4LTQuODI4LTAuODI4cy0wLjcyNyAzLjI3MyAwLjgyOCA0LjgyOGw1LjM5NiA1LjM5Ni02Ljg1OCAxNy4xNDMgNCA0IDEwLjI4Ny0xMy43MTUgNS43MTMgNS43MTN2Ny45OTloNGwyLTYgNi0ydi00bC03Ljk5OSAweiI+PC9wYXRoPgo8L3N2Zz4K);
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+  background-position: left center;
+  opacity: 1;
+}
+
+.info-table__tr_state_on-holiday .info-table__rotaed-text,
+.info-table__tr_state_on-holiday .info-table__notes,
+.info-table__tr_state_on-holiday .info-table__user-status,
+.info-table__tr_state_on-holiday .info-table__change-user-status,
+.info-table__tr_state_on-holiday .info-table__user-avatar-container,
+.info-table__tr_state_on-holiday .info-table__user-info {
+  opacity: .4;
+}

@@ -220,16 +220,17 @@ class ClockInOutStaffListItem extends Component {
         );
 
         const statusToggleButtons = (
-            <span
+            <button
                className="boss-info-table__change-user-status"
+               disabled={staffMember.isOnHolidays}
                onClick={this.showChangeStatusTooltip.bind(this)}
                id={this.changeStatusButtonId}
-            >(change)</span>
+            >(change)</button>
         );
 
         return (
-            <div className="boss-info-table__tr test-staff-row">
-                <div className="boss-info-table__td">
+            <div className={`boss-info-table__tr test-staff-row ${staffMember.isOnHolidays ? 'info-table__tr_state_on-holiday' : ''}`}>
+                <div className="boss-info-table__td info-table__td">
                     {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue)}
                     <div className="boss-info-table__user-info">
                         <div className="boss-info-table__user-name">
@@ -254,12 +255,14 @@ class ClockInOutStaffListItem extends Component {
         );
     }
     getClockInStatusBadge(updateStatusInProgress, clockInStatusValue) {
+        const staffMember = this.props.staff;
         if (updateStatusInProgress) {
             return <Spinner />;
         } else {
             return (
                 <ClockInStatusBadge
                     clockInStatusValue={clockInStatusValue}
+                    disabled={staffMember.isOnHolidays}
                     onClick={this.showChangeStatusTooltip.bind(this)}
                 />
             );
@@ -330,11 +333,12 @@ class ClockInOutStaffListItem extends Component {
         if (this.props.addClockInNoteIsInProgress){
             return <Spinner />
         }
-
+        const staffMember = this.props.staff;
         return (
             <button
                className="boss-button boss-button_type_small boss-button_role_add-note boss-tooltip-portal__action"
                data-test-marker-add-note
+               disabled={staffMember.isOnHolidays}
                onClick={this.onClickAddNote.bind(this)}
             >
                 Add Note
@@ -390,15 +394,16 @@ class ClockInOutStaffListItem extends Component {
         if (!this.props.userIsManagerOrSupervisor) {
             return null;
         }
-
+        const staffMember = this.props.staff;
         return (
-            <div
+            <button
                 id={this.changeSettingsButtonId}
                 className="boss-info-table__settings-sign boss-info-table__user-info_adjust_settings-sign test-settings-sign"
+                disabled={staffMember.isOnHolidays}
                 onClick={this.showChangeSettingsTooltip.bind(this)}
             >
                 {this.drawChangeSettingsTooltip()}
-            </div>
+            </button>
         );
     }
     getManagerModeButton(){
@@ -411,13 +416,14 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return (
-            <div
+            <button
                 className="boss-clock-button boss-clock-button_type_small boss-clock-button_role_enter-manager-mode boss-info-table_adjust_button-small"
                 data-test-marker-enter-manager-mode
+                disabled={staffMember.isOnHolidays}
                 onClick={this.onEnterManagerModeClick.bind(this)}
             >
                 enter manager mode
-            </div>
+            </button>
         );
     }
 }
