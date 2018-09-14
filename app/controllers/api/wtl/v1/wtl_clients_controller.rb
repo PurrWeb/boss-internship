@@ -26,6 +26,7 @@ module Api
             email: params.fetch(:email),
             university: params.fetch(:university),
             card_number: params.fetch(:cardNumber),
+            phone_number: params.fetch(:phoneNumber),
           }
         end
       end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe WtlCard, type: :model do
+RSpec.describe WtlCard, :wtl, type: :model do
   let!(:card_number) { "123456" }
 
   subject {

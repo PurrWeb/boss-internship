@@ -1,4 +1,5 @@
 import React from 'react';
+import humanize from 'string-humanize';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import BossFormInput from '~/components/boss-form/boss-form-input';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
@@ -41,7 +42,7 @@ class ProfileEditForm extends React.Component {
     const { submitting, handleSubmit } = this.props;
 
     const universityOptions = this.props.universities.map(university => {
-      return { label: university, value: university };
+      return { label: humanize(university), value: university };
     });
 
     return (
@@ -71,6 +72,13 @@ class ProfileEditForm extends React.Component {
             component={BossFormInput}
             label="Card Number"
             placeholder="Card Number"
+          />
+          <Field
+            name="phoneNumber"
+            type="tel"
+            component={BossFormInput}
+            label="Phone Number"
+            placeholder="Phone Number"
           />
           <div className="boss-form__field boss-form__field_justify_center">
             <button disabled={submitting} className="boss-button boss-form__submit" type="submit">

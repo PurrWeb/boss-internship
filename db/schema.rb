@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180910105605) do
+ActiveRecord::Schema.define(version: 20180913145912) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1417,6 +1417,7 @@ ActiveRecord::Schema.define(version: 20180910105605) do
     t.datetime "updated_at",                                 null: false
     t.string   "verification_token", limit: 255,             null: false
     t.datetime "verified_at"
+    t.string   "phone_number",       limit: 255,             null: false
   end
 
   add_index "wtl_clients", ["verification_token"], name: "index_wtl_clients_on_verification_token", unique: true, using: :btree

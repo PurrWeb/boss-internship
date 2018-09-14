@@ -7,7 +7,8 @@ class Api::Wtl::V1::WtlClients::WtlClientSerializer < ActiveModel::Serializer
     :email,
     :dateOfBirth,
     :university,
-    :cardNumber
+    :cardNumber,
+    :phoneNumber
 
   def firstName
     object.first_name
@@ -19,5 +20,9 @@ class Api::Wtl::V1::WtlClients::WtlClientSerializer < ActiveModel::Serializer
 
   def cardNumber
     object.wtl_card.andand.number
+  end
+
+  def phoneNumber
+    object.phone_number
   end
 end

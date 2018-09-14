@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Create wtl client API endpoint" do
+RSpec.describe "Create wtl client API endpoint", :wtl do
   include Rack::Test::Methods
   include HeaderHelpers
 
@@ -13,6 +13,7 @@ RSpec.describe "Create wtl client API endpoint" do
   let!(:gender) { WtlClient::GENDERS[0] }
   let!(:wrong_gender) { "Wrong gender" }
   let!(:email) { "some@email.com" }
+  let!(:phone_number) { "555-55-55" }
   let!(:wrong_email) { "somewrongemail.com" }
   let!(:existing_card_number) { "123456" }
   let!(:card_number) { "123457" }
@@ -26,6 +27,7 @@ RSpec.describe "Create wtl client API endpoint" do
       university: university,
       gender: gender,
       email: email,
+      phoneNumber: phone_number,
       cardNumber: card_number,
     }
   end
@@ -67,6 +69,7 @@ RSpec.describe "Create wtl client API endpoint" do
         expect(create_wtl_client.email).to eq(email)
         expect(create_wtl_client.university).to eq(university)
         expect(create_wtl_client.card_number).to eq(card_number)
+        expect(create_wtl_client.phone_number).to eq(phone_number)
       end
 
       it "it should return created wtl client" do
@@ -80,6 +83,7 @@ RSpec.describe "Create wtl client API endpoint" do
         expect(wtl_client_json["email"]).to eq(create_wtl_client.email)
         expect(wtl_client_json["university"]).to eq(create_wtl_client.university)
         expect(wtl_client_json["cardNumber"]).to eq(create_wtl_client.wtl_card.number)
+        expect(wtl_client_json["phoneNumber"]).to eq(create_wtl_client.phone_number)
       end
     end
 
@@ -93,6 +97,7 @@ RSpec.describe "Create wtl client API endpoint" do
           gender: nil,
           university: nil,
           cardNumber: nil,
+          phoneNumber: nil,
         })
       end
 
@@ -119,6 +124,7 @@ RSpec.describe "Create wtl client API endpoint" do
             "email" => ["can't be blank"],
             "university" => ["a valid university should be present"],
             "cardNumber" => ["can't be blank"],
+            "phoneNumber" => ["can't be blank"],
           },
         })
       end
@@ -151,8 +157,8 @@ RSpec.describe "Create wtl client API endpoint" do
         expect(json).to eq({
           "errors" => {
             "headline" => "Card or email problem!",
-            "descirption" => "This card could not be registered because there was a problem with your card or email address."
-          }
+            "descirption" => "This card could not be registered because there was a problem with your card or email address.",
+          },
         })
       end
     end
@@ -184,8 +190,8 @@ RSpec.describe "Create wtl client API endpoint" do
         expect(json).to eq({
           "errors" => {
             "headline" => "Already registered!",
-            "descirption" => "You are already registered. Verify your email address by visting the link in your verification email to complete the process and use your card."
-          }
+            "descirption" => "You are already registered. Verify your email address by visting the link in your verification email to complete the process and use your card.",
+          },
         })
       end
     end

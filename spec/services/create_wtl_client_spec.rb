@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CreateWtlClient do
+describe CreateWtlClient, :wtl do
   let!(:wtl_card) { FactoryGirl.create(:wtl_card, number: card_number) }
   let!(:first_name) { "John" }
   let!(:surname) { "Doe" }
@@ -8,6 +8,7 @@ describe CreateWtlClient do
   let!(:gender) { WtlClient::GENDERS[0] }
   let!(:email) { "some@email.com" }
   let!(:card_number) { "12345" }
+  let!(:phone_number) { "555-55-55" }
   let!(:invalid_card_number) { "invalid" }
   let!(:university) { WtlClient::UNIVERSITIES[0] }
   let!(:valid_params) do
@@ -19,6 +20,7 @@ describe CreateWtlClient do
       date_of_birth: date_of_birth,
       university: university,
       wtl_card: wtl_card,
+      phone_number: phone_number,
     }
   end
 

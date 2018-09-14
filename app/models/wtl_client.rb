@@ -6,7 +6,7 @@ class WtlClient < ActiveRecord::Base
     "liverpool_john_moores",
     "liverpool_hope_university",
     "edge_hill_university",
-    "liverpool_institute_for_performing_arts"
+    "liverpool_institute_for_performing_arts",
   ]
   GENDERS = ["male", "female", "other"]
 
@@ -25,6 +25,7 @@ class WtlClient < ActiveRecord::Base
   validates :date_of_birth, presence: true
   validates :email, uniqueness: {message: "Account suspended"}
   validates :email, presence: true
+  validates :phone_number, presence: true
   validates :wtl_card, presence: true, if: :from_registration?
   validates :wtl_card, uniqueness: true
 
