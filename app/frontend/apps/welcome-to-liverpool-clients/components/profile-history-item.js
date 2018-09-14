@@ -8,11 +8,14 @@ import humanize from 'string-humanize';
 import { HISTORY_EVENT_MAP, CREATED, REGISTERED, UPDATED } from '../constants';
 
 function renderValue(key, value) {
-  if (key !== 'date_of_birth') {
+  if (key === 'date_of_birth') {
+    return safeMoment.parse(value, 'YYYY-MM-DD').format(utils.commonDateFormat);
+  }
+  if (key === 'email') {
     return value;
   }
 
-  return safeMoment.parse(value, 'YYYY-MM-DD').format(utils.commonDateFormat);
+  return humanize(value);
 }
 
 function renderField(fieldName, changeset) {
