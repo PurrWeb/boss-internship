@@ -21,7 +21,7 @@ class ProfileEdit extends React.Component {
     if (!client) {
       return <NotFound />;
     }
-    const [id, firstName, surname, gender, dateOfBirth, email, university, cardNumber] = oFetch(
+    const [id, firstName, surname, gender, dateOfBirth, email, university, cardNumber, phoneNumber] = oFetch(
       client,
       'id',
       'firstName',
@@ -31,6 +31,7 @@ class ProfileEdit extends React.Component {
       'email',
       'university',
       'cardNumber',
+      'phoneNumber',
     );
     const initialValues = {
       id,
@@ -41,6 +42,7 @@ class ProfileEdit extends React.Component {
       email,
       university,
       cardNumber,
+      phoneNumber,
     };
     return (
       <main className="boss-page-main">
