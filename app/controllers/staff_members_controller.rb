@@ -319,6 +319,7 @@ class StaffMembersController < ApplicationController
       },
     ).all.
       includes([
+      :staff_member,
       :finance_report,
       :created_by_user,
       :accessory,
