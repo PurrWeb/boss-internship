@@ -34,4 +34,5 @@ export const OwedHourModel = Immutable.Record({
   payslipDate: undefined,
   createdAt: undefined,
   createdBy: undefined,
+  frozen: undefined,
 });

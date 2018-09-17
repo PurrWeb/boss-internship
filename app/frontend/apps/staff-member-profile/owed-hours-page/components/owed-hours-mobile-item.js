@@ -27,7 +27,7 @@ const OwedHourMobileItem = props => {
   };
 
   const owedHourJS = owedHour.toJS();
-  const [date, times, durationHours, durationMinutes, creator, created, note, editable, payslipDate] = oFetch(
+  const [date, times, durationHours, durationMinutes, creator, created, note, editable, payslipDate, frozen] = oFetch(
     getOwedHourUIData(owedHourJS),
     'date',
     'times',
@@ -38,13 +38,18 @@ const OwedHourMobileItem = props => {
     'note',
     'editable',
     'payslipDate',
+    'frozen',
   );
 
   const duration = `${durationHours} hours ${durationMinutes} minutes`;
   const owedHourId = oFetch(owedHourJS, 'id');
 
   return (
-    <div className="boss-check boss-check_role_panel boss-check_page_smp-owed-hours">
+    <div
+      className={`boss-check boss-check_role_panel boss-check_page_smp-owed-hours ${
+        frozen ? 'boss-check_state_frozen' : ''
+      }`}
+    >
       <div className="boss-check__row">
         <div className="boss-check__cell">
           <p className="boss-check__title">{date}</p>
@@ -85,7 +90,8 @@ const OwedHourMobileItem = props => {
         </div>
       </div>
       {editable &&
-        !isStaffMemberDisabled && (
+        !isStaffMemberDisabled &&
+        !frozen && (
           <div className="boss-check__row boss-check__row_role_actions">
             <button onClick={() => onEdit(owedHour)} className="boss-button boss-button_role_update boss-check__action">
               Edit

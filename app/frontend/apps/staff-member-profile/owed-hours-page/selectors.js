@@ -63,6 +63,7 @@ export const getOwedHoursWeeks = createSelector(getGrouppedByWeekOwedHours, owed
                 startsAt: owedHour.get('startsAt'),
                 endsAt: owedHour.get('endsAt'),
               }),
+              frozen: owedHour.get('frozen'),
             });
           })
           .sortBy(owedHour => oFetch(owedHour, 'date'))
