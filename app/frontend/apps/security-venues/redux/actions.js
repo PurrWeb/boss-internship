@@ -17,7 +17,5 @@ export const addSecurityVenue = values => (dispatch, getState) => {
 export const editSecurityVenue = values => (dispatch, getState) => {
   return updateSecurityVenueRequest(values).then(response => {
     dispatch(editVenueAction(response.data));
-  }).catch(err => {
-    console.log(err);
-  })
+  });
 };

@@ -3,20 +3,14 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import BossFormCheckbox from '~/components/boss-form/boss-form-checkbox';
 import BossFormTextarea from '~/components/boss-form/boss-form-textarea';
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 const validate = values => {
   const errors = {}
-  
+
   if (!values.get('reason')) {
     errors.reason = "You must fill disable reason"
   }
 
   return errors;
-}
-
-const asyncValidate = (values) => {
-
 }
 
 export const DisableStaffMemberForm = ({onDisable, handleSubmit}) => {
@@ -34,7 +28,7 @@ export const DisableStaffMemberForm = ({onDisable, handleSubmit}) => {
         <Field
           component={BossFormTextarea}
           required
-          name="reason"
+          name="reasonddd"
           label="Reason for disabling"
         />
         <div className="boss-form__field">

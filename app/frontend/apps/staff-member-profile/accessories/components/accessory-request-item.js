@@ -38,30 +38,39 @@ class AccessoryRequestItem extends React.Component {
     const status = oFetch(accessoryRequest, 'status');
     const hasRefundRequest = oFetch(accessoryRequest, 'hasRefundRequest');
     const refundRequestStatus = oFetch(accessoryRequest, 'refundRequestStatus');
+
+    const onAccessoryRefund = oFetch(this.props, 'onAccessoryRefund');
+    const onAccessoryCancel = oFetch(this.props, 'onAccessoryCancel');
+    const accessoryRequestPermissions = oFetch(this.props, 'accessoryRequestPermissions');
+    const [isCancelable, isRefundable] = oFetch(accessoryRequestPermissions, 'isCancelable', 'isRefundable');
+
     const refundRequestStatusRejected = refundRequestStatus === 'rejected';
     if (status === constants.ACCESSORY_REQUEST_STATUS_COMPLETED) {
       return (
         <div className="boss-requests__actions">
-          {(!hasRefundRequest || refundRequestStatusRejected) && (
-            <button
-              onClick={() => this.props.onAccessoryRefund(accessoryRequestId)}
-              className={`boss-requests__action boss-requests__action_role_request`}
-            >
-              Request refund
-            </button>
-          )}
+          {(!hasRefundRequest || refundRequestStatusRejected) &&
+            isRefundable && (
+              <button
+                onClick={() => onAccessoryRefund(accessoryRequestId)}
+                className={`boss-requests__action boss-requests__action_role_request`}
+              >
+                Request refund
+              </button>
+            )}
         </div>
       );
     }
     if (status === constants.ACCESSORY_REQUEST_STATUS_PENDING) {
       return (
         <div className="boss-requests__actions">
-          <button
-            className={`boss-requests__action boss-requests__action_role_cancel`}
-            onClick={() => this.props.onAccessoryCancel(accessoryRequestId)}
-          >
-            Cancel
-          </button>
+          {isCancelable && (
+            <button
+              className={`boss-requests__action boss-requests__action_role_cancel`}
+              onClick={() => onAccessoryCancel(accessoryRequestId)}
+            >
+              Cancel
+            </button>
+          )}
         </div>
       );
     }

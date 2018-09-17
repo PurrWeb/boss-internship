@@ -27,6 +27,11 @@ module Api
           page: page_from_params,
           per_page: per_page
         )
+        accessory_requests_permissions = AccessoryRequestsPagePermissions.new(
+          requester: current_user,
+          accessory_requests: accessory_requests.in_state(:pending, :accepted),
+          accessory_refund_requests: accessory_refund_requests
+        )
 
         render(
           json: {
@@ -46,6 +51,7 @@ module Api
               staff_members,
               serializer: Api::V1::SimpleStaffMemberSerializer
             ),
+            permissionsData: Api::V1::AccessoryRequests::PermissionsSerializer.new(accessory_requests_permissions),
             pagination: {
               pageNumber: page_from_params,
               perPage: per_page,
@@ -138,7 +144,7 @@ module Api
       end
 
       def accept_refund
-        authorize!(:accept, :accessories_request_refunds)
+        authorize!(:accept, refund_request_from_params)
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
@@ -158,7 +164,7 @@ module Api
       end
 
       def reject_refund
-        authorize!(:reject, :accessories_request_refunds)
+        authorize!(:reject, refund_request_from_params)
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
@@ -178,7 +184,7 @@ module Api
       end
 
       def undo_refund
-        authorize!(:undo, :accessories_request_refunds)
+        authorize!(:undo, refund_request_from_params)
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
@@ -198,7 +204,7 @@ module Api
       end
 
       def complete_refund
-        authorize!(:complete, :accessories_request_refunds)
+        authorize!(:complete, refund_request_from_params)
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,

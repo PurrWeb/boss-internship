@@ -9,9 +9,12 @@ class AccessoryRequestApiService
     @requester = requester
     @staff_member = staff_member
     @accessory_request = accessory_request
+    @ability = UserAbility.new(requester)
   end
 
   def create(params:)
+    ability.authorize!(:create, AccessoryRequest.new(staff_member: staff_member))
+
     accessory = staff_member.master_venue.accessories.find_by(id: params.fetch(:accessoryId))
 
     accessory_request_params = {
@@ -32,6 +35,8 @@ class AccessoryRequestApiService
   end
 
   def cancel
+    ability.authorize!(:cancel, accessory_request)
+
     model_service_result = CancelAccessoryRequest.new(
       accessory_request: accessory_request,
       requester: requester
@@ -45,6 +50,8 @@ class AccessoryRequestApiService
   end
 
   def refund
+    ability.authorize!(:refund_request, accessory_request)
+
     refund_accessory_request_params = {
       price_cents: accessory_request.price_cents,
     }.merge(staff_member: staff_member, accessory_request: accessory_request, created_by_user: requester)

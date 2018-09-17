@@ -1,10 +1,18 @@
 class StaffMemberProfilePermissions
-  def initialize(current_user:, staff_member:, holidays: [], holiday_requests: [], owed_hours: [])
+  def initialize(
+    current_user:,
+    staff_member:,
+    holidays: [],
+    holiday_requests: [],
+    owed_hours: [],
+    accessory_requests: AccessoryRequest.none
+  )
     @user_ability = UserAbility.new(current_user)
     @staff_member = staff_member
     @holidays = holidays
     @holiday_requests = holiday_requests
     @owed_hours = owed_hours
+    @accessory_requests = accessory_requests
   end
   attr_reader :user_ability, :staff_member
 
@@ -24,6 +32,13 @@ class StaffMemberProfilePermissions
     {
       canCreateOwedHours: user_ability.can?(:create, OwedHour.new(staff_member: staff_member)),
       owed_hours: owed_hours,
+    }
+  end
+
+  def accessories_tab
+    {
+      canCreateAccessoryRequest: user_ability.can?(:create, AccessoryRequest.new(staff_member: staff_member)),
+      accessory_requests: accessory_requests
     }
   end
 
@@ -56,6 +71,17 @@ class StaffMemberProfilePermissions
       result[holiday_request.id] = {
         isEditable: user_ability.can?(:edit, holiday_request),
         isDeletable: user_ability.can?(:destroy, holiday_request)
+      }
+    end
+    result
+  end
+
+  def accessory_requests
+    result = {}
+    @accessory_requests.map do |accessory_request|
+      result[accessory_request.id] = {
+        isCancelable: user_ability.can?(:cancel, accessory_request),
+        isRefundable: user_ability.can?(:refund_request, accessory_request)
       }
     end
     result

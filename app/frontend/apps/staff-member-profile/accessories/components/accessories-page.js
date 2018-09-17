@@ -118,10 +118,18 @@ class AccessoriesPage extends React.Component {
   };
 
   render() {
+    const canCreateAccessoryRequest = oFetch(this.props, 'canCreateAccessoryRequest');
+    const getAccessoryRequestPermission = oFetch(this.props, 'getAccessoryRequestPermission');
+    const accessoryRequestsJs = oFetch(this.props, 'accessoryRequests').toJS();
     const [mPayslipStartDate, mPayslipEndDate] = oFetch(this.props, 'mPayslipStartDate', 'mPayslipEndDate');
+
     return (
       <section className="boss-board">
-        <AccessoriesHeader title="Accessories" onRequest={this.openNewRequestModal} />
+        <AccessoriesHeader
+          canCreateAccessoryRequest={canCreateAccessoryRequest}
+          title="Accessories"
+          onRequest={this.openNewRequestModal}
+        />
         <AccessoriesContent>
           <AccessoriesFilter
             mPayslipStartDate={mPayslipStartDate}
@@ -129,16 +137,21 @@ class AccessoriesPage extends React.Component {
             onFilter={this.handleFilter}
           />
           <AccessoryRequestsList
-            accessoryRequests={this.props.accessoryRequests.toJS()}
-            accessoryRequestRendered={accessoryRequest => (
-              <AccessoryRequestItem
-                onAccessoryCancel={this.handleCancelRequest}
-                onAccessoryRefund={this.handleRefundRequest}
-                accessoryRequest={accessoryRequest}
-                onEditPayslipDate={this.openEditPayslipDateModal}
-                onEditRefundPayslipDate={this.openEditRefundPayslipDateModal}
-              />
-            )}
+            accessoryRequests={accessoryRequestsJs}
+            accessoryRequestRendered={accessoryRequest => {
+              const accessoryRequestId = oFetch(accessoryRequest, 'id');
+              const accessoryRequestPermission = getAccessoryRequestPermission(accessoryRequestId).toJS();
+              return (
+                <AccessoryRequestItem
+                  onAccessoryCancel={this.handleCancelRequest}
+                  onAccessoryRefund={this.handleRefundRequest}
+                  accessoryRequest={accessoryRequest}
+                  accessoryRequestPermissions={accessoryRequestPermission}
+                  onEditPayslipDate={this.openEditPayslipDateModal}
+                  onEditRefundPayslipDate={this.openEditRefundPayslipDateModal}
+                />
+              );
+            }}
           />
         </AccessoriesContent>
       </section>

@@ -5,19 +5,18 @@ import ContentWrapper from '~/components/content-wrapper';
 
 class AccessoryList extends React.Component {
   renderAccessories() {
-    const {
-      accessories,
-      accessoryRequests,
-      accessoryRefundRequests,
-      staffMembers,
-    } = this.props;
+    const [accessories, accessoryRequests, accessoryRefundRequests, staffMembers] = oFetch(
+      this.props,
+      'accessories',
+      'accessoryRequests',
+      'accessoryRefundRequests',
+      'staffMembers',
+    );
 
     return accessories.map((accessory, index) => {
       const name = oFetch(accessory, 'name');
       const accessoryId = oFetch(accessory, 'id');
-      const requests = accessoryRequests.filter(
-        item => oFetch(item, 'accessoryId') === oFetch(accessory, 'id'),
-      );
+      const requests = accessoryRequests.filter(item => oFetch(item, 'accessoryId') === oFetch(accessory, 'id'));
       const refundRequests = accessoryRefundRequests.filter(
         item => oFetch(item, 'accessoryId') === oFetch(accessory, 'id'),
       );
@@ -33,16 +32,14 @@ class AccessoryList extends React.Component {
         staffMembers,
         accessory,
       };
-      if (requestsCount == 0 && refundRequestsCount === 0) {
+
+      if (requestsCount === 0 && refundRequestsCount === 0) {
         return null;
       }
 
-      return React.cloneElement(
-        this.props.accessoryItemRenderer(accessoryData),
-        {
-          key: accessoryId,
-        },
-      );
+      return React.cloneElement(this.props.accessoryItemRenderer(accessoryData), {
+        key: accessoryId,
+      });
     });
   }
 

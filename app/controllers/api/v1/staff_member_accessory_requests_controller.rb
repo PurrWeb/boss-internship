@@ -49,6 +49,8 @@ module Api
 
       def create
         staff_member = staff_member_from_params
+        authorize!(:create, AccessoryRequest.new(staff_member: staff_member))
+
         result = AccessoryRequestApiService.new(
           requester: current_user,
           staff_member: staff_member_from_params,
@@ -56,9 +58,15 @@ module Api
         ).create(params: accessory_request_params)
         if result.success?
           render(
-            json: result.accessory_request,
-            serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
-            key_transform: :camel_lower,
+            json: {
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(result.accessory_request),
+              permissions: {
+                result.accessory_request.id => {
+                  isCancelable: current_ability.can?(:cancel, result.accessory_request),
+                  isRefundable: current_ability.can?(:refund_request, result.accessory_request)
+                }
+              }
+            },
             status: 200
           )
         else
@@ -68,6 +76,8 @@ module Api
 
       def cancel_request
         staff_member = staff_member_from_params
+        authorize!(:cancel, accessory_request_from_params)
+
         result = AccessoryRequestApiService.new(
           requester: current_user,
           staff_member: staff_member_from_params,
@@ -88,6 +98,7 @@ module Api
       def refund_request
         staff_member = staff_member_from_params
         accessory_request = accessory_request_from_params
+        authorize!(:refund_request, accessory_request)
 
         result = AccessoryRequestApiService.new(
           requester: current_user,

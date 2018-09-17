@@ -14,9 +14,7 @@ class AccessoryRequestsList extends Component {
     super(props);
 
     this.state = {
-      requests: props.paginate
-        ? props.accessoryRequests.slice(0, props.pageSize)
-        : props.accessoryRequests,
+      requests: props.paginate ? props.accessoryRequests.slice(0, props.pageSize) : props.accessoryRequests,
     };
   }
 
@@ -47,10 +45,10 @@ class AccessoryRequestsList extends Component {
         requestId,
         accessoryId,
         staffMember,
-        requestId,
         requestStatus,
         frozen,
       };
+
       return React.cloneElement(this.props.requestItemRenderer(requestData), {
         key: requestId,
       });

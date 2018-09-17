@@ -33,7 +33,7 @@ const accessoriesReducer = handleActions(
         .setIn(['mPayslipStartDate'], sPayslipStartDate ? safeMoment.uiDateParse(sPayslipStartDate) : null);
     },
     [constants.ADD_ACCESSORY]: (state, action) => {
-      const newAccessory = action.payload;
+      const newAccessory = oFetch(action.payload, 'accessoryRequest');
 
       return state.updateIn(['accessoryRequests'], requests => {
         return requests.push(fromJS(newAccessory));

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import AccessoryRequestsPage from '../components/accessory-requests-page';
+import { getAccessoryRefundRequestPermission, getAccessoryRequestPermission } from '../selectors';
 
 import {
   changeVenue,
@@ -27,6 +28,8 @@ const mapStateToProps = state => {
     accessoryRefundRequests: state.getIn(['accessoryRequestsPage', 'accessoryRefundRequests']),
     staffMembers: state.getIn(['accessoryRequestsPage', 'staffMembers']),
     pagination: state.getIn(['accessoryRequestsPage', 'pagination']),
+    getAccessoryRequestPermission: getAccessoryRequestPermission(state),
+    getAccessoryRefundRequestPermission: getAccessoryRefundRequestPermission(state),
   };
 };
 

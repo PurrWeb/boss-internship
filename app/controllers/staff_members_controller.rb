@@ -322,6 +322,7 @@ class StaffMembersController < ApplicationController
       :finance_report,
       :created_by_user,
       :accessory,
+      :staff_member,
       accessory_refund_request: [
         :staff_member, :created_by_user, :finance_report,
       ],
@@ -355,6 +356,7 @@ class StaffMembersController < ApplicationController
       staff_member_profile_permissions: StaffMemberProfilePermissions.new(
         staff_member: staff_member,
         current_user: current_user,
+        accessory_requests: accessory_requests,
       ),
       payslip_start_date: payslip_start_date,
       payslip_end_date: payslip_end_date,

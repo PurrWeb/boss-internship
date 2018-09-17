@@ -4,6 +4,7 @@ import configureStore from '~/apps/store';
 import { initialProfileLoad } from '../profile-wrapper/actions';
 import { loadInitialState } from './redux/actions';
 import { combineReducers } from 'redux-immutable';
+import { reducer as formReducer } from 'redux-form/immutable';
 
 import AccessoriesContainer from './containers/accessories-container';
 import accessoriesReducer from './redux/reducers';
@@ -15,6 +16,7 @@ class StaffMemberAccessoriesApp extends React.Component {
       combineReducers({
         accessoriesPage: accessoriesReducer,
         profile: profileReducer,
+        form: formReducer,
       }),
     );
     this.store.dispatch(initialProfileLoad({ ...this.props }));
