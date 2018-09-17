@@ -322,6 +322,7 @@ class StaffMembersController < ApplicationController
       :finance_report,
       :created_by_user,
       :accessory,
+      :staff_member,
       accessory_refund_request: [
         :staff_member, :created_by_user, :finance_report,
       ],
