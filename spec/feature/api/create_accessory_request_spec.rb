@@ -10,7 +10,7 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
   end
 
   let(:venue) { FactoryGirl.create(:venue) }
-  let(:user) { FactoryGirl.create(:user, venues: [venue]) }
+  let(:user) { FactoryGirl.create(:user, :ops_manager, venues: [venue]) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
   let(:accessory) { FactoryGirl.create(
     :accessory,
