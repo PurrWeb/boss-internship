@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react"
 import StaffTypeDropdown from "../staff-type-dropdown"
-import VenueDropdown from "~/components/venue-dropdown"
+import StatusDropdown from "~/components/status-dropdown"
 import _ from "underscore"
 
 export default class StaffFilter extends Component {
@@ -29,8 +29,8 @@ export default class StaffFilter extends Component {
     render() {
         if (this.props.isNewDesign) {
             return (
-                <div className="main-content__filters-block-container">
-                    <div className="main-content__filters-block-label">
+                <div className="boss-main-content__filters-block-container">
+                    <div className="boss-main-content__filters-block-label">
                         Filter
                     </div>
 
@@ -55,19 +55,18 @@ export default class StaffFilter extends Component {
         if (this.props.isNewDesign) {
             componentColumns = filters.map(function(filter){
                 const role = filter.title.toLowerCase();
-                const subClass = role === 'status' ? 'filters-block__cell_role_status' : ''
-
-                return <div className={`filters-block__cell ${subClass}`} key={filter.title}>
+                const subClass = role === 'status' ? 'boss-filters-block__cell_role_status' : ''
+                return <div style={{ display: 'table-cell' }} className={`${subClass} ${filters.length === 2 && 'boss-form__field_layout_half'}`} key={filter.title}>
                     {filter.component}
                 </div>
             });
 
             return (
-                <div className="filters-block">
-                    <div className="filters-block__head">
+                <div className="boss-filters-block">
+                    <div className="boss-filters-block__head">
                         {titleColumns}
                     </div>
-                    <div className="filters-block__row">
+                    <div className="boss-filters-block__row">
                         {componentColumns}
                     </div>
                 </div>
@@ -104,9 +103,6 @@ export default class StaffFilter extends Component {
         if (selectedFilters.staffType){
             filterItems.push(this.getStaffTypeFilter());
         }
-        if (selectedFilters.venue){
-            filterItems.push(this.getVenueFilter());
-        }
         if (selectedFilters.rotaedOrActive){
             filterItems.push(this.getRotaedOrActiveFilter())
         }
@@ -121,7 +117,7 @@ export default class StaffFilter extends Component {
                 name="search"
                 placeholder="Search"
                 data-test-marker-staff-text-search
-                style={{maxWidth: "100%"}}
+                className="boss-input boss-input_role_search boss-input-group_adjust_search-input"
                 onChange={(event) =>
                     this.handleChange("search", event.target.value)
                 }
@@ -138,7 +134,7 @@ export default class StaffFilter extends Component {
         }
 
         return (
-            <div className="boss-input-group__input-container main-content__filters-block-container_adjust_input-container">
+            <div className="boss-input-group__input-container boss-main-content__filters-block-container_adjust_input-container">
                 <input
                     type="text"
                     value={this.props.filterSettings.search}
@@ -148,7 +144,7 @@ export default class StaffFilter extends Component {
                     onChange={(event) =>
                         this.handleChange("search", event.target.value)
                     }
-                    className="boss-input boss-input_type_search boss-input-group_adjust_search-input"/>
+                    className="boss-input boss-input_role_search boss-input-group_adjust_search-input" />
             </div>
         );
     }
@@ -164,36 +160,13 @@ export default class StaffFilter extends Component {
             component
         }
     }
-    getVenueFilter(){
-        var component = <VenueDropdown
-            selectedVenues={this.props.filterSettings.venues}
-            venues={this.props.venues}
-            multi={true}
-            onChange={(venues) =>
-                this.handleChange("venues", venues)
-            } />
-        return {
-            title: "Venue",
-            component
-        }
-    }
     getRotaedOrActiveFilter(){
-        var rotaedOrActiveOption = "Rotaed / Active Only"
-        var allOption = "All"
-        var component = (
-            <select
-                className="boss-input boss-input_type_select boss-input_variant_filters-block"
-                value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
-                onChange={(e) => this.handleChange("rotaedOrActive", e.target.value !== allOption)}
-            >
-                <option className="boss-input boss-input_variant_filters-block" value={allOption}>
-                    {allOption}
-                </option>
-                <option className="boss-input boss-input_variant_filters-block" value={rotaedOrActiveOption}>
-                    {rotaedOrActiveOption}
-                </option>
-            </select>
-        );
+        const rotaedOrActiveOption = "Rotaed / Active Only";
+        const allOption = "All"
+        var component = (<StatusDropdown
+                            value={this.props.filterSettings.rotaedOrActive ? rotaedOrActiveOption : allOption}
+                            onChange={(status) => this.handleChange("rotaedOrActive", status === rotaedOrActiveOption)}
+                        />);
 
         return {
             title: "Status",
@@ -202,10 +175,10 @@ export default class StaffFilter extends Component {
     }
     getFilterTitle(titleString){
         const role = titleString.toLowerCase();
-        const subClass = role === 'status' ? 'filters-block__head-cell_role_status' : '';
+        const subClass = role === 'status' ? 'boss-filters-block__head-cell_role_status' : '';
 
         return this.props.isNewDesign ? (
-            <div className={`filters-block__head-cell filters-block__head-cell_type_label ${subClass}`} key={titleString}>
+            <div className={`boss-filters-block__head-cell boss-filters-block__head-cell_type_label ${subClass}`} key={titleString}>
                 {titleString}
             </div>
         ) : (

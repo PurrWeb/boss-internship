@@ -45,9 +45,12 @@ class ClockInOutView extends Component {
         this.setMainTagClass();
 
         if (!this.props.hasLoadedAppData) {
-            return <div className="page-wrapper">
-                <LoadAppDataDialog />
-            </div>
+            return (
+                <div className="boss-page-content__inner-container">
+                    <div className="boss-page-wrapper">
+                        <LoadAppDataDialog />
+                    </div>
+            </div>)
         } else {
             return this.getClockInOutUI();
         }
@@ -58,12 +61,12 @@ class ClockInOutView extends Component {
     }
     getReloadPageButton(){
         return (
-            <a href="#"
-               className="header__reload-button"
+            <button
+               className="boss-header__reload-button"
                onClick={this.onReloadClick}
             >
                 Reload
-            </a>
+            </button>
         );
     }
     setMainTagClass() {
@@ -105,15 +108,15 @@ class ClockInOutView extends Component {
             />;
         } else {
             header = (
-                <div className="header__container">
-                    <div className="header">
-                        <div className="header__reload-cell">
+                <div className="boss-header__container">
+                    <div className="boss-header">
+                        <div className="boss-header__reload-cell">
                             {this.getReloadPageButton()}
                         </div>
-                        <div className="header__caption-cell">
-                            <div className="header__caption-text">Select Your Staff Type</div>
+                        <div className="boss-header__caption-cell">
+                            <div className="boss-header__caption-text">Select Your Staff Type</div>
                         </div>
-                        <div className="header__time-cell">
+                        <div className="boss-header__time-cell">
                             <Clock />
                         </div>
                     </div>
@@ -127,11 +130,13 @@ class ClockInOutView extends Component {
         }
 
         return (
-            <div className="page-wrapper">
-                <ConfirmationModal />
-                {header}
-                <div className="main-content">
-                    {content}
+            <div className="boss-page-content__inner-container">
+                <div className="boss-page-wrapper">
+                    <ConfirmationModal />
+                    {header}
+                    <div className="boss-main-content">
+                        {content}
+                    </div>
                 </div>
             </div>
         );
