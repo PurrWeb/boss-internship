@@ -71,11 +71,9 @@ Rails.application.routes.draw do
 
     resources :names, only: [:index]
 
-    resources :invites, only: [:index, :new, :create] do
+    resources :invites, only: [:index] do
       member do
-        post :revoke
         get :accept
-        post :accept
       end
     end
 
@@ -264,6 +262,13 @@ Rails.application.routes.draw do
 
       namespace :v1 do
         get "version", to: "version#version"
+
+        resources :invites, only: [:create] do
+          member do
+            post :revoke
+            post :accept
+          end
+        end
 
         resources :wtl_cards, only: [:index, :create] do
           member do
