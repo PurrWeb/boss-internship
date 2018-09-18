@@ -47,7 +47,7 @@ class InviteAcceptForm extends React.Component {
     this.setState({ isShowPassword: e.target.checked });
   };
   render() {
-    const { error, handleSubmit } = this.props;
+    const { error, handleSubmit, submitting } = this.props;
     const { isShowPassword } = this.state;
     return (
       <div className="boss-modal-window__content">
@@ -82,7 +82,7 @@ class InviteAcceptForm extends React.Component {
               </label>
             </div>
             <div className="boss-form__field boss-form__field_justify_center">
-              <button className="boss-button boss-button_role_primary" type="submit">
+              <button disabled={submitting} className="boss-button boss-button_role_primary" type="submit">
                 Sign Up
               </button>
             </div>

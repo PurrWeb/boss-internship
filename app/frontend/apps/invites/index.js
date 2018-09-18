@@ -12,7 +12,6 @@ import Page from './containers/page';
 class InvitesApp extends React.Component {
   componentWillMount() {
     const { accessToken } = this.props;
-    console.log(this.props)
     if (!accessToken) {
       throw new Error('Access token must be present');
     }

@@ -93,7 +93,7 @@ class Page extends Component {
           </DashboardActions>
           <DashboardFilter onFilter={this.handleFilter} component={InvitesFilter} initialValues={filters} />
         </SimpleDashboard>
-        <LoadMore items={invites}>
+        <LoadMore perPage={15} items={invites}>
           {({ visibleItems, onLoadMore }) => (
             <div className="boss-page-main__content">
               <div className="boss-page-main__inner">

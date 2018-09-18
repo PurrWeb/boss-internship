@@ -33,7 +33,7 @@ const submission = (values, dispatch, props) => {
 
 class InviteUserForm extends React.Component {
   render() {
-    const { error, venues } = this.props;
+    const { error, venues, submitting } = this.props;
     return (
       <form onSubmit={this.props.handleSubmit(submission)} className="boss-form">
         <Field name="firstName" label="First Name" required component={BossFormInput} />
@@ -54,7 +54,7 @@ class InviteUserForm extends React.Component {
 
         <div className="boss-form__row boss-form__row_position_last">
           <div className="boss-form__field boss-form__field_justify_center">
-            <button className="boss-button boss-button_role_add boss-form__submit" type="submit">
+            <button disabled={submitting} className="boss-button boss-button_role_add boss-form__submit" type="submit">
               Invite New User
             </button>
           </div>

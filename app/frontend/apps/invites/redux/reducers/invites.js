@@ -16,6 +16,12 @@ export default handleActions(
       const invite = oFetch(action, 'payload.invite');
       return state.push(Immutable.fromJS(invite));
     },
+    [types.UPDATE_INVITE]: (state, action) => {
+      const invite = oFetch(action, 'payload.invite');
+      const inviteId = oFetch(invite, 'id');
+      const inviteIndex = state.findIndex(invite => invite.get('id') === inviteId);
+      return state.set(inviteIndex, Immutable.fromJS(invite));
+    },
   },
   initialState,
 );
