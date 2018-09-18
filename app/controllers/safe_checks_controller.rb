@@ -19,7 +19,8 @@ class SafeChecksController < ApplicationController
       render locals: {
         current_venue: venue,
         accessible_venues: accessible_venues,
-        safe_checks: safe_checks
+        safe_checks: safe_checks,
+        date_format: '%I:%M %a %m/%d/%Y'
       }
     else
       redirect_to(safe_checks_path(redirect_params))
