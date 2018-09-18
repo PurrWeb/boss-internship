@@ -14,6 +14,7 @@ class VenueSelect extends React.Component {
   render() {
     return (
       <BossSelect
+        className={this.props.className}
         onChange={this.onChange}
         selected={this.props.selectedTypes}
         options={this.props.venueTypes}
@@ -33,6 +34,7 @@ VenueSelect.PropTypes = {
   onChange: PropTypes.func.isRequired,
   selectedTypes: PropTypes.array.isRequired,
   venueTypes: PropTypes.array.isRequired,
+  className: PropTypes.string,
 };
 
 export default VenueSelect;

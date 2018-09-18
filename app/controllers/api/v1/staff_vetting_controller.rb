@@ -100,6 +100,29 @@ module Api
             ),
           }, status: 200
       end
+
+      def time_dodgers
+        date = date_from_params
+        week = RotaWeek.new(date);
+        time_dodgers_service = TimeDodgersService.new(week: week)
+        dodgers_data = time_dodgers_service.dodgers_data
+
+        staff_members = time_dodgers_service.staff_members
+        render json: {
+          acceptedHours: dodgers_data.fetch(:accepted_hours),
+          acceptedBreaks: dodgers_data.fetch(:accepted_breaks),
+          paidHolidays: dodgers_data.fetch(:paid_holidays),
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+            staff_members,
+            serializer: Api::V1::StaffVettings::StaffMemberSerializer
+          ),
+        }, status: 200
+      end
+
+      private
+      def date_from_params
+        UIRotaDate.parse(params.fetch(:date))
+      end
     end
   end
 end

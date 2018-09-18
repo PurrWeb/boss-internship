@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import StaffMemberInfo from './staff-member-info';
 import moment from 'moment';
-import utils from '~/lib/utils';
 import safeMoment from '~/lib/safe-moment';
 
 class StaffMemberList extends Component {
@@ -18,21 +17,11 @@ class StaffMemberList extends Component {
     if (!staffMember.get('siaBadgeExpiryDate')) {
       return '-';
     }
-    return safeMoment
-      .parse(staffMember.get('siaBadgeExpiryDate'), 'YYYY-MM-DD')
-      .format('ddd DD/MM/YYYY');
+    return safeMoment.parse(staffMember.get('siaBadgeExpiryDate'), 'YYYY-MM-DD').format('ddd DD/MM/YYYY');
   }
 
   render() {
-    const {
-      staffMembers,
-      staffTypes,
-      payRates,
-      withAge,
-      withSiaBadgeExpiryDate,
-      withBouncedEmail,
-      searchQuery,
-    } = this.props;
+    const { staffMembers, staffTypes, withAge, withSiaBadgeExpiryDate, withBouncedEmail, venues } = this.props;
 
     if (staffMembers.size === 0) {
       return (
@@ -46,6 +35,13 @@ class StaffMemberList extends Component {
         <div className="boss-users__flow-list">
           {staffMembers.map(staffMember => {
             const bouncedEmailData = staffMember.get('bouncedEmailData');
+            const paidHolidays = staffMember.get('paidHolidays');
+            const masterVenue = venues
+              ? staffMember.get('venueId')
+                ? venues.find(venue => venue.get('id') === staffMember.get('venueId')).get('name')
+                : null
+              : null;
+
             return (
               <StaffMemberInfo
                 key={staffMember.get('id')}
@@ -53,25 +49,18 @@ class StaffMemberList extends Component {
                 avatarUrl={staffMember.get('avatarUrl')}
                 fullName={staffMember.get('fullName')}
                 staffType={staffTypes
-                  .find(
-                    staffType =>
-                      staffType.get('id') === staffMember.get('staffTypeId'),
-                  )
+                  .find(staffType => staffType.get('id') === staffMember.get('staffTypeId'))
                   .get('name')}
                 staffColor={staffTypes
-                  .find(
-                    staffType =>
-                      staffType.get('id') === staffMember.get('staffTypeId'),
-                  )
+                  .find(staffType => staffType.get('id') === staffMember.get('staffTypeId'))
                   .get('color')}
                 age={withAge && this.getStaffMemberAge(staffMember)}
-                expiredSiaBadge={
-                  withSiaBadgeExpiryDate &&
-                  this.getStaffMemberSiaBadgeExpiryDate(staffMember)
-                }
-                bouncedEmailData={
-                  withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()
-                }
+                expiredSiaBadge={withSiaBadgeExpiryDate && this.getStaffMemberSiaBadgeExpiryDate(staffMember)}
+                bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
+                hours={staffMember.get('hours')}
+                acceptedBreaks={staffMember.get('acceptedBreaks')}
+                masterVenue={masterVenue}
+                paidHolidays={paidHolidays}
               />
             );
           })}
@@ -87,6 +76,7 @@ StaffMemberList.propTypes = {
   withAge: PropTypes.bool,
   withSiaBadgeExpiryDate: PropTypes.bool,
   withBouncedEmail: PropTypes.bool,
+  venues: ImmutablePropTypes.list,
 };
 
 export default StaffMemberList;

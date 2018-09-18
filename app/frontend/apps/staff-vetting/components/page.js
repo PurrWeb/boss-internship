@@ -10,20 +10,19 @@ import StaffMemberFilter from './staff-member-filter';
 
 class Page extends Component {
   render() {
-    const { count, title, venues, staffMembers, staffTypes } = this.props;
+    const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer } = this.props;
     if (staffMembers.size === 0) {
       return (
         <main className="boss-page-main">
           <StaffDashboard
             title={() => <StaffDashboardTitle text={title} count={count} />}
+            filterRenderer={dashboardFilterRenderer}
           />
           {count === 0 && (
             <ContentWrapper>
               <div className="boss-page-main__group boss-page-main__group_adjust_staff-vetting">
                 <div className="boss-users">
-                  <p className="boss-users__text-placeholder">
-                    No staff members found
-                  </p>
+                  <p className="boss-users__text-placeholder">No staff members found</p>
                 </div>
               </div>
             </ContentWrapper>
@@ -35,6 +34,7 @@ class Page extends Component {
       <main className="boss-page-main">
         <StaffDashboard
           title={() => <StaffDashboardTitle text={title} count={count} />}
+          filterRenderer={dashboardFilterRenderer}
         />
         <ContentWrapper>
           <PageContent
@@ -42,10 +42,9 @@ class Page extends Component {
             tabsFilterRenderer={this.props.tabsFilterRenderer}
             staffMembers={staffMembers}
             venues={venues}
+            selectedVenueIds={this.props.selectedVenueIds}
             staffTypes={staffTypes}
-            staffMemberFilterRenderer={props => (
-              <StaffMemberFilter {...props} />
-            )}
+            staffMemberFilterRenderer={props => <StaffMemberFilter {...props} />}
             staffMemberListRenderer={this.props.staffMemberListRenderer}
           />
         </ContentWrapper>

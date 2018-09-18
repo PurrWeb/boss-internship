@@ -12,6 +12,7 @@ import StaffMembersWithoutPhoto from './routes/staff-members-without-photo';
 import StaffMembersOnWrongPayrate from './routes/staff-members-on-wrong-payrate';
 import StaffMembersWithExpiredSiaBadge from './routes/staff-members-with-expired-sia-badge';
 import StaffMembersWithBouncedEmails from './routes/staff-members-with-bounced-emails';
+import StaffMembersWithTimeDodges from './routes/staff-members-with-time-dodges';
 
 class StaffVettingApp extends React.Component {
   componentWillMount() {
@@ -58,6 +59,8 @@ class StaffVettingApp extends React.Component {
     const canViewOnWrongPayrate = oFetch(permissions, 'staffOnWrongPayrate.canView');
     const canViewWithExpiredSiaBadge = oFetch(permissions, 'staffWithExpiredSiaBadge.canView');
     const canViewWithBouncedEmails = oFetch(permissions, 'staffWithBouncedEmails.canView');
+    const canViewWithTimeDodges = oFetch(permissions, 'staffWithWithTimeDodges.canView');
+
     return (
       <Router>
         <div>
@@ -157,6 +160,14 @@ class StaffVettingApp extends React.Component {
                 count={staffMembersWithBouncedEmailCount}
                 title="Staff Members with Bounced Emails"
               />
+            )}
+          />
+          <PrivateRoute
+            exact
+            path="/staff_members_with_time_dodges/:weekStartDate?"
+            canView={canViewWithTimeDodges}
+            render={props => (
+              <StaffMembersWithTimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodges" />
             )}
           />
         </div>

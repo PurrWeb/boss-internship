@@ -15,6 +15,7 @@ class StaffVetting extends Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
+      staffMembersWithTimeDodgesCount,
     } = this.props;
 
     const canViewWithoutAddress = oFetch(this.props, 'permissions.staffWithoutAddress.canView');
@@ -25,6 +26,8 @@ class StaffVetting extends Component {
     const canViewOnWrongPayrate = oFetch(this.props, 'permissions.staffOnWrongPayrate.canView');
     const canViewWithExpiredSiaBadge = oFetch(this.props, 'permissions.staffWithExpiredSiaBadge.canView');
     const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
+    const canViewWithTimeDodges = oFetch(this.props, 'permissions.staffWithWithTimeDodges.canView');
+
     const blocks = {
       withoutEmail: {
         title: 'Staff without Email Address',
@@ -68,6 +71,11 @@ class StaffVetting extends Component {
         count: staffMembersWithBouncedEmailCount,
         canView: canViewWithBouncedEmails,
       },
+      withTimeDodges: {
+        title: 'Staff with Time Dodges',
+        href: `/staff_members_with_time_dodges`,
+        canView: canViewWithTimeDodges,
+      },
     };
     const blocksJsx = Object.values(blocks)
       .map(block => {
@@ -107,6 +115,8 @@ StaffVetting.propTypes = {
   staffWithoutPhotoCount: PropTypes.number.isRequired,
   staffOnWrongPayrateCount: PropTypes.number.isRequired,
   staffWithExpiredSiaBadgeCount: PropTypes.number.isRequired,
+  staffMembersWithBouncedEmailCount: PropTypes.number.isRequired,
+  staffMembersWithTimeDodgesCount: PropTypes.number.isRequired,
 };
 
 export default StaffVetting;

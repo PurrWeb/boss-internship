@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import {
-  selectStaffMembersByStaffType,
-  selectSecurityStaffMembers,
-  selectStaffMembersByVenue,
-} from '../utils';
+import { selectStaffMembersByStaffType, selectSecurityStaffMembers, selectStaffMembersByVenue } from '../utils';
 
 class TabFilter extends Component {
   state = {
@@ -17,10 +13,7 @@ class TabFilter extends Component {
       return [];
     }
     return this.props.venues.reduce((acc, venue) => {
-      const staffMembers = selectStaffMembersByVenue(
-        this.props.staffMembers,
-        venue.get('id'),
-      );
+      const staffMembers = selectStaffMembersByVenue(this.props.staffMembers, venue.get('id'));
       const staffCount = staffMembers.size;
       if (staffCount === 0) {
         return acc;
@@ -98,12 +91,28 @@ class TabFilter extends Component {
     ];
   }
 
+  getTimeDodges() {
+    if (!this.props.timeDodgers) {
+      return [];
+    }
+
+    const { imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers } = this.props.timeDodgers;
+
+    const staffMembersHardDodgersTab = {
+      title: `Hard Dodgers - under 45h (${imStaffMembersHardDodgers.size})`,
+      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers),
+      onClear: () => this.props.onChangeTab(imStaffMembers),
+    };
+    const staffMembersSoftDodgersTab = {
+      title: `Soft Dodgers 45-47h (${imStaffMembersSoftDodgers.size})`,
+      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers),
+      onClear: () => this.props.onChangeTab(imStaffMembers),
+    };
+    return [staffMembersSoftDodgersTab, staffMembersHardDodgersTab];
+  }
+
   render() {
-    const tabs = [
-      ...this.getVenues(),
-      ...this.getPayRates(),
-      ...this.getSecurity(),
-    ];
+    const tabs = [...this.getVenues(), ...this.getPayRates(), ...this.getSecurity(), ...this.getTimeDodges()];
     return (
       <div className="boss-page-main__controls">
         {tabs.map((tab, index) => (
@@ -123,14 +132,8 @@ class TabFilter extends Component {
             className={`boss-page-main__control ${
               tab.icon === 'venue'
                 ? 'boss-page-main__control_role_venue'
-                : tab.icon === 'security'
-                  ? 'boss-page-main__control_role_staff-type'
-                  : ''
-            } ${
-              index === this.state.activeTabIndex
-                ? 'boss-page-main__control_state_active'
-                : ''
-            }`}
+                : tab.icon === 'security' ? 'boss-page-main__control_role_staff-type' : ''
+            } ${index === this.state.activeTabIndex ? 'boss-page-main__control_state_active' : ''}`}
           >
             {tab.title}
           </button>
@@ -144,6 +147,7 @@ TabFilter.propTypes = {
   showPayRates: PropTypes.bool,
   showVenues: PropTypes.bool,
   showSecurity: PropTypes.bool,
+  timeDodgers: PropTypes.object,
   payRates: PropTypes.object,
   onChangeTab: PropTypes.func,
 };

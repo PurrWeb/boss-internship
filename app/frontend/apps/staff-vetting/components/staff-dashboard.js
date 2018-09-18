@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import SimpleDashboard from '~/components/boss-dashboards/simple-dashboard';
+import SimpleDashboard from './simple-dashboard';
 import { DashboardActions } from '~/components/boss-dashboards';
 
 class StaffDashboard extends Component {
@@ -11,7 +11,7 @@ class StaffDashboard extends Component {
 
   render() {
     return (
-      <SimpleDashboard title={this.props.title}>
+      <SimpleDashboard filterRenderer={this.props.filterRenderer} title={this.props.title}>
         <DashboardActions>
           <button
             type="button"

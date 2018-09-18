@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import bouncedEmailModal from '~/components/bounced-email-modal';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment);
 
 function StaffMemberInfo({
   id,
@@ -11,6 +15,10 @@ function StaffMemberInfo({
   age,
   expiredSiaBadge,
   bouncedEmailData,
+  hours,
+  masterVenue,
+  paidHolidays,
+  acceptedBreaks,
 }) {
   const handleInfoClick = e => {
     if (bouncedEmailData) {
@@ -55,24 +63,56 @@ function StaffMemberInfo({
           {expiredSiaBadge && (
             <ul className="boss-user-summary__review-list">
               <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-label">
-                  Expiry Date:{' '}
-                </span>
-                <span className="boss-user-summary__review-val">
-                  {expiredSiaBadge}
-                </span>
+                <span className="boss-user-summary__review-label">Expiry Date: </span>
+                <span className="boss-user-summary__review-val">{expiredSiaBadge}</span>
               </li>
             </ul>
           )}
           {bouncedEmailData ? (
             <ul className="boss-user-summary__review-list">
               <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-wrap">
-                  {bouncedEmailData.email}
-                </span>
+                <span className="boss-user-summary__review-wrap">{bouncedEmailData.email}</span>
               </li>
             </ul>
           ) : null}
+          {masterVenue && (
+            <ul className="boss-user-summary__review-list">
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Master Venue: </span>
+                <span className="boss-user-summary__review-val">{masterVenue}</span>
+              </li>
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Accepted: </span>
+                <span className="boss-user-summary__review-val">
+                  {hours - acceptedBreaks === 0
+                    ? `0h`
+                    : moment
+                        .duration(hours - acceptedBreaks, 'minutes')
+                        .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                </span>
+              </li>
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Breaks: </span>
+                <span className="boss-user-summary__review-val">
+                  {acceptedBreaks === 0
+                    ? `0h`
+                    : moment
+                        .duration(acceptedBreaks, 'minutes')
+                        .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                </span>
+              </li>
+              <li className="boss-user-summary__review-item">
+                <span className="boss-user-summary__review-label">Paid holidays: </span>
+                <span className="boss-user-summary__review-val">
+                  {paidHolidays === 0
+                    ? `0h`
+                    : moment
+                        .duration(paidHolidays, 'minutes')
+                        .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                </span>
+              </li>
+            </ul>
+          )}
         </div>
       </a>
     </div>
@@ -88,6 +128,8 @@ StaffMemberInfo.propTypes = {
   age: PropTypes.number,
   expiredSiaBadge: PropTypes.string,
   bouncedEmailData: PropTypes.object,
+  hours: PropTypes.number,
+  masterVenue: PropTypes.string,
 };
 
 export default StaffMemberInfo;
