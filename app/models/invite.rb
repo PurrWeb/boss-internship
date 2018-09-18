@@ -13,6 +13,8 @@ class Invite < ActiveRecord::Base
 
   validates :role, presence: true, inclusion: { in: User::ROLES, message: 'is required' }
 
+  validates :first_name, presence: true
+  validates :surname, presence: true
   validates :token, presence: true, uniqueness: true
 
   validates :email,
