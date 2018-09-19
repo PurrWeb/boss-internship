@@ -167,8 +167,7 @@ class UserAbility
           user.payroll_manager? ||
             user.has_effective_access_level?(AccessLevel.admin_access_level)
         else
-          user.food_ops_manager? ||
-          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+          can_edit_staff_member?(user, accessory_request.staff_member)
         end
       end
 
