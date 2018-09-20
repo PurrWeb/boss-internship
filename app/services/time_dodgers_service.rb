@@ -31,7 +31,11 @@ class TimeDodgersService
     paid_holidays = dodgers_data.fetch(:paid_holidays)
     accepted_breaks = dodgers_data.fetch(:accepted_breaks)
 
-    StaffMember.includes([:email_address, :name, :staff_type]).where(id: (accepted_hours.keys | paid_holidays.keys | accepted_breaks.keys))
+    StaffMember.
+      enabled.
+      on_weekly_pay_rate.
+      where(id: (accepted_hours.keys | paid_holidays.keys | accepted_breaks.keys)).
+      includes([:email_address, :name, :staff_type])
   end
 
   private
