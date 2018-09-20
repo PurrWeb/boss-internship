@@ -13,6 +13,32 @@ describe StaffMember do
   end
 
   describe 'scopes' do
+    describe 'StaffMember#on_weekly_pay_rate' do
+      context 'staff member is on weekly payrate' do
+        let!(:existing_staff_member) do
+          pay_rate = FactoryGirl.create(:pay_rate, :weekly)
+          FactoryGirl.create(
+            :staff_member,
+            pay_rate: pay_rate
+          )
+        end
+
+        it 'should be returned' do
+          expect(StaffMember.on_weekly_pay_rate).to include(existing_staff_member)
+        end
+      end
+
+      context 'staff member is not weekly payrate' do
+        let!(:existing_staff_member) do
+          FactoryGirl.create(:staff_member)
+        end
+
+        it 'should be returned' do
+          expect(StaffMember.on_weekly_pay_rate).to_not include(existing_staff_member)
+        end
+      end
+    end
+
     describe 'StaffMember#can_have_finance_reports' do
       context 'staff member is not security' do
         let!(:existing_staff_member) do
