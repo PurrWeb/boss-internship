@@ -81,7 +81,7 @@ class StaffMemberShiftsIndexQuery
       .enabled
       .joins(:clock_in_day)
       .where(clock_in_day: clock_in_days_by_range)
-      .includes([:accepted_by, :frozen_by, :hours_acceptance_breaks_enabled, clock_in_day: [:venue, :staff_member]])
+      .includes([:accepted_by, :finance_report, :hours_acceptance_breaks_enabled, clock_in_day: [:venue, :staff_member]])
 
     hours_acceptance_breaks = HoursAcceptanceBreak
       .enabled
