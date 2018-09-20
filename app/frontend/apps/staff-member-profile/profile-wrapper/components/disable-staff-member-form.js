@@ -28,7 +28,7 @@ export const DisableStaffMemberForm = ({onDisable, handleSubmit}) => {
         <Field
           component={BossFormTextarea}
           required
-          name="reasonddd"
+          name="reason"
           label="Reason for disabling"
         />
         <div className="boss-form__field">
