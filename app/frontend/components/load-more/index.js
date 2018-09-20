@@ -10,9 +10,6 @@ const loadMore = WrappedComponent => {
       if (!props.list && !props[props.listObjectName]) {
         throw new Error('`list` prop or `listObjectName` prop must be present');
       }
-      if (!Immutable.List.isList(props.list) && !Immutable.List.isList(props[props.listObjectName])) {
-        throw new Error('`list` must be `Immutable List`');
-      }
       if (!props.perPage) {
         throw new Error('`perPage` prop must be present');
       }
@@ -62,7 +59,6 @@ const loadMore = WrappedComponent => {
     }
 
     render() {
-      console.log('rendered');
       const fullList = this.getList();
       const totalAmount = fullList.size;
       const currentAmount = this.state.reducedList.size;
@@ -72,7 +68,7 @@ const loadMore = WrappedComponent => {
       };
 
       return (
-        <div>
+        <div style={{ marginBottom: '15px' }}>
           <WrappedComponent {...this.props} {...newProps} />
           {this.isShowLoadMoreButton() && (
             <LoadMoreButton onClick={this.handleLoadMore} currentAmount={currentAmount} totalAmount={totalAmount} />

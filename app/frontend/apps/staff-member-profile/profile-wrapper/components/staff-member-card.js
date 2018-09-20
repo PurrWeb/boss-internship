@@ -128,6 +128,15 @@ const StaffMemberCard = ({
         >
           Owed hours
         </a>
+        <a
+          href={`shifts`}
+          className={`${isActive(
+            currentPage,
+            'shifts',
+          )} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
+        >
+          Shifts
+        </a>
         {!isSecurityStaff && (
           <a
             href={`accessories`}

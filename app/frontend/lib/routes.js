@@ -113,6 +113,9 @@ export const appRoutes = {
     securityRotaDaily: (date) => {
         return `/security_rotas/${date}`;
     },
+    rotaDaily: (date, venueId) => {
+        return `/rotas/${date}${venueId ? `?venue_id=${venueId}` : ''}`;
+    },
     financeReports: (options) => {
         const startDate = oFetch(options, "startDate");
         const venueId = oFetch(options, "venueId");

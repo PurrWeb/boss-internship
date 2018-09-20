@@ -106,6 +106,9 @@ registerComponent('StaffMemberHolidaysApp', StaffMemberHolidaysApp);
 import { StaffMemberOwedHoursApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberOwedHoursApp', StaffMemberOwedHoursApp);
 
+import { StaffMemberShiftsApp } from './apps/staff-member-profile';
+registerComponent('StaffMemberShiftsApp', StaffMemberShiftsApp);
+
 import { StaffMemberAccessoriesApp } from './apps/staff-member-profile';
 registerComponent('StaffMemberAccessoriesApp', StaffMemberAccessoriesApp);
 

@@ -1,5 +1,6 @@
 class StaffMembersController < ApplicationController
-  before_action :set_new_layout, only: [:index, :new, :show, :holidays, :profile, :owed_hours, :accessories, :payments]
+  before_action :set_new_layout
+  before_action :show_global_venue?, only: [:shifts]
 
   def index
     authorize! :list, :staff_members
@@ -170,6 +171,69 @@ class StaffMembersController < ApplicationController
       render "reduced_show", locals: {
                                staff_member: staff_member,
                              }
+    end
+  end
+
+  def shifts
+    unless (shifts_params_present?)
+      return redirect_to(shifts_staff_member_path(shifts_redirect_params))
+    end
+    staff_member = staff_member_from_params
+
+    raise ActiveRecord::RecordNotFound.new unless staff_member.present?
+
+    if can? :edit, staff_member
+      access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
+      accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+        user: current_user,
+        pay_rate: staff_member.pay_rate
+      ).page_pay_rates.map(&:id)
+
+      app_download_link_data = get_app_download_link_data(staff_member)
+
+      staff_shifts_data = StaffMemberShiftsIndexQuery.new(
+        staff_member: staff_member,
+        venue_id_from_filter: params[:venue_id],
+        start_date_from_filter: shifts_start_date_from_params,
+        end_date_from_filter: shifts_end_date_from_params,
+        venue_type_from_filter: shifts_venue_type_from_params,
+      ).all
+
+      accessible_venues = if current_user.has_all_venue_access?
+        Venue.all
+      else
+        current_user.venues
+      end
+
+      render locals: {
+        staff_member: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+        app_download_link_data: app_download_link_data,
+        access_token: access_token,
+        staff_types: StaffType.all,
+        venues: Venue.all,
+        pay_rates: ActiveModel::Serializer::CollectionSerializer.new(
+          PayRate.all,
+          serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+          scope: current_user
+        ),
+        gender_values: StaffMember::GENDERS,
+        accessible_venue_ids: Venue.all.pluck(:id),
+        accessible_pay_rate_ids: accessible_pay_rate_ids,
+        security_venues: SecurityVenue.all,
+        accessible_venues: accessible_venues,
+        staff_member_profile_permissions: StaffMemberProfilePermissions.new(
+          staff_member: staff_member,
+          current_user: current_user
+        ),
+        start_date: UIRotaDate.format(shifts_start_date_from_params),
+        end_date: UIRotaDate.format(shifts_end_date_from_params),
+        venue: shifts_venue_from_params,
+        venue_type: shifts_venue_type_from_params,
+      }.merge(staff_shifts_data)
+    else
+      render 'reduced_show', locals: {
+        staff_member: staff_member
+      }
     end
   end
 
@@ -388,7 +452,6 @@ class StaffMembersController < ApplicationController
   end
 
   private
-
   def accessories_tab_params_present?
     accessory_request_filter_start_date_from_params.present? &&
       accessory_request_filter_end_date_from_params.present?
@@ -512,6 +575,42 @@ class StaffMembersController < ApplicationController
     StaffMemberPaymentPageFilter::SHOW_ALL_STATUS_FILTER_VALUE
   end
 
+  def shifts_redirect_params
+    start_date = shifts_start_date_from_params || Date.current - 4.week
+    end_date = shifts_end_date_from_params || Date.current
+    {
+      end_date: UIRotaDate.format(end_date),
+      start_date: UIRotaDate.format(start_date),
+    }
+  end
+
+  def shifts_start_date_from_params
+    UIRotaDate.parse_if_present(params[:start_date])
+  end
+
+  def shifts_end_date_from_params
+    UIRotaDate.parse_if_present(params[:end_date])
+  end
+
+  def staff_member_from_params
+    query = StaffMember.where(id: params.fetch(:id))
+    query = QueryOptimiser.apply_optimisations(query, :staff_member_show)
+    query.first
+  end
+
+  def shifts_params_present?
+    shifts_start_date_from_params.present? &&
+      shifts_end_date_from_params.present?
+  end
+
+  def shifts_venue_from_params
+    accessible_venues.find_by(id: params[:venue_id])
+  end
+
+  def shifts_venue_type_from_params
+    params[:venue_type]
+  end
+
   def holiday_start_date_from_params
     UIRotaDate.parse_if_present(params["start_date"])
   end
@@ -528,11 +627,19 @@ class StaffMembersController < ApplicationController
     UIRotaDate.parse_if_present(params["payslip_end_date"])
   end
 
+  def accessible_venues
+    AccessibleVenuesQuery.new(current_user).all
+  end
+
   def get_app_download_link_data(staff_member)
     GetAppDownloadLinkData.new(staff_member: staff_member).call
   end
 
   def current_tax_year
     @current_tax_year ||= TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
+  end
+
+  def show_global_venue?
+    false
   end
 end
