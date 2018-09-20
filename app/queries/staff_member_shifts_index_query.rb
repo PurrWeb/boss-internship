@@ -69,8 +69,8 @@ class StaffMemberShiftsIndexQuery
 
     rotas_by_range = InRangeQuery.new(
       relation: rotas,
-      start_value: RotaShiftDate.new(start_date_from_filter).start_time,
-      end_value: RotaShiftDate.new(end_date_from_filter).end_time,
+      start_value: start_date_from_filter,
+      end_value: end_date_from_filter,
       start_column_name: 'date',
       end_column_name: 'date'
     ).all
