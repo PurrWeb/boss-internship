@@ -234,6 +234,14 @@
                     precision: 2
                   ) %>
                 </p>
+                <p class="boss-check__text">
+                  <% if safe_check.ash_cash_cents > 0 %>
+                    <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-green boss-button_type_no-behavior boss-check__label">ASH</span>
+                  <% end %>
+                  <% if safe_check.security_plus_cents > 0 %>
+                  <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-purple boss-button_type_no-behavior boss-check__label">S+</span>
+                  <% end %>
+                </p>
               </div>
             </div>
 
