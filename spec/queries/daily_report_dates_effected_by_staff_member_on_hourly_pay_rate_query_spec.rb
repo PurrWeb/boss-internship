@@ -108,7 +108,7 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             :finance_report,
             staff_member: staff_member,
             venue: staff_member.master_venue,
-            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+            week_start: RotaWeek.new(clock_in_day.date).start_date
           )
         end
         let(:hours_acceptance) do
@@ -152,7 +152,7 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             :finance_report,
             staff_member: staff_member,
             venue: staff_member.master_venue,
-            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+            week_start: RotaWeek.new(clock_in_day.date).start_date
           )
         end
         let(:hours_acceptance) do
@@ -196,7 +196,7 @@ describe DailyReportDatesEffectedByStaffMemberOnHourlyPayRateQuery do
             :finance_report,
             staff_member: staff_member,
             venue: staff_member.master_venue,
-            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+            week_start: RotaWeek.new(clock_in_day.date).start_date
           )
         end
         let(:hours_acceptance) do
