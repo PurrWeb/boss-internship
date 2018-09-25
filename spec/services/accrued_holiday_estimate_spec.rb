@@ -43,7 +43,7 @@ describe AccruedHolidayEstimate do
           :finance_report,
           staff_member: staff_member,
           venue: staff_member.master_venue,
-          week_start: RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date
+          week_start: RotaWeek.new(clock_in_day.date).start_date
         )
 
         HoursAcceptancePeriod.create!(
@@ -85,7 +85,7 @@ describe AccruedHolidayEstimate do
       end
     end
 
-    context 'user also has accrued coliday hours in previous year' do
+    context 'user also has accrued holiday hours in previous year' do
       # Should not increase the year count
       let(:accepted_hours_previous_year) { 70 }
       let(:last_tax_year) { TaxYear.new(current_tax_year.start_date - 2.days) }
@@ -107,7 +107,7 @@ describe AccruedHolidayEstimate do
             :finance_report,
             staff_member: clock_in_day.staff_member,
             venue: clock_in_day.staff_member.master_venue,
-            week_start: RotaWeek.new(RotaShiftDate.to_rota_date(Time.current)).start_date
+            week_start: RotaWeek.new(clock_in_day.date).start_date
           )
 
           HoursAcceptancePeriod.create!(

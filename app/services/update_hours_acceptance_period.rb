@@ -48,15 +48,15 @@ class UpdateHoursAcceptancePeriod
         accepting = (status == HoursAcceptancePeriod::ACCEPTED_STATE) && (old_status != HoursAcceptancePeriod::ACCEPTED_STATE)
         unaccecpting = (old_status == HoursAcceptancePeriod::ACCEPTED_STATE) && (status != HoursAcceptancePeriod::ACCEPTED_STATE)
 
-        week = RotaWeek.new(RotaShiftDate.to_rota_date(call_time))
         staff_member = hours_acceptance_period.staff_member
-        if staff_member.can_have_finance_reports?
+        if staff_member.can_have_finance_reports? && hours_acceptance_period.date.present?
+          finance_report_week = RotaWeek.new(hours_acceptance_period.date)
           if accepting
-            finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+            finance_report = MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: finance_report_week).call
             hours_acceptance_period.finance_report = finance_report
           elsif unaccecpting
             hours_acceptance_period.finance_report = nil
-            MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: week).call
+            MarkFinanceReportRequiringUpdate.new(staff_member: staff_member, week: finance_report_week).call
           end
         end
 

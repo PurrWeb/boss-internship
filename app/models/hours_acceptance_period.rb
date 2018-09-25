@@ -36,8 +36,8 @@ class HoursAcceptancePeriod < ActiveRecord::Base
 
   #validation
   def finance_repot_matches_date
-    if accepted_at.present? && finance_report.present?
-      errors.add(:accepted_at, 'must match finance report') if RotaWeek.new(RotaShiftDate.to_rota_date(accepted_at)).start_date != finance_report.week_start
+    if date.present? && finance_report.present?
+      errors.add(:base, 'date must match finance report') if RotaWeek.new(date).start_date != finance_report.week_start
     end
   end
 
