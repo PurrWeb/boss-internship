@@ -3,6 +3,7 @@ import oFetch from 'o-fetch';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import humanize from 'string-humanize';
+import AsyncButton from 'react-async-button';
 import pureToJs from '~/hocs/pure-to-js';
 import { VALIDATED, PENDING_VALIDATION } from '../constants';
 import { appRoutes } from '~/lib/routes';
@@ -33,6 +34,16 @@ class ClientItem extends React.Component {
             >
               {emailVerified ? humanize(VALIDATED) : humanize(PENDING_VALIDATION)}
             </p>
+            {!emailVerified && (
+              <div className="boss-table__actions">
+                <AsyncButton
+                  className="boss-button boss-button_type_extra-small boss-button_role_alert-light boss-table__action"
+                  text="Resend Verification Email"
+                  pendingText="Resending ..."
+                  onClick={() => this.props.onResendVerificationEmailClick({ id: id })}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="boss-table__cell">
@@ -63,6 +74,7 @@ class ClientItem extends React.Component {
 
 ClientItem.propTypes = {
   client: PropTypes.object.isRequired,
+  onResendVerificationEmailClick: PropTypes.func.isRequired,
 };
 
 export default ClientItem;

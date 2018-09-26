@@ -6,6 +6,7 @@ import pureToJs from '~/hocs/pure-to-js';
 import safeMoment from '~/lib/safe-moment';
 import utils from '~/lib/utils';
 import humanize from 'string-humanize';
+import AsyncButton from 'react-async-button';
 import { PENDING_VALIDATION, VALIDATED } from '../constants';
 import { appRoutes } from '~/lib/routes';
 
@@ -41,6 +42,16 @@ class ClientItemMobile extends React.Component {
               <div className="boss-indicator__label">
                 {emailVerified ? humanize(VALIDATED) : humanize(PENDING_VALIDATION)}
               </div>
+              {!emailVerified && (
+                <div className="boss-check__buttons">
+                  <AsyncButton
+                    className="boss-button boss-button_type_extra-small boss-button_role_alert-light boss-check__button boss-check__button_position_below"
+                    text="Resend Verification Email"
+                    pendingText="Resending ..."
+                    onClick={() => this.props.onResendVerificationEmailClick({ id: id })}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -85,6 +96,7 @@ class ClientItemMobile extends React.Component {
 
 ClientItemMobile.propTypes = {
   client: PropTypes.object.isRequired,
+  onResendVerificationEmailClick: PropTypes.func.isRequired,
 };
 
 export default ClientItemMobile;

@@ -109,6 +109,7 @@ ClientsPage.propTypes = {
   changeFilter: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
   getWtlClients: PropTypes.func.isRequired,
+  resendWtlClientVerificationEmailAction: PropTypes.func.isRequired,
 };
 
 export default withRouter(ClientsPage);

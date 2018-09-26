@@ -25,8 +25,17 @@ export default function http({ ...messages }, interval) {
       },
       function(error) {
         // Do something with response error
-
-        notify(errorMessage || 'There was an error', {
+        let baseErrorFromResponse;
+        if (
+          error &&
+          error.response &&
+          error.response.data &&
+          error.response.data.errors &&
+          error.response.data.errors.base
+        ) {
+          baseErrorFromResponse = error.response.data.errors.base[0];
+        }
+        notify(errorMessage || baseErrorFromResponse || 'There was an error', {
           interval: interval,
           status: 'error',
         });
