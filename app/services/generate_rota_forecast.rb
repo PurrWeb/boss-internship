@@ -23,7 +23,12 @@ class GenerateRotaForecast
       pr_total_cents +
       kitchen_total_cents +
       security_total_cents +
-      overhead_total_cents
+      overhead_total_cents +
+      tax_and_ni
+  end
+
+  def tax_and_ni
+    (overhead_total_cents + kitchen_total_cents + staff_total_cents) * 0.08
   end
 
   def staff_total_cents

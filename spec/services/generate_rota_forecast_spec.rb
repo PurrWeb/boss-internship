@@ -52,7 +52,8 @@ RSpec.describe GenerateRotaForecast do
       end
 
       specify 'staffs hours should show up in total' do
-        expect(result.total_cents).to eq(3000)
+        tax = (result.overhead_total_cents + result.kitchen_total_cents + result.staff_total_cents) * 0.08
+        expect(result.total_cents).to eq(3000 + tax)
       end
 
       specify 'staffs hours should show up in staff_total_cents' do
@@ -116,13 +117,14 @@ RSpec.describe GenerateRotaForecast do
           :rota_shift,
           staff_member: staff_member,
           rota: rota,
-          starts_at: rota_shift_date.start_time ,
+          starts_at: rota_shift_date.start_time,
           ends_at: rota_shift_date.start_time + 2.hours
         )
       end
 
       specify 'kitchen_staffs hours should show up in total' do
-        expect(result.total_cents).to eq(3000)
+        tax = (result.overhead_total_cents + result.kitchen_total_cents + result.staff_total_cents) * 0.08
+        expect(result.total_cents).to eq(3000 + tax)
       end
 
       specify 'kitchen_staffs hours should show up in kitchen staffs total' do

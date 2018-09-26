@@ -34,6 +34,7 @@ export default class RotaForecast extends React.Component {
             {this.getForecastHeaderRow()}
             {this.getErrorComponent()}
             {this.getForecastBody()}
+            {this.getForecastFooter()}
           </div>
         </div>
     }
@@ -56,6 +57,18 @@ export default class RotaForecast extends React.Component {
             {dataRowComponents}
         </div>;
     }
+
+    getForecastFooter() {
+        var dataRows = getFooterRows(this.props.rotaForecast);
+        var dataRowComponents = dataRows.map(
+            (row) => this.getDataRowComponent(row)
+        );
+
+        return <div className="boss-forecast__group boss-forecast__group_role_footer">
+            {dataRowComponents}
+        </div>;
+    }
+
     getForecastHeaderRow(){
         var forecastedTakeComponent = <div>
             &pound;
@@ -113,10 +126,9 @@ export default class RotaForecast extends React.Component {
 
     }
     getDataRowComponent(row){
-      const rowClassName = row.title === 'Total' ? 'boss-forecast__row boss-forecast__row_role_footer' : 'boss-forecast__row';
       const rowPercentageClass = row.percentage > 0 ? 'boss-button_role_secondary' : 'boss-button_role_alert';
-      
-      return <div className={rowClassName} key={row.title}>
+
+      return <div className="boss-forecast__row" key={row.title}>
           <div className="boss-forecast__cell">
               {row.title}
           </div>
@@ -124,12 +136,30 @@ export default class RotaForecast extends React.Component {
               &pound;{utils.formatMoney(row.total/100)}
           </div>
           <div className="boss-forecast__cell">
-            <p className={'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' + rowPercentageClass}>
+             {row.percentage !== undefined && <p className={'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' + rowPercentageClass}>
               {row.percentage !== null ? (Math.round(row.percentage*100)/100) + "%" : "0%"}
-              </p>
+              </p>}
           </div>
       </div>
     }
+}
+
+function getTaxAndNI(rotaForecast) {
+    return (rotaForecast.overhead_total_cents + rotaForecast.kitchen_total_cents + rotaForecast.staff_total_cents) * 0.08;
+}
+
+function getFooterRows(rotaForecast) {
+    return [
+        {
+            title: "Tax & NI",
+            total: getTaxAndNI(rotaForecast),
+        },
+        {
+            title: "Total",
+            total: rotaForecast.total_cents,
+            percentage: rotaForecast.total_percentage
+        }
+    ]
 }
 
 function getDataRows(rotaForecast){
@@ -159,10 +189,5 @@ function getDataRows(rotaForecast){
             total: rotaForecast.security_total_cents,
             percentage: rotaForecast.security_total_percentage
         },
-        {
-            title: "Total",
-            total: rotaForecast.total_cents,
-            percentage: rotaForecast.total_percentage
-        }
     ];
 }
