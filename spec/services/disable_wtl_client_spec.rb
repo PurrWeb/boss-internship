@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe DisableWtlClient, :wtl do
-  let!(:wtl_client) { FactoryGirl.create(:wtl_client, status: 0) }
+  let!(:wtl_client) { FactoryGirl.create(:wtl_client, :enabled) }
 
   let(:service) do
     DisableWtlClient.new(wtl_client: wtl_client)

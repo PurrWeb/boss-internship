@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe EnableWtlClientApiService, :wtl do
-  let!(:wtl_client) { FactoryGirl.create(:wtl_client, status: 1) }
+  let!(:wtl_client) { FactoryGirl.create(:wtl_client, :disabled) }
 
   let(:service) do
     EnableWtlClientApiService.new(wtl_client: wtl_client)
@@ -14,7 +14,7 @@ describe EnableWtlClientApiService, :wtl do
       expect(result).to be_success
     end
 
-    it "should disable a wtl client" do
+    it "should enable a wtl client" do
       expect(result.wtl_client.enabled?).to eq(true)
     end
   end
