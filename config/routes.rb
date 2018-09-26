@@ -278,6 +278,7 @@ Rails.application.routes.draw do
             post :disable
             post :enable
             get :history
+            post :resend_verification_email
           end
         end
 
