@@ -53,6 +53,11 @@ module Api
         end
       end
 
+      def history
+        history = WtlClientHistoryService.new(wtl_client: wtl_client_from_params).call
+        render json: {history: history}, status: 200
+      end
+
       private
 
       def wtl_client_from_params
