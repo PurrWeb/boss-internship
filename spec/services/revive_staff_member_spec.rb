@@ -2,10 +2,12 @@ require 'rails_helper'
 
 describe ReviveStaffMember do
   let(:requester) { FactoryGirl.create(:user) }
+  let(:sage_id) { 'SAGE_ID' }
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
-      :disabled
+      :disabled,
+      sage_id: sage_id
     )
   end
   let(:staff_member_params) do
@@ -27,6 +29,10 @@ describe ReviveStaffMember do
     specify 'staff member disabled_by_user is not requester' do
       expect(staff_member.disabled_by_user).to_not eq(requester)
     end
+
+    specify 'sage id is set' do
+      expect(staff_member.sage_id).to eq(sage_id)
+    end
   end
 
   context 'after call' do
@@ -40,6 +46,11 @@ describe ReviveStaffMember do
 
     context 'when update is successful' do
       let(:update_result) { true }
+
+      specify 'sage id is cleared' do
+        expect(staff_member).to receive(:sage_id=).with(nil)
+        service.call
+      end
 
       specify 'staff member is updated' do
         expect(staff_member).to(
@@ -90,6 +101,11 @@ describe ReviveStaffMember do
         specify 'staff member is not enabled' do
           service.call
           expect(staff_member.reload).to_not be_enabled
+        end
+
+        specify 'sage id is still set' do
+          service.call
+          expect(staff_member.reload.sage_id).to eq(sage_id)
         end
       end
     end

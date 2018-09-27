@@ -29,6 +29,9 @@ class ReviveStaffMember
       staff_member.assign_attributes(staff_member_params)
       starts_at_changed = staff_member.starts_at_changed?
 
+      # Sage ID changes when restarting a staff member
+      staff_member.sage_id = nil
+
       StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
       result = staff_member.save && starts_at_changed

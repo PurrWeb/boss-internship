@@ -18,6 +18,7 @@ class UpdateStaffMemberEmploymentDetails
 
     ActiveRecord::Base.transaction do
       old_master_venue = staff_member.master_venue
+      old_sage_id = staff_member.sage_id
       old_pay_rate = staff_member.pay_rate
 
       staff_member.assign_attributes(params)
@@ -27,6 +28,7 @@ class UpdateStaffMemberEmploymentDetails
       # Used below for system updates
       pay_rate_changed = staff_member.pay_rate_id_changed?
       master_venue_changed = old_master_venue != staff_member.master_venue
+      sage_id_changed = old_sage_id != staff_member.sage_id
 
       if staff_member.security? && staff_member.sia_badge_expiry_date.present? && staff_member.sia_badge_expiry_date_changed?
         if staff_member.sia_badge_expiry_date < now
@@ -43,6 +45,11 @@ class UpdateStaffMemberEmploymentDetails
         staff_member: staff_member,
         old_master_venue: old_master_venue
       )
+
+      #Sage ID at new venue is different
+      if master_venue_changed && !sage_id_changed
+        staff_member.sage_id = nil
+      end
 
       result = staff_member.save
       raise ActiveRecord::Rollback unless result

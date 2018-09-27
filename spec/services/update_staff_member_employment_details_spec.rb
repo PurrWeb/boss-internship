@@ -12,11 +12,13 @@ describe UpdateStaffMemberEmploymentDetails do
   let(:old_pay_rate) do
     FactoryGirl.create(:pay_rate, :hourly, cents: old_pay_rate_cents)
   end
+  let(:sage_id) { 'SAGE_ID' }
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
       master_venue: old_venue,
-      pay_rate: old_pay_rate
+      pay_rate: old_pay_rate,
+      sage_id: sage_id
     )
   end
   let(:service) do
@@ -144,6 +146,12 @@ describe UpdateStaffMemberEmploymentDetails do
       allow(migrate_finance_report_venue_service_instance).to receive(:call)
     end
 
+    context 'before call' do
+      specify 'sage id should be set' do
+        expect(staff_member.sage_id).to eq(sage_id)
+      end
+    end
+
     it 'should succceed' do
       call_service
       expect(result.success?).to eq(true)
@@ -152,6 +160,11 @@ describe UpdateStaffMemberEmploymentDetails do
     it 'should update the pay rate' do
       call_service
       expect(result.staff_member.master_venue).to eq(new_master_venue)
+    end
+
+    it 'should clear the staff members sage id' do
+      call_service
+      expect(staff_member.reload.sage_id).to eq(nil)
     end
 
     context 'incomplete finance reports exist' do
