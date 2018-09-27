@@ -43,7 +43,7 @@ class DashboardDropdownFilter extends React.PureComponent {
                   <span className="boss-form__label-text">Card number</span>
                   <input
                     name="card-nmber"
-                    type="number"
+                    type="text"
                     className="boss-form__input"
                     value={this.state.filter}
                     onChange={this.handleFilterChange}

@@ -77,7 +77,7 @@ class Page extends React.Component {
           }
           activeFilter={<DashboardActiveFilter onActiveFilterChange={this.handleActiveFilterChange} />}
         />
-        <LoadMore items={cards}>
+        <LoadMore items={cards} perPage={20}>
           {({ visibleItems, onLoadMore }) => (
             <CardList
               cards={visibleItems}

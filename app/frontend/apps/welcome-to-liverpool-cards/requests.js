@@ -11,3 +11,8 @@ export const enableCardRequest = params => {
 
   return http().post(`/api/v1/wtl_cards/${number}/enable`);
 };
+
+export const fetchWtlCardHistoryRequest = params => {
+  const number = oFetch(params, 'number');
+  return http({ showNotification: false }).get(`/api/v1/wtl_cards/${number}/history`);
+};
