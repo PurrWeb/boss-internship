@@ -54,7 +54,7 @@ class ClientsPage extends React.Component {
           total={total}
           dropdownFilter={<DashboardDropdownFilter {...filter} onFilterUpdate={this.handleDropdownFilterUpdate} />}
         />
-        <LoadMore items={clients}>
+        <LoadMore items={clients} perPage={20}>
           {({ visibleItems, onLoadMore }) => (
             <ClientList
               clients={visibleItems}

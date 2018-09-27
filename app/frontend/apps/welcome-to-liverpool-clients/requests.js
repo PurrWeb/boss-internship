@@ -12,6 +12,11 @@ export const enableClientRequest = params => {
   return http().post(`/api/v1/wtl_clients/${id}/enable`);
 };
 
+export const fetchWtlClientHistoryRequest = params => {
+  const id = oFetch(params, 'id');
+  return http().get(`/api/v1/wtl_clients/${id}/history`);
+};
+
 export const updateClientProfileRequest = params => {
   const id = oFetch(params, 'id');
   const mDateOfBirth = oFetch(params, 'dateOfBirth');
