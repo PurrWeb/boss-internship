@@ -44,6 +44,11 @@ module Api
         end
       end
 
+      def history
+        history = WtlCardHistoryService.new(wtl_card: wtl_card_from_card_number).call
+        render json: {history: history}, status: 200
+      end
+
       private
 
       def wtl_card_from_card_number

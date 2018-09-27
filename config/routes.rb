@@ -269,6 +269,7 @@ Rails.application.routes.draw do
           member do
             post :disable
             post :enable
+            get :history
           end
         end
 
