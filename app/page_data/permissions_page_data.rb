@@ -348,12 +348,12 @@ class PermissionsPageData
       items: [
         {
           description: "WTL Cards",
-          permitted: false,
+          permitted: true,
           path: @path.wtl_cards_path,
         },
         {
           description: "WTL Clients",
-          permitted: false,
+          permitted: true,
           path: @path.wtl_clients_path,
         },
       ],
