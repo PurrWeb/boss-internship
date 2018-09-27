@@ -11,7 +11,7 @@ class WtlCardHistoryService
       changeset = version.changeset
       full_name = whodunnit.present? ? whodunnit["full_name"] : "System"
 
-      acc[created_at] = {
+      acc[created_at.iso8601] = {
         by: full_name,
         to: nil,
         event: event,
@@ -27,7 +27,7 @@ class WtlCardHistoryService
       client = history.wtl_client
       user = history.user
       created_at = history.created_at
-      acc[created_at] = {
+      acc[created_at.iso8601] = {
         by: user.andand.full_name,
         to: client.andand.full_name,
         event: history_event(client: client, user: user),
