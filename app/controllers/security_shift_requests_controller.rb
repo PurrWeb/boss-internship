@@ -31,7 +31,7 @@ class SecurityShiftRequestsController < ApplicationController
     rota_shifts = RotaShift
                     .joins(:security_shift_request)
                     .where(security_shift_requests: {id: assigned_security_shift_requests})
-                    .includes([:staff_member])
+                    .includes([:staff_member, :rota])
     staff_members = StaffMember
                       .where(id: rota_shifts.pluck(:staff_member_id).uniq)
                       .includes([:name, :staff_type])
