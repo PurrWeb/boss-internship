@@ -93,7 +93,8 @@ module Api
 
       def filter_from_params
         {
-          card_number: params[:cardNumber],
+          card_number: params[:card_number],
+          status: params[:status]
         }
       end
 
