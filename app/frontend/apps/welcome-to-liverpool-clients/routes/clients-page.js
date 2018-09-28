@@ -7,7 +7,7 @@ import {
   statusFilterSelector,
   cardNumberFilterSelector,
 } from '../selectors';
-import { changeFilter, loadMore } from '../redux/actions';
+import { changeFilter, loadMore, getWtlClients, filterWtlClients } from '../redux/actions';
 
 const mapStateToProps = state => {
   return {
@@ -26,6 +26,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   changeFilter,
   loadMore,
+  getWtlClients,
+  filterWtlClients,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClientsPage);

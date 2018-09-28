@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import oFetch from 'o-fetch';
 import Immutable from 'immutable';
+import Spinner from '~/components/spinner';
 import Dashboard from './dashboard';
 import queryString from 'query-string';
 import ClientList from './client-list';
@@ -11,15 +12,22 @@ import { PureToJSClientItemMobile } from './client-item-mobile';
 import DashboardDropdownFilter from './dashboard-dropdown-filter';
 
 class ClientsPage extends React.Component {
+  state = {
+    fetching: true,
+  };
+
   componentDidMount = async () => {
-    const filter = queryString.parse(this.props.location.search);
-    oFetch(this.props, 'changeFilter')({
-      name: filter.name ? filter.name : null,
-      email: filter.email ? filter.email : null,
-      status: filter.status ? filter.status : null,
-      cardNumber: filter.card_number ? filter.card_number : null,
-    });
+    const filterQuery = queryString.parse(this.props.location.search);
+    const filter = {
+      name: filterQuery.name ? filterQuery.name : null,
+      email: filterQuery.email ? filterQuery.email : null,
+      status: filterQuery.status ? filterQuery.status : null,
+      cardNumber: filterQuery.card_number ? filterQuery.card_number : null,
+    };
+    oFetch(this.props, 'changeFilter')(filter);
     document.title = 'Welcome to Liverpool Clients';
+    await this.props.getWtlClients(filter);
+    this.setState({ fetching: false });
   };
 
   handleDropdownFilterUpdate = filter => {
@@ -35,9 +43,24 @@ class ClientsPage extends React.Component {
       pathname: `/`,
       search: `?${filterQuery}`,
     });
+    return this.props.filterWtlClients(filter);
+  };
+
+  onLoadMore = () => {
+    const filterQuery = queryString.parse(this.props.location.search);
+    const filter = {
+      name: filterQuery.name ? filterQuery.name : null,
+      email: filterQuery.email ? filterQuery.email : null,
+      status: filterQuery.status ? filterQuery.status : null,
+      cardNumber: filterQuery.card_number ? filterQuery.card_number : null,
+    };
+    return this.props.loadMore(filter);
   };
 
   render() {
+    if (this.state.fetching) {
+      return <Spinner />;
+    }
     const [
       clients,
       totalCount,
@@ -70,7 +93,7 @@ class ClientsPage extends React.Component {
         <ClientList
           clients={clients}
           total={totalCount}
-          onLoadMore={this.props.loadMore}
+          onLoadMore={this.onLoadMore}
           itemRenderer={client => <PureToJSClientItem client={client} />}
           itemRendererMobile={client => <PureToJSClientItemMobile client={client} />}
         />
@@ -81,12 +104,11 @@ class ClientsPage extends React.Component {
 
 ClientsPage.propTypes = {
   clients: PropTypes.instanceOf(Immutable.List).isRequired,
-  totalCount: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
-  totalPages: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
   changeFilter: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
+  getWtlClients: PropTypes.func.isRequired,
 };
 
 export default withRouter(ClientsPage);

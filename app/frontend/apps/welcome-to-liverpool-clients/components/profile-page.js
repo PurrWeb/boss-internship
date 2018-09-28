@@ -19,16 +19,33 @@ class ProfilePage extends React.PureComponent {
     startDate: null,
     endDate: null,
     fetching: true,
+    clientFetching: false,
     history: {},
+  };
+
+  componentWillReceiveProps = async nextProps => {
+    if (!this.props.client && nextProps.client) {
+      const fullName = oFetch(nextProps.client, 'fullName');
+      document.title = `${fullName} Profile`;
+      const response = await fetchWtlClientHistoryRequest(nextProps.client);
+      const history = oFetch(response, 'data.history');
+      this.setState({ fetching: false, history });
+    }
   };
 
   componentDidMount = async () => {
     const client = oFetch(this.props, 'client');
-    const fullName = oFetch(client, 'fullName');
-    document.title = `${fullName} Profile`;
-    const response = await fetchWtlClientHistoryRequest(client);
-    const history = oFetch(response, 'data.history');
-    this.setState({ fetching: false, history });
+    if (!client) {
+      this.setState({ clientFetching: true });
+      await this.props.getWtlClient({ id: this.props.clientId });
+      this.setState({ clientFetching: false });
+    } else {
+      const fullName = oFetch(client, 'fullName');
+      document.title = `${fullName} Profile`;
+      const response = await fetchWtlClientHistoryRequest(client);
+      const history = oFetch(response, 'data.history');
+      this.setState({ fetching: false, history });
+    }
   };
 
   handleFilter = (startDate, endDate) => {
@@ -66,6 +83,10 @@ class ProfilePage extends React.PureComponent {
   };
 
   render() {
+    if (this.state.clientFetching) {
+      return <Spinner />;
+    }
+
     const [client, enableClientRequested, disableClientRequested] = oFetch(
       this.props,
       'client',

@@ -22,6 +22,16 @@ export default handleActions(
         .set('totalPages', totalPages)
         .set('perPage', perPage);
     },
+    [types.SET_WTL_CLIENTS]: (state, action) => {
+      const totalCount = oFetch(action, 'payload.totalCount');
+      const totalPages = oFetch(action, 'payload.totalPages');
+      const perPage = oFetch(action, 'payload.perPage');
+      return state
+        .set('totalCount', totalCount)
+        .set('totalPages', totalPages)
+        .set('perPage', perPage)
+        .set('pageNumber', 1);
+    },
     [types.INCREMENT_PAGE]: (state, action) => {
       return state.update('pageNumber', pageNumber => {
         return parseInt(pageNumber) + 1;

@@ -11,6 +11,14 @@ export default handleActions(
       const clients = oFetch(action, 'payload.clients');
       return state.concat(Immutable.fromJS(clients));
     },
+    [types.LOAD_WTL_CLIENT]: (state, action) => {
+      const client = oFetch(action, 'payload.client');
+      return state.push(Immutable.fromJS(client));
+    },
+    [types.SET_WTL_CLIENTS]: (state, action) => {
+      const clients = oFetch(action, 'payload.clients');
+      return Immutable.fromJS(clients);
+    },
     [types.ENABLE_CLIENT]: (state, action) => {
       const client = oFetch(action, 'payload.client');
       const clientId = oFetch(client, 'id');

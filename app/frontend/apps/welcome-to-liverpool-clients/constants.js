@@ -1,6 +1,6 @@
 import humanize from 'string-humanize';
-export const VALIDATED = 'validated';
-export const PENDING_VALIDATION = 'pending_validation';
+export const VALIDATED = 'verified';
+export const PENDING_VALIDATION = 'pending_verification';
 
 export const STATUS_OPTIONS = [
   {

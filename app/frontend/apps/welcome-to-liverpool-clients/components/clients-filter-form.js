@@ -33,13 +33,17 @@ class ClientsFilterForm extends React.Component {
             name="cardNumber"
             label="Card Number"
             component={BossFormInput}
-            type="number"
+            type="text"
             className="boss-form__field_layout_sixth"
           />
         </div>
 
         <div className="boss-form__field boss-form__field_justify_end">
-          <button className="boss-button boss-form__submit boss-form__submit_adjust_single" type="submit">
+          <button
+            disabled={this.props.submitting}
+            className="boss-button boss-form__submit boss-form__submit_adjust_single"
+            type="submit"
+          >
             Update
           </button>
         </div>
@@ -49,6 +53,5 @@ class ClientsFilterForm extends React.Component {
 }
 
 export default reduxForm({
-  enableReinitialize: true,
   form: 'clients-filter-form',
 })(ClientsFilterForm);

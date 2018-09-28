@@ -12,29 +12,19 @@ import Spinner from '~/components/spinner';
 import { getWtlClientsFilterQueryParams } from './selectors';
 
 export default class WelcomeToLiverpoolClients extends Component {
-  state = {
-    fetching: true,
-  };
-
-  componentDidMount = async () => {
+  componentWillMount = () => {
     const { accessToken } = this.props;
     if (!accessToken) {
       throw new Error('Access token must be present');
     }
-    const filter = getWtlClientsFilterQueryParams();
+
     window.boss.accessToken = accessToken;
 
     this.store = configureStore(reducers);
     this.store.dispatch(loadInitialData(this.props));
-    await this.store.dispatch(getWtlClients(filter));
-    this.setState({ fetching: false });
   };
 
   render() {
-    if (this.state.fetching) {
-      return <Spinner />;
-    }
-
     return (
       <Provider store={this.store}>
         <Router>

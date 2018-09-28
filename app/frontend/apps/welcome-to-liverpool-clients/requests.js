@@ -8,6 +8,13 @@ export const getWtlClientsRequest = params => {
   });
 };
 
+export const getWtlClientRequest = params => {
+  const id = oFetch(params, 'id');
+  return http().get(`/api/v1/wtl_clients/${id}`, {
+    params,
+  });
+};
+
 export const disableClientRequest = params => {
   const id = oFetch(params, 'id');
   return http().post(`/api/v1/wtl_clients/${id}/disable`);

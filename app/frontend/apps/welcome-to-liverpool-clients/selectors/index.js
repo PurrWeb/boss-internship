@@ -29,52 +29,8 @@ export const getClientById = createSelector(clientsSelector, clientIdSelector, (
   return clients.find(client => client.get('id').toString() === clientId.toString());
 });
 
-export const getClientsFilteredByName = createSelector(clientsSelector, nameFilterSelector, (clients, name) => {
-  if (name) {
-    return utils.staffMemberFilterFullName(name, clients);
-  }
+export const getClients = createSelector(clientsSelector, clients => {
   return clients;
 });
 
-export const getClientsFilteredByEmail = createSelector(
-  getClientsFilteredByName,
-  emailFilterSelector,
-  (clients, email) => {
-    if (email) {
-      return clients.filter(client => client.get('email').includes(email));
-    }
-    return clients;
-  },
-);
-
-export const getClientsFilteredByStatus = createSelector(
-  getClientsFilteredByEmail,
-  statusFilterSelector,
-  (clients, status) => {
-    if (status && status === VALIDATED) {
-      return clients.filter(client => client.get('emailVerified'));
-    }
-    if (status && status === PENDING_VALIDATION) {
-      return clients.filter(client => !client.get('emailVerified'));
-    }
-    return clients;
-  },
-);
-
-export const getClientsFilteredByNumber = createSelector(
-  getClientsFilteredByStatus,
-  cardNumberFilterSelector,
-  (clients, cardNumber) => {
-    if (cardNumber) {
-      return clients.filter(client =>
-        client
-          .get('cardNumber')
-          .toString()
-          .includes(cardNumber),
-      );
-    }
-    return clients;
-  },
-);
-
-export const getFilteredClients = getClientsFilteredByNumber;
+export const getFilteredClients = getClients;

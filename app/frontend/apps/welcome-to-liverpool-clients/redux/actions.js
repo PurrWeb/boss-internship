@@ -6,11 +6,14 @@ import {
   disableClientRequest,
   updateClientProfileRequest,
   getWtlClientsRequest,
+  getWtlClientRequest,
 } from '../requests';
 import { getWtlClientsFilterQueryParams } from '../selectors';
 
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
 export const loadWtlClients = createAction(types.LOAD_WTL_CLIENTS);
+export const loadWtlClient = createAction(types.LOAD_WTL_CLIENT);
+export const setWtlClients = createAction(types.SET_WTL_CLIENTS);
 export const changeFilter = createAction(types.CHANGE_FILTER);
 
 export const enableClient = createAction(types.ENABLE_CLIENT);
@@ -22,14 +25,35 @@ export const getWtlClients = params => (dispatch, getState) => {
   const pageNumber = getState().getIn(['pagination', 'pageNumber']);
   return getWtlClientsRequest({ ...params, page: pageNumber }).then(response => {
     const data = oFetch(response, 'data');
+    dispatch(setWtlClients(data));
+  });
+};
+
+export const getWtlClient = params => (dispatch, getState) => {
+  return getWtlClientRequest(params).then(response => {
+    const data = oFetch(response, 'data');
+    dispatch(loadWtlClient(data));
+  });
+};
+
+export const appendWtlClients = params => (dispatch, getState) => {
+  const pageNumber = getState().getIn(['pagination', 'pageNumber']);
+  return getWtlClientsRequest({ ...params, page: pageNumber }).then(response => {
+    const data = oFetch(response, 'data');
     dispatch(loadWtlClients(data));
   });
 };
 
-export const loadMore = () => dispatch => {
+export const filterWtlClients = params => (dispatch, getState) => {
+  return getWtlClientsRequest({ ...params, page: 1 }).then(response => {
+    const data = oFetch(response, 'data');
+    dispatch(setWtlClients(data));
+  });
+};
+
+export const loadMore = filter => dispatch => {
   dispatch(incrementPage());
-  const filter = getWtlClientsFilterQueryParams();
-  return dispatch(getWtlClients(filter));
+  return dispatch(appendWtlClients(filter));
 };
 
 export const enableClientRequested = params => dispatch => {
