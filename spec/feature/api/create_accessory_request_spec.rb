@@ -61,17 +61,37 @@ RSpec.describe 'Staff member create accessory requests API endpoint' do
         expect(staff_member.accessory_requests.count).to eq(1)
       end
 
-      it 'it should return created accessory' do
-        json = JSON.parse(create_response.body).except("createdAt", "updatedAt", "timeline")
+      it 'it should return created accessory data' do
+        json = JSON.parse(create_response.body)
+
         accessory_request = staff_member.accessory_requests.first
-        expect(json).to eq({
+        accessory_request_json = json.fetch("accessoryRequest")
+        timeline_json = accessory_request_json.fetch("timeline")
+        accessory_request_attributes_json = accessory_request_json.
+          except("createdAt", "updatedAt", "timeline")
+
+        expect(accessory_request_attributes_json).to eq({
           "id" => accessory_request.id,
-          "frozen" => accessory_request.frozen?,
           "hasRefundRequest" => accessory_request.has_refund_request?,
           "accessoryName" => accessory_request.accessory.name,
           "size" => accessory_request.size,
           "status" => accessory_request.current_state,
           "refundRequestStatus" => nil,
+          "requestFrozen" => accessory_request.frozen?,
+          "payslipDate" => nil,
+          "refundFrozen" => nil,
+          "refundPayslipDate" => nil
+        })
+
+        expect(timeline_json.count).to eq(1)
+        expect(timeline_json.first.fetch("createdAt")).to be_present
+        expect(timeline_json.first.except("createdAt")).to eq({
+          "requester" => {
+            "id" => user.id,
+            "fullName" => user.full_name
+          },
+          "state" => "pending",
+          "requestType"=>"accessoryRequest"
         })
       end
     end
