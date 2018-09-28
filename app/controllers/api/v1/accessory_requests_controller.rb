@@ -19,9 +19,10 @@ module Api
         end
         accessories = all_venue_accessories
           .where(id: (venue_accessories_requests.in_state(:pending, :accepted).pluck(:accessory_id) + refund_request_accessory_ids))
-        accessory_requests = AccessoryRequest.where(accessory_id: accessories.pluck(:id))
-        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending, :accepted).where(accessory_request_id: accessory_requests.pluck(:id))
-        staff_members = StaffMember.where(id: accessory_requests.pluck(:staff_member_id))
+        all_accessory_requests = AccessoryRequest.where(accessory_id: accessories.pluck(:id))
+        accessory_requests = all_accessory_requests.in_state([:pending, :accepted])
+        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending, :accepted).where(accessory_request_id: all_accessory_requests.pluck(:id))
+        staff_members = StaffMember.where(id: accessory_requests.pluck(:staff_member_id).concat(accessory_refund_requests.pluck(:staff_member_id)))
 
         paginated_accessory = accessories.paginate(
           page: page_from_params,
