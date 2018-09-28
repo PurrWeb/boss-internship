@@ -273,7 +273,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :wtl_clients, only: [:update] do
+        resources :wtl_clients, only: [:index, :update] do
           member do
             post :disable
             post :enable

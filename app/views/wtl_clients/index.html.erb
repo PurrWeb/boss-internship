@@ -1,8 +1,4 @@
 <%= react_component('WelcomeToLiverpoolClients', {
   accessToken: access_token,
-  clients: ActiveModel::Serializer::CollectionSerializer.new(
-    wtl_clients,
-    serializer: Api::V1::WtlClients::WtlClientSerializer,
-  ),
   universities: universities,
 }) %>
