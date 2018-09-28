@@ -17,17 +17,21 @@ class SecurityShiftRequestsController < ApplicationController
     access_token = current_user.current_access_token ||
                     WebApiAccessToken.new(user: current_user).persist!
 
-    security_shift_requests = InRangeQuery.new({
-                                relation: venue_from_params.security_shift_requests.includes([:created_shift, :creator]),
-                                start_value: RotaShiftDate.new(week.start_date).start_time,
-                                end_value: RotaShiftDate.new(week.end_date).end_time,
-                              }).all
+    venue_security_shift_requests = venue_from_params.
+      security_shift_requests.
+      includes([:created_shift, :creator])
 
-    assigned_security_shift_requests = security_shift_requests.in_state(:assigned)
+    security_shift_requests = InRangeQuery.new({
+      relation: venue_security_shift_requests.in_state([:pending, :accepted]),
+      start_value: RotaShiftDate.new(week.start_date).start_time,
+      end_value: RotaShiftDate.new(week.end_date).end_time,
+    }).all
+
+    assigned_security_shift_requests = venue_security_shift_requests.in_state(:assigned)
     rota_shifts = RotaShift
                     .joins(:security_shift_request)
                     .where(security_shift_requests: {id: assigned_security_shift_requests})
-                    .includes([:staff_member])
+                    .includes([:staff_member, :rota])
     staff_members = StaffMember
                       .where(id: rota_shifts.pluck(:staff_member_id).uniq)
                       .includes([:name, :staff_type])
