@@ -2,6 +2,7 @@ import { combineReducers } from 'redux-immutable';
 import clients from './clients';
 import filter from './filter';
 import universities from './universities';
+import pagination from './pagination';
 import { reducer as formReducer } from 'redux-form/immutable';
 
 export default combineReducers({
@@ -9,4 +10,5 @@ export default combineReducers({
   filter,
   form: formReducer,
   universities,
+  pagination,
 });

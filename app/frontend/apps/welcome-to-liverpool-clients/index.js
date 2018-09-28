@@ -4,24 +4,37 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import configureStore from '~/apps/store';
 
 import reducers from './redux/reducers';
-import { loadInitialData } from './redux/actions';
+import { loadInitialData, getWtlClients } from './redux/actions';
 import ClientsPage from './routes/clients-page';
 import ProfilePage from './routes/profile-page';
 import ProfileEdit from './routes/profile-edit';
+import Spinner from '~/components/spinner';
+import { getWtlClientsFilterQueryParams } from './selectors';
 
 export default class WelcomeToLiverpoolClients extends Component {
-  componentWillMount() {
+  state = {
+    fetching: true,
+  };
+
+  componentDidMount = async () => {
     const { accessToken } = this.props;
     if (!accessToken) {
       throw new Error('Access token must be present');
     }
+    const filter = getWtlClientsFilterQueryParams();
     window.boss.accessToken = accessToken;
 
     this.store = configureStore(reducers);
     this.store.dispatch(loadInitialData(this.props));
-  }
+    await this.store.dispatch(getWtlClients(filter));
+    this.setState({ fetching: false });
+  };
 
   render() {
+    if (this.state.fetching) {
+      return <Spinner />;
+    }
+
     return (
       <Provider store={this.store}>
         <Router>

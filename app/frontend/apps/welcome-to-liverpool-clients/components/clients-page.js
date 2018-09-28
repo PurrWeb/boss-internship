@@ -9,10 +9,9 @@ import ClientList from './client-list';
 import { PureToJSClientItem } from './client-item';
 import { PureToJSClientItemMobile } from './client-item-mobile';
 import DashboardDropdownFilter from './dashboard-dropdown-filter';
-import LoadMore from '~/components/load-more/load-more-children';
 
 class ClientsPage extends React.Component {
-  componentDidMount() {
+  componentDidMount = async () => {
     const filter = queryString.parse(this.props.location.search);
     oFetch(this.props, 'changeFilter')({
       name: filter.name ? filter.name : null,
@@ -21,10 +20,11 @@ class ClientsPage extends React.Component {
       cardNumber: filter.card_number ? filter.card_number : null,
     });
     document.title = 'Welcome to Liverpool Clients';
-  }
+  };
 
   handleDropdownFilterUpdate = filter => {
-    oFetch(this.props, 'changeFilter')(filter);
+    const changeFilter = oFetch(this.props, 'changeFilter');
+    changeFilter(filter);
     const filterQuery = queryString.stringify({
       name: filter.name ? filter.name : undefined,
       email: filter.email ? filter.email : undefined,
@@ -38,10 +38,23 @@ class ClientsPage extends React.Component {
   };
 
   render() {
-    const [clients, total, nameFilter, emailFilter, statusFilter, cardNumberFilter] = oFetch(
+    const [
+      clients,
+      totalCount,
+      totalPages,
+      perPage,
+      pageNumber,
+      nameFilter,
+      emailFilter,
+      statusFilter,
+      cardNumberFilter,
+    ] = oFetch(
       this.props,
       'clients',
-      'total',
+      'totalCount',
+      'totalPages',
+      'perPage',
+      'pageNumber',
       'nameFilter',
       'emailFilter',
       'statusFilter',
@@ -51,20 +64,16 @@ class ClientsPage extends React.Component {
     return (
       <main className="boss-page-main">
         <Dashboard
-          total={total}
+          total={totalCount}
           dropdownFilter={<DashboardDropdownFilter {...filter} onFilterUpdate={this.handleDropdownFilterUpdate} />}
         />
-        <LoadMore items={clients} perPage={20}>
-          {({ visibleItems, onLoadMore }) => (
-            <ClientList
-              clients={visibleItems}
-              total={clients.size}
-              onLoadMore={onLoadMore}
-              itemRenderer={client => <PureToJSClientItem client={client} />}
-              itemRendererMobile={client => <PureToJSClientItemMobile client={client} />}
-            />
-          )}
-        </LoadMore>
+        <ClientList
+          clients={clients}
+          total={totalCount}
+          onLoadMore={this.props.loadMore}
+          itemRenderer={client => <PureToJSClientItem client={client} />}
+          itemRendererMobile={client => <PureToJSClientItemMobile client={client} />}
+        />
       </main>
     );
   }
@@ -72,8 +81,12 @@ class ClientsPage extends React.Component {
 
 ClientsPage.propTypes = {
   clients: PropTypes.instanceOf(Immutable.List).isRequired,
-  total: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number.isRequired,
   changeFilter: PropTypes.func.isRequired,
+  loadMore: PropTypes.func.isRequired,
 };
 
 export default withRouter(ClientsPage);
