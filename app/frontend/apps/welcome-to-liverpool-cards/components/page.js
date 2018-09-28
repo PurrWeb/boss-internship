@@ -64,11 +64,17 @@ class Page extends React.Component {
   };
 
   render() {
-    const [cards, total, enadleCardRequested] = oFetch(this.props, 'cards', 'total', 'enadleCardRequested');
+    const [cards, enadleCardRequested, totalCount, loadMore] = oFetch(
+      this.props,
+      'cards',
+      'enadleCardRequested',
+      'totalCount',
+      'loadMore',
+    );
     return (
       <main className="boss-page-main">
         <Dashboard
-          total={total}
+          total={totalCount}
           dropdownFilter={
             <DashboardDropdownFilter
               onFilterUpdate={this.handleDropdownFilterUpdate}
@@ -77,23 +83,20 @@ class Page extends React.Component {
           }
           activeFilter={<DashboardActiveFilter onActiveFilterChange={this.handleActiveFilterChange} />}
         />
-        <LoadMore items={cards} perPage={20}>
-          {({ visibleItems, onLoadMore }) => (
-            <CardList
-              cards={visibleItems}
-              total={cards.size}
-              onLoadMore={onLoadMore}
-              itemRenderer={card => (
-                <PureToJSCardItem
-                  card={card}
-                  onEnable={enadleCardRequested}
-                  onDisable={this.handleDisableCard}
-                  onOpenHistory={this.handleOpenHistory}
-                />
-              )}
+
+        <CardList
+          cards={cards}
+          total={totalCount}
+          onLoadMore={loadMore}
+          itemRenderer={card => (
+            <PureToJSCardItem
+              card={card}
+              onEnable={enadleCardRequested}
+              onDisable={this.handleDisableCard}
+              onOpenHistory={this.handleOpenHistory}
             />
           )}
-        </LoadMore>
+        />
       </main>
     );
   }
