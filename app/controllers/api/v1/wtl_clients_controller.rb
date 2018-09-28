@@ -32,6 +32,13 @@ module Api
         }
       end
 
+      def show
+        wtl_client = WtlClient.includes([:wtl_card]).find_by(id: params.fetch(:id))
+        render json: {
+          client: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client)
+        }
+      end
+
       def update
         wtl_client_result = UpdateWtlClientApiService
           .new(wtl_client: wtl_client_from_params, requester: current_user)
