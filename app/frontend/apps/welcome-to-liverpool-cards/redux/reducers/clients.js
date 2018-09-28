@@ -11,6 +11,10 @@ export default handleActions(
       const clients = oFetch(action, 'payload.clients');
       return state.concat(Immutable.fromJS(clients));
     },
+    [types.SET_WTL_CARDS_DATA]: (state, action) => {
+      const clients = oFetch(action, 'payload.clients');
+      return Immutable.fromJS(clients);
+    },
   },
   initialState,
 );

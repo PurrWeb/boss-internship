@@ -11,6 +11,10 @@ export default handleActions(
       const cards = oFetch(action, 'payload.cards');
       return state.concat(Immutable.fromJS(cards));
     },
+    [types.SET_WTL_CARDS_DATA]: (state, action) => {
+      const cards = oFetch(action, 'payload.cards');
+      return Immutable.fromJS(cards);
+    },
     [types.ENABLE_CARD]: (state, action) => {
       const card = oFetch(action, 'payload.card');
       const cardNumber = oFetch(card, 'number');

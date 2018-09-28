@@ -6,6 +6,7 @@ import { getWtlCardsFilterQueryParams } from '../selectors';
 
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
 export const loadWtlCardsData = createAction(types.LOAD_WTL_CARDS_DATA);
+export const setWtlCardsData = createAction(types.SET_WTL_CARDS_DATA);
 export const changeActiveFilter = createAction(types.CHANGE_ACTIVE_FILTER);
 export const changeCardNumberFilter = createAction(types.CHANGE_CARD_NUMBER_FILTER);
 export const enableCard = createAction(types.ENABLE_CARD);
@@ -16,6 +17,14 @@ export const getWtlCardsData = params => (dispatch, getState) => {
   const pageNumber = getState().getIn(['pagination', 'pageNumber']);
   return getWtlCardsDataRequest({ ...params, page: pageNumber }).then(response => {
     const data = oFetch(response, 'data');
+    dispatch(setWtlCardsData(data));
+  });
+};
+
+export const appendWtlCardsData = params => (dispatch, getState) => {
+  const pageNumber = getState().getIn(['pagination', 'pageNumber']);
+  return getWtlCardsDataRequest({ ...params, page: pageNumber }).then(response => {
+    const data = oFetch(response, 'data');
     dispatch(loadWtlCardsData(data));
   });
 };
@@ -23,7 +32,7 @@ export const getWtlCardsData = params => (dispatch, getState) => {
 export const loadMore = () => dispatch => {
   dispatch(incrementPage());
   const filter = getWtlCardsFilterQueryParams();
-  return dispatch(getWtlCardsData(filter));
+  return dispatch(appendWtlCardsData(filter));
 };
 export const enadleCardRequested = params => dispatch => {
   return enableCardRequest(params).then(response => dispatch(enableCard(response.data)));

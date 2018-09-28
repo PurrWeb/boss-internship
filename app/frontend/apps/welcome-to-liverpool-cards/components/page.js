@@ -9,22 +9,29 @@ import { PureToJSCardItem } from './card-item';
 import DashboardDropdownFilter from './dashboard-dropdown-filter';
 import DashboardActiveFilter from './dashboard-active-filter';
 import CardHistoryContent from './card-history-content';
-import LoadMore from '~/components/load-more/load-more-children';
 import { appRoutes } from '~/lib/routes';
 import { openContentModal, openWarningModal } from '~/components/modals';
+import { ALL } from '../constants';
 
 class Page extends React.Component {
   componentDidMount() {
     const filter = queryString.parse(window.location.search);
     oFetch(this.props, 'changeCardNumberFilter')({
-      filter: filter.card_number ? filter.card_number : null,
+      filter: filter.card_number || null,
+    });
+    oFetch(this.props, 'changeActiveFilter')({
+      filter: filter.status || ALL,
     });
     document.title = 'Welcome to Liverpool Cards';
   }
 
   handleDropdownFilterUpdate = filter => {
-    oFetch(this.props, 'changeCardNumberFilter')({ filter });
+    oFetch(this.props, 'changeCardNumberFilter')({
+      filter: filter,
+    });
+    const parsedQueryString = queryString.parse(location.search);
     const filterQuery = queryString.stringify({
+      ...parsedQueryString,
       card_number: filter,
     });
     window.history.pushState(
@@ -32,6 +39,7 @@ class Page extends React.Component {
       'title',
       filter ? `${appRoutes.wtlCardsPage()}?${filterQuery}` : `${appRoutes.wtlCardsPage()}`,
     );
+    return this.props.getWtlCardsData({ ...parsedQueryString, card_number: filter });
   };
 
   handleOpenHistory = card => {
@@ -48,7 +56,20 @@ class Page extends React.Component {
   };
 
   handleActiveFilterChange = filter => {
-    oFetch(this.props, 'changeActiveFilter')({ filter });
+    oFetch(this.props, 'changeActiveFilter')({
+      filter: filter,
+    });
+    const parsedQueryString = queryString.parse(location.search);
+    const filterQuery = queryString.stringify({
+      ...parsedQueryString,
+      status: filter,
+    });
+    window.history.pushState(
+      'state',
+      'title',
+      filter ? `${appRoutes.wtlCardsPage()}?${filterQuery}` : `${appRoutes.wtlCardsPage()}`,
+    );
+    return this.props.getWtlCardsData({ ...parsedQueryString, status: filter });
   };
 
   handleDisableCard = ({ number }) => {
@@ -81,7 +102,12 @@ class Page extends React.Component {
               cardNumberFilter={oFetch(this.props, 'cardNumberFilter')}
             />
           }
-          activeFilter={<DashboardActiveFilter onActiveFilterChange={this.handleActiveFilterChange} />}
+          activeFilter={
+            <DashboardActiveFilter
+              activeFilter={this.props.activeFilter}
+              onActiveFilterChange={this.handleActiveFilterChange}
+            />
+          }
         />
 
         <CardList
@@ -104,7 +130,6 @@ class Page extends React.Component {
 
 Page.propTypes = {
   cards: PropTypes.instanceOf(Immutable.List).isRequired,
-  total: PropTypes.number.isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
   changeCardNumberFilter: PropTypes.func.isRequired,
   enadleCardRequested: PropTypes.func.isRequired,

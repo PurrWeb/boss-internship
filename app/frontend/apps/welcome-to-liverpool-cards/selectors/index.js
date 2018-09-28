@@ -7,7 +7,7 @@ export const cardsSelector = state => state.get('cards');
 export const activeFilterSelector = state => state.getIn(['filter', 'activeFilter']);
 export const numberFilterSelector = state => state.getIn(['filter', 'numberFilter']);
 
-export const ALLOWED_FILTER_KEYS = ['cardNumber'];
+export const ALLOWED_FILTER_KEYS = ['card_number', 'state'];
 
 export const getWtlCardsFilterQueryParams = () => {
   const query = location.search;
@@ -29,33 +29,4 @@ export const getCardsWithClients = createSelector(clientsSelector, cardsSelector
   });
 });
 
-export const getFilteredCardsByActive = createSelector(
-  getCardsWithClients,
-  activeFilterSelector,
-  (cards, activeFilter) => {
-    if (activeFilter === ALL) {
-      return cards;
-    } else {
-      return cards.filter(card => card.get('disabled') === false);
-    }
-  },
-);
-
-export const getFilteredCardsByNumber = createSelector(
-  getFilteredCardsByActive,
-  numberFilterSelector,
-  (cards, numberFilter) => {
-    if (!numberFilter) {
-      return cards;
-    } else {
-      return cards.filter(card =>
-        card
-          .get('number')
-          .toString()
-          .includes(numberFilter),
-      );
-    }
-  },
-);
-
-export const getFilteredCards = getFilteredCardsByNumber;
+export const getFilteredCards = getCardsWithClients;

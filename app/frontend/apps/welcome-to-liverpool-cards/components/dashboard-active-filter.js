@@ -5,12 +5,7 @@ import { RadioGroup, Radio } from 'react-radio-group';
 import { ACTIVE_ONLY, ALL } from '../constants';
 
 class DashboardActiveFilter extends Component {
-  state = {
-    activeFilter: ALL,
-  };
-
   handleFilterChange = value => {
-    this.setState({ activeFilter: value });
     oFetch(this.props, 'onActiveFilterChange')(value);
   };
 
@@ -22,7 +17,7 @@ class DashboardActiveFilter extends Component {
             <div className="boss-form__field boss-form__field_layout_fluid">
               <RadioGroup
                 name="dashboardActiveFilter"
-                selectedValue={this.state.activeFilter}
+                selectedValue={this.props.activeFilter}
                 onChange={this.handleFilterChange}
                 className="boss-form__switcher"
               >
