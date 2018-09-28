@@ -11,6 +11,32 @@ module Api
         }.to_json
       end
 
+      def index
+        per_page = 10
+
+        wtl_cards = WtlCardsIndexQuery.new(filter: filter_from_params).all
+        paginated_wtl_cards = wtl_cards.paginate(
+          page: page_from_params,
+          per_page: per_page,
+        )
+        wtl_clients = WtlClient.includes([:wtl_card]).where(wtl_card_id: paginated_wtl_cards.map(&:id))
+
+        render json: {
+          cards: ActiveModel::Serializer::CollectionSerializer.new(
+            paginated_wtl_cards,
+            serializer: Api::V1::WtlCards::WtlCardSerializer,
+          ),
+          clients: ActiveModel::Serializer::CollectionSerializer.new(
+            wtl_clients,
+            serializer: Api::V1::WtlCards::WtlClientSerializer,
+          ),
+          pageNumber: page_from_params,
+          perPage: per_page,
+          totalCount: wtl_cards.count,
+          totalPages: (wtl_cards.count / per_page) + 1,
+        }
+      end
+
       def create
         wtl_card_result = CreateWtlCardApiService.new(params: wtl_card_from_params).call
         if wtl_card_result.success?
@@ -63,6 +89,16 @@ module Api
         {
           number: params.fetch(:number),
         }
+      end
+
+      def filter_from_params
+        {
+          card_number: params[:cardNumber],
+        }
+      end
+
+      def page_from_params
+        params[:page].to_i == 0 ? 1 : params[:page].to_i
       end
     end
   end
