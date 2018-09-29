@@ -81,15 +81,30 @@ RSpec.describe 'Staff member refund accessory requests API endpoint' do
 
     it ' should return refunded accessory request' do
       json = JSON.parse(refund_response.body).except("createdAt", "updatedAt", "timeline")
-      expect(json).to eq({
+      accessory_request = staff_member.accessory_requests.first
+      accessory_request_json = json.fetch("accessoryRequest")
+      timeline_json = accessory_request_json.fetch("timeline")
+      accessory_request_attributes_json = accessory_request_json.
+        except("createdAt", "updatedAt", "timeline")
+
+      expect(accessory_request_attributes_json).to eq({
         "id" => accessory_request.id,
-        "frozen" => accessory_request.frozen?,
         "hasRefundRequest" => accessory_request.has_refund_request?,
         "accessoryName" => accessory_request.accessory.name,
         "size" => accessory_request.size,
         "status" => accessory_request.current_state,
         "refundRequestStatus" => accessory_request.accessory_refund_request.current_state,
+        "payslipDate" => "24-09-2018",
+        "refundFrozen" => nil,
+        "refundPayslipDate" => nil,
+        "requestFrozen" => false,
       })
+      expect(timeline_json.count).to eq(4)
+      expected_states = ["pending", 'accepted', 'completed', 'pending']
+      expected_states.each_with_index do |expected_state, index|
+        timeline_json_record = timeline_json[index]
+        expect(timeline_json_record.fetch("state")).to eq(expected_state)
+      end
     end
   end
 
@@ -114,15 +129,31 @@ RSpec.describe 'Staff member refund accessory requests API endpoint' do
 
       it ' should return refunded accessory request' do
         json = JSON.parse(refund_response.body).except("createdAt", "updatedAt", "timeline")
-        expect(json).to eq({
+        accessory_request = staff_member.accessory_requests.first
+        accessory_request_json = json.fetch("accessoryRequest")
+        timeline_json = accessory_request_json.fetch("timeline")
+        accessory_request_attributes_json = accessory_request_json.
+          except("createdAt", "updatedAt", "timeline")
+
+        expect(accessory_request_attributes_json).to eq({
           "id" => accessory_request.id,
-          "frozen" => accessory_request.frozen?,
           "hasRefundRequest" => accessory_request.has_refund_request?,
           "accessoryName" => accessory_request.accessory.name,
           "size" => accessory_request.size,
           "status" => accessory_request.current_state,
           "refundRequestStatus" => accessory_request.accessory_refund_request.current_state,
+          "requestFrozen" => accessory_request.frozen?,
+          "payslipDate" => UIRotaDate.format(accessory_request.payslip_date),
+          "refundFrozen" => nil,
+          "refundPayslipDate" => nil
         })
+
+        expect(timeline_json.count).to eq(6)
+        expected_states = ["pending", 'accepted', 'completed', 'pending', 'rejected', 'pending']
+        expected_states.each_with_index do |expected_state, index|
+          timeline_json_record = timeline_json[index]
+          expect(timeline_json_record.fetch("state")).to eq(expected_state)
+        end
       end
     end
   end

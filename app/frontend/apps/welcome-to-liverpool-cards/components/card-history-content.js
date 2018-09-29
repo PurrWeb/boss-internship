@@ -2,10 +2,24 @@ import React from 'react';
 import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 import utils from '~/lib/utils';
+import Spinner from '~/components/spinner';
+
 import { ASSIGNED, REGISTERED, UNASSIGNED, UPDATE, CREATED, HISTORY_EVENTS_MAP } from '../constants';
 import LoadMore from '~/components/load-more/load-more-children';
-
+import { fetchWtlCardHistoryRequest } from '../requests';
 class CardHistoryContent extends React.PureComponent {
+  state = {
+    fetching: true,
+    history: {},
+  };
+
+  componentDidMount = async () => {
+    const card = oFetch(this.props, 'card');
+    const response = await fetchWtlCardHistoryRequest(card);
+    const history = oFetch(response, 'data.history');
+    this.setState({ fetching: false, history });
+  };
+
   renderHistory(history) {
     return history.map(historyItem => {
       const [date, event, by, to, changeset] = oFetch(historyItem, 'date', 'event', 'by', 'to', 'changeset');
@@ -63,7 +77,11 @@ class CardHistoryContent extends React.PureComponent {
   }
 
   render() {
-    const history = oFetch(this.props, 'card.history');
+    if (this.state.fetching) {
+      return <Spinner />;
+    }
+
+    const history = oFetch(this.state, 'history');
 
     const historyArray = Object.keys(history)
       .map(date => ({ ...history[date], date }))

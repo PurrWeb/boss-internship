@@ -12,7 +12,6 @@ class Api::V1::WtlClients::WtlClientSerializer < ActiveModel::Serializer
     :emailVerified,
     :disabled,
     :updatedAt,
-    :history,
     :phoneNumber
 
   def fullName
@@ -41,10 +40,6 @@ class Api::V1::WtlClients::WtlClientSerializer < ActiveModel::Serializer
 
   def disabled
     object.disabled?
-  end
-
-  def history
-    WtlClientHistoryService.new(wtl_client: object).call
   end
 
   def phoneNumber

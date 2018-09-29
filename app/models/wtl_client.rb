@@ -1,4 +1,10 @@
 class WtlClient < ActiveRecord::Base
+  include SearchCop
+
+  search_scope :search do
+    attributes :first_name, :surname
+  end
+
   has_paper_trail
 
   UNIVERSITIES = [

@@ -7,7 +7,11 @@ import * as types from '../types';
 const initialState = Immutable.List();
 export default handleActions(
   {
-    [types.LOAD_INITIAL_DATA]: (state, action) => {
+    [types.LOAD_WTL_CARDS_DATA]: (state, action) => {
+      const cards = oFetch(action, 'payload.cards');
+      return state.concat(Immutable.fromJS(cards));
+    },
+    [types.SET_WTL_CARDS_DATA]: (state, action) => {
       const cards = oFetch(action, 'payload.cards');
       return Immutable.fromJS(cards);
     },

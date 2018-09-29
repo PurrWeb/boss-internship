@@ -7,7 +7,15 @@ import * as types from '../types';
 const initialState = Immutable.List();
 export default handleActions(
   {
-    [types.LOAD_INITIAL_DATA]: (state, action) => {
+    [types.LOAD_WTL_CLIENTS]: (state, action) => {
+      const clients = oFetch(action, 'payload.clients');
+      return state.concat(Immutable.fromJS(clients));
+    },
+    [types.LOAD_WTL_CLIENT]: (state, action) => {
+      const client = oFetch(action, 'payload.client');
+      return state.push(Immutable.fromJS(client));
+    },
+    [types.SET_WTL_CLIENTS]: (state, action) => {
       const clients = oFetch(action, 'payload.clients');
       return Immutable.fromJS(clients);
     },

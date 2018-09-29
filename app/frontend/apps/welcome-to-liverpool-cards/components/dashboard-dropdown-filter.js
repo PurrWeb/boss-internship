@@ -1,6 +1,7 @@
 import React from 'react';
 import oFetch from 'o-fetch';
 import PropTypes from 'prop-types';
+import AsyncButton from 'react-async-button';
 
 class DashboardDropdownFilter extends React.PureComponent {
   constructor(props) {
@@ -22,13 +23,13 @@ class DashboardDropdownFilter extends React.PureComponent {
 
   handleFilterUpdate = () => {
     const onFilterUpdate = oFetch(this.props, 'onFilterUpdate');
-    onFilterUpdate(this.state.filter);
+    return onFilterUpdate(this.state.filter);
   };
 
   handleKeyPress = e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.handleFilterUpdate();
+      return this.handleFilterUpdate();
     }
   };
 
@@ -43,7 +44,7 @@ class DashboardDropdownFilter extends React.PureComponent {
                   <span className="boss-form__label-text">Card number</span>
                   <input
                     name="card-nmber"
-                    type="number"
+                    type="text"
                     className="boss-form__input"
                     value={this.state.filter}
                     onChange={this.handleFilterChange}
@@ -52,13 +53,12 @@ class DashboardDropdownFilter extends React.PureComponent {
                 </label>
               </div>
               <div className="boss-form__field boss-form__field_layout_min boss-form__field_justify_end boss-form__field_no-label">
-                <button
-                  onClick={this.handleFilterUpdate}
+                <AsyncButton
                   className="boss-button boss-form__submit boss-form__submit_adjust_single"
-                  type="submit"
-                >
-                  Update
-                </button>
+                  text="Update"
+                  pendingText="Updating ..."
+                  onClick={this.handleFilterUpdate}
+                />
               </div>
             </div>
           </div>

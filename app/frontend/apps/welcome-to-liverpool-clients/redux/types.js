@@ -1,4 +1,9 @@
 export const LOAD_INITIAL_DATA = 'LOAD_INITIAL_DATA';
+export const LOAD_WTL_CLIENTS = 'LOAD_WTL_CLIENTS';
+export const LOAD_WTL_CLIENT = 'LOAD_WTL_CLIENT';
+export const SET_WTL_CLIENTS = 'SET_WTL_CLIENTS';
+export const INCREMENT_PAGE = 'INCREMENT_PAGE';
+export const LOAD_MORE = 'LOAD_MORE';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 
 export const ENABLE_CLIENT = 'ENABLE_CLIENT';

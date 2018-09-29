@@ -16,7 +16,7 @@ class WtlClientHistoryService
         to = WtlCard.find_by(id: to).number if to.present?
         changeset["card_number"] = [from, to]
       end
-      acc[created_at] = {
+      acc[created_at.iso8601] = {
         by: full_name,
         to: nil,
         event: event,

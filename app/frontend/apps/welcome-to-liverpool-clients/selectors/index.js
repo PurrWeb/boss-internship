@@ -1,6 +1,21 @@
 import { createSelector } from 'reselect';
+import queryString from 'query-string';
 import utils from '~/lib/utils';
 import { VALIDATED, PENDING_VALIDATION } from '../constants';
+
+export const ALLOWED_FILTER_KEYS = ['name', 'email', 'status', 'cardNumber'];
+
+export const getWtlClientsFilterQueryParams = () => {
+  const query = location.search;
+  const parsedQueryString = queryString.parse(query);
+
+  return Object.keys(parsedQueryString).reduce((acc, item) => {
+    if (ALLOWED_FILTER_KEYS.includes(item)) {
+      return { ...acc, [item]: parsedQueryString[item] };
+    }
+    return acc;
+  }, {});
+};
 
 export const clientsSelector = state => state.get('clients');
 export const nameFilterSelector = state => state.getIn(['filter', 'nameFilter']);
@@ -14,52 +29,8 @@ export const getClientById = createSelector(clientsSelector, clientIdSelector, (
   return clients.find(client => client.get('id').toString() === clientId.toString());
 });
 
-export const getClientsFilteredByName = createSelector(clientsSelector, nameFilterSelector, (clients, name) => {
-  if (name) {
-    return utils.staffMemberFilterFullName(name, clients);
-  }
+export const getClients = createSelector(clientsSelector, clients => {
   return clients;
 });
 
-export const getClientsFilteredByEmail = createSelector(
-  getClientsFilteredByName,
-  emailFilterSelector,
-  (clients, email) => {
-    if (email) {
-      return clients.filter(client => client.get('email').includes(email));
-    }
-    return clients;
-  },
-);
-
-export const getClientsFilteredByStatus = createSelector(
-  getClientsFilteredByEmail,
-  statusFilterSelector,
-  (clients, status) => {
-    if (status && status === VALIDATED) {
-      return clients.filter(client => client.get('emailVerified'));
-    }
-    if (status && status === PENDING_VALIDATION) {
-      return clients.filter(client => !client.get('emailVerified'));
-    }
-    return clients;
-  },
-);
-
-export const getClientsFilteredByNumber = createSelector(
-  getClientsFilteredByStatus,
-  cardNumberFilterSelector,
-  (clients, cardNumber) => {
-    if (cardNumber) {
-      return clients.filter(client =>
-        client
-          .get('cardNumber')
-          .toString()
-          .includes(cardNumber),
-      );
-    }
-    return clients;
-  },
-);
-
-export const getFilteredClients = getClientsFilteredByNumber;
+export const getFilteredClients = getClients;

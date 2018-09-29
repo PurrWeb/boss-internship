@@ -6,7 +6,7 @@ import ClientsFilterForm from './clients-filter-form';
 class DashboardDropdownFilter extends React.PureComponent {
   handleFilterUpdate = values => {
     const onFilterUpdate = oFetch(this.props, 'onFilterUpdate');
-    onFilterUpdate(values.toJS());
+    return onFilterUpdate(values.toJS());
   };
 
   render() {

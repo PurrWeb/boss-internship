@@ -11,6 +11,34 @@ module Api
         }.to_json
       end
 
+      def index
+        per_page = 10
+
+        wtl_clients = WtlClientsIndexQuery.new(filter: filter_from_params).all
+        paginated_wtl_clients = wtl_clients.paginate(
+          page: page_from_params,
+          per_page: per_page,
+        )
+
+        render json: {
+          clients: ActiveModel::Serializer::CollectionSerializer.new(
+            paginated_wtl_clients,
+            serializer: Api::V1::WtlClients::WtlClientSerializer,
+          ),
+          pageNumber: page_from_params,
+          perPage: per_page,
+          totalCount: wtl_clients.count,
+          totalPages: (wtl_clients.count / per_page) + 1,
+        }
+      end
+
+      def show
+        wtl_client = WtlClient.includes([:wtl_card]).find_by(id: params.fetch(:id))
+        render json: {
+          client: Api::V1::WtlClients::WtlClientSerializer.new(wtl_client)
+        }
+      end
+
       def update
         wtl_client_result = UpdateWtlClientApiService
           .new(wtl_client: wtl_client_from_params, requester: current_user)
@@ -53,10 +81,28 @@ module Api
         end
       end
 
+      def history
+        history = WtlClientHistoryService.new(wtl_client: wtl_client_from_params).call
+        render json: {history: history}, status: 200
+      end
+
       private
 
       def wtl_client_from_params
         WtlClient.find_by(id: params.fetch(:id))
+      end
+
+      def filter_from_params
+        {
+          name: params[:name],
+          email: params[:email],
+          status: params[:status],
+          card_number: params[:cardNumber],
+        }
+      end
+
+      def page_from_params
+        params[:page].to_i == 0 ? 1 : params[:page].to_i
       end
     end
   end

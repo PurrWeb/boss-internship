@@ -2,6 +2,7 @@ import React from 'react';
 import oFetch from 'o-fetch';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
+import AsyncButton from 'react-async-button';
 
 class CardList extends React.Component {
   renderItems(cards) {
@@ -39,12 +40,12 @@ class CardList extends React.Component {
           </div>
           {cards.size !== total && (
             <div className="boss-page-main__actions boss-page-main__actions_position_last">
-              <button
-                onClick={onLoadMore}
+              <AsyncButton
                 className="boss-button boss-button_role_load-more boss-button_adjust_full-mobile"
-              >
-                Load More
-              </button>
+                text="Load more"
+                pendingText="Loading ..."
+                onClick={onLoadMore}
+              />
             </div>
           )}
         </div>

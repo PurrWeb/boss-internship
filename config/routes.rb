@@ -265,17 +265,19 @@ Rails.application.routes.draw do
       namespace :v1 do
         get "version", to: "version#version"
 
-        resources :wtl_cards, only: [:create] do
+        resources :wtl_cards, only: [:index, :create] do
           member do
             post :disable
             post :enable
+            get :history
           end
         end
 
-        resources :wtl_clients, only: [:update] do
+        resources :wtl_clients, only: [:index, :show, :update] do
           member do
             post :disable
             post :enable
+            get :history
           end
         end
 

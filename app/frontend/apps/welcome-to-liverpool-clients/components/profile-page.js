@@ -11,17 +11,42 @@ import ProfileHistoryItem from './profile-history-item';
 import NotFound from './not-found';
 import LoadMore from '~/components/load-more/load-more-children';
 import safeMoment from '~/lib/safe-moment';
+import Spinner from '~/components/spinner';
+import { fetchWtlClientHistoryRequest } from '../requests';
 
 class ProfilePage extends React.PureComponent {
   state = {
     startDate: null,
     endDate: null,
+    fetching: true,
+    clientFetching: false,
+    history: {},
   };
 
-  componentDidMount() {
-    const fullName = oFetch(this.props, 'client.fullName');
-    document.title = `${fullName} Profile`;
-  }
+  componentWillReceiveProps = async nextProps => {
+    if (!this.props.client && nextProps.client) {
+      const fullName = oFetch(nextProps.client, 'fullName');
+      document.title = `${fullName} Profile`;
+      const response = await fetchWtlClientHistoryRequest(nextProps.client);
+      const history = oFetch(response, 'data.history');
+      this.setState({ fetching: false, history });
+    }
+  };
+
+  componentDidMount = async () => {
+    const client = oFetch(this.props, 'client');
+    if (!client) {
+      this.setState({ clientFetching: true });
+      await this.props.getWtlClient({ id: this.props.clientId });
+      this.setState({ clientFetching: false });
+    } else {
+      const fullName = oFetch(client, 'fullName');
+      document.title = `${fullName} Profile`;
+      const response = await fetchWtlClientHistoryRequest(client);
+      const history = oFetch(response, 'data.history');
+      this.setState({ fetching: false, history });
+    }
+  };
 
   handleFilter = (startDate, endDate) => {
     this.setState({ startDate, endDate });
@@ -29,7 +54,7 @@ class ProfilePage extends React.PureComponent {
 
   getFilteredHistory = () => {
     const { startDate, endDate } = this.state;
-    const history = oFetch(this.props, 'client.history');
+    const history = oFetch(this.state, 'history');
     const historyArray = Object.keys(history)
       .map(date => ({ ...history[date], date }))
       .sort((a, b) => {
@@ -58,6 +83,10 @@ class ProfilePage extends React.PureComponent {
   };
 
   render() {
+    if (this.state.clientFetching) {
+      return <Spinner />;
+    }
+
     const [client, enableClientRequested, disableClientRequested] = oFetch(
       this.props,
       'client',
@@ -67,7 +96,6 @@ class ProfilePage extends React.PureComponent {
     if (!client) {
       return <NotFound />;
     }
-    const filteredHistoryList = this.getFilteredHistory();
     const disabled = oFetch(client, 'disabled');
     return (
       <main className="boss-page-main">
@@ -99,19 +127,23 @@ class ProfilePage extends React.PureComponent {
               disableClientRequested={disableClientRequested}
               history={this.props.history}
             />
-            <ProfileHistory>
-              <ProfileHistoryFilter onFilter={this.handleFilter} />
-              <LoadMore items={filteredHistoryList}>
-                {({ visibleItems, onLoadMore }) => (
-                  <ProfileHistoryList
-                    total={filteredHistoryList.length}
-                    historyList={visibleItems}
-                    onLoadMore={onLoadMore}
-                    itemRenderer={historyItem => <ProfileHistoryItem historyItem={historyItem} />}
-                  />
-                )}
-              </LoadMore>
-            </ProfileHistory>
+            {this.state.fetching ? (
+              <Spinner />
+            ) : (
+              <ProfileHistory>
+                <ProfileHistoryFilter onFilter={this.handleFilter} />
+                <LoadMore items={this.getFilteredHistory()}>
+                  {({ visibleItems, onLoadMore }) => (
+                    <ProfileHistoryList
+                      total={this.getFilteredHistory().length}
+                      historyList={visibleItems}
+                      onLoadMore={onLoadMore}
+                      itemRenderer={historyItem => <ProfileHistoryItem historyItem={historyItem} />}
+                    />
+                  )}
+                </LoadMore>
+              </ProfileHistory>
+            )}
           </div>
         </div>
       </main>
