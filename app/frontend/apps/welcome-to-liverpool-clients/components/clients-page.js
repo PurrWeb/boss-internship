@@ -94,8 +94,18 @@ class ClientsPage extends React.Component {
           clients={clients}
           total={totalCount}
           onLoadMore={this.onLoadMore}
-          itemRenderer={client => <PureToJSClientItem client={client} />}
-          itemRendererMobile={client => <PureToJSClientItemMobile client={client} />}
+          itemRenderer={client => (
+            <PureToJSClientItem
+              onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
+              client={client}
+            />
+          )}
+          itemRendererMobile={client => (
+            <PureToJSClientItemMobile
+              onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
+              client={client}
+            />
+          )}
         />
       </main>
     );
