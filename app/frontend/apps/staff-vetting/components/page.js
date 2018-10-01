@@ -11,6 +11,7 @@ import StaffMemberFilter from './staff-member-filter';
 class Page extends Component {
   render() {
     const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer } = this.props;
+    document.title = this.props.title;
     if (staffMembers.size === 0) {
       return (
         <main className="boss-page-main">

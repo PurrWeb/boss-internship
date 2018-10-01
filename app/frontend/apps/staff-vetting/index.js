@@ -12,7 +12,7 @@ import StaffMembersWithoutPhoto from './routes/staff-members-without-photo';
 import StaffMembersOnWrongPayrate from './routes/staff-members-on-wrong-payrate';
 import StaffMembersWithExpiredSiaBadge from './routes/staff-members-with-expired-sia-badge';
 import StaffMembersWithBouncedEmails from './routes/staff-members-with-bounced-emails';
-import StaffMembersWithTimeDodges from './routes/staff-members-with-time-dodges';
+import TimeDodges from './routes/time-dodges';
 
 class StaffVettingApp extends React.Component {
   componentWillMount() {
@@ -164,11 +164,9 @@ class StaffVettingApp extends React.Component {
           />
           <PrivateRoute
             exact
-            path="/staff_members_with_time_dodges/:weekStartDate?"
+            path="/time_dodges/:weekStartDate?"
             canView={canViewWithTimeDodges}
-            render={props => (
-              <StaffMembersWithTimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodges" />
-            )}
+            render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodges" />}
           />
         </div>
       </Router>

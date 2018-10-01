@@ -21,7 +21,6 @@ class DashboardFilter extends React.Component {
   render() {
     const startDate = safeMoment.uiDateParse(this.props.startDate).format(utils.commonDateFormatCalendar());
     const endDate = safeMoment.uiDateParse(this.props.endDate).format(utils.commonDateFormatCalendar());
-
     const popoverClass = classNames({
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
