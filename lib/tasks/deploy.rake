@@ -49,7 +49,7 @@ namespace :deploy do
           puts err.message
           failed
         end
-      end        
+      end
     end
   end
 
@@ -137,7 +137,7 @@ namespace :deploy do
 
   def git_push_version
     ShellSpinner "Push to version file to #{ @master_branch }" do
-      run("git push -f #{ @origin } #{ @master_branch }")
+      run("git push #{ @origin } #{ @master_branch }")
     end
   end
 
@@ -179,7 +179,7 @@ namespace :deploy do
   def deploy_on_production
     puts "Deploy on production... \n"
     STDOUT.sync = true
-    Open3.popen3("git push -f #{ @production } HEAD:master 2>&1") do |stdin, stdout, stderr, wait_thr|
+    Open3.popen3("git push #{ @production } HEAD:master 2>&1") do |stdin, stdout, stderr, wait_thr|
       stdout.sync = true
       while line = stdout.gets
         puts line
