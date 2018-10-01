@@ -112,13 +112,17 @@ function StaffMemberInfo({
               </li>
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Breaks: </span>
-                <span className="boss-user-summary__review-val">
+                <a
+                  className="boss-user-summary__review-val"
+                  target="_blank"
+                  href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
+                >
                   {acceptedBreaks === 0
                     ? `0h`
                     : moment
                         .duration(acceptedBreaks, 'minutes')
                         .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
-                </span>
+                </a>
               </li>
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Paid holidays: </span>
