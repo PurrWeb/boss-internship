@@ -71,7 +71,7 @@ class StaffVetting extends Component {
         canView: canViewWithBouncedEmails,
       },
       withTimeDodges: {
-        title: 'Time Dodges',
+        title: 'Time Dodgers',
         href: `/time_dodges`,
         canView: canViewWithTimeDodges,
       },

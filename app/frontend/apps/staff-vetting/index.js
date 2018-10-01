@@ -166,7 +166,7 @@ class StaffVettingApp extends React.Component {
             exact
             path="/time_dodges/:weekStartDate?"
             canView={canViewWithTimeDodges}
-            render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodges" />}
+            render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodgers" />}
           />
         </div>
       </Router>
