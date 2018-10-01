@@ -193,7 +193,15 @@ class TimeDodges extends PureComponent {
             }}
           />
         )}
-        staffMemberListRenderer={staffMembers => <StaffMemberList staffMembers={staffMembers} venues={venues} />}
+        staffMemberListRenderer={staffMembers => (
+          <StaffMemberList
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            profileLink={false}
+            staffMembers={staffMembers}
+            venues={venues}
+          />
+        )}
         dashboardFilterRenderer={this.renderDashboardFilter}
       />
     );

@@ -48,6 +48,9 @@ class StaffMemberList extends Component {
                 id={staffMember.get('id')}
                 avatarUrl={staffMember.get('avatarUrl')}
                 fullName={staffMember.get('fullName')}
+                profileLink={this.props.profileLink}
+                startDate={this.props.startDate}
+                endDate={this.props.endDate}
                 staffType={staffTypes
                   .find(staffType => staffType.get('id') === staffMember.get('staffTypeId'))
                   .get('name')}
@@ -70,6 +73,10 @@ class StaffMemberList extends Component {
   }
 }
 
+StaffMemberList.defaultProps = {
+  profileLink: true,
+};
+
 StaffMemberList.propTypes = {
   staffMembers: ImmutablePropTypes.list,
   staffTypes: ImmutablePropTypes.list,
@@ -77,6 +84,9 @@ StaffMemberList.propTypes = {
   withSiaBadgeExpiryDate: PropTypes.bool,
   withBouncedEmail: PropTypes.bool,
   venues: ImmutablePropTypes.list,
+  profileLink: PropTypes.bool,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
 };
 
 export default StaffMemberList;

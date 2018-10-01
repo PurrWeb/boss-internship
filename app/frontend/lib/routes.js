@@ -113,6 +113,24 @@ export const appRoutes = {
     securityRotaDaily: (date) => {
         return `/security_rotas/${date}`;
     },
+    staffMemberProfileShifts({startDate, endDate, staffMemberId}) {
+        if (!staffMemberId) {
+            throw new Error(`You must apply a staffMemberId`);
+        }
+        if (startDate && endDate) {
+            return `/staff_members/${staffMemberId}/shifts?end_date=${endDate}&start_date=${startDate}`
+        }
+        return `/staff_members/${staffMemberId}/shifts`
+    },
+    staffMemberProfileHolidays({startDate, endDate, staffMemberId}) {
+        if (!staffMemberId) {
+            throw new Error(`You must apply a staffMemberId`);
+        }
+        if (startDate && endDate) {
+            return `/staff_members/${staffMemberId}/holidays?end_date=${endDate}&start_date=${startDate}`
+        }
+        return `/staff_members/${staffMemberId}/holidays`
+    },
     rotaDaily: (date, venueId) => {
         return `/rotas/${date}${venueId ? `?venue_id=${venueId}` : ''}`;
     },

@@ -3,8 +3,24 @@ import PropTypes from 'prop-types';
 import bouncedEmailModal from '~/components/bounced-email-modal';
 import moment from 'moment';
 import momentDurationFormatSetup from 'moment-duration-format';
+import { appRoutes } from '~/lib/routes';
 
 momentDurationFormatSetup(moment);
+
+function InfoWrapper({ profileLink, id, children, handleInfoClick }) {
+  if (profileLink) {
+    return (
+      <a
+        onClick={handleInfoClick}
+        href={`/staff_members/${id}`}
+        className={`boss-user-summary boss-user-summary_role_review-short boss-user-summary_role_link`}
+      >
+        {children}
+      </a>
+    );
+  }
+  return <div className={`boss-user-summary boss-user-summary_role_review-short`}>{children}</div>;
+}
 
 function StaffMemberInfo({
   id,
@@ -19,6 +35,9 @@ function StaffMemberInfo({
   masterVenue,
   paidHolidays,
   acceptedBreaks,
+  profileLink,
+  startDate,
+  endDate,
 }) {
   const handleInfoClick = e => {
     if (bouncedEmailData) {
@@ -28,11 +47,7 @@ function StaffMemberInfo({
   };
   return (
     <div className="boss-users__flow-item">
-      <a
-        onClick={handleInfoClick}
-        href={`/staff_members/${id}`}
-        className="boss-user-summary boss-user-summary_role_review-short boss-user-summary_role_link"
-      >
+      <InfoWrapper handleInfoClick={handleInfoClick} id={id} profileLink={profileLink}>
         <div className="boss-user-summary__side">
           <div className="boss-user-summary__avatar">
             <div className="boss-user-summary__avatar-inner">
@@ -83,13 +98,17 @@ function StaffMemberInfo({
               </li>
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Accepted: </span>
-                <span className="boss-user-summary__review-val">
+                <a
+                  className="boss-user-summary__review-val"
+                  target="_blank"
+                  href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
+                >
                   {hours - acceptedBreaks === 0
                     ? `0h`
                     : moment
                         .duration(hours - acceptedBreaks, 'minutes')
                         .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
-                </span>
+                </a>
               </li>
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Breaks: </span>
@@ -103,21 +122,29 @@ function StaffMemberInfo({
               </li>
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Paid holidays: </span>
-                <span className="boss-user-summary__review-val">
+                <a
+                  className="boss-user-summary__review-val"
+                  target="_blank"
+                  href={appRoutes.staffMemberProfileHolidays({ startDate, endDate, staffMemberId: id })}
+                >
                   {paidHolidays === 0
                     ? `0h`
                     : moment
                         .duration(paidHolidays, 'minutes')
                         .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
-                </span>
+                </a>
               </li>
             </ul>
           )}
         </div>
-      </a>
+      </InfoWrapper>
     </div>
   );
 }
+
+StaffMemberInfo.defaultProps = {
+  profileLink: true,
+};
 
 StaffMemberInfo.propTypes = {
   id: PropTypes.number.isRequired,
@@ -130,6 +157,7 @@ StaffMemberInfo.propTypes = {
   bouncedEmailData: PropTypes.object,
   hours: PropTypes.number,
   masterVenue: PropTypes.string,
+  profileLink: PropTypes.bool,
 };
 
 export default StaffMemberInfo;
