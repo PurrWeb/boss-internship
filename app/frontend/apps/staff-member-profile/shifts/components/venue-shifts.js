@@ -34,7 +34,9 @@ class VenueShifts extends Component {
       const endsAt = oFetch(hoursAcceptancePeriod, 'endsAt');
       const acceptedBy = oFetch(hoursAcceptancePeriod, 'acceptedBy');
       const acceptedAt = oFetch(hoursAcceptancePeriod, 'acceptedAt');
-      const formattedAcceptedAt = safeMoment.iso8601Parse(acceptedAt).format(utils.commonDateFormat);
+      const formattedAcceptedAt = acceptedAt
+        ? safeMoment.iso8601Parse(acceptedAt).format(utils.commonDateFormat)
+        : 'N/A';
       const breaks = oFetch(hoursAcceptancePeriod, 'breaks');
       const breaksDiff = utils.getStartsEndsTimeDiff(breaks);
       const breaksTotalTime = utils.formattedTime(breaksDiff);
