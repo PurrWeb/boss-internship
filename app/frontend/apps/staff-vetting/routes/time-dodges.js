@@ -22,14 +22,16 @@ const TIME_DODGERS_END_LIMIT = 47;
 const getEndDate = uiDate =>
   safeMoment
     .uiDateParse(uiDate)
-    .add(6, 'd')
+    .endOf('isoWeek')
     .format(utils.commonDateFormat);
 
-class StaffMembersWithTimeDodgers extends PureComponent {
+class TimeDodges extends PureComponent {
   constructor(props) {
     super(props);
     const { weekStartDate } = props.match.params;
-    this.timeDodgesDate = moment().format(utils.commonDateFormat);
+    this.timeDodgesDate = moment()
+      .subtract(1, 'week')
+      .format(utils.commonDateFormat);
 
     this.state = {
       imStaffMembers: Immutable.List([]),
@@ -37,8 +39,16 @@ class StaffMembersWithTimeDodgers extends PureComponent {
       imStaffMembersHardDodgers: Immutable.List([]),
       isLoaded: false,
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
-      startDate: weekStartDate || this.timeDodgesDate,
-      endDate: weekStartDate ? getEndDate(weekStartDate) : this.timeDodgesDate,
+      startDate: safeMoment
+        .uiDateParse(weekStartDate || this.timeDodgesDate)
+        .startOf('isoWeek')
+        .format(utils.commonDateFormat),
+      endDate: weekStartDate
+        ? getEndDate(weekStartDate)
+        : safeMoment
+            .uiDateParse(this.timeDodgesDate)
+            .endOf('isoWeek')
+            .format(utils.commonDateFormat),
     };
   }
 
@@ -72,7 +82,6 @@ class StaffMembersWithTimeDodgers extends PureComponent {
         const hours = staffMember.get('hours') - staffMember.get('acceptedBreaks') + staffMember.get('paidHolidays');
         return hours < TIME_DODGERS_START_LIMIT * 60;
       });
-
       return {
         imStaffMembersHardDodgers,
         imStaffMembersSoftDodgers,
@@ -85,7 +94,10 @@ class StaffMembersWithTimeDodgers extends PureComponent {
     const { weekStartDate } = this.props.match.params;
     const { selectedVenueIds } = this.state;
 
-    const date = weekStartDate || this.timeDodgesDate;
+    const date = safeMoment
+      .uiDateParse(weekStartDate || this.timeDodgesDate)
+      .startOf('isoWeek')
+      .format(utils.commonDateFormat);
     if (!weekStartDate) {
       this.changeURL(selectedVenueIds, date);
     }
@@ -103,7 +115,7 @@ class StaffMembersWithTimeDodgers extends PureComponent {
   changeURL = (selectedVenueIds, startDate) => {
     const venuesQueryString = queryString.stringify({ venues: selectedVenueIds }, { arrayFormat: 'bracket' });
     this.props.history.replace({
-      pathname: `/staff_members_with_time_dodges/${startDate}`,
+      pathname: `/time_dodges/${startDate}`,
       search: `?${venuesQueryString}`,
     });
   };
@@ -181,17 +193,25 @@ class StaffMembersWithTimeDodgers extends PureComponent {
             }}
           />
         )}
-        staffMemberListRenderer={staffMembers => <StaffMemberList staffMembers={staffMembers} venues={venues} />}
+        staffMemberListRenderer={staffMembers => (
+          <StaffMemberList
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            profileLink={false}
+            staffMembers={staffMembers}
+            venues={venues}
+          />
+        )}
         dashboardFilterRenderer={this.renderDashboardFilter}
       />
     );
   }
 }
 
-StaffMembersWithTimeDodgers.propTypes = {
+TimeDodges.propTypes = {
   venues: ImmutablePropTypes.list,
   staffTypes: ImmutablePropTypes.list,
   title: PropTypes.string.isRequired,
 };
 
-export default withRouter(StaffMembersWithTimeDodgers);
+export default withRouter(TimeDodges);

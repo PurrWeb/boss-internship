@@ -14,15 +14,14 @@ class PageContent extends Component {
   }
 
   componentWillReceiveProps = nextProps => {
-    const { selectedVenueIds } = nextProps;
-    if (this.props.selectedVenueIds && this.props.selectedVenueIds.length !== selectedVenueIds.length) {
-      this.setState(state => {
-        const filteredStaffMembers = this.filterByVenues(this.state.staffMembers, selectedVenueIds);
-        return {
-          filteredStaffMembers,
-        };
-      });
-    }
+    const { selectedVenueIds, staffMembers } = nextProps;
+    this.setState(state => {
+      const filteredStaffMembers = this.filterByVenues(staffMembers, selectedVenueIds);
+      return {
+        filteredStaffMembers,
+        staffMembers,
+      };
+    });
   };
 
   filterByVenues = (staffMembers, selectedVenueIds = this.props.selectedVenueIds) => {

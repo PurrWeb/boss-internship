@@ -14,7 +14,9 @@ class StaffCountBlock extends Component {
     return (
       <Link to={this.props.href} className={blockClassName}>
         <div className="boss-count__group">
-          {this.props.count !== undefined && <p className="boss-count__number">{this.props.count}</p>}
+          <p style={{ opacity: this.props.count !== undefined ? 1 : 0 }} className="boss-count__number">
+            {this.props.count !== undefined ? this.props.count : 0}
+          </p>
           <p className="boss-count__label">{this.props.title}</p>
         </div>
       </Link>
