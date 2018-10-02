@@ -14,13 +14,13 @@ module Api
 
         result = StaffMemberVerificationService.new(staff_member: staff_member).set_password_and_verify(
           password: password,
-          password_confirmation: password_confirmation
+          password_confirmation: password_confirmation,
         )
 
         if result.success?
           render json: {}, status: 200
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -33,13 +33,13 @@ module Api
 
         result = StaffMemberPasswordResetService.new(staff_member: staff_member).reset_password(
           password: password,
-          password_confirmation: password_confirmation
+          password_confirmation: password_confirmation,
         )
 
         if result.success?
           render json: {}, status: 200
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -53,14 +53,14 @@ module Api
         mobile_app = MobileApp.enabled.find(params.fetch(:mobileAppId))
         endpoint = SendMobileAppDownloadEmailEndpoint.new(
           staff_member: staff_member,
-          mobile_app: mobile_app
+          mobile_app: mobile_app,
         )
         authorize!(:use, endpoint)
 
         result = SendMobileAppDownloadEmail.new(staff_member: staff_member, mobile_app: mobile_app).call
 
         if result.success?
-          render json: { sentAt: result.mobile_app_download_link_send.sent_at }, status: 200
+          render json: {sentAt: result.mobile_app_download_link_send.sent_at}, status: 200
         else
           render json: {}, status: 422
         end
@@ -78,7 +78,7 @@ module Api
         if result.success?
           render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -103,7 +103,7 @@ module Api
         if result.success?
           render json: result.staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -111,7 +111,7 @@ module Api
         staff_member = StaffMember.find(params.fetch(:id))
         authorize! :edit, staff_member
 
-        render locals: { staff_member: staff_member }
+        render locals: {staff_member: staff_member}
       end
 
       def create
@@ -124,16 +124,16 @@ module Api
         model_params = api_params.
           model_params.
           merge(
-            creator: current_user
-          )
+          creator: current_user,
+        )
 
         result = CreateStaffMember.new(requester: current_user, params: model_params).call
 
         if result.success?
-          render json: { staff_member_id: result.staff_member.id }.to_json, status: 200
+          render json: {staff_member_id: result.staff_member.id}.to_json, status: 200
         else
           api_errors = AddStaffMemberApiErrors.new(staff_member: result.staff_member)
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: api_errors}
         end
       end
 
@@ -155,10 +155,10 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
+          frontend_updates: frontend_updates,
         ).disable({
           disable_reason: params.fetch("disable_reason"),
-          never_rehire: params.fetch("never_rehire")
+          never_rehire: params.fetch("never_rehire"),
         })
 
         if result.success?
@@ -166,10 +166,10 @@ module Api
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -180,42 +180,18 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
-        ).enable({
-          starts_at: params.fetch("startsAt"),
-          staff_type_id: params.fetch("staffType"),
-          main_venue_id: params.fetch("mainVenue"),
-          pay_rate_id: params.fetch("payRate"),
-          other_venue_ids: Array(params.fetch("otherVenues")),
-          pin_code: params["pinCode"],
-          gender: params.fetch("gender"),
-          phone_number: params.fetch("phoneNumber"),
-          date_of_birth: params.fetch("dateOfBirth"),
-          national_insurance_number: params.fetch("nationalInsuranceNumber"),
-          hours_preference_note: params["hoursPreferenceNote"],
-          avatar_base64: params["avatar"],
-          day_preference_note: params["dayPreferenceNote"],
-          employment_status: params.fetch("employmentStatus"),
-          first_name: params.fetch("firstName"),
-          surname: params.fetch("surname"),
-          sia_badge_number: params["siaBadgeNumber"],
-          sia_badge_expiry_date: params["siaBadgeExpiryDate"],
-          address: params.fetch("address"),
-          postcode: params.fetch("postcode"),
-          country: params.fetch("country"),
-          county: params.fetch("county"),
-          email_address: params.fetch("emailAddress")
-        })
+          frontend_updates: frontend_updates,
+        ).enable(starts_at: params.fetch("startsAt"))
 
         if result.success?
           frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -226,7 +202,7 @@ module Api
             surname: params.fetch("surname").strip,
             date_of_birth: params.fetch("date_of_birth").present? ? Date.iso8601(params.fetch("date_of_birth")) : nil,
             email_address: params.fetch("email_address").strip,
-            national_insurance_number: params.fetch("national_insurance_number").strip
+            national_insurance_number: params.fetch("national_insurance_number").strip,
           ).all
 
           existing_profiles = []
@@ -236,20 +212,20 @@ module Api
             national_insurance_number = params.fetch("national_insurance_number").strip
             existing_profiles = StaffMembersExistingQuery.new(
               email: email,
-              national_insurance_number: national_insurance_number
+              national_insurance_number: national_insurance_number,
             ).profiles
           end
 
           render json: staff_members,
                  each_serializer: FlaggedStaffMemberSerializer,
-                 meta: { existing_profiles: existing_profiles },
+                 meta: {existing_profiles: existing_profiles},
                  adapter: :json, status: :ok
         else
           render(
             json: {
-              errors: { base: "required fields missing" }
+              errors: {base: "required fields missing"},
             },
-            status: 422
+            status: 422,
           )
         end
       end
@@ -261,9 +237,9 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
+          frontend_updates: frontend_updates,
         ).update_avatar({
-          avatar_base64: params.fetch("avatar_base64")
+          avatar_base64: params.fetch("avatar_base64"),
         })
 
         if result.success?
@@ -271,10 +247,10 @@ module Api
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -285,14 +261,14 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
+          frontend_updates: frontend_updates,
         ).update_contact_details({
           phone_number: params.fetch("phone_number"),
           address: params.fetch("address"),
           postcode: params.fetch("postcode"),
           country: params.fetch("country"),
           county: params.fetch("county"),
-          email_address: params.fetch("email_address") || ""
+          email_address: params.fetch("email_address") || "",
         })
 
         if result.success?
@@ -300,10 +276,10 @@ module Api
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -314,12 +290,12 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
+          frontend_updates: frontend_updates,
         ).update_personal_details({
           gender: params.fetch(:gender),
           date_of_birth: params.fetch(:date_of_birth),
           first_name: params.fetch(:first_name),
-          surname: params.fetch(:surname)
+          surname: params.fetch(:surname),
         })
 
         if result.success?
@@ -327,10 +303,10 @@ module Api
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 
@@ -341,7 +317,7 @@ module Api
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates
+          frontend_updates: frontend_updates,
         ).update_employment_details({
           national_insurance_number: params["national_insurance_number"],
           sage_id: params.fetch("sage_id"),
@@ -354,7 +330,7 @@ module Api
           other_venue_ids: params.fetch("other_venue_ids") || [],
           staff_type_id: params.fetch("staff_type_id"),
           sia_badge_number: params["sia_badge_number"],
-          sia_badge_expiry_date: params["sia_badge_expiry_date"]
+          sia_badge_expiry_date: params["sia_badge_expiry_date"],
         })
 
         if result.success?
@@ -362,10 +338,10 @@ module Api
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
-            status: 200
+            status: 200,
           )
         else
-          render 'api/v1/shared/api_errors.json', status: 422 ,locals: { api_errors: result.api_errors }
+          render "api/v1/shared/api_errors.json", status: 422, locals: {api_errors: result.api_errors}
         end
       end
 

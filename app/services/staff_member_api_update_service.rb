@@ -4,7 +4,7 @@
 # * return ApiErrors object for operations
 class StaffMemberApiUpdateService
   class Result < Struct.new(:staff_member, :success, :api_errors)
-    def  success?
+    def success?
       success
     end
   end
@@ -15,6 +15,7 @@ class StaffMemberApiUpdateService
     @ability = UserAbility.new(requester)
     @frontend_updates = frontend_updates
   end
+
   attr_reader :staff_member, :requester, :ability, :frontend_updates
 
   def disable(params)
@@ -23,7 +24,7 @@ class StaffMemberApiUpdateService
     form = DisableStaffMemberForm.new(OpenStruct.new)
     form_valid = form.validate({
       disable_reason: params.fetch(:disable_reason),
-      never_rehire: BooleanString.parse_boolean(params.fetch(:never_rehire))
+      never_rehire: BooleanString.parse_boolean(params.fetch(:never_rehire)),
     })
 
     success = false
@@ -33,7 +34,7 @@ class StaffMemberApiUpdateService
         staff_member: staff_member,
         would_rehire: form.would_rehire,
         disable_reason: form.disable_reason,
-        frontend_updates: frontend_updates
+        frontend_updates: frontend_updates,
       ).call
       success = true
     end
@@ -48,58 +49,13 @@ class StaffMemberApiUpdateService
     Result.new(staff_member, success, api_errors)
   end
 
-  def enable(params)
+  def enable(starts_at:)
     assert_action_permitted(:enable)
-
-    master_venue = Venue.find_by(id: params.fetch(:main_venue_id))
-    work_venues = Array(params.fetch(:other_venue_ids)).map do |id|
-      Venue.find(id)
-    end
-    staff_type = StaffType.find_by(id: params.fetch(:staff_type_id))
-    pay_rate = PayRate.find_by(id: params.fetch(:pay_rate_id))
-
-    staff_member_params = {
-      starts_at: UIRotaDate.parse(params.fetch(:starts_at)),
-      master_venue: master_venue,
-      work_venues: work_venues,
-      pay_rate: pay_rate,
-      staff_type: staff_type,
-      gender: params.fetch(:gender),
-      phone_number: params.fetch(:phone_number),
-      date_of_birth: UIRotaDate.parse(params.fetch(:date_of_birth)),
-      national_insurance_number: params.fetch(:national_insurance_number),
-      name_attributes: {
-        first_name: params.fetch(:first_name),
-        surname: params.fetch(:surname)
-      },
-      address_attributes: {
-        address: params.fetch(:address),
-        country: params.fetch(:country),
-        county: params.fetch(:county),
-        postcode: params.fetch(:postcode)
-      },
-      sia_badge_number: params.fetch(:sia_badge_number),
-      sia_badge_expiry_date: params.fetch(:sia_badge_expiry_date).present? && UIRotaDate.parse(params.fetch(:sia_badge_expiry_date))
-    }
-
-    new_email_address = (params.fetch(:email_address) || '').downcase.strip
-    if staff_member.email != new_email_address
-      staff_member_params[:email_address_attributes] = {
-        email: new_email_address
-      }
-    end
-    staff_member_params[:pin_code] = params.fetch(:pin_code) if params[:pin_code].present?
-    staff_member_params[:avatar_data_uri] = params[:avatar_base64] if params[:avatar_base64].present?
-    staff_member_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?
-    staff_member_params[:day_perference_note] = params[:day_preference_note] if params[:day_preference_note].present?
-    EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params.each do |param, value|
-      staff_member_params[param] = value
-    end
 
     model_service_result = ReviveStaffMember.new(
       requester: requester,
       staff_member: staff_member,
-      staff_member_params: staff_member_params
+      starts_at: starts_at,
     ).call
 
     api_errors = nil
@@ -123,9 +79,9 @@ class StaffMemberApiUpdateService
         address: params.fetch(:address),
         postcode: params.fetch(:postcode),
         country: params.fetch(:country),
-        county: params.fetch(:county)
+        county: params.fetch(:county),
       ),
-      email: params.fetch(:email_address)
+      email: params.fetch(:email_address),
     ).call
 
     api_errors = nil
@@ -149,9 +105,9 @@ class StaffMemberApiUpdateService
         date_of_birth: UIRotaDate.parse(params.fetch(:date_of_birth)),
         name_attributes: {
           first_name: params.fetch(:first_name),
-          surname: params.fetch(:surname)
-        }
-      }
+          surname: params.fetch(:surname),
+        },
+      },
     ).call
 
     api_errors = nil
@@ -195,7 +151,7 @@ class StaffMemberApiUpdateService
     model_service_result = UpdateStaffMemberEmploymentDetails.new(
       requester: requester,
       staff_member: staff_member,
-      params: update_params
+      params: update_params,
     ).call
 
     api_errors = nil
@@ -213,7 +169,7 @@ class StaffMemberApiUpdateService
     assert_action_permitted(:update_avatar)
 
     result = staff_member.update_attributes(
-      avatar_data_uri: params.fetch(:avatar_base64)
+      avatar_data_uri: params.fetch(:avatar_base64),
     )
 
     api_errors = nil
@@ -227,6 +183,7 @@ class StaffMemberApiUpdateService
   end
 
   private
+
   def assert_action_permitted(action)
     case action
     when :enable
@@ -244,6 +201,6 @@ class StaffMemberApiUpdateService
   end
 
   def assert_staff_member_enabled
-    raise 'Attempt to update disabled staff_member' if staff_member.disabled?
+    raise "Attempt to update disabled staff_member" if staff_member.disabled?
   end
 end

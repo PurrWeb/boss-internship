@@ -8,8 +8,6 @@ import {
   INITIAL_LOAD,
   EDIT_PROFILE,
   CANCEL_EDIT_PROFILE,
-  ENABLE_PROFILE,
-  CANCEL_ENABLE_PROFILE,
   SHOW_DISABLE_MODAL,
   HIDE_DISABLE_MODAL,
   SHOW_EDIT_AVATAR_MODAL,
@@ -22,7 +20,6 @@ const initialState = fromJS({
   staffMember: {},
   accessToken: null,
   editProfile: false,
-  enableProfile: false,
   staffTypes: [],
   venues: [],
   payRates: [],
@@ -108,12 +105,6 @@ const profileReducer = handleActions(
     },
     [CANCEL_EDIT_PROFILE]: state => {
       return state.set('editProfile', false);
-    },
-    [ENABLE_PROFILE]: state => {
-      return state.set('enableProfile', true);
-    },
-    [CANCEL_ENABLE_PROFILE]: state => {
-      return state.set('enableProfile', false);
     },
     [SHOW_DISABLE_MODAL]: state => {
       return state.set('disableStaffMemberModal', true);

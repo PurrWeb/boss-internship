@@ -31,6 +31,8 @@ export const globalReducer = handleActions({
       mEndDate: safeMoment.uiDateParse(oFetch(rawPaymentFilter, 'sEndDate')),
       statusFilter: oFetch(rawPaymentFilter, 'statusFilter')
     };
+    
+    window.boss.accessToken = accessToken;
 
     return state.
       set('accessToken', accessToken).
