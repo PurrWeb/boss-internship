@@ -594,6 +594,8 @@ ActiveRecord::Schema.define(version: 20180924181537) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.text     "venue_ids",   limit: 65535
+    t.string   "first_name",  limit: 255,   null: false
+    t.string   "surname",     limit: 255,   null: false
   end
 
   add_index "invites", ["accepted_at"], name: "index_invites_on_accepted_at", using: :btree

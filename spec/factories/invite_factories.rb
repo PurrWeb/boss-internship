@@ -2,6 +2,11 @@ FactoryGirl.define do
   factory :invite do
     inviter factory: :user
 
+    first_name 'Invite'
+    sequence :surname do |n|
+      "User#{n}"
+    end
+
     sequence :email do |n|
       "fake#{n}@email.com"
     end
