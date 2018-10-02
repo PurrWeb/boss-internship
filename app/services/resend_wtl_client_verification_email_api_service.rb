@@ -10,7 +10,6 @@ class ResendWtlClientVerificationEmailApiService
   end
 
   def call
-    success = false
     api_errors = nil
     wtl_client.from_registration = false
 
@@ -18,7 +17,7 @@ class ResendWtlClientVerificationEmailApiService
     unless result.success?
       api_errors = WtlClientApiErrors.new(wtl_client: wtl_client)
     end
-    Result.new(success, wtl_client, api_errors)
+    Result.new(result.success?, wtl_client, api_errors)
   end
 
   private
