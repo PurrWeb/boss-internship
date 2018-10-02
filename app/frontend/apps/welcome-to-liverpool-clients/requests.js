@@ -36,3 +36,8 @@ export const updateClientProfileRequest = params => {
   const dateOfBirth = mDateOfBirth ? mDateOfBirth.format(utils.commonDateFormat) : null;
   return http().put(`/api/v1/wtl_clients/${id}`, { ...params, dateOfBirth });
 };
+
+export const resendWtlClientVerificationEmailRequest = params => {
+  const id = oFetch(params, 'id');
+  return http().post(`/api/v1/wtl_clients/${id}/resend_verification_email`);
+};

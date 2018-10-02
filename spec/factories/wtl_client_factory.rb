@@ -9,5 +9,17 @@ FactoryGirl.define do
     gender WtlClient::GENDERS[0]
     phone_number "555-55-55"
     verification_token SecureRandom.hex
+
+    trait :verified do
+      verified_at Time.now - 1.day
+    end
+
+    trait :enabled do
+      status WtlClient.statuses.keys[0]
+    end
+
+    trait :disabled do
+      status WtlClient.statuses.keys[1]
+    end
   end
 end

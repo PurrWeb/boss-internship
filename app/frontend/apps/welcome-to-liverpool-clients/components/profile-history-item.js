@@ -19,6 +19,13 @@ function renderValue(key, value) {
 }
 
 function renderField(fieldName, changeset) {
+  if (fieldName === 'verified_at' && changeset[fieldName][0] === null) {
+    return (
+      <p className="boss-timeline__text">
+        <span className="boss-timeline__text-faded">Verified</span>
+      </p>
+    );
+  }
   if (fieldName === 'card_number') {
     const isAssigned = changeset[fieldName][0] === null && changeset[fieldName][1];
     const isUnAssigned = changeset[fieldName][0] && changeset[fieldName][1] === null;
@@ -36,6 +43,13 @@ function renderField(fieldName, changeset) {
         </p>
       );
     }
+  }
+  if (fieldName === 'verification_token') {
+    return (
+      <p className="boss-timeline__text">
+        <span className="boss-timeline__text-faded">Verification email was resend</span>
+      </p>
+    );
   }
   return (
     <p className="boss-timeline__text">

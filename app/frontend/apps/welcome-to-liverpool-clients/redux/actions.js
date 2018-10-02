@@ -7,7 +7,9 @@ import {
   updateClientProfileRequest,
   getWtlClientsRequest,
   getWtlClientRequest,
+  resendWtlClientVerificationEmailRequest,
 } from '../requests';
+
 import { getWtlClientsFilterQueryParams } from '../selectors';
 
 export const loadInitialData = createAction(types.LOAD_INITIAL_DATA);
@@ -66,4 +68,8 @@ export const disableClientRequested = params => dispatch => {
 
 export const updateClientProfileRequested = params => dispatch => {
   return updateClientProfileRequest(params).then(response => dispatch(updateClientProfile(response.data)));
+};
+
+export const resendWtlClientVerificationEmailAction = params => dispatch => {
+  return resendWtlClientVerificationEmailRequest(params).then(response => dispatch(updateClientProfile(response.data)));
 };

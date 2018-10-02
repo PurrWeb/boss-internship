@@ -94,8 +94,18 @@ class ClientsPage extends React.Component {
           clients={clients}
           total={totalCount}
           onLoadMore={this.onLoadMore}
-          itemRenderer={client => <PureToJSClientItem client={client} />}
-          itemRendererMobile={client => <PureToJSClientItemMobile client={client} />}
+          itemRenderer={client => (
+            <PureToJSClientItem
+              onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
+              client={client}
+            />
+          )}
+          itemRendererMobile={client => (
+            <PureToJSClientItemMobile
+              onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
+              client={client}
+            />
+          )}
         />
       </main>
     );
@@ -109,6 +119,7 @@ ClientsPage.propTypes = {
   changeFilter: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
   getWtlClients: PropTypes.func.isRequired,
+  resendWtlClientVerificationEmailAction: PropTypes.func.isRequired,
 };
 
 export default withRouter(ClientsPage);

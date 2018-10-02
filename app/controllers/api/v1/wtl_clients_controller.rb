@@ -86,6 +86,19 @@ module Api
         render json: {history: history}, status: 200
       end
 
+      def resend_verification_email
+        result = ResendWtlClientVerificationEmailApiService.new(wtl_client: wtl_client_from_params).call
+        if result.success?
+          render json: {
+            client: Api::V1::WtlClients::WtlClientSerializer.new(result.wtl_client),
+          }, status: 200
+        else
+          render json: {
+            errors: result.api_errors.errors,
+          }, status: 422
+        end
+      end
+
       private
 
       def wtl_client_from_params
