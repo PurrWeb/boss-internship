@@ -23,19 +23,12 @@ module PageObject
     end
 
     def assert_on_correct_page
-      expect(page_heading).to(
-        have_text(expected_page_heading_text),
-        "expected page heading to have test '#{expected_page_heading_text}' got '#{page_heading.text}'"
-      )
+      react_app_div
     end
 
     private
-    def page_heading
-      page.find('main h1')
-    end
-
-    def expected_page_heading_text
-      'Invites'
+    def react_app_div
+      page.find('div[data-react-class="InvitesApp"]')
     end
   end
 end
