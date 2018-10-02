@@ -94,7 +94,7 @@ RSpec.describe 'Staff member refund accessory requests API endpoint' do
         "size" => accessory_request.size,
         "status" => accessory_request.current_state,
         "refundRequestStatus" => accessory_request.accessory_refund_request.current_state,
-        "payslipDate" => "24-09-2018",
+        "payslipDate" => UIRotaDate.format(accessory_request.payslip_date),
         "refundFrozen" => nil,
         "refundPayslipDate" => nil,
         "requestFrozen" => false,
