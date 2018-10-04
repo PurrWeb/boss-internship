@@ -62,10 +62,10 @@ export const appRoutes = {
         ].join("")
     },
     rotaOverviewPdfDownload: function(options){
-      let [highlightDate, venueId] = oFetch(options, "highlightDate", "venueId");
+      let [mHighlightDate, venueId] = oFetch(options, "mHighlightDate", "venueId");
       return [
           'rotas.pdf?',
-          'highlight_date=' + utils.formatRotaUrlDate(highlightDate),
+          'highlight_date=' + mHighlightDate.format(utils.apiDateFormat),
           '&venue_id=' + venueId,
       ].join("")
     },

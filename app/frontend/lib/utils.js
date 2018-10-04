@@ -45,7 +45,7 @@ function replaceFunctionPropsWithStrings(obj){
 
 function formatJSDateToUIDate(date) {
   if (!date) {
-    throw new Error(`no date supplyed to formatJSDateToUIDate`);
+    return date;
   }
   if (!(date instanceof Date)) {
     throw new Error(`date is not instance of Date`);
