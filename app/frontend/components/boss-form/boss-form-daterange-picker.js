@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 
 const START_DATE_FIELD_NAME = 'startDate';
 const END_DATE_FIELD_NAME = 'endDate';
@@ -35,18 +35,13 @@ class BossFormDaterangePicker extends Component {
             <span className="boss-form__label-text">{label}</span>
           </p>
         )}
-        <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
-          <DateRangePicker
-            numberOfMonths={1}
-            withPortal
-            showClearDates
-            displayFormat={'DD-MM-YYYY'}
-            isOutsideRange={() => false}
+        <div className="date-control date-control_type_icon date-control_type_interval-fluid date-control_adjust_third">
+          <BossDateRangePicker
+            startDateId="startDateId"
+            endDateId="endDateId"
             startDate={startDate.input.value || null}
-            onDatesChange={this._handleDatesChange}
             endDate={endDate.input.value || null}
-            focusedInput={this.state.focusedInput}
-            onFocusChange={focusedInput => this.setState({ focusedInput })}
+            onApply={this._handleDatesChange}
           />
         </div>
       </div>

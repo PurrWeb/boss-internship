@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import safeMoment from '~/lib/safe-moment';
 import moment from 'moment';
+import utils from '~/lib/utils';
 
 class RotaWeekDays extends Component {
   state = {
@@ -16,7 +17,7 @@ class RotaWeekDays extends Component {
     let day = startOfWeek;
 
     while (day <= endOfWeek) {
-      days.push(day.toDate());
+      days.push(day.format(utils.commonDateFormat));
       day = day.clone().add(1, 'd');
     }
     return days;
@@ -55,7 +56,7 @@ class RotaWeekDays extends Component {
 
   loadDayRota = (index, week) => {
     const date = week[index];
-    const formatedDate = moment(date).format('DD-MM-YYYY');
+    const formatedDate = safeMoment.uiDateParse(date).format('DD-MM-YYYY');
     this.setState({
       highlightDate: date,
     });

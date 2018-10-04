@@ -1,6 +1,6 @@
 import React from 'react';
-import DatePicker from 'react-datepicker';
-import CalendarCustomInput from './calendar-custom-input';
+import BossDatePicker from '~/components/react-dates/boss-date-picker';
+
 
 class BossFormCalendar extends React.Component {
 
@@ -17,18 +17,10 @@ class BossFormCalendar extends React.Component {
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
         </label>
-        <DatePicker
-          customInput={<CalendarCustomInput errorClass={`${touched && error && 'boss-input_state_error'}`} />}
-          withPortal="withPortal"
-          calendarClassName={`date-picker`}
-          showMonthDropdown
-          showYearDropdown
-          locale="en-gb"
-          selected={value}
-          onChange={(value) => onChange(value)}
-          dropdownMode="select"
-          dateFormat="DD-MM-YYYY"
-          allowSameDay
+        <BossDatePicker 
+          date={value}
+          onApply={onChange}
+          invalid={!!touched && !!error}
         />
         {
           touched && error &&

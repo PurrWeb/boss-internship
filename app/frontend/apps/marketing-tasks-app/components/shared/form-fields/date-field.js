@@ -1,8 +1,5 @@
 import React from 'react';
-import DatePicker from 'react-datepicker';
-import TimePicker from 'rc-time-picker';
-import CalendarCustomInput from '~/components/boss-form/calendar-custom-input';
-import safeMoment from "~/lib/safe-moment";
+import BossDatePicker from '~/components/react-dates/boss-date-picker';
 
 class DateField extends React.Component {
   render() {
@@ -20,25 +17,12 @@ class DateField extends React.Component {
         <p className="boss-form__label">
           <span className="boss-form__label-text">{label}</span>
         </p>
-
-        <div className={ `date-picker-input date-picker-input_type_icon ${touched && error && 'boss-form__input_state_error'} false` }>
-          <DatePicker
-            customInput={<CalendarCustomInput />}
-            withPortal="withPortal"
-            calendarClassName="date-picker"
-            className={`${touched && error && 'boss-form__input_state_error'} false`}
-            showMonthDropdown
-            showYearDropdown
-            locale="en-gb"
-            selected={input.value}
-            onChange={(value) => input.onChange(value)}
-            dropdownMode="select"
-            dateFormat="DD-MM-YYYY"
-            allowSameDay
-            placeholderText="Select a date"
-          />
-        </div>
-
+        <BossDatePicker 
+          id="date"
+          date={input.value}
+          onApply={input.onChange}
+          invalid={touched && error}
+        />
         {
           touched && error &&
             <div className="boss-form__error">

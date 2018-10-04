@@ -1,13 +1,10 @@
 import React from 'react';
+import AsyncButton from 'react-async-button';
 
-import FormDateInterval from './form-date-interval';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 import BossSelect from '~/components/boss-select';
 
 class IncidentReportsFilter extends React.Component {
-  
-  constructor(props) {
-    super(props);
-  }
 
   onDatesChange = ({startDate, endDate}) => {
     this.props.onStartEndChange({startDate, endDate})
@@ -19,16 +16,13 @@ class IncidentReportsFilter extends React.Component {
   }
 
   handleUpdateClick = () => {
-    this.props.handleUpdateClick();
+    return this.props.handleUpdateClick();
   }
 
   render() {
     const {
       reportCreators,
       selectedCreatorId,
-      handleUpdateClick,
-      onCreatorChange,
-      onStartEndChange,
     } = this.props;
 
     const selectedCreator = reportCreators.find(creator => creator.get('id') == selectedCreatorId) || null;
@@ -38,13 +32,18 @@ class IncidentReportsFilter extends React.Component {
         <div className="boss-dropdown__content-inner">
           <div className="boss-form">
             <div className="boss-form__row">
-              <FormDateInterval
-                label="Date"
-                startDate={this.props.startDate}
-                endDate={this.props.endDate}
-                fieldClassName="boss-form__field_layout_half"
-                onDatesChange={this.onDatesChange}
-              />
+              <div className="boss-form__field boss-form__field_layout_half">
+                <p className="boss-form__label"><span className="boss-form__label-text">Date</span></p>
+                <div className="date-control date-control_type_icon date-control_type_interval-fluid">
+                  <BossDateRangePicker
+                    startDateId="startDateId"
+                    endDateId="endDateId"
+                    startDate={this.props.startDate}
+                    endDate={this.props.endDate}
+                    onApply={this.onDatesChange}
+                  />
+                </div>
+              </div>
               <div className="boss-form__field boss-form__field_layout_half boss-form__field_position_last">
                 <label className="boss-form__label">
                   <span className="boss-form__label-text">Created By</span>
@@ -61,10 +60,12 @@ class IncidentReportsFilter extends React.Component {
               </div>
             </div>
             <div className="boss-form__field">
-              <button
-                onClick={this.handleUpdateClick}
-                className="boss-button boss-form__submit boss-form__submit_adjust_single"
-              >Update</button>
+            <AsyncButton
+              onClick={this.handleUpdateClick}
+              className="boss-button boss-form__submit boss-form__submit_adjust_single"
+              text="Update"
+              pendingText="Updating ..."
+            />
             </div>
           </div>
         </div>

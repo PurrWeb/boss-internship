@@ -1,9 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-import VenuesSelect from '~/components/select-venue';
-import BossSelect from '~/components/boss-select';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 import {RadioGroup, Radio} from 'react-radio-group';
 
 class AllDisabledDateRangeFilter extends React.PureComponent {
@@ -11,7 +7,6 @@ class AllDisabledDateRangeFilter extends React.PureComponent {
     super(props);
 
     this.state = {
-      focusedInput: null,
       startDate: props.startDate,
       endDate: props.endDate,
     }
@@ -44,28 +39,20 @@ class AllDisabledDateRangeFilter extends React.PureComponent {
       selectedStatus,
       dateTitle,
     } = this.props;
-
     return (
       <div className="boss-page-main__filter">
         <div className="boss-form">
-          <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
-            <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_fluid">
-              <p className="boss-form__label boss-form__label_type_icon-date">
-                <span className="boss-form__label-text">
-                  {dateTitle}
-                </span>
-              </p>
-              <div className="date-range-picker date-range-picker_adjust_control">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  displayFormat={"DD/MM/YYYY"}
-                  isOutsideRange={() => false}
+        <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
+            <div className="boss-form__field boss-form__field_layout_min boss-form__field_role_control">
+              <label className="boss-form__label boss-form__label_type_icon-date"><span className="boss-form__label-text">{dateTitle}</span></label>
+              <div className="date-control date-control_adjust_control">
+                <BossDateRangePicker
+                  startDateId="startDate"
+                  endDateId="endDate"
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}
-                  onDatesChange={this.onDatesChange}
-                  focusedInput={this.state.focusedInput}
-                  onFocusChange={focusedInput => this.setState({ focusedInput })}
+                  onApply={this.onDatesChange}
+                  showClearDates={false}
                 />
               </div>
             </div>

@@ -1,10 +1,10 @@
 import React from 'react';
-import classnames from 'classnames';
-import moment from 'moment';
+import AsyncButton from 'react-async-button';
 import oFetch from 'o-fetch';
 
 import Select from 'react-select';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
+
 
 export default class TaskFilter extends React.Component {
   componentDidMount() {
@@ -33,7 +33,6 @@ export default class TaskFilter extends React.Component {
       statuses: oFetch(this.props.filter, 'statuses'),
       startDate: {},
       endDate: {},
-      focusedInput: {},
       lateTaskOnlyChecked: false,
       showAllChecked: true
     }
@@ -118,10 +117,10 @@ export default class TaskFilter extends React.Component {
     }
   }
 
-  setAndQueryMarketingTasks(e) {
+  setAndQueryMarketingTasks = (e) => {
     e.preventDefault();
 
-    this.queryMarketingTasks();
+    return this.queryMarketingTasks();
   }
 
   queryMarketingTasks() {
@@ -151,7 +150,7 @@ export default class TaskFilter extends React.Component {
       assignedToUser = this.props.filter.assignedToUser.value
     }
 
-    this.props.queryMarketingTasks({
+    return this.props.queryMarketingTasks({
       dueAtStartDate: dueAtStartDate,
       dueAtEndDate: dueAtEndDate,
       completedAtStartDate: completedAtStartDate,
@@ -176,11 +175,12 @@ export default class TaskFilter extends React.Component {
   }
 
   renderFilterUpdate() {
-    if (this.props.filter.updating) {
-      return <button className="boss-button boss-form__submit boss-form__submit_adjust_single">Updating</button>
-    } else {
-      return <button className="boss-button boss-form__submit boss-form__submit_adjust_single" type="submit" onClick={ this.setAndQueryMarketingTasks.bind(this) }>Update</button>
-    }
+    return <AsyncButton
+            onClick={this.setAndQueryMarketingTasks}
+            className="boss-button boss-form__submit boss-form__submit_adjust_single"
+            text="Update"
+            pendingText="Updating ..."
+          />
   }
 
   renderOption(option) {
@@ -221,36 +221,26 @@ export default class TaskFilter extends React.Component {
 
                   <div className="boss-form__field boss-form__field_layout_half">
                     <p className="boss-form__label"><span className="boss-form__label-text">Due Date</span></p>
-                    <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
-                      <DateRangePicker
-                        startDate={this.state.startDate['dueAt']}
-                        endDate={this.state.endDate['dueAt']}
-                        numberOfMonths={1}
-                        withPortal
-                        showClearDates
-                        displayFormat={ 'DD-MM-YYYY' }
-                        isOutsideRange={ () => false }
-                        onDatesChange={({ startDate, endDate }) => this.onDatesChange('dueAt', { startDate, endDate })}
-                        focusedInput={this.state.focusedInput['dueAt']}
-                        onFocusChange={(focusedInput) => this.onFocusChange('dueAt', focusedInput)}
+                    <div className="date-control date-control_type_icon date-control_type_interval-fluid date-control_adjust_third">
+                      <BossDateRangePicker
+                        startDateId="startDateId"
+                        endDateId="endDateId"
+                        startDate={this.state.startDate['dueAt'] || null}
+                        endDate={this.state.endDate['dueAt'] || null}
+                        onApply={({ startDate, endDate }) => this.onDatesChange('dueAt', { startDate, endDate })}
                       />
                     </div>
                   </div>
 
                   <div className="boss-form__field boss-form__field_layout_half">
                     <p className="boss-form__label"><span className="boss-form__label-text">Completed At</span></p>
-                    <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
-                      <DateRangePicker
-                        startDate={this.state.startDate['completedAt']}
-                        endDate={this.state.endDate['completedAt']}
-                        numberOfMonths={1}
-                        withPortal
-                        showClearDates
-                        displayFormat={ 'DD-MM-YYYY' }
-                        isOutsideRange={ () => false }
-                        onDatesChange={({ startDate, endDate }) => this.onDatesChange('completedAt', { startDate, endDate })}
-                        focusedInput={this.state.focusedInput['completedAt']}
-                        onFocusChange={(focusedInput) => this.onFocusChange('completedAt', focusedInput)}
+                    <div className="date-control date-control_type_icon date-control_type_interval-fluid date-control_adjust_third">
+                      <BossDateRangePicker
+                        startDateId="startDateId"
+                        endDateId="endDateId"
+                        startDate={this.state.startDate['completedAt'] || null}
+                        endDate={this.state.endDate['completedAt'] || null}
+                        onApply={({ startDate, endDate }) => this.onDatesChange('completedAt', { startDate, endDate })}
                       />
                     </div>
                   </div>

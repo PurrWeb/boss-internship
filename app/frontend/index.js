@@ -1,10 +1,11 @@
 import './polyfills';
 import 'whatwg-fetch';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
 import moment from 'moment';
+import 'react-dates/initialize'
+
 import $ from 'jquery';
 import * as selectors from '~/redux/selectors';
 import '~/lib/global-try-catch';
@@ -27,6 +28,8 @@ window.debug.selectors = selectors;
 // Expose these globally because react rails relies on them
 window.React = React;
 window.ReactDOM = ReactDOM;
+
+require('react-dates/lib/css/_datepicker.css');
 
 // ToDo: Need to remove this condition, after fix old layout issues
 if (window.boss.currentLayout !== 'oldLayout') {

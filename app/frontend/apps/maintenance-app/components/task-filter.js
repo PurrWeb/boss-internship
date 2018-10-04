@@ -5,7 +5,7 @@ import oFetch from 'o-fetch';
 import URLSearchParams from 'url-search-params';
 
 import Select from 'react-select';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 
 export default class MainDashboard extends React.Component {
   componentDidMount() {
@@ -35,7 +35,6 @@ export default class MainDashboard extends React.Component {
       statuses: oFetch(this.props.filter, 'statuses'),
       startDate: oFetch(this.props.filter, 'startDate'),
       endDate: oFetch(this.props.filter, 'startDate'),
-      focusedInput: null,
       unacceptedOnlyChecked: true,
       showAllChecked: false
     }
@@ -165,7 +164,7 @@ export default class MainDashboard extends React.Component {
     return <button disabled={this.props.filter.updating} className="boss-button boss-form__submit boss-form__submit_adjust_single" type="button" onClick={this.setAndQueryMaintenanceTasks}>Update</button>
   }
 
-  handleDateChange(dates) {
+  handleDateChange = (dates) => {
     this.props.setFilterParams({ startDate: dates.startDate, endDate: dates.endDate });
   }
 
@@ -203,18 +202,13 @@ export default class MainDashboard extends React.Component {
                 <div className="boss-form__row">
                   <div className="boss-form__field boss-form__field_layout_half">
                     <p className="boss-form__label"><span className="boss-form__label-text">Date</span></p>
-                    <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
-                      <DateRangePicker
+                    <div className="date-control date-control_type_icon date-control_type_interval-fluid date-control_adjust_third">
+                      <BossDateRangePicker
+                        startDateId="startDateId"
+                        endDateId="endDateId"
                         startDate={this.props.filter.startDate}
                         endDate={this.props.filter.endDate}
-                        numberOfMonths={1}
-                        withPortal
-                        showClearDates
-                        displayFormat={'DD-MM-YYYY'}
-                        isOutsideRange={() => false}
-                        onDatesChange={this.handleDateChange.bind(this)}
-                        onFocusChange={focusedInput => this.setState({ focusedInput })}
-                        focusedInput={this.state.focusedInput}
+                        onApply={this.handleDateChange}
                       />
                     </div>
                   </div>

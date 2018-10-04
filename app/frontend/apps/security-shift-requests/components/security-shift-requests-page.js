@@ -50,9 +50,9 @@ class SecurityShiftRequestsPage extends Component {
     })(EditSecurityShiftRequest);
   };
 
-  handleDateChage = ({ startDate }) => {
+  handleDateChage = ({ startUIDate }) => {
     location.href = appRoutes.securityShiftRequests({
-      startDate,
+      startDate: startUIDate,
     });
   };
 

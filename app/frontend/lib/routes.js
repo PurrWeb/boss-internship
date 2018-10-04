@@ -73,7 +73,7 @@ export const appRoutes = {
         var date = oFetch(options, "date");
         return [
             '/security_rotas.pdf?',
-            'date=' + utils.formatRotaUrlDate(date)
+            'date=' + date
         ].join("");
     },
     financeReportsPdfDownload: function(options){
@@ -96,19 +96,19 @@ export const appRoutes = {
     },
     securityRotaOverview: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security_rotas?highlight_date=${utils.formatRotaUrlDate(startDate)}`;
+        return `/security_rotas?highlight_date=${startDate}`;
     },
     securityShiftRequestReviews: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security-shift-request-reviews/${utils.formatRotaUrlDate(startDate)}`;
+        return `/security-shift-request-reviews/${startDate}`;
     },
     securityShiftRequests: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security-shift-requests/${utils.formatRotaUrlDate(startDate)}`;
+        return `/security-shift-requests/${startDate}`;
     },
     securityRotaShiftRequests: (options) => {
         const startDate = oFetch(options, "startDate");
-        return `/security_rotas/${utils.formatRotaUrlDate(startDate)}/requests`;
+        return `/security_rotas/${startDate}/requests`;
     },
     securityRotaDaily: (date) => {
         return `/security_rotas/${date}`;
@@ -137,17 +137,17 @@ export const appRoutes = {
     financeReports: (options) => {
         const startDate = oFetch(options, "startDate");
         const venueId = oFetch(options, "venueId");
-        return `/finance_reports/${utils.formatRotaUrlDate(startDate)}?venue_id=${venueId}`;
+        return `/finance_reports/${startDate}?venue_id=${venueId}`;
     },
     payrollReports: (options) => {
         const startDate = oFetch(options, "startDate");
         const venueId = oFetch(options, "venueId");
-        return `/payroll_reports/${utils.formatRotaUrlDate(startDate)}?venue_id=${venueId}`;
+        return `/payroll_reports/${startDate}?venue_id=${venueId}`;
     },
     rotaOverview: function(options){
         var [venueId, startDate] = oFetch(options, "venueId", "startDate");
         return [
-            "/rotas?venue_id=" + venueId + "&highlight_date=" + utils.formatRotaUrlDate(startDate),
+            "/rotas?venue_id=" + venueId + "&highlight_date=" + startDate,
         ].join("");
     },
     changeOrdersIndex: function(options){
@@ -183,12 +183,12 @@ export const appRoutes = {
           venueId;
     },
     holidays: function(options) {
-        var date = oFetch(options, "date");
+        var startDate = oFetch(options, "startDate");
         var venueId = options.venueId; // venueId is optional
 
         var parts = [
             "holidays?",
-            "date=" + utils.formatRotaUrlDate(date)
+            "date=" + startDate
         ];
         if (venueId !== undefined && venueId !== null) {
             parts.push("&venue=" + venueId);
@@ -275,7 +275,7 @@ export const appRoutes = {
         var venueId = options.venueId; //optional
         var parts = [
           "/holidays.csv?" +
-          'date=' + utils.formatRotaUrlDate(date)
+          'date=' + date
         ];
         if (venueId !== null && venueId !== undefined){
             parts.push('&venue=' + venueId);
@@ -296,7 +296,7 @@ export const appRoutes = {
     },
     hoursConfirmationDayPage: function(options){
         var [date, venueId] = oFetch(options, "date", "venueId");
-        return "/hours_confirmation?date=" + utils.formatRotaUrlDate(date)
+        return "/hours_confirmation?date=" + date.format(utils.commonDateFormat)
             + "&venue_id=" + venueId
     },
     checklistsPage: function(options){

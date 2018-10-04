@@ -11,7 +11,7 @@ import RequestItem from './requests-item';
 class RequestsPage extends PureComponent {
   handleDateChage = selection => {
     this.goToSecurityRotaShiftRequestsPage({
-      startDate: selection.startDate,
+      startDate: selection.startUIDate,
     });
   };
 

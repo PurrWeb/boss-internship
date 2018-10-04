@@ -1,11 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
-import utils from "~/lib/utils"
 import { appRoutes } from "~/lib/routes"
-import HolidayReportStaffFinder from "./holiday-report-staff-finder"
 import ReportsHeader from "./reports-header"
 import ReportsBody from "./reports-body"
-import WeekAndVenueSelector from "~/components/week-and-venue-selector"
 import _ from 'lodash';
 export class HolidayReportView extends React.Component {
   render() {

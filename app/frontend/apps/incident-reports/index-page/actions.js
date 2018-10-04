@@ -40,10 +40,14 @@ export const createIncidentReport = (values) => (dispatch, getState) => {
   let incidentTime = '';
 
   if (values.date && values.time) {
-    incidentTime = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    incidentTime = newDate.hour(values.time.hour()).minute(values.time.minute()).toISOString().split('.')[0] + 'Z';
   }
-
-  return createIncidentReportRequest({values: {...values, incidentTime}, venueId})
+  const newValues = { ...values, incidentTime };
+  delete newValues.date;
+  delete newValues.time;
+  return createIncidentReportRequest({values: newValues, venueId})
     .then((resp) => {
       dispatch(addIncidentReport(resp.data))
       dispatch(hideAddNewReport());

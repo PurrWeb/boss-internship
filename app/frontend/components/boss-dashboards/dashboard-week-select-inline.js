@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Popover from 'react-popover';
 import DashboardActions from './dashboard-actions';
 import safeMoment from '~/lib/safe-moment';
-import WeekPicker from '~/components/week-picker';
+import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import utils from '~/lib/utils';
 
 class DashboardWeekSelect extends React.Component {
@@ -38,10 +38,10 @@ class DashboardWeekSelect extends React.Component {
       .uiDateParse(this.props.endDate)
       .format(utils.commonDateFormatCalendar());
 
-    const popoverClass = classNames({
-      'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
-      'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
-    });
+      const popoverClass = classNames({
+        'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
+        'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
+      });
     return (
       <div className="boss-page-main__dashboard">
         <div className="boss-page-main__inner">
@@ -58,7 +58,7 @@ class DashboardWeekSelect extends React.Component {
                     place="below"
                     tipSize={0.01}
                     onOuterAction={this.togglePopover}
-                    className="boss-popover boss-popover_context_dashboard-calendar boss-popover_state_opened"
+                    className="boss-popover boss-popover_context_dashboard-week-picker boss-popover_state_opened"
                     style={{ marginTop: '10px' }}
                   >
                     <p className={popoverClass} onClick={this.togglePopover}>
@@ -82,11 +82,10 @@ class DashboardWeekSelect extends React.Component {
   renderCalendar() {
     return (
       <div className="boss-popover__inner">
-        <WeekPicker
-          selectionStartDate={safeMoment
-            .uiDateParse(this.props.startDate)
-            .toDate()}
+        <BossWeekPicker
+          selectionStartUIDate={this.props.startDate}
           onChange={selection => this.props.onDateChange(selection)}
+          onCancelClick={this.togglePopover}
         />
       </div>
     );

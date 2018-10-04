@@ -171,8 +171,8 @@ export default class ArtworkTasks extends React.Component {
 
                 <div className="boss-check__header-meta-item">
                   <p className={ `boss-check__text boss-check__text_role_meta ${(currentMarketingTask.pastDue) ? 'boss-check__text_role_date-alert' : 'boss-check__text_role_date'}` }>
-                    { safeMoment.uiDateParse(
-                      new Date(oFetch(currentMarketingTask, 'dueAt'))
+                    { safeMoment.iso8601Parse(
+                      oFetch(currentMarketingTask, 'dueAt')
                     ).format("DD/MM/YYYY") }
                   </p>
                 </div>

@@ -1,22 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import VenuesSelect from '~/components/select-venue';
 import BossSelect from '~/components/boss-select';
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
+import AsyncButton from 'react-async-button';
+
 
 
 class SubmissionsFilter extends React.PureComponent {
-  static propTypes = {
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      focusedInput: null,
-    }
-  }
   
   onCretedByChange = (createdBy) => {
     this.props.onCretedByChange(createdBy && createdBy.value)
@@ -71,18 +61,13 @@ class SubmissionsFilter extends React.PureComponent {
                     <label className="boss-form__label">
                       <span className="boss-form__label-text">Date</span>
                     </label>
-                    <div className="date-range-picker date-range-picker_type_interval-fluid date-range-picker_type_icon">
-                      <DateRangePicker
-                        numberOfMonths={1}
-                        withPortal
-                        showClearDates
-                        displayFormat={"DD/MM/YYYY"}
-                        isOutsideRange={() => false}
+                    <div className="date-control date-control_type_icon date-control_type_interval-fluid">
+                      <BossDateRangePicker
+                        startDateId="startDate"
+                        endDateId="endDate"
                         startDate={startDate}
                         endDate={endDate}
-                        onDatesChange={onDatesChange}
-                        focusedInput={this.state.focusedInput}
-                        onFocusChange={focusedInput => this.setState({ focusedInput })}
+                        onApply={onDatesChange}
                       />
                     </div>
                   </div>
@@ -120,9 +105,12 @@ class SubmissionsFilter extends React.PureComponent {
                   </div>
                 </div>
                 <div className="boss-form__field">
-                  <button onClick={onSearch} className="boss-button boss-form__submit boss-form__submit_adjust_single">
-                    Update
-                  </button>
+                  <AsyncButton
+                    className="boss-button boss-form__submit boss-form__submit_adjust_single"
+                    text="Update"
+                    pendingText="Updating..."
+                    onClick={onSearch}
+                  />
                 </div>
               </div>
             </div>

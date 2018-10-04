@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 
 class VoucherUsagesFilter extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      focusedInput: null,
       startDate: props.startDate,
       endDate: props.endDate,
     }
@@ -37,25 +36,19 @@ class VoucherUsagesFilter extends React.PureComponent {
       <div className="boss-page-main__filter">
         <div className="boss-form">
           <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
-            <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_fluid">
-              <p className="boss-form__label boss-form__label_type_icon-date">
-                <span className="boss-form__label-text">
-                  {dateTitle}
-                </span>
-              </p>
-              <div className="date-range-picker date-range-picker_adjust_control">
-                <DateRangePicker
-                  numberOfMonths={1}
-                  withPortal
-                  isOutsideRange={() => false}
+          <div className="boss-form__field boss-form__field_layout_min boss-form__field_role_control">
+              <label className="boss-form__label boss-form__label_type_icon-date"><span className="boss-form__label-text">{dateTitle}</span></label>
+              <div className="date-control date-control_adjust_control">
+                <BossDateRangePicker
+                  startDateId="startDate"
+                  endDateId="endDate"
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}
-                  onDatesChange={this.onDatesChange}
-                  focusedInput={this.state.focusedInput}
-                  onFocusChange={focusedInput => this.setState({ focusedInput })}
+                  onApply={this.onDatesChange}
+                  showClearDates={false}
                 />
               </div>
-            </div>
+            </div>            
           </div>
         </div>
       </div>

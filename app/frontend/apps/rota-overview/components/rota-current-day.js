@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import utils from '~/lib/utils';
 import VenueRotaOverviewChart from "../venue-rota-overview-chart";
 import RotaForecast from "../containers/rota-forecast";
 import safeMoment from "~/lib/safe-moment";
@@ -16,8 +16,8 @@ export default class RotaCurrentDay extends React.Component {
   }
 
   render() {
-    const date = safeMoment.uiDateParse(this.props.rota.date).format('dddd, D MMMM YYYY');
-    const rotaEditUrlDate = safeMoment.uiDateParse(this.props.rota.date).format('DD-MM-YYYY');
+    const date = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.props.rota.date)).format('dddd, D MMMM YYYY');
+    const rotaEditUrlDate = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.props.rota.date)).format('DD-MM-YYYY');
     const status = this.props.rota.status;
 
     return (

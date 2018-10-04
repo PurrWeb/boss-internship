@@ -1,7 +1,6 @@
 import React from 'react';
-import DatePicker from 'react-datepicker';
 import TimePicker from 'rc-time-picker';
-import CalendarCustomInput from '~/components/boss-form/calendar-custom-input';
+import BossDatePicker from '~/components/react-dates/boss-date-picker';
 import safeMoment from "~/lib/safe-moment";
 
 import 'rc-time-picker/assets/index.css';
@@ -26,20 +25,12 @@ class DateTimeField extends React.Component {
           </p>
         </div>
         <div className="boss-form__field boss-form__field_layout_max">
-          <DatePicker
-            customInput={<CalendarCustomInput />}
-            withPortal="withPortal"
-            calendarClassName="date-picker"
-            className={`${date.meta.touched && date.meta.error && 'boss-input_state_error'}`}
-            showMonthDropdown
-            showYearDropdown
-            locale="en-gb"
-            selected={date.input.value}
-            onChange={(value) => date.input.onChange(value)}
-            dropdownMode="select"
-            dateFormat="DD-MM-YYYY"
-            allowSameDay
-          />
+            <BossDatePicker 
+              id="date"
+              date={date.input.value}
+              onApply={date.input.onChange}
+              invalid={date.meta.touched && date.meta.error}
+            />
           {
             date.meta.touched && date.meta.error &&
               <div className="boss-form__error">

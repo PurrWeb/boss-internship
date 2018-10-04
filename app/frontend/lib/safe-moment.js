@@ -1,5 +1,9 @@
 import moment from "moment"
 
+function isValidUIDate(str) {
+  return str.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+}
+
 let parse = function(input, dateFormat) {
   if( arguments.length < 2 ){
     throw new Error("Invalid arguments error: must supply input and dateFormat")
@@ -21,6 +25,12 @@ let iso8601Parse = function(input){
 };
 
 let uiDateParse = function(input){
+  if (typeof input !== 'string') {
+    throw new Error(`invalid uiDate ${input} supplied, not match 'DD-MM-YYYY'`);
+  }
+  if (!isValidUIDate(input)) {
+    throw new Error(`invalid uiDate ${input} supplied, not match 'DD-MM-YYYY'`);
+  }
   return parse(input, 'DD-MM-YYYY');
 };
 

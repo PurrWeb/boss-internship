@@ -1,7 +1,6 @@
-import constants from '../constants';
 import { createAction } from 'redux-actions';
 import safeMoment from "~/lib/safe-moment"
-import { CREATE_DASHBOARD_MESSAGE, SET_FRONTEND_STATE } from '../constants';
+import utils from '~/lib/utils';
 import notify from '~/components/global-notification';
 
 import {
@@ -25,7 +24,9 @@ export const createMessageBoard = (values) => (dispatch, getState) => {
   let publishDate = '';
 
   if (values.date && values.time) {
-    publishDate = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    publishDate = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return createDashboardMessageRequest({values: {...values, publishDate}})
@@ -48,9 +49,10 @@ export const createMessageBoard = (values) => (dispatch, getState) => {
 
 export const updateMessageBoard = (values) => (dispatch, getState) => {
   let publishDate = '';
-
   if (values.date && values.time) {
-    publishDate = safeMoment.uiDateParse(values.date).hour(values.time.hour()).minute(values.time.minute());
+    const uiDate = values.date.format(utils.apiDateFormat);
+    const newDate = safeMoment.uiDateParse(uiDate);
+    publishDate = newDate.hour(values.time.hour()).minute(values.time.minute());
   }
 
   return updateDashboardMessageRequest({values: {...values, publishDate}})

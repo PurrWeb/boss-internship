@@ -1,6 +1,6 @@
 import React from "react"
 
-import { DateRangePicker } from 'react-dates';
+import BossDateRangePicker from '~/components/react-dates/boss-date-range-picker';
 
 import {
   DashboardWrapper,
@@ -81,19 +81,13 @@ export default class MachinesRefloatsFilter extends React.Component {
     return (
       <DashboardFilter onFilterUpdate={this.onFilterUpdate}>
         <DashboardFilterItem label="Date">
-          <div className="date-range-picker date-range-picker_type_icon date-range-picker_type_interval-fluid date-range-picker_adjust_third">
-            <DateRangePicker
-              numberOfMonths={1}
-              withPortal
-              showClearDates
-              isOutsideRange={() => false}
-              displayFormat={"DD-MM-YYYY"}
+          <div className="date-control date-control_type_icon date-control_type_interval-fluid date-control_adjust_third">
+            <BossDateRangePicker
+              startDateId="startDateId"
+              endDateId="endDateId"
               startDate={startDate}
-              keepOpenOnDateSelect={false}
               endDate={endDate}
-              onDatesChange={this.onDatesChange}
-              focusedInput={this.state.focusedInput}
-              onFocusChange={focusedInput => this.setState({focusedInput})}
+              onApply={this.onDatesChange}
             />
           </div>
         </DashboardFilterItem>

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import DashboardActions from './dashboard-actions';
 import safeMoment from '~/lib/safe-moment';
-import DatePicker from 'react-datepicker';
-import CalendarCustomInputLeft from '~/components/boss-form/calendar-custom-input-left';
+import BossDatePicker from '~/components/react-dates/boss-date-picker';
+
 
 class DashboardDateSelect extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class DashboardDateSelect extends React.Component {
   };
 
   onDateChange = date => {
-    this.setState({ date: safeMoment.uiDateParse(date) }, () => {
+    this.setState({ date }, () => {
       this.props.onDateChange(date);
     });
   };
@@ -48,18 +48,10 @@ class DashboardDateSelect extends React.Component {
               <div className="boss-page-dashboard__controls-group">
                 <div className="boss-form">
                   <div className="boss-form__row boss-form__row_justify_space boss-form__row_position_last">
-                    <DatePicker
-                      customInput={<CalendarCustomInputLeft />}
-                      withPortal="withPortal"
-                      calendarClassName="date-picker"
-                      showMonthDropdown
-                      showYearDropdown
-                      locale="en-gb"
-                      dropdownMode="select"
-                      selected={this.state.date}
-                      onChange={this.onDateChange}
-                      dateFormat="DD-MM-YYYY"
-                      allowSameDay
+                    <BossDatePicker 
+                      id="date"
+                      date={this.state.date}
+                      onApply={this.onDateChange}
                     />
                   </div>
                 </div>
