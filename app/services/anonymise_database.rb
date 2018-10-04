@@ -106,9 +106,13 @@ class AnonymiseDatabase
 
     puts "Anonymising Invites"
     Invite.find_each do |invite|
-      new_email = FactoryHelper::Internet.free_email(FactoryHelper::Internet.password)
+      new_email = invite.user.present? ? invite.user.email : FactoryHelper::Internet.free_email
+      new_first_name = invite.user.present? ? invite.user.first_name : FactoryHelper::Name.male_first_name
+      new_surname = invite.user.present? ? invite.user.first_name : FactoryHelper::Name.last_name
 
       invite.update_attributes!(
+        first_name: new_first_name,
+        surname: new_surname,
         email: new_email,
         token: SecureRandom.hex
       )
