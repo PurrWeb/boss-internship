@@ -7,7 +7,7 @@ class StaffMembersPaidHolidaysByWeekQuery
 
   def all
     holiday_ids = InRangeQuery.new(
-      relation: Holiday.where(holiday_type: Holiday::PAID_HOLIDAY_TYPE),
+      relation: Holiday.in_state(:enabled).where(holiday_type: Holiday::PAID_HOLIDAY_TYPE),
       start_value: week.start_date,
       end_value: week.end_date,
       start_column_name: 'start_date',
