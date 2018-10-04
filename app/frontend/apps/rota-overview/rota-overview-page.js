@@ -27,7 +27,7 @@ class RotaOverviewPage extends Component {
       super(props);
 
       this.state = {
-        highlightDate: this.props.storeRotas.date,
+        highlightDate: utils.formatJSDateToUIDate(this.props.storeRotas.date),
         selectedIndex: 0,
         venue: this.props.venue,
         venues: this.props.venues
@@ -149,7 +149,7 @@ class RotaOverviewPage extends Component {
         </div>
     }
     renderTabList(week){
-      const highlightDate = safeMoment.uiDateParse(utils.formatJSDateToUIDate(this.state.highlightDate));
+      const highlightDate = safeMoment.uiDateParse(this.state.highlightDate);
       return week.map((item, index) => {
         const modifiedItem = safeMoment.uiDateParse(item);
         const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
@@ -160,12 +160,11 @@ class RotaOverviewPage extends Component {
     }
     loadDayRota = (index, week) => {
       const date = week[index];
-      const formatedDate = moment(date).format('DD-MM-YYYY');
       const venueId = this.state.venue.id
       this.setState({
         highlightDate: date,
       })
-      this.props.getRotaWeeklyDay(formatedDate, venueId);
+      this.props.getRotaWeeklyDay(date, venueId);
     }
 }
 

@@ -65,7 +65,7 @@ export const appRoutes = {
       let [highlightDate, venueId] = oFetch(options, "highlightDate", "venueId");
       return [
           'rotas.pdf?',
-          'highlight_date=' + utils.formatRotaUrlDate(highlightDate),
+          'highlight_date=' + highlightDate,
           '&venue_id=' + venueId,
       ].join("")
     },
