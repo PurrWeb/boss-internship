@@ -49,7 +49,9 @@ class RotaOverviewPage extends Component {
 
         const pdfHref = appRoutes.rotaOverviewPdfDownload({
           venueId: oFetch(this.props, "venue.id"),
-          highlightDate: oFetch(this.state, "highlightDate")
+          mHighlightDate: safeMoment.uiDateParse(
+            oFetch(this.state, "highlightDate")
+          )
         });
 
         var rotaDetails = storeRota;
