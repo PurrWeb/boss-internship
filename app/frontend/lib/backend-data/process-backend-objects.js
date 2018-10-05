@@ -105,11 +105,7 @@ export function processRotaShiftObject(shift){
 }
 
 export function processHolidayObject(holiday){
-    holiday = processBackendObject(holiday);
-    return Object.assign({}, holiday, {
-        start_date: new Date(holiday.start_date),
-        end_date: new Date(holiday.end_date)
-    })
+    return processBackendObject(holiday);
 }
 
 export function processRotaForecastObject(rotaForecast){
