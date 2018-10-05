@@ -10,10 +10,10 @@ class TimeDodgersService
     staff_members_ids = accepted_minutes.keys | paid_holiday_days.keys | accepted_breaks_minutes.keys
 
     staff_members_ids.inject({ accepted_hours: {}, accepted_breaks: {}, paid_holidays: {} }) do |acc, staff_member_id|
-      staff_member_accepted_minutes = accepted_minutes[staff_member_id].to_i
       staff_member_accepted_breaks_minutes = accepted_breaks_minutes[staff_member_id].to_i
+      staff_member_accepted_minutes = accepted_minutes[staff_member_id].to_i - staff_member_accepted_breaks_minutes
       staff_member_paid_holidays_minutes = paid_holiday_days[staff_member_id].to_i * 576
-      dodged_time = staff_member_accepted_minutes - staff_member_accepted_breaks_minutes + staff_member_paid_holidays_minutes
+      dodged_time = staff_member_accepted_minutes + staff_member_paid_holidays_minutes
 
       if dodged_time > dodgers_limit || dodged_time == 0
         acc
