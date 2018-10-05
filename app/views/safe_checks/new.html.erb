@@ -126,7 +126,6 @@
                           <span class="boss-form__label-text">£10 Notes</span>
                           <span class="boss-form__units">
                               <span class="boss-form__units-value">£</span>
-                              <!-- <input name="£10-notes" type="text" class="boss-form__input" placeholder="0"> -->
                               <%= form.number_field(
                                 :ten_pound_note_pounds,
                                 prepend: '£',
@@ -507,7 +506,7 @@
                                   value: safe_check.pound_value_for(:ash_cash_cents).to_int_if_whole,
                                   label: SafeCheck.label_for(:ash_cash_cents),
                                   step: 0.01,
-                                class: ['boss-form__input', 'js-total-calulation-ash-cash-value', 'js-total-calculation-watch-field']
+                                  class: ['boss-form__input', 'js-total-calulation-ash-cash-value', 'js-total-calculation-watch-field']
                               ) %>
                             </span>
                         </label>
@@ -642,7 +641,7 @@
               <% end %>
 
               <div class="boss-form__field boss-form__field_justify_mobile-center">
-                <%= form.submit('Add new', class: 'boss-button boss-button_role_add boss-form__submit') %>
+                <button type="button" onclick="handleFormSubmit()" class="boss-button boss-button_role_add boss-form__submit">Add new</button>
               </div>
           <% end %>
       </div>
@@ -652,17 +651,28 @@
 <script>
     window.onload = onReceivedChange();
 
+    function handleFormSubmit(e) {
+      const checkbox = document.getElementById("safe_check_received_change");
+      const ashCashInput = document.getElementById("safe_check_ash_cash_cents");
+      const securityPlusInput = document.getElementById("safe_check_security_plus_cents");
+      if (!checkbox.checked) {
+        ashCashInput.value = 0;
+        securityPlusInput.value = 0;
+      }
+      $("#new_safe_check").submit();
+    }
+
     function onReceivedChange() {
-      var checkBox = document.getElementById("received-change");
+      var checkBox = document.getElementById("safe_check_received_change");
       var ashCashInput = document.getElementById("safe_check_ash_cash_cents");
+      var receivedChangeRow = document.getElementById("received-change-row");
       var securityPlusInput = document.getElementById("safe_check_security_plus_cents");
       var outToOrder = document.getElementById("safe_check_out_to_order_cents");
       if(checkBox.checked) {
-        ashCashInput.disabled = false;
-        securityPlusInput.disabled = false;
+        receivedChangeRow.style.display = "flex";
       } else {
-        ashCashInput.disabled = true;
-        securityPlusInput.disabled = true;
+        receivedChangeRow.style.display = "none";
       }
+      calculateRealtimeTotals();
     }
 </script>

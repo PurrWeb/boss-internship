@@ -136,7 +136,7 @@ class SafeChecksController < ApplicationController
 
     params.
       require(:safe_check).
-      permit([:checked_by_note]).
+      permit([:checked_by_note, :received_change]).
       merge(
         venue: venue,
         creator: current_user

@@ -20,6 +20,11 @@ var calculateRealtimeTotals = function(){
   var valueFields = $('.js-total-calculation-value-field');
   var floatFields = $('.js-total-calculation-float-value');
   var outToOrderField = $('.js-total-calculation-out-to-order-value')[0];
+  var ashCash = $('.js-total-calulation-ash-cash-value')[0].value;
+  var securityPlus = $('.js-total-calculation-security-plus-value')[0].value;
+  var checkBox = document.getElementById("safe_check_received_change");
+  var receivedChangeBlock = document.getElementById("received-change-block");
+  var stillOutToOrder = document.getElementById("js-still-out-to-order-calculation-float-value");
 
   var totalCents = 0;
   valueFields.each(function(index, field){
@@ -37,7 +42,18 @@ var calculateRealtimeTotals = function(){
   var safeFloatCents = parseCentsFromPlaceHolderField(safeFloatField);
 
   var outToOrderCents = Math.floor(parseFloat(outToOrderField.value) * 100);
+  var ashCashCents = Math.floor(parseFloat(ashCash) * 100);
+  var securityPlusCents = Math.floor(parseFloat(securityPlus) * 100);
 
+  if (outToOrderCents > 0) {
+    receivedChangeBlock.style.display = "block";
+  } else {
+    receivedChangeBlock.style.display = "none";
+  }
+  if (checkBox.checked) {
+    outToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
+    stillOutToOrder.innerText = "£" + outToOrderCents / 100;
+  }
   var varianceCents = totalCents + outToOrderCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);

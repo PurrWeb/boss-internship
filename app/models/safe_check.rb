@@ -50,6 +50,8 @@ class SafeCheck < ActiveRecord::Base
 
   auto_strip_attributes :checked_by_note, convert_non_breaking_spaces: true, squish: true
 
+  attr_accessor :received_change
+
   POUND_FIELDS.each do |field|
     validate do
       pound_value = SafeCheck.amount_for(field)
