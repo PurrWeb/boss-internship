@@ -105,7 +105,7 @@ function StaffMemberInfo({
                 >
                   {hours === 0
                     ? `0h`
-                    : moment.duration(hours, 'minutes').format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                    : moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
                 </a>
               </li>
               <li className="boss-user-summary__review-item">
@@ -119,7 +119,7 @@ function StaffMemberInfo({
                     ? `0h`
                     : moment
                         .duration(acceptedBreaks, 'minutes')
-                        .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                        .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
                 </a>
               </li>
               <li className="boss-user-summary__review-item">
@@ -133,7 +133,7 @@ function StaffMemberInfo({
                     ? `0h`
                     : moment
                         .duration(paidHolidays, 'minutes')
-                        .format('*hh[h] mm[m]', { trim: 'both', useGrouping: false })}
+                        .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
                 </a>
               </li>
             </ul>
