@@ -11,7 +11,8 @@ class StaffMembersPaidHolidaysByWeekQuery
       start_value: week.start_date,
       end_value: week.end_date,
       start_column_name: 'start_date',
-      end_column_name: 'end_date'
+      end_column_name: 'end_date',
+      include_boundaries: [:start, :end]
     ).all.map(&:id)
 
     StaffMember
@@ -21,6 +22,6 @@ class StaffMembersPaidHolidaysByWeekQuery
       .joins(:holidays)
       .merge(Holiday.where(id: holiday_ids))
       .group('staff_members.id')
-      .sum('TIMESTAMPDIFF(day, holidays.start_date, holidays.end_date)')
+      .sum('TIMESTAMPDIFF(day, holidays.start_date, holidays.end_date) + 1')
   end
 end
