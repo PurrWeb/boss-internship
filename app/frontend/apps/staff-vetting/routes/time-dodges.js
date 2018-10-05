@@ -75,11 +75,11 @@ class TimeDodges extends PureComponent {
       );
 
       const imStaffMembersSoftDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') - staffMember.get('acceptedBreaks') + staffMember.get('paidHolidays');
+        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
         return hours >= TIME_DODGERS_START_LIMIT * 60 && hours <= TIME_DODGERS_END_LIMIT * 60;
       });
       const imStaffMembersHardDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') - staffMember.get('acceptedBreaks') + staffMember.get('paidHolidays');
+        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
         return hours < TIME_DODGERS_START_LIMIT * 60;
       });
       return {
