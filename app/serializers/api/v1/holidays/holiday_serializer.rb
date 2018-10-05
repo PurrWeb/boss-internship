@@ -24,13 +24,11 @@ class Api::V1::Holidays::HolidaySerializer < ActiveModel::Serializer
   end
 
   def start_date
-    #TODO: should be in UIRotaDate format
-    object.start_date.iso8601
+    UIRotaDate.format(object.start_date)
   end
 
   def end_date
-    #TODO: Should be in UIRotaDate format
-    object.end_date.iso8601
+    UIRotaDate.format(object.end_date)
   end
 
   def payslip_date
