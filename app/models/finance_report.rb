@@ -24,16 +24,26 @@ class FinanceReport < ActiveRecord::Base
   validates :accessories_cents, presence: true, unless: :requiring_update?
   validates_inclusion_of :contains_time_shifted_owed_hours, in: [true, false], unless: :requiring_update?
   validates_inclusion_of :contains_time_shifted_holidays, in: [true, false], unless: :requiring_update?
-  validates :monday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :tuesday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :wednesday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :thursday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :friday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :saturday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :sunday_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :owed_hours_minute_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :total_hours_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
-  validates :holiday_days_count, numericality: { greater_than_or_equal_to: 0 }, unless: :requiring_update?
+  validates :monday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :monday_hours_count, presence: true, unless: :requiring_update?
+  validates :tuesday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :tuesday_hours_count, presence: true, unless: :requiring_update?
+  validates :wednesday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :wednesday_hours_count, presence: true, unless: :requiring_update?
+  validates :thursday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :thursday_hours_count, presence: true, unless: :requiring_update?
+  validates :friday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :friday_hours_count, presence: true, unless: :requiring_update?
+  validates :saturday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :saturday_hours_count, presence: true, unless: :requiring_update?
+  validates :sunday_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :sunday_hours_count, presence: true, unless: :requiring_update?
+  validates :owed_hours_minute_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :owed_hours_minute_count, presence: true, unless: :requiring_update?
+  validates :total_hours_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :total_hours_count, presence: true, unless: :requiring_update?
+  validates :holiday_days_count, numericality: { greater_than_or_equal_to: 0 }, if: :done?
+  validates :holiday_days_count, presence: true, unless: :requiring_update?
   validate :total_cents_valid
   validate  :week_start_valid
   validate :requiring_update_matches_status
