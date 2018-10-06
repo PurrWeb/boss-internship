@@ -128,6 +128,10 @@ class FinanceReport < ActiveRecord::Base
     current_state == FinanceReportStateMachine::DONE_STATE.to_s
   end
 
+  def negative?
+    total_cents.present? && (total_cents < 0)
+  end
+
   def contains_negative_values?
     (monday_hours_count.present? && monday_hours_count < 0) ||
       (tuesday_hours_count.present? && tuesday_hours_count < 0) ||
