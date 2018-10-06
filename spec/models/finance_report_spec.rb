@@ -190,4 +190,153 @@ describe FinanceReport do
       end
     end
   end
+
+  describe "#contains_negative_values" do
+    let(:finance_report) do
+      FinanceReport.new(attributes)
+    end
+    let(:valid_attributes) do
+      {
+        monday_hours_count: 1.2,
+        tuesday_hours_count: 2.2,
+        wednesday_hours_count: 3.3,
+        thursday_hours_count: 4.4,
+        friday_hours_count: 5.5,
+        saturday_hours_count: 6.6,
+        sunday_hours_count: 7.7,
+        owed_hours_minute_count: 8.8,
+        total_hours_count: 9.9,
+        holiday_days_count: 11.1
+      }
+    end
+
+    context 'with valid attributes' do
+      let(:attributes) { valid_attributes }
+
+      it 'should be false' do
+        expect(finance_report.contains_negative_values?).to eq(false)
+      end
+    end
+
+    context 'monday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          monday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'tuesday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          tuesday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'wednesday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          wednesday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'thursday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          thursday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'friday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          friday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'saturday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          saturday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'sunday_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          sunday_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'owed_hours_minute_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          owed_hours_minute_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'total_hours_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          total_hours_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+    end
+
+    context 'holiday_days_count is negative' do
+      let(:attributes) do
+        valid_attributes.merge(
+          holiday_days_count: -1
+        )
+      end
+
+      it 'should be true' do
+        expect(finance_report.contains_negative_values?).to eq(true)
+      end
+
+    end
+  end
 end
