@@ -148,58 +148,59 @@ class Disciplinary extends React.Component {
           </section>
         </ProfileWrapper>
       );
-    }
-    const disciplinariesGroupedByLevel = oFetch(this.props, 'disciplinariesGroupedByLevel');
-    return (
-      <ProfileWrapper currentPage="disciplinary">
-        <section className="boss-board boss-board_role_profile-disciplinary">
-          <header className="boss-board__header">
-            <h2 className="boss-board__title">Disciplinary</h2>
-            {canCreateDisciplinary && (
-              <div className="boss-board__button-group" onClick={this.handleAddDisciplinary}>
-                <p className="boss-button boss-button_role_add">Add Disciplinary</p>
+    } else {
+      const disciplinariesGroupedByLevel = oFetch(this.props, 'disciplinariesGroupedByLevel');
+      return (
+        <ProfileWrapper currentPage="disciplinary">
+          <section className="boss-board boss-board_role_profile-disciplinary">
+            <header className="boss-board__header">
+              <h2 className="boss-board__title">Disciplinary</h2>
+              {canCreateDisciplinary && (
+                <div className="boss-board__button-group" onClick={this.handleAddDisciplinary}>
+                  <p className="boss-button boss-button_role_add">Add Disciplinary</p>
+                </div>
+              )}
+            </header>
+            <div className="boss-board__main">
+              <div className="boss-board__manager">
+                <DisciplinaryFilter
+                  startDate={startDate}
+                  endDate={endDate}
+                  show={show}
+                  onFilterUpdate={this.handleFilterUpdate}
+                  canCreateDisciplinary={canCreateDisciplinary}
+                />
+                <DisciplinaryLevelList
+                  disciplinariesGroupedByLevel={disciplinariesGroupedByLevel}
+                  itemRenderer={(disciplinaries, level) => {
+                    return (
+                      <DisciplinaryList
+                        title={level}
+                        disciplinaries={disciplinaries}
+                        itemRenderer={disciplinary => {
+                          const permission = disablePermissions.find((value, key) => disciplinary.id.toString() === key);
+                          const isDisablable = permission ? permission.get('isDisablable') : false;
+                          return (
+                            <DisciplinaryItem
+                              {...disciplinary}
+                              onViewDetails={() => this.handleViewDetails(disciplinary)}
+                              onOpenDisableDisciplinary={() =>
+                                this.handleOpenDisableDisciplinary({ disciplinaryId: disciplinary.id })
+                              }
+                              isDisablable={isDisablable}
+                            />
+                          );
+                        }}
+                      />
+                    );
+                  }}
+                />
               </div>
-            )}
-          </header>
-          <div className="boss-board__main">
-            <div className="boss-board__manager">
-              <DisciplinaryFilter
-                startDate={startDate}
-                endDate={endDate}
-                show={show}
-                onFilterUpdate={this.handleFilterUpdate}
-                canCreateDisciplinary={canCreateDisciplinary}
-              />
-              <DisciplinaryLevelList
-                disciplinariesGroupedByLevel={disciplinariesGroupedByLevel}
-                itemRenderer={(disciplinaries, level) => {
-                  return (
-                    <DisciplinaryList
-                      title={level}
-                      disciplinaries={disciplinaries}
-                      itemRenderer={disciplinary => {
-                        const permission = disablePermissions.find((value, key) => disciplinary.id.toString() === key);
-                        const isDisablable = permission ? permission.get('isDisablable') : false;
-                        return (
-                          <DisciplinaryItem
-                            {...disciplinary}
-                            onViewDetails={() => this.handleViewDetails(disciplinary)}
-                            onOpenDisableDisciplinary={() =>
-                              this.handleOpenDisableDisciplinary({ disciplinaryId: disciplinary.id })
-                            }
-                            isDisablable={isDisablable}
-                          />
-                        );
-                      }}
-                    />
-                  );
-                }}
-              />
             </div>
-          </div>
-        </section>
-      </ProfileWrapper>
-    );
+          </section>
+        </ProfileWrapper>
+      )
+    }
   }
 }
 
