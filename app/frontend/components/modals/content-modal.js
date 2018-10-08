@@ -45,6 +45,7 @@ function openContentModal(
   {
     title: title = 'Content Modal',
     modalRoleClassName: modalRoleClassName = 'boss-modal-window_role_edit',
+    modalClassName,
     closeButtonOverflowed: closeButtonOverflowed = false,
   },
   props = {},
