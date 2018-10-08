@@ -41,8 +41,9 @@
 							<div style="color:#555555;line-height:150%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 35px;">
 								<div style="font-size:12px;line-height:18px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
 									<p
-									 style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">Dear <strong><%= disciplinary.staff_member.full_name %></strong></span></p>
-									<p style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">You attended a disciplinary hearing on <strong><%= disciplinary.created_at %></strong>,
+									 style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">For the attention of <strong><%= disciplinary.staff_member.full_name %></strong></span></p>
+                  <p><p/>
+									<p style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">You attended a disciplinary hearing on <strong><%= disciplinary.created_at.to_s(:human) %></strong>,
 											and I am writing to inform you of your <strong><%= disciplinary.title %></strong>. This warning will be placed in your personal
 											file but will be disregarded for disciplinary purposes after a period of <strong><%= Disciplinary::EXPIRATION_LIMIT.inspect %></strong>, provided
 											your conduct improves.</span></p>
@@ -128,41 +129,11 @@
 							<!--[if mso]></td></tr></table><![endif]-->
 						</div>
 						<div class="">
-							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 30px; padding-bottom: 30px;"><![endif]-->
-							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 30px; padding-bottom: 30px;">
-								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
-									<p
-									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;">Your sincerely&#160;</span></p>
-								</div>
-							</div>
-							<!--[if mso]></td></tr></table><![endif]-->
-						</div>
-						<div class="">
 							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
 							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
 								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
 									<p
-									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><strong><%= disciplinary.staff_member.full_name %></strong></span></p>
-								</div>
-							</div>
-							<!--[if mso]></td></tr></table><![endif]-->
-						</div>
-						<div class="">
-							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
-							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
-								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
-									<p
-									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><strong><%= disciplinary.staff_member.staff_type.name %></strong></span></p>
-								</div>
-							</div>
-							<!--[if mso]></td></tr></table><![endif]-->
-						</div>
-						<div class="">
-							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
-							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
-								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
-									<p
-									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><strong><%= disciplinary.staff_member.email %></strong></span></p>
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><strong><%= disciplinary.created_by_user.full_name %> (on behalf of <%= StaffMemberDisciplinaryMailer::COMPANY_NAME %>)</strong></span></p>
 								</div>
 							</div>
 							<!--[if mso]></td></tr></table><![endif]-->
