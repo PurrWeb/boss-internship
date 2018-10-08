@@ -11,7 +11,7 @@ import disciplinariesReducer from './redux/reducers/disciplinaries-reducer';
 import filterReducer from './redux/reducers/filter-reducer';
 import permissionsReducer from './redux/reducers/permissions-reducer';
 
-class StaffMemberOwedHoursApp extends React.Component {
+class StaffMemberDisiplinaryApp extends React.Component {
   componentWillMount() {
     require('./styles.css');
     this.store = configureStore(
@@ -35,4 +35,4 @@ class StaffMemberOwedHoursApp extends React.Component {
   }
 }
 
-export default StaffMemberOwedHoursApp;
+export default StaffMemberDisiplinaryApp;
