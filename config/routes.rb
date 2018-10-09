@@ -107,6 +107,7 @@ Rails.application.routes.draw do
         get :owed_hours
         get :accessories
         get :shifts
+        get :disciplinaries
       end
     end
 
@@ -472,6 +473,7 @@ Rails.application.routes.draw do
             end
           end
           resources :owed_hours, only: [:index, :update, :destroy, :create]
+          resources :disciplinaries, only: [:index, :update, :destroy, :create]
           member do
             post :disable
             post :enable

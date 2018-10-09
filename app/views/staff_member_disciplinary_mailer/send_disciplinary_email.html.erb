@@ -1,0 +1,149 @@
+<div style="background-color:transparent;">
+	<div style="Margin: 0 auto;min-width: 320px;max-width: 900px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;"
+	 class="block-grid ">
+		<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+			<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: 900px;"><tr class="layout-full-width" style="background-color:transparent;"><![endif]-->
+			<!--[if (mso)|(IE)]><td align="center" width="900" style=" width:900px; padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><![endif]-->
+			<div class="col num12" style="min-width: 320px;max-width: 900px;display: table-cell;vertical-align: top;">
+				<div style="background-color: transparent; width: 100% !important;">
+					<!--[if (!mso)&(!IE)]><!-->
+					<div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
+						<!--<![endif]-->
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 40px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 40px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><strong><span style="font-size: 24px; line-height: 28px;"><%= StaffMemberDisciplinaryMailer::COMPANY_NAME %></span></strong></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 40px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 40px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center">
+										<span style="font-size: 20px; line-height: 24px;">
+											<strong>
+												<span style="line-height: 24px; font-size: 20px;">
+									 				Notice of <%= disciplinary.warning_level_text %>
+												</span>
+											</strong>
+										</span>
+									</p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 35px;"><![endif]-->
+							<div style="color:#555555;line-height:150%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 35px;">
+								<div style="font-size:12px;line-height:18px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">For the attention of <strong><%= disciplinary.staff_member.full_name %></strong></span></p>
+                  <p><p/>
+									<p style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">You attended a disciplinary hearing on <strong><%= disciplinary.created_at.to_s(:human) %></strong>,
+											and I am writing to inform you of your <strong><%= disciplinary.title %></strong>. This warning will be placed in your personal
+											file but will be disregarded for disciplinary purposes after a period of <strong><%= Disciplinary::EXPIRATION_LIMIT.inspect %></strong>, provided
+											your conduct improves.</span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><strong><span style="line-height: 19px; font-size: 16px;">a)&#160;The nature of the unsatisfactory conduct or performance
+												was:</span></strong></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><%= disciplinary.nature %></span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;">
+								<div style="font-size:12px;line-height:14px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><strong><span style="font-size: 16px; line-height: 19px;"><span style="line-height: 19px; font-size: 16px;"><span
+													 style="line-height: 19px; font-size: 16px;">b)&#160;</span></span></span><span style="font-size: 16px; line-height: 19px;"><span
+												 style="line-height: 19px; font-size: 16px;">The conduct or performance improvement expected is<span style="line-height: 19px; font-size: 16px;">:</span></span></span></strong></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><%= disciplinary.conduct %></span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 5px;">
+								<div style="font-size:12px;line-height:14px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><strong><span style="font-size: 16px; line-height: 19px;"><span style="line-height: 19px; font-size: 16px;"><span
+													 style="line-height: 19px; font-size: 16px;">c) The likely consequence of further misconduct or insufficient
+														improvement is</span></span></span><span style="font-size: 16px; line-height: 19px;"><span style="line-height: 19px; font-size: 16px;"><span
+													 style="line-height: 19px; font-size: 16px;">:</span></span></span></strong></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 5px; padding-bottom: 20px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><%= disciplinary.consequence %></span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;">You have right to appeal against this decision to <strong><%= StaffMemberDisciplinaryMailer::APPEAL_TO_NAME %></strong>
+											within 7 days of receiving this disciplinary&#160;decision.</span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<div class="">
+							<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
+							<div style="color:#555555;line-height:120%;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
+								<div style="font-size:12px;line-height:14px;font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;color:#555555;text-align:left;">
+									<p
+									 style="margin: 0;font-size: 14px;line-height: 17px"><span style="font-size: 16px; line-height: 19px;"><strong><%= disciplinary.created_by_user.full_name %> (on behalf of <%= StaffMemberDisciplinaryMailer::COMPANY_NAME %>)</strong></span></p>
+								</div>
+							</div>
+							<!--[if mso]></td></tr></table><![endif]-->
+						</div>
+						<!--[if (!mso)&(!IE)]><!-->
+					</div>
+					<!--<![endif]-->
+				</div>
+			</div>
+			<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+		</div>
+	</div>
+</div>

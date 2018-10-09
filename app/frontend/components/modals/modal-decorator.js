@@ -1,36 +1,33 @@
 import ReactDOM from 'react-dom';
 
 export default function modalDecorator(openModalFn) {
-  let bodyFirst, wrapper;
+  return function({ submit = () => {}, config = {}, props, closeCallback = () => {} }) {
+    let bodyFirst, wrapper;
 
-  const handleClose = () => {
-    setTimeout(() => {
-      ReactDOM.unmountComponentAtNode(wrapper);
-      wrapper.remove();
-    }, 50);
-  };
+    const handleClose = () => {
+      destroyModal();
+      return closeCallback();
+    };
 
-  return function({
-    submit = () => {},
-    config = {},
-    props,
-    closeCallback = () => {},
-  }) {
+    const destroyModal = () => {
+      setTimeout(() => {
+        ReactDOM.unmountComponentAtNode(wrapper);
+        wrapper.remove();
+      }, 50);
+    };
+
+    const handleCloseAfterSubmit = () => {
+      destroyModal();
+    };
+
     bodyFirst = document.body.firstChild;
     wrapper = document.createElement('div');
     bodyFirst.parentNode.insertBefore(wrapper, bodyFirst);
 
     const handleSubmit = (...args) => {
-      return Promise.resolve(submit(handleClose, ...args));
+      return Promise.resolve(submit(handleCloseAfterSubmit, ...args));
     };
 
-    return openModalFn(
-      config,
-      props,
-      handleSubmit,
-      handleClose,
-      wrapper,
-      closeCallback,
-    );
+    return openModalFn(config, props, handleSubmit, handleClose, wrapper);
   };
 }

@@ -8,6 +8,8 @@ const BossFormTextarea = ({
   containerClasses = {},
   classNames = '',
   meta: { touched, error, warning },
+  note,
+  placeholder,
 }) => {
   return (
     <div style={style} className={ `boss-form__field ${containerClasses}` }>
@@ -18,11 +20,12 @@ const BossFormTextarea = ({
       </label>
       <textarea
         {...input}
-        placeholder={label}
+        placeholder={placeholder || label}
         className={`boss-form__textarea ${classNames} ${touched &&
           error &&
           'boss-form__textarea_state_error'}`}
       />
+      {note && <p className="boss-form__field-note">{note}</p>}
       {touched &&
         error && (
           <div className="boss-form__error">

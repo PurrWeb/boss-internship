@@ -15,6 +15,7 @@ const BossFormInput = ({
   unit = '',
   placeholder = '',
   autocomplete = true,
+  fieldClassName,
 }) => {
   const handleChange = (maskedvalue, floatvalue) => {
     onChange(floatvalue);
@@ -47,7 +48,7 @@ const BossFormInput = ({
   };
 
   return (
-    <div className={`boss-form__field ${className && className}`}>
+    <div className={`boss-form__field ${className && className} ${fieldClassName && fieldClassName}`}>
       {label && (
         <label className="boss-form__label">
           <span className="boss-form__label-text">{`${label} ${

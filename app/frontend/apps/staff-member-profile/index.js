@@ -4,3 +4,4 @@ export StaffMemberOwedHoursApp from './owed-hours-page';
 export StaffMemberAccessoriesApp from './accessories';
 export StaffMemberProfilePaymentsApp from './payments-page';
 export StaffMemberShiftsApp from './shifts';
+export StaffMemberProfileDisciplinaryApp from './disciplinary-page';

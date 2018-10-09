@@ -158,6 +158,7 @@ class ProfileWrapper extends React.PureComponent {
                 jobType={jobType.toJS()}
                 onEditAvatar={showEditAvatarModal}
                 venues={venues.toJS()}
+                permissionsData={permissionsData}
               />
               <StaffMemberProfileActions
                 staffMember={staffMember}
@@ -172,7 +173,12 @@ class ProfileWrapper extends React.PureComponent {
 
         <ContentWrapper>
           {editProfile && <EditProfilePage onSubmissionComplete={onStaffMemberChanged} {...profileProps} />}
-          {!editProfile && <div className="boss-page-main__flow">{this.props.children}</div>}
+          {!editProfile && currentPage === 'disciplinaries' && this.props.children}
+          {!editProfile && currentPage !== 'disciplinaries' && (
+            <div className="boss-page-main__flow">
+              {this.props.children}
+            </div>
+          )}
         </ContentWrapper>
       </div>
     );

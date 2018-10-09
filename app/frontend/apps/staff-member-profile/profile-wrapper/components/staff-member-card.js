@@ -14,7 +14,8 @@ const StaffMemberCard = ({
   onUpdateAvatar,
   onEditAvatar,
   currentPage,
-  venues
+  venues,
+  permissionsData
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(
@@ -34,6 +35,7 @@ const StaffMemberCard = ({
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
   const isSecurityStaff = oFetch(staffMember, 'is_security_staff');
+  const canViewDisciplinary = oFetch(permissionsData.toJS(), 'disciplinariesTab.canViewPage');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -157,6 +159,15 @@ const StaffMemberCard = ({
         >
           Payments
         </a>
+        {canViewDisciplinary && <a
+          href={`disciplinaries`}
+          className={`${isActive(
+            currentPage,
+            'disciplinary',
+          )} boss-button boss-button_type_small boss-button_role_disciplinary boss-page-dashboard__switch`}
+        >
+          Disciplinary
+        </a>}
 
       </div>
     );
