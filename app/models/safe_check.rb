@@ -46,7 +46,11 @@ class SafeCheck < ActiveRecord::Base
   validates :other_cents,
     numericality: {greater_than_or_equal_to: 0}
   validates :payouts_cents,
-            numericality: {greater_than_or_equal_to: 0}
+    numericality: {greater_than_or_equal_to: 0}
+  validates :ash_cash_cents,
+    numericality: {greater_than_or_equal_to: 0}
+  validates :security_plus_cents,
+    numericality: {greater_than_or_equal_to: 0}
 
   auto_strip_attributes :checked_by_note, convert_non_breaking_spaces: true, squish: true
 

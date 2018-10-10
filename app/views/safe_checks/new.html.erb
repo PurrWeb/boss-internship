@@ -505,6 +505,7 @@
                                   prepend: '£',
                                   value: safe_check.pound_value_for(:ash_cash_cents).to_int_if_whole,
                                   label: SafeCheck.label_for(:ash_cash_cents),
+                                  min: 0,
                                   step: 0.01,
                                   class: ['boss-form__input', 'js-total-calulation-ash-cash-value', 'js-total-calculation-watch-field']
                               ) %>
@@ -530,6 +531,7 @@
                                 prepend: '£',
                                 value: safe_check.pound_value_for(:security_plus_cents).to_int_if_whole,
                                 label: SafeCheck.label_for(:security_plus_cents),
+                                min: 0,
                                 step: 0.01,
                                 class: ['boss-form__input', 'js-total-calculation-security-plus-value', 'js-total-calculation-watch-field']
                               ) %>
