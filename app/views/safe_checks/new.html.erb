@@ -485,8 +485,8 @@
                       <label class="boss-form__label">
                         <span class="boss-form__label-text">Still out to order</span>
                       </label>
-                      <p class="boss-form__value">
-                        <span id="js-still-out-to-order-calculation-float-value">
+                      <p class="boss-form__text">
+                        <span id="js-still-out-to-order-calculation-float-value" class="boss-form__text-primary boss-form__text-extra-large">
                           <%= number_to_currency(
                             safe_check.pound_value_for(:total_float_cents).to_int_if_whole,
                             unit: '£',
@@ -551,8 +551,8 @@
               <div class="boss-form__row">
                   <div class="boss-form__field boss-form__field_layout_half">
                     <p class="boss-form__label"><span class="boss-form__label-text">Total</span></p>
-                    <p class="boss-form__value">
-                      <span class="js-total-calculation-total-result">
+                    <p class="boss-form__text">
+                      <span class="js-total-calculation-total-result boss-form__text-primary boss-form__text-extra-large">
                         <% if safe_check.total_cents.present? %>
                           <%= number_to_currency(
                             safe_check.total_cents / 100.0,
@@ -567,8 +567,8 @@
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <p class="boss-form__label"><span class="boss-form__label-text">Safe Float</span></p>
-                      <p class="boss-form__value">
-                        <span class="js-total-calculation-float-value js-safe-float-field">
+                      <p class="boss-form__text">
+                        <span class="js-total-calculation-float-value boss-form__text-primary boss-form__text-extra-large js-safe-float-field">
                           <%= number_to_currency(
                             safe_check.pound_value_for(:safe_float_cents).to_int_if_whole,
                             unit: '£',
@@ -582,8 +582,8 @@
               <div class="boss-form__row">
                   <div class="boss-form__field boss-form__field_layout_half">
                       <p class="boss-form__label"><span class="boss-form__label-text">Total Float</span></p>
-                      <p class="boss-form__value">
-                        <span class="js-total-calculation-float-value">
+                      <p class="boss-form__text">
+                        <span class="js-total-calculation-float-value boss-form__text-primary boss-form__text-extra-large">
                           <%= number_to_currency(
                             safe_check.pound_value_for(:total_float_cents).to_int_if_whole,
                             unit: '£',
@@ -594,28 +594,32 @@
                   </div>
                   <div class="boss-form__field boss-form__field_layout_half">
                       <p class="boss-form__label"><span class="boss-form__label-text">Till Float</span></p>
-                      <p class="boss-form__value">
-                        <%= number_to_currency(
-                          safe_check.pound_value_for(:till_float_cents).to_int_if_whole,
-                          unit: '£',
-                          precision: 2
-                        ) %>
+                      <p class="boss-form__text">
+                        <span class="boss-form__text-primary boss-form__text-extra-large">
+                          <%= number_to_currency(
+                            safe_check.pound_value_for(:till_float_cents).to_int_if_whole,
+                            unit: '£',
+                            precision: 2
+                          ) %>
+                        </span>
                       </p>
                   </div>
               </div>
 
               <div class="boss-form__field">
                   <p class="boss-form__label"><span class="boss-form__label-text">Variance</span></p>
-                  <p class="boss-form__value js-total-calculation-variance-result <%= "boss-form__value_state_alert" if (safe_check.variance_cents || 0) < 0 %>">
-                    <% if safe_check.variance_cents.present? %>
-                      <%= number_to_currency(
-                        safe_check.variance_cents / 100.0,
-                        unit: '£',
-                        precision: 2
-                      ) %>
-                    <% else %>
-                      -
-                    <% end %>
+                  <p class="boss-form__text">
+                    <span class="js-total-calculation-variance-result boss-form__text-primary boss-form__text-extra-large <%= "boss-form__text-alert" if (safe_check.variance_cents || 0) < 0 %>">
+                      <% if safe_check.variance_cents.present? %>
+                        <%= number_to_currency(
+                          safe_check.variance_cents / 100.0,
+                          unit: '£',
+                          precision: 2
+                        ) %>
+                      <% else %>
+                        -
+                      <% end %>
+                    </span>
                   </p>
               </div>
 

@@ -25,6 +25,7 @@ var calculateRealtimeTotals = function(){
   var checkBox = document.getElementById("safe_check_received_change");
   var receivedChangeBlock = document.getElementById("received-change-block");
   var stillOutToOrder = document.getElementById("js-still-out-to-order-calculation-float-value");
+  var alertClass = "boss-form__text-alert";
 
   var totalCents = 0;
   valueFields.each(function(index, field){
@@ -52,6 +53,12 @@ var calculateRealtimeTotals = function(){
   }
   if (checkBox.checked) {
     outToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
+
+    if (outToOrderCents < 0) {
+      $(stillOutToOrder).addClass(alertClass);
+    } else {
+      $(stillOutToOrder).removeClass(alertClass);
+    }
     stillOutToOrder.innerText = "£" + outToOrderCents / 100;
   }
   var varianceCents = totalCents + outToOrderCents - safeFloatCents;
@@ -115,7 +122,7 @@ var updateRealtimeTotalField = function(totalCents){
 
 var updateRealtimeVarienceField = function(varianceCents){
   var variancePlaceholderSelector = '.js-total-calculation-variance-result';
-  var alertClass = "boss-form__value_state_alert";
+  var alertClass = "boss-form__text-alert";
 
   if(varianceCents < 0){
     $(variancePlaceholderSelector).addClass(alertClass);
