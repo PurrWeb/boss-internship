@@ -67,7 +67,7 @@ export const updateEmploymentDetails = payload => {
       ...fields,
       master_venue_id: null,
       sia_badge_number,
-      sia_badge_expiry_date: safeMoment.uiDateParse(sia_badge_expiry_date).format('DD-MM-YYYY'),
+      sia_badge_expiry_date: sia_badge_expiry_date.format('DD-MM-YYYY'),
     };
   } else {
     fields = {
