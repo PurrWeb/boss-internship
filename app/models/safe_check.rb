@@ -88,7 +88,7 @@ class SafeCheck < ActiveRecord::Base
       TOTAL_FIELDS.each do |field|
         total = total + cent_value_for(field)
       end
-      total = total - (out_to_order_cents + ash_cash_cents + security_plus_cents)
+      total = total - out_to_order_cents + ash_cash_cents + security_plus_cents
     end
     total
   end
