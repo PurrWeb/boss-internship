@@ -52,16 +52,17 @@ var calculateRealtimeTotals = function(){
     receivedChangeBlock.style.display = "none";
   }
   if (checkBox.checked) {
-    outToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
+    var stillOutToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
 
     if (outToOrderCents < 0) {
       $(stillOutToOrder).addClass(alertClass);
     } else {
       $(stillOutToOrder).removeClass(alertClass);
     }
-    stillOutToOrder.innerText = "£" + outToOrderCents / 100;
+    stillOutToOrder.innerText = "£" + stillOutToOrderCents / 100;
   }
-  var varianceCents = totalCents + outToOrderCents - safeFloatCents;
+  totalCents = totalCents - outToOrderCents;
+  var varianceCents = totalCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);
   updateRealtimeTotalFloatField(totalFloatValueCents);

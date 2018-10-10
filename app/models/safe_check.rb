@@ -88,6 +88,7 @@ class SafeCheck < ActiveRecord::Base
       TOTAL_FIELDS.each do |field|
         total = total + cent_value_for(field)
       end
+      total = total - (out_to_order_cents + ash_cash_cents + security_plus_cents)
     end
     total
   end
@@ -103,7 +104,7 @@ class SafeCheck < ActiveRecord::Base
   end
 
   def variance_cents
-    total_cents + out_to_order_cents - safe_float_cents if (total_cents.present? && out_to_order_cents.present? && safe_float_cents.present?)
+    total_cents - safe_float_cents if (total_cents.present? && out_to_order_cents.present? && safe_float_cents.present?)
   end
 
   def pound_value_for(field)
