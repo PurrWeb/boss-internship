@@ -36,8 +36,8 @@ class CreateSafeCheck
       unless (ash_cash_cents + security_plus_cents) <= out_to_order_cents
         safe_check.errors.add(:received_change, "Change received cannot be greater than out to order total")
         safe_check.errors.delete(:out_to_order_cents)
-        safe_check.out_to_order_cents = out_to_order_cents
       end
+      safe_check.out_to_order_cents = out_to_order_cents
     end
 
     Result.new(success, safe_check, safe_check_note)
