@@ -12,18 +12,8 @@ class AccessoryRequestItem extends Component {
     const onAcceptRequest = oFetch(this.props, 'onAcceptRequest');
     const onUndoRequest = oFetch(this.props, 'onUndoRequest');
     const onCompleteRequest = oFetch(this.props, 'onCompleteRequest');
-
-    const [
-      accessoryId,
-      avatarUrl,
-      fullName,
-      accessorySize,
-      staffMember,
-      requestId,
-      requestStatus,
-      frozen,
-      reusable,
-    ] = oFetch(
+    const { reusable } = data;
+    const [accessoryId, avatarUrl, fullName, accessorySize, staffMember, requestId, requestStatus, frozen] = oFetch(
       data,
       'accessoryId',
       'avatarUrl',
@@ -33,7 +23,6 @@ class AccessoryRequestItem extends Component {
       'requestId',
       'requestStatus',
       'frozen',
-      'reusable',
     );
 
     return (
