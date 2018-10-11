@@ -8,7 +8,6 @@ import { BossTable } from '~/components/boss-table';
 import AccessoryRequestsList from './accessory-requests-list';
 import AccessoryRequestItem from './accessory-request-item';
 import ReusableModalContent from './reusable-modal-content';
-import oFetch from 'o-fetch';
 
 class AccessoryListItem extends Component {
   onCompleteAccessoryRefundRequest = ({ accessoryId, requestId, reusable }) => {
