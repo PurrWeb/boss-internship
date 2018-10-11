@@ -157,6 +157,36 @@ export default class DetailsModal extends React.Component {
 
                   <div className="boss-stats__table-row">
                     <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text boss-stats__table-text_role_label">Out to order</p>
+                    </div>
+
+                    <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text">{this.props.costs.out_to_order_cents}</p>
+                    </div>
+                  </div>
+
+                  <div className="boss-stats__table-row">
+                    <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text boss-stats__table-text_role_label">Ash Cash</p>
+                    </div>
+
+                    <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text">{this.props.costs.ash_cash_cents}</p>
+                    </div>
+                  </div>
+
+                  <div className="boss-stats__table-row">
+                    <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text boss-stats__table-text_role_label">Security Plus</p>
+                    </div>
+
+                    <div className="boss-stats__table-cell">
+                      <p className="boss-stats__table-text">{this.props.costs.security_plus_cents}</p>
+                    </div>
+                  </div>
+
+                  <div className="boss-stats__table-row">
+                    <div className="boss-stats__table-cell">
                       <p className="boss-stats__table-text boss-stats__table-text_role_label">Other</p>
                     </div>
 

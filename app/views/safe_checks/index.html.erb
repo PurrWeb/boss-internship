@@ -102,6 +102,18 @@
                   ) %>
                 </p>
               </div>
+              <% if safe_check.ash_cash_cents > 0 %>
+                <div class="boss-corner boss-corner_position_top-right boss-corner_color_accent-green">
+                  <p class="boss-corner__label boss-corner__label_size_l">ASH</p>
+                </div>
+              <% end %>
+
+              <% if safe_check.security_plus_cents > 0 %>
+                <div class="boss-corner boss-corner_position_bottom-right boss-corner_color_accent-purple">
+                    <p class="boss-corner__label boss-corner__label_size_l">S+</p>
+                </div>
+              <% end %>
+
             </div>
 
             <div class="boss-table__cell">
@@ -221,6 +233,14 @@
                     unit: '£',
                     precision: 2
                   ) %>
+                </p>
+                <p class="boss-check__text">
+                  <% if safe_check.ash_cash_cents > 0 %>
+                    <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-green boss-button_type_no-behavior boss-check__label">ASH</span>
+                  <% end %>
+                  <% if safe_check.security_plus_cents > 0 %>
+                  <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-purple boss-button_type_no-behavior boss-check__label">S+</span>
+                  <% end %>
                 </p>
               </div>
             </div>

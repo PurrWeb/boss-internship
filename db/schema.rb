@@ -1100,6 +1100,8 @@ ActiveRecord::Schema.define(version: 20180924181537) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "payouts_cents",            limit: 4,   null: false
+    t.integer  "ash_cash_cents",           limit: 4,   null: false
+    t.integer  "security_plus_cents",      limit: 4,   null: false
   end
 
   add_index "safe_checks", ["created_at", "venue_id"], name: "index_safe_checks_on_created_at_and_venue_id", using: :btree

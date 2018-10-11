@@ -47,7 +47,7 @@ class SafeChecksController < ApplicationController
         till_float_cents: venue.till_float_cents,
         safe_float_cents: venue.safe_float_cents
       )
-      authorize! :create, safe_check
+      authorize! :create, SafeChecksPage.new(venue: venue)
 
       safe_check_note = SafeCheckNote.new
 
@@ -63,33 +63,26 @@ class SafeChecksController < ApplicationController
   end
 
   def create
-    safe_check = SafeCheck.new(safe_check_params)
+    venue = safe_check_params.fetch(:venue)
+    authorize! :view, SafeChecksPage.new(venue: venue)
 
-    safe_check_note = SafeCheckNote.new(
-      safe_check_note_params.
-        merge(
-          safe_check: safe_check,
-          created_by: current_user,
-          note_left_by_note: safe_check.checked_by_note
-        )
-    )
+    result = CreateSafeCheck.new(
+      safe_check_params: safe_check_params,
+      safe_check_note_params: safe_check_note_params,
+      requester: current_user,
+    ).call
 
-    authorize! :create, safe_check
-
-    safe_check.enabled_notes << safe_check_note if safe_check_note.note_text.present?
-    success = safe_check.save
-
-    if success
+    if result.success?
       flash[:success] = "Safe check created successfully"
       redirect_to(
-        safe_checks_path(venue_id: safe_check.venue.id)
+        safe_checks_path(venue_id: result.safe_check.venue.id)
       )
     else
       render 'new', locals: {
         current_venue: find_accessible_venue(params['safe_check']['venue_id']),
         accessible_venues: accessible_venues,
-        safe_check: safe_check,
-        safe_check_note: safe_check_note
+        safe_check: result.safe_check,
+        safe_check_note: result.safe_check_note
       }
     end
   end
@@ -136,7 +129,7 @@ class SafeChecksController < ApplicationController
 
     params.
       require(:safe_check).
-      permit([:checked_by_note]).
+      permit([:checked_by_note, :received_change]).
       merge(
         venue: venue,
         creator: current_user

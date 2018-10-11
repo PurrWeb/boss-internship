@@ -20,6 +20,12 @@ var calculateRealtimeTotals = function(){
   var valueFields = $('.js-total-calculation-value-field');
   var floatFields = $('.js-total-calculation-float-value');
   var outToOrderField = $('.js-total-calculation-out-to-order-value')[0];
+  var ashCash = $('.js-total-calulation-ash-cash-value')[0].value;
+  var securityPlus = $('.js-total-calculation-security-plus-value')[0].value;
+  var checkBox = document.getElementById("safe_check_received_change");
+  var receivedChangeBlock = document.getElementById("received-change-block");
+  var stillOutToOrder = document.getElementById("js-still-out-to-order-calculation-float-value");
+  var alertClass = "boss-form__text-alert";
 
   var totalCents = 0;
   valueFields.each(function(index, field){
@@ -37,8 +43,28 @@ var calculateRealtimeTotals = function(){
   var safeFloatCents = parseCentsFromPlaceHolderField(safeFloatField);
 
   var outToOrderCents = Math.floor(parseFloat(outToOrderField.value) * 100);
+  var ashCashCents = Math.floor(parseFloat(ashCash) * 100);
+  var securityPlusCents = Math.floor(parseFloat(securityPlus) * 100);
 
-  var varianceCents = totalCents + outToOrderCents - safeFloatCents;
+  if (outToOrderCents > 0) {
+    receivedChangeBlock.style.display = "block";
+  } else {
+    receivedChangeBlock.style.display = "none";
+  }
+  if (checkBox.checked) {
+    var stillOutToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
+
+    if (outToOrderCents < 0) {
+      $(stillOutToOrder).addClass(alertClass);
+    } else {
+      $(stillOutToOrder).removeClass(alertClass);
+    }
+    stillOutToOrder.innerText = "£" + stillOutToOrderCents / 100;
+    totalCents = totalCents - stillOutToOrderCents + ashCashCents + securityPlusCents;
+  } else {
+    totalCents = totalCents - outToOrderCents;
+  }
+  var varianceCents = totalCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);
   updateRealtimeTotalFloatField(totalFloatValueCents);
@@ -99,7 +125,7 @@ var updateRealtimeTotalField = function(totalCents){
 
 var updateRealtimeVarienceField = function(varianceCents){
   var variancePlaceholderSelector = '.js-total-calculation-variance-result';
-  var alertClass = "boss-form__value_state_alert";
+  var alertClass = "boss-form__text-alert";
 
   if(varianceCents < 0){
     $(variancePlaceholderSelector).addClass(alertClass);
