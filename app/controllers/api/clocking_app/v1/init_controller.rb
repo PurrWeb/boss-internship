@@ -25,6 +25,14 @@ module Api
               rota_shifts: rota_shifts
             ).all.includes([:master_venue, :staff_type, :name, :work_venues])
 
+            staff_with_holidays_ids = InRangeQuery.new(
+              relation: Holiday.in_state(:enabled).where(staff_member: staff_members),
+              start_value: current_rota_date,
+              end_value: current_rota_date,
+              start_column_name: "start_date",
+              end_column_name: "end_date",
+            ).all.pluck(:staff_member_id).uniq
+
             clock_in_days = ClockInDay.where(
               staff_member: staff_members,
               venue: current_venue,
@@ -63,6 +71,7 @@ module Api
                 staff_members,
                 serializer: Api::ClockingApp::V1::StaffMemberSerializer,
               ),
+              staffMembersWithHolidaysIds: staff_with_holidays_ids,
               staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
                 staff_types,
                 serializer: Api::ClockingApp::V1::StaffTypeSerializer,
