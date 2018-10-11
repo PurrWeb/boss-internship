@@ -81,6 +81,10 @@ class SafeCheck < ActiveRecord::Base
     end
   end
 
+  def total_out_to_order_cents
+    out_to_order_cents + ash_cash_cents + security_plus_cents
+  end
+
   def total_cents
     total = nil
     if total_cents_prerequsites_present?
@@ -88,7 +92,7 @@ class SafeCheck < ActiveRecord::Base
       TOTAL_FIELDS.each do |field|
         total = total + cent_value_for(field)
       end
-      total = total - out_to_order_cents + ash_cash_cents + security_plus_cents
+      total = total + total_out_to_order_cents
     end
     total
   end
@@ -145,7 +149,7 @@ class SafeCheck < ActiveRecord::Base
       safe_float_cents: "Safe Float",
       till_float_cents: "Till Float",
       total_float_cents: "Total Float",
-      out_to_order_cents: "Out to order",
+      out_to_order_cents: "Out to Order",
       ash_cash_cents: "Ash Cash",
       security_plus_cents: "Security Plus",
     }.fetch(field)

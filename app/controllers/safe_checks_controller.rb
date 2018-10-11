@@ -63,23 +63,29 @@ class SafeChecksController < ApplicationController
   end
 
   def create
-    venue = safe_check_params.fetch(:venue)
-    authorize! :view, SafeChecksPage.new(venue: venue)
+    form = CreateSafeCheckForm.new(
+      params: params,
+      accessible_venues: accessible_venues,
+    )
+    authorize! :view, SafeChecksPage.new(venue: form.venue)
 
     result = CreateSafeCheck.new(
-      safe_check_params: safe_check_params,
-      safe_check_note_params: safe_check_note_params,
+      total_out_to_order_cents: form.total_out_to_order_cents,
+      safe_check_params: form.safe_check_params,
+      safe_check_note_params: form.safe_check_note_params,
       requester: current_user,
     ).call
 
     if result.success?
       flash[:success] = "Safe check created successfully"
       redirect_to(
-        safe_checks_path(venue_id: result.safe_check.venue.id)
+        safe_checks_path(venue_id: form.venue.id)
       )
     else
+      form.perpare_model(result.safe_check)
+
       render 'new', locals: {
-        current_venue: find_accessible_venue(params['safe_check']['venue_id']),
+        current_venue: form.venue,
         accessible_venues: accessible_venues,
         safe_check: result.safe_check,
         safe_check_note: result.safe_check_note
@@ -92,15 +98,6 @@ class SafeChecksController < ApplicationController
     AccessibleVenuesQuery.
       new(current_user).
       all
-  end
-
-  def safe_check_note_params
-    params.
-      require("safe_check").
-      require("safe_check_note").
-      permit([
-        :note_text
-      ])
   end
 
   def redirect_params
@@ -124,70 +121,9 @@ class SafeChecksController < ApplicationController
       find_by!(id: id_param)
   end
 
-  def safe_check_params
-    venue = find_accessible_venue!(_safe_check_params["venue_id"])
-
-    params.
-      require(:safe_check).
-      permit([:checked_by_note, :received_change]).
-      merge(
-        venue: venue,
-        creator: current_user
-      ).
-      merge(pound_params).
-      merge(cent_params).
-      merge(
-        float_params(venue)
-      ).
-      permit!
-  end
 
   def _safe_check_params
     params["safe_check"] || {}
   end
 
-  def float_params(venue)
-    {
-      till_float_cents: venue.till_float_cents,
-      safe_float_cents: venue.safe_float_cents
-    }
-  end
-
-  def pound_params
-    result = {}
-    SafeCheck::POUND_FIELDS.each do |field|
-      parsed_value = nil
-      unparsed_value = _safe_check_params.fetch(field.to_s)
-      begin
-        parsed_value = Float(unparsed_value).to_int_if_whole
-      rescue ArgumentError, TypeError
-      end
-
-      if parsed_value.present?
-        result[field] = parsed_value
-      else
-        result[field] = unparsed_value
-      end
-    end
-    result
-  end
-
-  def cent_params
-    result = {}
-    (SafeCheck::CENTS_FIELDS - [:safe_float_cents, :total_float_cents, :till_float_cents]).each do |field|
-      parsed_value = nil
-      unparsed_value = _safe_check_params.fetch(field.to_s)
-      begin
-        parsed_value = Float(unparsed_value)
-      rescue ArgumentError, TypeError
-      end
-
-      if parsed_value.present?
-        result[field] = parsed_value * 100.0
-      else
-        result[field] = unparsed_value
-      end
-    end
-    result
-  end
 end

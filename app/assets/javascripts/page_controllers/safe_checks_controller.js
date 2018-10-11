@@ -51,6 +51,7 @@ var calculateRealtimeTotals = function(){
   } else {
     receivedChangeBlock.style.display = "none";
   }
+
   if (checkBox.checked) {
     var stillOutToOrderCents = outToOrderCents - (ashCashCents + securityPlusCents);
 
@@ -60,10 +61,9 @@ var calculateRealtimeTotals = function(){
       $(stillOutToOrder).removeClass(alertClass);
     }
     stillOutToOrder.innerText = "£" + stillOutToOrderCents / 100;
-    totalCents = totalCents - stillOutToOrderCents + ashCashCents + securityPlusCents;
-  } else {
-    totalCents = totalCents - outToOrderCents;
   }
+
+  totalCents = totalCents + outToOrderCents;
   var varianceCents = totalCents - safeFloatCents;
 
   updateRealtimeTotalField(totalCents);

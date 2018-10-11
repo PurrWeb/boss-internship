@@ -26,7 +26,7 @@
       <th>Other</th>
       <th>Payouts</th>
       <th>Total</th>
-      <th>Out to order</th>
+      <th>Out to Order</th>
       <th>Till Float</th>
       <th>Safe Float</th>
       <th>Total Float</th>
@@ -89,6 +89,7 @@
       </td>
 
       <td>
+        <% still_out_to_order_cents = safe_check.out_to_order_cents %>
         <%= number_to_currency(
               safe_check.pound_value_for(:out_to_order_cents),
               unit: '£',

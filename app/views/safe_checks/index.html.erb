@@ -96,7 +96,7 @@
                 <p class="boss-table__label">Out to Order</p>
                 <p class="boss-table__text">
                   <%= number_to_currency(
-                    safe_check.pound_value_for(:out_to_order_cents),
+                    (safe_check.total_out_to_order_cents || 0.0) / 100,
                     unit: '£',
                     precision: 2
                   ) %>
@@ -213,7 +213,7 @@
               <div class="boss-check__cell boss-check__cell_role_table">
                 <p class="boss-check__text">
                   <%= number_to_currency(
-                    safe_check.pound_value_for(:total_float_cents),
+                    safe_check.pound_value_for(:total_cents),
                     unit: '£',
                     precision: 2
                   ) %>
@@ -229,7 +229,7 @@
               <div class="boss-check__cell boss-check__cell_role_table">
                 <p class="boss-check__text">
                   <%= number_to_currency(
-                    safe_check.pound_value_for(:out_to_order_cents),
+                    (safe_check.total_out_to_order_cents || 0.0) / 100,
                     unit: '£',
                     precision: 2
                   ) %>
