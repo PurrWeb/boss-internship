@@ -41,7 +41,6 @@ class StaffMemberList extends Component {
                 ? venues.find(venue => venue.get('id') === staffMember.get('venueId')).get('name')
                 : null
               : null;
-
             return (
               <StaffMemberInfo
                 key={staffMember.get('id')}

@@ -4,6 +4,10 @@ export const getStaffMembersWithoutAddress = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-without-address`);
 };
 
+export const getStaffMembersWithSameSageId = () => {
+  return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-with-same-sage-id`);
+};
+
 export const getStaffMembersWithoutNINumber = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-without-ni-number`);
 };

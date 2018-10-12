@@ -10,7 +10,7 @@ import StaffMemberFilter from './staff-member-filter';
 
 class Page extends Component {
   render() {
-    const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer } = this.props;
+    const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer, filter } = this.props;
     document.title = this.props.title;
     if (staffMembers.size === 0) {
       return (
@@ -43,10 +43,12 @@ class Page extends Component {
             tabsFilterRenderer={this.props.tabsFilterRenderer}
             staffMembers={staffMembers}
             venues={venues}
+            simpleLayout={this.props.simpleLayout}
             selectedVenueIds={this.props.selectedVenueIds}
             staffTypes={staffTypes}
-            staffMemberFilterRenderer={props => <StaffMemberFilter {...props} />}
+            staffMemberFilterRenderer={filter ? props => <StaffMemberFilter {...props} /> : null}
             staffMemberListRenderer={this.props.staffMemberListRenderer}
+            contentRenderer={this.props.contentRenderer}
           />
         </ContentWrapper>
       </main>
@@ -59,7 +61,9 @@ Page.propTypes = {
   venues: ImmutablePropTypes.list,
   staffTypes: ImmutablePropTypes.list,
   title: PropTypes.string.isRequired,
-  staffMemberListRenderer: PropTypes.func.isRequired,
+  staffMemberListRenderer: PropTypes.func,
+  contentRenderer: PropTypes.func,
+  simpleLayout: PropTypes.bool,
 };
 
 export default Page;
