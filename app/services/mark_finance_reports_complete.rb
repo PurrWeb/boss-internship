@@ -7,7 +7,7 @@ class MarkFinanceReportsComplete
 
   def call
     unsaveable_reports = finance_reports.select do |finance_report|
-      !finance_report.ready? || !finance_report.completion_date_reached? || finance_report.negative? || finance_report.contains_negative_values?
+      !finance_report.ready? || !finance_report.completion_date_reached?
     end
     if unsaveable_reports.length > 0
       raise self.class.incompletable_report_attempt_error_message(staff_member_ids: unsaveable_reports.map{ |finance_report| finance_report.staff_member_id })
