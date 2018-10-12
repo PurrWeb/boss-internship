@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
-import moment from 'moment';
 import utils from '~/lib/utils';
-import { openContentModal } from '~/components/modals';
-import safeMoment from '~/lib/safe-moment'
+import { openContentModal, openInfoModal } from '~/components/modals';
+import safeMoment from '~/lib/safe-moment';
 import RejectSecurityShiftRequest from './reject-security-shift-request';
 
 class RequestsItem extends PureComponent {
@@ -23,6 +22,12 @@ class RequestsItem extends PureComponent {
     });
   };
 
+  handleOpenNoteModal = note => {
+    openInfoModal({
+      config: { title: 'Note', text: note },
+    });
+  };
+
   render() {
     const shiftRequest = oFetch(this.props, 'shiftRequest');
     const isAssignable = oFetch(shiftRequest, 'permissions.isAssignable');
@@ -32,6 +37,7 @@ class RequestsItem extends PureComponent {
     const endsAt = oFetch(shiftRequest, 'endsAt');
     const venueName = oFetch(shiftRequest, 'venueName');
     const id = oFetch(shiftRequest, 'id');
+    const note = oFetch(shiftRequest, 'note');
     const venueId = oFetch(shiftRequest, 'venueId');
 
     const rejectRequestFormInitialValues = {
@@ -50,6 +56,16 @@ class RequestsItem extends PureComponent {
               <div className="boss-check__header-meta-item">
                 <p className="boss-check__text boss-check__text_role_main boss-check__text_role_venue">{venueName}</p>
               </div>
+              {note && (
+                <div className="boss-check__header-meta-item">
+                  <p
+                    onClick={() => this.handleOpenNoteModal(note)}
+                    className="boss-check__text boss-check__text_role_main boss-check__text_role_note boss-check__text_role_link"
+                  >
+                    Show Note
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className="boss-check__header-actions">
