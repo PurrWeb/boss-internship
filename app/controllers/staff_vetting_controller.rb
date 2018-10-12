@@ -16,7 +16,7 @@ class StaffVettingController < ApplicationController
 
     bounced_emails = BouncedEmailAddress.all.map {|be| be['email']}
     staff_members_with_bounced_email = StaffMember.enabled.joins(:email_address).where({email_addresses: {email: bounced_emails}})
-
+    same_sage_id_result = StaffWithSameSageIdQuery.new.all
     render locals: {
       access_token: access_token.token,
       staff_without_email_count: StaffMembersWithoutEmailQuery.new.all.count,
@@ -25,6 +25,7 @@ class StaffVettingController < ApplicationController
       staff_without_photo_count: StaffMembersWithoutPhotoQuery.new.all.count,
       staff_with_expired_sia_badge_count: StaffMembersWithExpiringSiaBadgeQuery.new.all.count,
       staff_on_wrong_payrate_count: staff_on_wrong_payrate_count,
+      staff_with_same_sage_id_count: same_sage_id_result.all_staff_members.count,
       staff_members_with_bounced_email_count: staff_members_with_bounced_email.count,
       venues: Venue.all,
       staff_types: StaffType.all,

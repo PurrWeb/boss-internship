@@ -119,6 +119,21 @@ module Api
         }, status: 200
       end
 
+      def staff_with_same_sage_id
+        result = StaffWithSameSageIdQuery.new.all
+        render json: {
+          sameSageId: result.same_sage_id,
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+            result.all_staff_members,
+            serializer: Api::V1::StaffVettings::StaffMemberSerializer
+          ),
+          venues: ActiveModel::Serializer::CollectionSerializer.new(
+            Venue.all,
+            serializer: Api::V1::StaffVettings::VenueSerializer
+          ),
+        }, status: 200
+      end
+
       private
       def date_from_params
         UIRotaDate.parse(params.fetch(:date))

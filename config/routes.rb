@@ -321,6 +321,7 @@ Rails.application.routes.draw do
             get :staff_on_wrong_payrate, path: 'staff-on-wrong-payrate'
             get :staff_with_bounced_email, path: 'staff-with-bounced-email'
             get :time_dodgers, path: 'time-dodgers'
+            get :staff_with_same_sage_id, path: 'staff-with-same-sage-id'
           end
         end
 
