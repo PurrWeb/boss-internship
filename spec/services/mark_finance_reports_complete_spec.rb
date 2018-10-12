@@ -203,45 +203,45 @@ describe MarkFinanceReportsComplete do
       end
     end
 
-    specify 'it should raise error' do
-      expect{ call_service}.to raise_error("Attempt to complete incompletable finanace report for staff members with ids: #{finance_report.staff_member.id}")
-    end
-
-    specify 'finance report should not complete' do
-      begin
-        call_service
-      rescue; end
-      expect(finance_report.reload.done?).to eq(false)
+    specify 'finance report should complete' do
+      call_service
+      expect(finance_report.reload.done?).to eq(true)
     end
 
     specify 'finance report should be valid' do
-      begin
-        call_service
-      rescue; end
+      call_service
       expect(finance_report.reload).to be_valid
     end
 
 
     it 'should set report total to zero' do
-      begin
-        call_service
-      rescue; end
+      call_service
       expect(finance_report.reload.total_cents).to eq(0)
     end
 
     it 'should set report accessories_cents to zero' do
-      begin
-        call_service
-      rescue; end
+      call_service
       expect(finance_report.reload.accessories_cents).to eq(0)
     end
 
-    it 'should not create new finance report' do
-      expect(FinanceReport.count).to eq(1)
-      begin
-        call_service
-      rescue; end
-      expect(FinanceReport.count).to eq(1)
+    it 'should create finance report for next week' do
+      call_service
+      expect(
+        FinanceReport.find_by(
+          staff_member: staff_member,
+          week_start: finance_report.week_start + 1.week,
+          venue: finance_report.venue
+        )
+      ).to be_present
+    end
+
+    it 'should move accessory into next weeks finance report' do
+      call_service
+      expect(
+        accessory_request.reload.payslip_date
+      ).to eq(
+        finance_report.week_start + 1.week
+      )
     end
   end
 
