@@ -4,13 +4,27 @@
 			<h2 class="boss-modal-window__title">Forgot Your Password?</h2>
 		</div>
 		<div class="boss-modal-window__content">
+			<% if flash["alert"].present? %>
+				<div class="boss-modal-window__alert">
+					<div class="boss-alert boss-alert_role_area boss-alert_context_above">
+						<p class="boss-alert__text"><%= flash["alert"] %></p>
+					</div>
+				</div>
+			<% end %>
+			<% if flash["notice"].present? %>
+				<div class="boss-modal-window__alert">
+					<div class="boss-alert boss-alert_role_area boss-alert_role_confirm boss-alert_status_success boss-alert_context_above">
+						<p class="boss-alert__text"><%= flash["notice"] %></p>
+					</div>
+				</div>
+			<% end %>
 			<div class="boss-modal-window__form">
 				<!-- Form start -->
 				<%= boss_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
 					<div class="boss-form__field">
 						<label class="boss-form__label">
 							<span class="boss-form__label-text">Email</span>
-							<%= f.email_field :email, label: nil, autofocus: true, class: 'boss-form__input' %>
+							<%= f.email_field :email, label: nil, autofocus: true, class: 'boss-form__input', required: true %>
 						</label>
 					</div>
 					<div class="boss-form__field boss-form__field_justify_center">

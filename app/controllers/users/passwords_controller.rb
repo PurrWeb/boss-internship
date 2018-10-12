@@ -14,8 +14,13 @@ class Users::PasswordsController < Devise::PasswordsController
       super
     else
       # Fake success
-      flash[:notice] = 'You will receive an email with instructions on how to reset your password in a few minutes.'
-      redirect_to new_user_session_path
+      if !email.present?
+        flash[:alert] = 'Email field is required'
+        redirect_to new_user_password_path
+      else
+        flash[:notice] = 'You will receive an email with instructions on how to reset your password in a few minutes.'
+        redirect_to new_user_session_path
+      end
     end
   end
 
