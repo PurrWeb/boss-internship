@@ -7,7 +7,8 @@ class Api::V1::StaffVettings::PermissionDataSerializer < ActiveModel::Serializer
    :staffOnWrongPayrate,
    :staffWithExpiredSiaBadge,
    :staffWithBouncedEmails,
-   :staffWithWithTimeDodges
+   :staffWithWithTimeDodges,
+   :duplicatedSageId
 
   def staffWithoutEmail
     {
@@ -54,6 +55,12 @@ class Api::V1::StaffVettings::PermissionDataSerializer < ActiveModel::Serializer
   def staffWithWithTimeDodges
     {
       canView: user_ability.can?(:view, :time_dodgers)
+    }
+  end
+
+  def duplicatedSageId
+    {
+      canView: user_ability.can?(:view, :duplicated_sage_id)
     }
   end
 

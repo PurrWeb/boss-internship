@@ -102,6 +102,8 @@ module Api
       end
 
       def time_dodgers
+        authorize! :view, :time_dodgers
+
         date = date_from_params
         week = RotaWeek.new(date);
         time_dodgers_service = TimeDodgersService.new(week: week)
@@ -120,6 +122,8 @@ module Api
       end
 
       def staff_with_same_sage_id
+        authorize! :view, :duplicated_sage_id
+
         result = StaffWithSameSageIdQuery.new.all
         render json: {
           sameSageId: result.same_sage_id,

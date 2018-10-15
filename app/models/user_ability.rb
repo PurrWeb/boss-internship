@@ -229,6 +229,10 @@ class UserAbility
         can_view_main_vettings_page?(user)
       end
 
+      can :view, :duplicated_sage_id do
+        can_view_main_vettings_page?(user)
+      end
+
       can [:view, :accept, :complete, :edit], :change_order_reports do
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end
