@@ -1,5 +1,5 @@
-const FIRST_TITLE = 'First';
-const SECOND_TITLE = 'Second';
+const FIRST_TITLE = 'Verbal';
+const SECOND_TITLE = 'Written';
 const FINAL_TITLE = 'Final';
 
 const FIRST_VALUE = 'first_level';
