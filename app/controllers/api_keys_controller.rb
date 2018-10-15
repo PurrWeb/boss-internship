@@ -1,6 +1,4 @@
 class ApiKeysController < ApplicationController
-  before_action :authorize_admin
-
   def index
     authorize!(:view, :api_keys_page)
 
@@ -40,10 +38,5 @@ class ApiKeysController < ApplicationController
   private
   def venue_from_params
     Venue.find(params[:venue_id])
-  end
-
-  private
-  def authorize_admin
-    authorize! :manage, :admin
   end
 end
