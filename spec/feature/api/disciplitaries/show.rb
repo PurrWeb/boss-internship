@@ -17,7 +17,8 @@ RSpec.describe 'Show disciplinaties API endpoint' do
       staff_member: staff_member,
       created_by_user: user,
       disabled_by_user: user,
-      disabled_at: Time.zone.now
+      disabled_at: Time.zone.now,
+      level: Disciplinary.levels[:first_level],
     )
   end
 
@@ -25,7 +26,8 @@ RSpec.describe 'Show disciplinaties API endpoint' do
     FactoryGirl.create(:disciplinary,
       staff_member: staff_member,
       created_by_user: user,
-      created_at: Time.zone.now - (Disciplinary::EXPIRATION_LIMIT + 1.day),
+      level: Disciplinary.levels[:first_level],
+      created_at: Time.zone.now - (Disciplinary::EXPIRATION_LIMITS[Disciplinary.levels.keys[0]] + 1.day),
     )
   end
 
