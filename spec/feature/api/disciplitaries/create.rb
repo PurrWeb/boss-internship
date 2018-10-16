@@ -28,7 +28,9 @@ RSpec.describe 'Create disciplinaties API endpoint' do
     {
       title: 'Title',
       level: 'first_level',
-      note: 'Note',
+      conduct: 'conduct',
+      nature: 'nature',
+      consequence: 'consequence',
     }
   end
 
@@ -53,14 +55,16 @@ RSpec.describe 'Create disciplinaties API endpoint' do
     it 'should return created disciplinary' do
       json = JSON.parse(response.body)
       disciplinary = staff_member.disciplinaries.first
-      expect(json["id"]).to eq(disciplinary.id)
-      expect(json["title"]).to eq(disciplinary.title)
-      expect(json["note"]).to eq(disciplinary.note)
-      expect(json["createdAt"]).to eq(disciplinary.created_at.iso8601)
-      expect(json["expiredAt"]).to eq(disciplinary.expired_at.iso8601)
-      expect(json["createdByUser"]).to eq(user.full_name)
-      expect(json["disabledByUser"]).to eq(nil)
-      expect(json["disabledAt"]).to eq(nil)
+      expect(json["disciplinary"]["id"]).to eq(disciplinary.id)
+      expect(json["disciplinary"]["title"]).to eq(disciplinary.title)
+      expect(json["disciplinary"]["conduct"]).to eq(disciplinary.conduct)
+      expect(json["disciplinary"]["nature"]).to eq(disciplinary.nature)
+      expect(json["disciplinary"]["consequence"]).to eq(disciplinary.consequence)
+      expect(json["disciplinary"]["createdAt"]).to eq(disciplinary.created_at.iso8601)
+      expect(json["disciplinary"]["expiredAt"]).to eq(disciplinary.expired_at.iso8601)
+      expect(json["disciplinary"]["createdByUser"]).to eq(user.full_name)
+      expect(json["disciplinary"]["disabledByUser"]).to eq(nil)
+      expect(json["disciplinary"]["disabledAt"]).to eq(nil)
     end
   end
 
@@ -68,7 +72,9 @@ RSpec.describe 'Create disciplinaties API endpoint' do
     let(:params) do
       valid_params.merge({
         title: nil,
-        note: nil,
+        conduct: nil,
+        nature: nil,
+        consequence: nil,
         level: nil
       })
     end
@@ -86,7 +92,9 @@ RSpec.describe 'Create disciplinaties API endpoint' do
       json = JSON.parse(response.body)
       errors = json["errors"];
       expect(errors["title"]).to eq(["can't be blank"])
-      expect(errors["note"]).to eq(["can't be blank"])
+      expect(errors["conduct"]).to eq(["can't be blank"])
+      expect(errors["nature"]).to eq(["can't be blank"])
+      expect(errors["consequence"]).to eq(["can't be blank"])
       expect(errors["level"]).to eq(["is invalid", "can't be blank"])
     end
   end

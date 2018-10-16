@@ -7,7 +7,17 @@ class Disciplinary < ActiveRecord::Base
     Disciplinary.levels.keys[2] => "Final written warning",
   }
 
-  EXPIRATION_LIMIT = 2.month
+  EXPIRATION_LEVEL_DESCRIPTION = {
+    Disciplinary.levels.keys[0] => "6 months",
+    Disciplinary.levels.keys[1] => "6 months",
+    Disciplinary.levels.keys[2] => "1 year",
+  }
+
+  EXPIRATION_LIMITS = {
+    Disciplinary.levels.keys[0] => 6.month,
+    Disciplinary.levels.keys[1] => 6.month,
+    Disciplinary.levels.keys[2] => 1.year,
+  }
 
   belongs_to :staff_member
   belongs_to :created_by_user, class_name: "User"
@@ -21,7 +31,12 @@ class Disciplinary < ActiveRecord::Base
   validates :staff_member, presence: true
   validates :created_by_user, presence: true
 
-  scope :without_expired, -> { where("created_at > ?", Time.zone.now - EXPIRATION_LIMIT) }
+  scope :without_expired, -> {
+      where("(level = ? AND created_at > ?) OR (level = ? AND created_at > ?) OR (level = ? AND created_at > ?)",
+            0, Time.zone.now - Disciplinary::EXPIRATION_LIMITS[Disciplinary::levels.keys[0]],
+            1, Time.zone.now - Disciplinary::EXPIRATION_LIMITS[Disciplinary::levels.keys[1]],
+            2, Time.zone.now - Disciplinary::EXPIRATION_LIMITS[Disciplinary::levels.keys[2]])
+    }
   scope :without_disabled, -> { where({disabled_at: nil, disabled_by_user: nil}) }
 
   def expired?
@@ -29,10 +44,14 @@ class Disciplinary < ActiveRecord::Base
   end
 
   def expired_at
-    created_at + EXPIRATION_LIMIT
+    created_at + EXPIRATION_LIMITS[level]
+  end
+
+  def expiration_description
+    EXPIRATION_LEVEL_DESCRIPTION[level]
   end
 
   def warning_level_text
-    "#{LEVELS_TEXT[level]} #{EXPIRATION_LIMIT.inspect}"
+    LEVELS_TEXT[level]
   end
 end

@@ -45,7 +45,7 @@
                   <p><p/>
 									<p style="margin: 0;font-size: 14px;line-height: 21px"><span style="line-height: 24px; font-size: 16px;">You attended a disciplinary hearing on <strong><%= disciplinary.created_at.to_s(:human) %></strong>,
 											and I am writing to inform you of your <strong><%= disciplinary.title %></strong>. This warning will be placed in your personal
-											file but will be disregarded for disciplinary purposes after a period of <strong><%= Disciplinary::EXPIRATION_LIMIT.inspect %></strong>, provided
+											file but will be disregarded for disciplinary purposes after a period of <strong><%= disciplinary.expiration_description %></strong>, provided
 											your conduct improves.</span></p>
 								</div>
 							</div>

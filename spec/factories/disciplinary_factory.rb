@@ -4,7 +4,9 @@ FactoryGirl.define do
     association :created_by_user, factory: :user
     title "Some title"
     level Disciplinary.levels[:first_level]
-    note "Some note"
+    conduct "Some conduct"
+    nature "Some nature"
+    consequence "Some consequence"
     disabled_at nil
   end
 end

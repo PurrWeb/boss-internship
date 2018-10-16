@@ -46,14 +46,16 @@ RSpec.describe 'Disable disciplinaties API endpoint' do
     it 'should return disabled disciplinary' do
       json = JSON.parse(response.body)
       disciplinary = staff_member.disciplinaries.first
-      expect(json["id"]).to eq(disciplinary.id)
-      expect(json["title"]).to eq(disciplinary.title)
-      expect(json["note"]).to eq(disciplinary.note)
-      expect(json["createdAt"]).to eq(disciplinary.created_at.iso8601)
-      expect(json["expiredAt"]).to eq(disciplinary.expired_at.iso8601)
-      expect(json["createdByUser"]).to eq(user.full_name)
-      expect(json["disabledByUser"]).to eq(user.full_name)
-      expect(json["disabledAt"]).to eq(Time.zone.now.iso8601)
+      expect(json["disciplinary"]["id"]).to eq(disciplinary.id)
+      expect(json["disciplinary"]["title"]).to eq(disciplinary.title)
+      expect(json["disciplinary"]["conduct"]).to eq(disciplinary.conduct)
+      expect(json["disciplinary"]["nature"]).to eq(disciplinary.nature)
+      expect(json["disciplinary"]["consequence"]).to eq(disciplinary.consequence)
+      expect(json["disciplinary"]["createdAt"]).to eq(disciplinary.created_at.iso8601)
+      expect(json["disciplinary"]["expiredAt"]).to eq(disciplinary.expired_at.iso8601)
+      expect(json["disciplinary"]["createdByUser"]).to eq(user.full_name)
+      expect(json["disciplinary"]["disabledByUser"]).to eq(user.full_name)
+      expect(json["disciplinary"]["disabledAt"]).to eq(Time.zone.now.iso8601)
     end
   end
 
