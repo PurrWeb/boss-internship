@@ -165,7 +165,7 @@ class UserAbility
       can [:create, :cancel, :refund_request], AccessoryRequest do |accessory_request|
         if accessory_request.staff_member.disabled?
           user.payroll_manager? ||
-            user.has_effective_access_level?(AccessLevel.admin_access_level)
+            user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
         else
           can_edit_staff_member?(user, accessory_request.staff_member)
         end
