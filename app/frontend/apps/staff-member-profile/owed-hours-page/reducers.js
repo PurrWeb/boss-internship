@@ -44,6 +44,8 @@ const owedHoursReducer = handleActions(
         payslipEndDate,
       } = action.payload;
 
+      window.boss.accessToken = accessToken;
+
       const permissionsData = oFetch(action.payload, 'permissionsData');
       const canEnable = oFetch(permissionsData, 'canEnable');
       const owedHoursPermissions = oFetch(permissionsData, 'owedHoursTab.owed_hours');
