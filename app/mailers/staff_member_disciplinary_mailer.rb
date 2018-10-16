@@ -4,7 +4,7 @@ class StaffMemberDisciplinaryMailer < ApplicationMailer
   APPEAL_TO_NAME = "Sina (sina@jsmbars.co.uk)"
 
   def send_disciplinary_email(disciplinary:)
-    mail(to: disciplinary.staff_member.email, subject: "Reset your JSM Bars Password") do |format|
+    mail(to: disciplinary.staff_member.email, subject: "Notice of #{disciplinary.warning_level_text}") do |format|
       format.html do
         render locals: {
           disciplinary: disciplinary,

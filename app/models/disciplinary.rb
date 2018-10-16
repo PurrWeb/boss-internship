@@ -7,6 +7,12 @@ class Disciplinary < ActiveRecord::Base
     Disciplinary.levels.keys[2] => "Final written warning",
   }
 
+  EXPIRATION_LEVEL_DESCRIPTION = {
+    Disciplinary.levels.keys[0] => "6 months",
+    Disciplinary.levels.keys[1] => "6 months",
+    Disciplinary.levels.keys[2] => "1 year",
+  }
+
   EXPIRATION_LIMITS = {
     Disciplinary.levels.keys[0] => 6.month,
     Disciplinary.levels.keys[1] => 6.month,
@@ -41,7 +47,11 @@ class Disciplinary < ActiveRecord::Base
     created_at + EXPIRATION_LIMITS[level]
   end
 
+  def expiration_description
+    EXPIRATION_LEVEL_DESCRIPTION[level]
+  end
+
   def warning_level_text
-    "#{LEVELS_TEXT[level]} #{EXPIRATION_LIMITS[level].inspect}"
+    LEVELS_TEXT[level]
   end
 end
