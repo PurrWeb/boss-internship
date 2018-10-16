@@ -8,17 +8,7 @@ import modalDecorator from './modal-decorator';
 
 class WarningModalBig extends React.Component {
   render() {
-    const {
-      show,
-      title,
-      text,
-      buttonText,
-      onClose,
-      onSubmit,
-      props,
-      cancel,
-      closeCallback,
-    } = this.props;
+    const { show, title, text, buttonText, onClose, onSubmit, props, cancel, closeCallback } = this.props;
 
     return (
       <Modal
@@ -36,9 +26,7 @@ class WarningModalBig extends React.Component {
           }}
           className="boss-modal-window__close"
         />
-        <div className="boss-modal-window__header boss-modal-window__header_warning">
-          {title}
-        </div>
+        <div className="boss-modal-window__header boss-modal-window__header_warning">{title}</div>
         <div className="boss-modal-window__content">
           <div className="boss-modal-window__message-block">
             {_.isArray(text) ? (
@@ -76,17 +64,12 @@ class WarningModalBig extends React.Component {
 }
 
 function openWarningModalBig(
-  {
-    title = 'Warning modal',
-    text = 'Are you sure ?',
-    buttonText = 'Confirm',
-    cancel = false,
-  },
+  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm', cancel = false },
   props = {},
   onSubmit,
   onClose,
   wrapper,
-  closeCallback,
+  closeCallback = () => {},
 ) {
   ReactDOM.render(
     <WarningModalBig
