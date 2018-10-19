@@ -70,6 +70,7 @@ class SecurityRotasController < ApplicationController
       date: date,
       staff_member: staff_members,
     ).includes([:staff_member])
+    security_shift_requests_count = SecurityShiftPendingRequestsCountQuery.new(week: week).all[UIRotaDate.format(date)]
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
@@ -87,7 +88,8 @@ class SecurityRotasController < ApplicationController
       week_security_venue_shifts: week_security_venue_shifts,
       holidays: holidays,
       staff_types: staff_types,
-      week_rotas: week_rotas
+      week_rotas: week_rotas,
+      security_shift_requests_count: security_shift_requests_count,
     }
   end
 
@@ -177,6 +179,7 @@ class SecurityRotasController < ApplicationController
       .joins(:staff_member)
       .merge(staff_members)
       .includes(:rota)
+    security_shift_requests_count = SecurityShiftPendingRequestsCountQuery.new(week: week).all
 
     render locals: {
       access_token: access_token,
@@ -187,7 +190,8 @@ class SecurityRotasController < ApplicationController
       date: highlight_date_from_params,
       staff_members: staff_members,
       rota_shifts: rota_shifts,
-      staff_types: staff_types
+      staff_types: staff_types,
+      security_shift_requests_count: security_shift_requests_count,
     }
   end
 
