@@ -17,9 +17,9 @@ class SecurityShiftRequestsController < ApplicationController
     access_token = current_user.current_access_token ||
                     WebApiAccessToken.new(user: current_user).persist!
 
-    venue_security_shift_requests = venue_from_params.
-      security_shift_requests.
-      includes([:created_shift, :creator])
+    venue_security_shift_requests = SecurityShiftRequest
+      .where(venue: accessible_venues)
+      .includes([:created_shift, :creator])
 
     security_shift_requests = InRangeQuery.new({
       relation: venue_security_shift_requests.in_state([:pending, :accepted, :assigned, :rejected]),
@@ -44,7 +44,8 @@ class SecurityShiftRequestsController < ApplicationController
       start_date: week.start_date,
       end_date: week.end_date,
       staff_members: staff_members,
-      current_venue: venue_from_params,
+      venue_filter: venue_from_params,
+      accessible_venues: accessible_venues,
       permissions: SecurityShiftRequestsPermissions.new(
         current_user: current_user,
         shift_requests: security_shift_requests,
@@ -54,6 +55,9 @@ class SecurityShiftRequestsController < ApplicationController
   end
 
   private
+  def show_global_venue?
+    false
+  end
 
   def accessible_venues
     AccessibleVenuesQuery.new(current_user).all
@@ -64,11 +68,11 @@ class SecurityShiftRequestsController < ApplicationController
   end
 
   def show_redirect_params
-    venue = venue_from_params || current_user.default_venue
+    venue = venue_from_params || 'all'
     date = date_from_params || default_date
     {
       id: UIRotaDate.format(date),
-      venue_id: venue.id
+      venue_id: venue
     }
   end
 
@@ -78,7 +82,7 @@ class SecurityShiftRequestsController < ApplicationController
   end
 
   def venue_from_params
-    accessible_venues.find_by(id: params[:venue_id])
+    params[:venue_id]
   end
 
   def default_date
