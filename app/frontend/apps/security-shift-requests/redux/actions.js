@@ -55,3 +55,4 @@ export const deleteSecurityShiftRequest = id => (dispatch, getState) => {
 };
 
 export const changeWeekDay = createAction(types.CHANGE_WEEK_DAY);
+export const changeVenueFilter = createAction(types.CHANGE_VENUE_FILTER);

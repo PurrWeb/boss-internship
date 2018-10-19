@@ -15,7 +15,11 @@
   ),
   startDate: UIRotaDate.format(start_date),
   endDate: UIRotaDate.format(end_date),
-  venueId: current_venue.id,
+  accessibleVenues: ActiveModel::Serializer::CollectionSerializer.new(
+    accessible_venues,
+    serializer: Api::V1::SecurityShiftRequests::VenueSerializer,
+  ),
+  venueFilter: venue_filter,
   permissions: Api::V1::SecurityShiftRequests::PermissionsSerializer.new(permissions),
   canCreate: can_create,
 }) %>

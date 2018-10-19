@@ -36,6 +36,7 @@ class SecurityShiftRequestList extends Component {
           <div className={`boss-table boss-table_page_ssr-${isCompleted ? 'completed' : 'pending'}`}>
             <div className="boss-table__row">
               <div className="boss-table__cell boss-table__cell_role_header">Requested times</div>
+              <div className="boss-table__cell boss-table__cell_role_header">Venue</div>
               <div className="boss-table__cell boss-table__cell_role_header">Note</div>
               {this.props.isCompleted && (
                 <div className="boss-table__cell boss-table__cell_role_header">Rotaed Shift</div>
