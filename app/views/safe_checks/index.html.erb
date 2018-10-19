@@ -312,7 +312,8 @@
       notes: safe_check.enabled_notes,
       safe_check: safe_check,
       costs: notes_and_coins(safe_check),
-      variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
+      variance_cents: safe_check.variance_cents,
+      variance_cents_text: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
     },
     { class: 'react-modal' }
   ) %>

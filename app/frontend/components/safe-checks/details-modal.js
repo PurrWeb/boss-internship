@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import ReactDOM from 'react-dom';
 import ModalNote from './modal-note';
+import oFetch from 'o-fetch';
 
 export default class DetailsModal extends React.Component {
   constructor(props){
@@ -35,6 +36,10 @@ export default class DetailsModal extends React.Component {
 
   render() {
     if (this.state.showModal) {
+      const varianceCentsText = oFetch(this.props, 'variance_cents_text');
+      const varianceCents = oFetch(this.props, 'variance_cents');
+      const varianceLabelClass = varianceCents < 0 ? 'boss-stats__label_state_alert' : 'boss-stats__label_state_success';
+
       return (
           <Modal className="boss-modal-window boss-modal-window_role_details" isOpen={ this.state.showModal } contentLabel={"Details"}>
             <a className="boss-modal-window__close" onClick={ this.handleClose.bind(this) }></a>
@@ -42,8 +47,8 @@ export default class DetailsModal extends React.Component {
             <div className="boss-modal-window__content">
               <div className="boss-stats">
                 <div className="boss-stats__meta">
-                  <p className="boss-stats__label">
-                    <span>{this.props.variance_cents}</span>
+                  <p className={ `boss-stats__label ${varianceLabelClass}` }>
+                    <span>{ varianceCentsText }</span>
                   </p>
 
                   <p className="boss-stats__label boss-stats__label_role_date">
