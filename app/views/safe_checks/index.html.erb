@@ -44,11 +44,11 @@
         </div>
 
         <% safe_checks.each_with_index do |safe_check, index| %>
-          <div class="boss-table__row <%= (negative?(safe_check.variance_cents) ? 'boss-table__row_state_alert' : '') %>">
-            <div class="boss-table__cell <%= (negative?(safe_check.variance_cents) ? 'boss-table__cell_state_alert' : '') %>">
+          <div class="boss-table__row <%= (negative?(safe_check.variance_cents) ? 'boss-table__row_state_alert' : 'boss-table__row_state_success') %>">
+            <div class="boss-table__cell <%= (negative?(safe_check.variance_cents) ? 'boss-table__cell_state_alert' : 'boss-table__cell_state_success') %>">
               <div class="boss-table__info">
                 <p class="boss-table__label <%= (negative?(safe_check.variance_cents) ? 'boss-table__label_state_alert' : '') %>">Variance</p>
-                <p class="boss-table__text <%= (negative?(safe_check.variance_cents) ? 'boss-table__text_state_alert' : '') %>">
+                <p class="boss-table__text <%= (negative?(safe_check.variance_cents) ? 'boss-table__text_state_alert' : 'boss-form__text-success') %>">
                   <%= number_to_currency(
                     safe_check.pound_value_for(:variance_cents),
                     unit: '£',
@@ -169,9 +169,9 @@
       </div>
 
       <% safe_checks.each_with_index do |safe_check, index| %>
-        <div data-safe-check class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : '' %>">
+        <div data-safe-check class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : 'boss-check_state_success' %>">
           <div class="boss-check__row boss-check__row_role_header">
-            <div class="boss-check__cell boss-check__cell_size_half <%= negative?(safe_check.variance_cents) ? 'boss-check__cell_state_alert' : '' %>">
+            <div class="boss-check__cell boss-check__cell_size_half <%= negative?(safe_check.variance_cents) ? 'boss-check__cell_state_alert' : 'boss-check__cell_state_success' %>">
               <p class="boss-check__text boss-check__text_marked <%= negative?(safe_check.variance_cents) ? 'boss-check__text_state_alert' : '' %>">
                 <%= number_to_currency(
                   safe_check.pound_value_for(:variance_cents),
