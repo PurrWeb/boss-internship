@@ -18,6 +18,7 @@ class SecurityShiftRequestApiService
       starts_at: params.fetch(:starts_at),
       ends_at: params.fetch(:ends_at),
       note: params.fetch(:note),
+      venue: params.fetch(:venue),
     }
 
     result = UpdateSecurityShiftRequest.new(
