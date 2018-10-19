@@ -96,22 +96,24 @@ var poundValueString = function(cents){
   return numberWithCommas(result);
 }
 
-var updatePlaceHolderValue = function(selector, centValue, colorNegativeValue){
+var updatePlaceHolderValue = function(selector, centValue, colorValue){
   resultPlaceholder = $(selector);
 
   if( isNaN(centValue) ){
     resultPlaceholder.html("-");
   } else {
     var htmlFragments = [];
-    var negativeColoringRequired = colorNegativeValue && (centValue < 0);
+    var negative = (centValue < 0);
 
-    if( negativeColoringRequired ){
-      htmlFragments.push("<span class=\"text-danger\">");
+    if( colorValue && negative ){
+      htmlFragments.push("<span class=\"boss-form__text-primary boss-form__text-extra-large boss-form__text-alert\">");
+    } else if (colorValue && !negative) {
+      htmlFragments.push("<span class=\"boss-form__text-primary boss-form__text-extra-large boss-form__text-success\">")
     }
 
     htmlFragments.push("£" + poundValueString(centValue));
 
-    if( negativeColoringRequired ){
+    if (colorValue) {
       htmlFragments.push("</span>");
     }
 
@@ -124,16 +126,7 @@ var updateRealtimeTotalField = function(totalCents){
 };
 
 var updateRealtimeVarienceField = function(varianceCents){
-  var variancePlaceholderSelector = '.js-total-calculation-variance-result';
-  var alertClass = "boss-form__text-alert";
-
-  if(varianceCents < 0){
-    $(variancePlaceholderSelector).addClass(alertClass);
-  } else {
-    $(variancePlaceholderSelector).removeClass(alertClass)
-  }
-
-  updatePlaceHolderValue(variancePlaceholderSelector, varianceCents, true);
+  updatePlaceHolderValue('.js-total-calculation-variance-result', varianceCents, true);
 };
 
 var updateRealtimeTotalFloatField = function(floatValueCents){
