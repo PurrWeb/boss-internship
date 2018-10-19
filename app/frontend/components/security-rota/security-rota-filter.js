@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function RotaFilter({ currentRotaDay, page = 'daily' }) {
+export default function RotaFilter({ currentRotaDay, page = 'daily', securityShiftRequestsCount }) {
   return (
     <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
       <p className="boss-form__label boss-form__label_type_icon-single boss-form__label_type_icon-date">
@@ -45,7 +45,7 @@ export default function RotaFilter({ currentRotaDay, page = 'daily' }) {
         {page === 'requests' ? (
           <span className="boss-form__switcher-label">
             <span className="boss-form__switcher-label-text boss-form__switcher-label-text_type_border boss-form__switcher-label-text_state_active">
-              Requests
+              Requests {securityShiftRequestsCount !== undefined && <b>{securityShiftRequestsCount}</b>}
             </span>
           </span>
         ) : (
@@ -54,7 +54,7 @@ export default function RotaFilter({ currentRotaDay, page = 'daily' }) {
             className="boss-form__switcher-label"
           >
             <span className="boss-form__switcher-label-text boss-form__switcher-label-text_type_border">
-              Requests
+              Requests {securityShiftRequestsCount !== undefined && <b>{securityShiftRequestsCount}</b>}
             </span>
           </a>
         )}

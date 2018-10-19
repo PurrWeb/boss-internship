@@ -39,6 +39,7 @@ const mapStateToProps = state => {
     isLoading,
     breakdown,
     groups,
+    securityShiftRequestsCount: state.get('securityShiftRequestsCount'),
   };
 };
 

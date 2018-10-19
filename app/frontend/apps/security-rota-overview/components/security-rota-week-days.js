@@ -43,24 +43,28 @@ class RotaWeekDays extends Component {
         : modifiedItem.format('D');
 
       return (
-        <button
-          key={index}
-          onClick={() => this.loadDayRota(index, week)}
-          className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}
-        >
-          {formatedDate}
-        </button>
+        <div key={index} className="boss-paginator__group">
+          <button
+            onClick={() => this.loadDayRota(item)}
+            className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}
+          >
+            {formatedDate}
+          </button>
+          <div className="boss-paginator__meta">
+            <button className="boss-paginator__meta-link boss-paginator__meta-link_role_button-light">
+              Requests: {this.props.securityShiftRequestsCount[item]}
+            </button>
+          </div>
+        </div>
       );
     });
   }
 
-  loadDayRota = (index, week) => {
-    const date = week[index];
-    const formatedDate = safeMoment.uiDateParse(date).format('DD-MM-YYYY');
+  loadDayRota = uiDate => {
     this.setState({
-      highlightDate: date,
+      highlightDate: uiDate,
     });
-    this.props.onDateChange(formatedDate);
+    this.props.onDateChange(uiDate);
   };
 
   render() {
@@ -75,5 +79,6 @@ class RotaWeekDays extends Component {
 
 RotaWeekDays.propTypes = {
   date: PropTypes.string.isRequired,
+  securityShiftRequestsCount: PropTypes.object,
 };
 export default RotaWeekDays;

@@ -50,6 +50,7 @@ const mapStateToProps = state => {
     isMultipleShift: state.getIn(['page', 'isMultipleShift']),
     venuesFilterIds: venuesFilterIdsSelector(state),
     venueTypes: getVenueTypes(state),
+    securityShiftRequestsCount: state.getIn(['page', 'securityShiftRequestsCount']),
   };
 };
 
@@ -104,6 +105,7 @@ class RotaDailyContent extends React.Component {
       actions: { openMultipleShift, closeMultipleShift },
       venueTypes,
       filteredRotaShifts,
+      securityShiftRequestsCount,
     } = this.props;
     const rotaGraphClassName = isAddingNewShift
       ? 'boss-rotas__graphs_state_mobile-hidden'
@@ -139,6 +141,7 @@ class RotaDailyContent extends React.Component {
             <RotaDailyGraphFilter
               selectedTypes={this.props.venuesFilterIds.toJS()}
               venueTypes={this.getVenueTypes()}
+              securityShiftRequestsCount={securityShiftRequestsCount}
               rotaDate={rotaDate}
               onVenueChange={this.handleGraphVenueChange}
             />
