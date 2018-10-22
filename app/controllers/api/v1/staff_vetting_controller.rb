@@ -124,11 +124,10 @@ module Api
       def staff_with_same_sage_id
         authorize! :view, :duplicated_sage_id
 
-        result = StaffWithSameSageIdQuery.new.all
+        staff_members_with_duplicated_sage_id = StaffWithSameSageIdQuery.new.all
         render json: {
-          sameSageId: result.same_sage_id,
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
-            result.all_staff_members,
+            staff_members_with_duplicated_sage_id,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer
           ),
           venues: ActiveModel::Serializer::CollectionSerializer.new(
