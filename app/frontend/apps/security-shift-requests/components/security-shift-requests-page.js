@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import oFetch from 'o-fetch';
+import urlSearchParams from 'url-search-params';
 import safeMoment from '~/lib/safe-moment';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { DashboardActions } from '~/components/boss-dashboards';
@@ -13,10 +14,15 @@ import SecurityShiftRequestCard from '~/components/security-shift-requests/secur
 import SecurityShiftRequestList from './security-shift-request-list';
 import SecurityShiftRequestItem from './security-shift-request-item';
 import EditSecurityShiftRequest from './edit-security-shift-request';
+import VenueSelect from './venue-select';
 import utils from '~/lib/utils';
 import WeekFilter from './requests-week-filter';
 
 class SecurityShiftRequestsPage extends Component {
+  state = {
+    venueFilter: oFetch(this.props.venueFilter) === 'all' ? null : oFetch(this.props.venueFilter),
+  };
+
   handleEditRequest = (hideModal, values) => {
     const editSecurityShiftRequest = oFetch(this.props, 'editSecurityShiftRequest');
     return editSecurityShiftRequest(values).then(response => {
@@ -31,6 +37,7 @@ class SecurityShiftRequestsPage extends Component {
     const status = oFetch(securityShiftRequest, 'status');
     const venueId = oFetch(securityShiftRequest, 'venueId');
     const note = oFetch(securityShiftRequest, 'note');
+    const accessibleVenues = oFetch(this.props, 'accessibleVenues');
     const shiftMinutes = utils.getDiffFromRotaDayInMinutes(
       safeMoment.iso8601Parse(startsAt),
       safeMoment.iso8601Parse(endsAt),
@@ -46,7 +53,7 @@ class SecurityShiftRequestsPage extends Component {
     openContentModal({
       submit: this.handleEditRequest,
       config: { title: 'Edit Shift Request' },
-      props: { editRequestFormInitialValues },
+      props: { editRequestFormInitialValues, accessibleVenues },
     })(EditSecurityShiftRequest);
   };
 
@@ -70,11 +77,29 @@ class SecurityShiftRequestsPage extends Component {
 
   handleOpenAddNewRequest = () => {
     const date = oFetch(this.props, 'date');
+    const accessibleVenues = oFetch(this.props, 'accessibleVenues');
     openContentModal({
       submit: this.handleAddNewRequest,
       config: { title: 'Add new shift request' },
-      props: { date: safeMoment.parse(date, 'DD-MM-YYYY') },
+      props: { date: safeMoment.parse(date, 'DD-MM-YYYY'), accessibleVenues },
     })(AddSecurityShiftRequest);
+  };
+
+  handleVenueFilterSelect = value => {
+    const changeVenueFilter = oFetch(this.props, 'changeVenueFilter');
+    const chosenDate = oFetch(this.props, 'chosenDate');
+    changeVenueFilter(value);
+    window.history.pushState('state', 'title', `/security-shift-requests/${chosenDate}?venue_id=${value || 'all'}`);
+  };
+
+  handleChangeURLDate = date => {
+    const chosenDate = oFetch(this.props, 'chosenDate');
+    window.history.pushState(
+      'state',
+      'title',
+      `/security-shift-requests/${date === 'All' ? chosenDate : date}?venue_id=${this.props.venueFilter || 'all'}`,
+    );
+    this.props.changeWeekDay({ chosenDate: date });
   };
 
   render() {
@@ -84,9 +109,9 @@ class SecurityShiftRequestsPage extends Component {
     const completedSecurityShiftRequests = oFetch(this.props, 'completedSecurityShiftRequests');
     const canCreate = oFetch(this.props, 'canCreate');
     const date = oFetch(this.props, 'date');
-    const changeWeekDay = oFetch(this.props, 'changeWeekDay');
+    const chosenDate = oFetch(this.props, 'chosenDate');
     const weekDates = oFetch(this.props, 'weekDates');
-    const venueId = oFetch(this.props, 'venueId');
+    const jsAccessibleVenues = oFetch(this.props, 'accessibleVenues').toJS();
     return (
       <div>
         <DashboardWeekSelect
@@ -108,12 +133,20 @@ class SecurityShiftRequestsPage extends Component {
           )}
         </DashboardWeekSelect>
         <ContentWrapper>
-          <WeekFilter
-              date={date}
-              onChange={changeWeekDay}
-              weekDates={weekDates.toJS()}
-              venueId={venueId}
-            />
+          <div className="boss-page-main__filter">
+            <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
+              <p className="boss-form__label boss-form__label_type_icon-filter">
+                <span className="boss-form__label-text">Venue filter</span>
+              </p>
+              <VenueSelect
+                selected={this.props.venueFilter}
+                onChange={this.handleVenueFilterSelect}
+                clearable
+                venues={jsAccessibleVenues}
+              />
+            </div>
+          </div>
+          <WeekFilter date={chosenDate} onChange={this.handleChangeURLDate} weekDates={weekDates.toJS()} />
           <SecurityShiftRequestCard title="Pending">
             <SecurityShiftRequestList
               securityShiftRequests={pendingSecurityShiftRequests}
@@ -125,6 +158,9 @@ class SecurityShiftRequestsPage extends Component {
                       this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))
                     }
                     securityShiftRequest={securityShiftRequest}
+                    venue={jsAccessibleVenues.find(
+                      venue => oFetch(venue, 'id') === oFetch(securityShiftRequest, 'venueId'),
+                    )}
                   />
                 );
               }}
@@ -143,6 +179,9 @@ class SecurityShiftRequestsPage extends Component {
                       this.handleDeleteSecurityShiftRequest(oFetch(securityShiftRequest, 'id'))
                     }
                     securityShiftRequest={securityShiftRequest}
+                    venue={jsAccessibleVenues.find(
+                      venue => oFetch(venue, 'id') === oFetch(securityShiftRequest, 'venueId'),
+                    )}
                   />
                 );
               }}
@@ -163,7 +202,7 @@ SecurityShiftRequestsPage.propTypes = {
   addSecurityShiftRequest: PropTypes.func.isRequired,
   changeWeekDay: PropTypes.func.isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
-  venueId: PropTypes.number.isRequired,
+  venueFilter: PropTypes.string.isRequired,
 };
 
 export default SecurityShiftRequestsPage;

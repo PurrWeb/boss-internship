@@ -9,6 +9,7 @@ class SecurityShiftRequest < ActiveRecord::Base
   validates_associated :created_shift
 
   scope :accepted, -> { in_state(:accepted) }
+  scope :pending, -> { in_state(:pending) }
 
   validates :creator, presence: true
   validates :starts_at, presence: true

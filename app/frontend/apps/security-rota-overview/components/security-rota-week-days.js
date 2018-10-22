@@ -24,56 +24,56 @@ class RotaWeekDays extends Component {
   }
 
   renderDays(week) {
-    return (
-      <div className="boss-paginator boss-paginator_size_full">
-        {this.renderTabList(week)}
-      </div>
-    );
+    return <div className="boss-paginator boss-paginator_size_full">{this.renderTabList(week)}</div>;
   }
 
   renderTabList(week) {
     const highlightDate = safeMoment.uiDateParse(this.state.highlightDate);
     return week.map((item, index) => {
       const modifiedItem = safeMoment.uiDateParse(item);
-      const tabClassName = highlightDate.isSame(modifiedItem, 'days')
-        ? 'boss-paginator__action_state_active'
-        : '';
+      const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
       const formatedDate = highlightDate.isSame(modifiedItem, 'days')
         ? modifiedItem.format('D MMMM')
         : modifiedItem.format('D');
 
       return (
-        <button
-          key={index}
-          onClick={() => this.loadDayRota(index, week)}
-          className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}
-        >
-          {formatedDate}
-        </button>
+        <div key={index} className="boss-paginator__group">
+          <button
+            onClick={() => this.loadDayRota(item)}
+            className={`boss-paginator__action boss-paginator__action_type_light ${tabClassName}`}
+          >
+            {formatedDate}
+          </button>
+          <div className="boss-paginator__meta">
+            <a
+              href={`/security-shift-requests/${item}`}
+              className="boss-paginator__meta-link boss-paginator__meta-link_role_button-light"
+            >
+              Requests: {this.props.securityShiftRequestsCount[item]}
+            </a>
+          </div>
+        </div>
       );
     });
   }
 
-  loadDayRota = (index, week) => {
-    const date = week[index];
-    const formatedDate = safeMoment.uiDateParse(date).format('DD-MM-YYYY');
+  loadDayRota = uiDate => {
     this.setState({
-      highlightDate: date,
+      highlightDate: uiDate,
     });
-    this.props.onDateChange(formatedDate);
+    this.props.onDateChange(uiDate);
   };
 
   render() {
     const { date } = this.props;
     const currentWeek = this.generateWeek(date);
 
-    return (
-      <div className="boss-rotas__days-nav">{this.renderDays(currentWeek)}</div>
-    );
+    return <div className="boss-rotas__days-nav">{this.renderDays(currentWeek)}</div>;
   }
 }
 
 RotaWeekDays.propTypes = {
   date: PropTypes.string.isRequired,
+  securityShiftRequestsCount: PropTypes.object,
 };
 export default RotaWeekDays;

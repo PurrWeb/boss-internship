@@ -52,7 +52,6 @@ class SecurityShiftRequestItem extends Component {
     const securityShiftRequest = oFetch(this.props, 'securityShiftRequest');
     const shiftRequestStartsAt = oFetch(securityShiftRequest, 'startsAt');
     const shiftRequestEndsAt = oFetch(securityShiftRequest, 'endsAt');
-
     const isStartsAtChanged = startsAt !== shiftRequestStartsAt;
     const isEndsAtChanged = endsAt !== shiftRequestEndsAt;
     return (
@@ -103,6 +102,7 @@ class SecurityShiftRequestItem extends Component {
 
   render() {
     const securityShiftRequest = oFetch(this.props, 'securityShiftRequest');
+    const venueName = oFetch(this.props, 'venue.name');
     const onOpenEditSecurityShiftRequest = oFetch(this.props, 'onOpenEditSecurityShiftRequest');
     const onDeleteSecurityShiftRequest = oFetch(this.props, 'onDeleteSecurityShiftRequest');
     const startsAt = oFetch(securityShiftRequest, 'startsAt');
@@ -127,9 +127,13 @@ class SecurityShiftRequestItem extends Component {
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <p className="boss-table__label">Requested times</p>
-            <p className="boss-table__text">
-              {getFormattedDate(startsAt, endsAt)}
-            </p>
+            <p className="boss-table__text">{getFormattedDate(startsAt, endsAt)}</p>
+          </div>
+        </div>
+        <div className="boss-table__cell">
+          <div className="boss-table__info">
+            <p className="boss-table__label">Venue</p>
+            <p className="boss-table__text">{venueName}</p>
           </div>
         </div>
         <div className="boss-table__cell">

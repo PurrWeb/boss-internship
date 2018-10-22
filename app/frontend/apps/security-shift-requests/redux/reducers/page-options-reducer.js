@@ -8,7 +8,7 @@ import * as types from '../types';
 const initialGlobalState = Immutable.Map({
   startDate: null,
   endDate: null,
-  venueId: null,
+  venueFilter: null,
   date: null,
 });
 
@@ -16,9 +16,10 @@ const pageOptionsReducer = handleActions(
   {
     [types.INITIAL_LOAD]: (state, action) => {
       const date = oFetch(action, 'payload.date');
+      const accessibleVenues = oFetch(action, 'payload.accessibleVenues');
       const startDate = oFetch(action, 'payload.startDate');
       const endDate = oFetch(action, 'payload.endDate');
-      const venueId = oFetch(action, 'payload.venueId');
+      const venueFilter = oFetch(action, 'payload.venueFilter');
       const canCreate = oFetch(action, 'payload.canCreate');
       const chosenDate = oFetch(action, 'payload.date');
 
@@ -26,14 +27,19 @@ const pageOptionsReducer = handleActions(
         date,
         startDate,
         endDate,
-        venueId,
+        venueFilter: venueFilter === 'all' ? null : parseInt(venueFilter),
         canCreate,
         chosenDate,
+        accessibleVenues,
       });
     },
     [types.CHANGE_WEEK_DAY]: (state, action) => {
       const chosenDate = oFetch(action, 'payload.chosenDate');
       return state.set('chosenDate', chosenDate);
+    },
+    [types.CHANGE_VENUE_FILTER]: (state, action) => {
+      const venueFilter = oFetch(action, 'payload');
+      return state.set('venueFilter', venueFilter);
     },
   },
   initialGlobalState,

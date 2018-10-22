@@ -55,6 +55,7 @@ const rotaDailyReducer = handleActions(
         weekRotaShifts,
         securityVenueShifts,
         weekSecurityVenueShifts,
+        securityShiftRequestsCount,
       } = action.payload;
 
       const imWeekSecurityVenueShifts = fromJS(weekSecurityVenueShifts);
@@ -113,7 +114,8 @@ const rotaDailyReducer = handleActions(
         .set('holidays', imHolidays)
         .set('date', date)
         .set('venueIdsForCurrentDay', venueIdsForCurrentDay)
-        .set('securityVenueShifts', fromJS(securityVenueShifts));
+        .set('securityVenueShifts', fromJS(securityVenueShifts))
+        .set('securityShiftRequestsCount', securityShiftRequestsCount);
     },
     [ADD_NEW_SHIFT]: state => {
       return state.set('isAddingNewShift', true);

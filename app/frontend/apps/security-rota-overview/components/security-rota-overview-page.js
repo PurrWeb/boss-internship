@@ -34,8 +34,9 @@ class SecurityRotaOverviewPage extends Component {
       breakdown,
       isLoading,
       groups,
+      securityShiftRequestsCount,
     } = this.props;
-
+    const jsSecurityShiftRequestsCount = securityShiftRequestsCount.toJS();
     const rotaEditUrlDate = safeMoment.uiDateParse(date).format('DD-MM-YYYY');
     const rotaDate = safeMoment.uiDateParse(date).format('dddd, D MMMM YYYY');
     return (
@@ -64,6 +65,7 @@ class SecurityRotaOverviewPage extends Component {
           rotaShiftsLength={rotaShifts.size}
           rotaWeekDaysRenderer={() => (
             <SecurityRotaWeekDays
+              securityShiftRequestsCount={jsSecurityShiftRequestsCount}
               date={date}
               onDateChange={this.handleRotaDayClick}
             />

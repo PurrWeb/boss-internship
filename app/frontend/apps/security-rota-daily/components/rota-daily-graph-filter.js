@@ -21,7 +21,7 @@ class RotaDailyGraphFilter extends React.Component {
                 onChange={this.props.onVenueChange}
               />
             </div>
-            <RotaFilter currentRotaDay={this.props.rotaDate} page="daily" />
+            <RotaFilter securityShiftRequestsCount={this.props.securityShiftRequestsCount} currentRotaDay={this.props.rotaDate} page="daily" />
           </div>
           <RotaDayFilter currentRotaDay={this.props.rotaDate} />
           <div className="boss-form__row boss-form__row_justify_space boss-form__row_mobile boss-form__row_position_last">
