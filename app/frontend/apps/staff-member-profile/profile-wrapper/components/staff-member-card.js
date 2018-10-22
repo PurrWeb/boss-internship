@@ -59,7 +59,7 @@ const StaffMemberCard = ({
   const renderEmailorBounced = email => {
     return bouncedEmail ? (
       <p
-        onClick={() => showBouncedModal(bouncedEmail.toJS())}
+        onClick={() => showBouncedModal(bouncedEmail)}
         className="boss-user-summary__link boss-user-summary__link_role_alert-action"
       >
         {email}
