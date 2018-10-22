@@ -62,7 +62,7 @@ module Api
         end
 
         def ably_auth
-          token_request = AblyService.new.request_token(staff_member: current_staff_member)
+          token_request = SecurityAppAblyService.new.request_token(staff_member: current_staff_member)
           render json: token_request, status: 200
         end
 
