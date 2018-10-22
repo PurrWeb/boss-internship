@@ -104,7 +104,7 @@ export default function createApiRequestActionCreator(actionOptions){
 
                         dispatch(actions().showWrongPinMessage(errorMessage, 'WRONG_PIN', onRetryClick));
                     } else {
-                        if (responseOptions.errors.base){
+                        if (responseOptions.errors && responseOptions.errors.base){
                             alert(responseOptions.errors.base.join("\n"));
                         } else {
                             alert(JSON.stringify(responseOptions.errors));
