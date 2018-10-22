@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { BossCheckCardCollapsibleGroup } from '~/components/boss-check-card';
-
-import TabFilter from '../components/tab-filter';
+import GroupWrapper from '../components/group-wrapper';
 import StaffMemberList from '../components/staff-member-list';
 import Page from '../components/page';
 import Collabsible from '../components/collapsible';
@@ -25,18 +23,13 @@ class StaffWithSameSageId extends Component {
             fullName: `${staffMember.firstName} ${staffMember.surname}`,
           })),
         );
-        const imGrouppedBySageId = Immutable.fromJS(
-          res.data.sameSageId.map(sageGroup => {
-            const { staffMembersIds } = sageGroup;
-            return {
-              ...sageGroup,
-              staffMembers: imStaffMembers.filter(staffMember => staffMembersIds.includes(staffMember.get('id'))),
-            };
-          }),
-        );
+        const imGrouppedByVenueAndSageId = imStaffMembers
+          .groupBy(s => s.get('venueId'))
+          .map((staffMembersByVenue, venueId) => staffMembersByVenue.groupBy(s => s.get('sageId')));
+        console.log(imGrouppedByVenueAndSageId);
         this.setState({
           staffMembers: imStaffMembers,
-          grouppedStaffMembers: imGrouppedBySageId,
+          grouppedStaffMembers: imGrouppedByVenueAndSageId,
           isLoaded: true,
         });
       });
@@ -61,16 +54,23 @@ class StaffWithSameSageId extends Component {
         contentRenderer={() => {
           return (
             <div>
-              {this.state.grouppedStaffMembers.map((sageGroup, index) => {
-                const sageId = sageGroup.get('sageId');
-                const staffMembers = sageGroup.get('staffMembers');
+              {this.state.grouppedStaffMembers.entrySeq().map(grouppedStaffMembersEntry => {
+                const [venueId, venueAndSageGroup] = grouppedStaffMembersEntry;
+                const venue = this.props.venues.find(venue => venue.get('id') === parseInt(venueId));
+                const venueName = venue.get('name');
+                const staffMembersGroupsTotal = venueAndSageGroup.reduce((acc, group) => {
+                  return acc + group.size;
+                }, 0);
                 return (
-                  <Collabsible text={sageId} count={staffMembers.size} key={index.toString()}>
-                    <StaffMemberList
-                      venues={this.props.venues}
-                      staffTypes={this.props.staffTypes}
-                      staffMembers={staffMembers}
-                    />
+                  <Collabsible text={venueName} count={staffMembersGroupsTotal} key={venueId}>
+                    {venueAndSageGroup.entrySeq().map(venueAndSageGroupEntry => {
+                      const [sageId, staffMembers] = venueAndSageGroupEntry;
+                      return (
+                        <GroupWrapper groupTitle={sageId} key={sageId}>
+                          <StaffMemberList staffTypes={this.props.staffTypes} staffMembers={staffMembers} />
+                        </GroupWrapper>
+                      )
+                    })}
                   </Collabsible>
                 );
               })}
