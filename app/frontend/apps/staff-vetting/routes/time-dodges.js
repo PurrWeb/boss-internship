@@ -63,6 +63,7 @@ class TimeDodges extends PureComponent {
       const acceptedHours = oFetch(res, 'data.acceptedHours');
       const paidHolidays = oFetch(res, 'data.paidHolidays');
       const acceptedBreaks = oFetch(res, 'data.acceptedBreaks');
+      const owedHours = oFetch(res, 'data.owedHours');
 
       const imStaffMembers = Immutable.fromJS(
         staffMembers.map(staffMember => ({
@@ -71,15 +72,16 @@ class TimeDodges extends PureComponent {
           hours: acceptedHours[staffMember.id] || 0,
           paidHolidays: paidHolidays[staffMember.id] || 0,
           acceptedBreaks: acceptedBreaks[staffMember.id] || 0,
+          owedHours: owedHours[staffMember.id] || 0,
         })),
       );
 
       const imStaffMembersSoftDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
+        const hours = staffMember.get('hours') + staffMember.get('paidHolidays') + staffMember.get('owedHours');
         return hours >= TIME_DODGERS_START_LIMIT * 60 && hours <= TIME_DODGERS_END_LIMIT * 60;
       });
       const imStaffMembersHardDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays');
+        const hours = staffMember.get('hours') + staffMember.get('paidHolidays') + staffMember.get('owedHours');
         return hours < TIME_DODGERS_START_LIMIT * 60;
       });
       return {

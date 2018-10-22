@@ -38,6 +38,7 @@ function StaffMemberInfo({
   profileLink,
   startDate,
   endDate,
+  owedHours,
 }) {
   const handleInfoClick = e => {
     if (bouncedEmailData) {
@@ -140,6 +141,22 @@ function StaffMemberInfo({
                       ? `0h`
                       : moment
                           .duration(paidHolidays, 'minutes')
+                          .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                  </a>
+                </li>
+              )}
+              {owedHours !== undefined && (
+                <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Owed hours: </span>
+                  <a
+                    className="boss-user-summary__review-val"
+                    target="_blank"
+                    href={appRoutes.staffMemberProfileHolidays({ startDate, endDate, staffMemberId: id })}
+                  >
+                    {owedHours === 0
+                      ? `0h`
+                      : moment
+                          .duration(owedHours, 'minutes')
                           .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
                   </a>
                 </li>

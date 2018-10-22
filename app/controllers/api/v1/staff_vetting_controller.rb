@@ -114,6 +114,7 @@ module Api
           acceptedHours: dodgers_data.fetch(:accepted_hours),
           acceptedBreaks: dodgers_data.fetch(:accepted_breaks),
           paidHolidays: dodgers_data.fetch(:paid_holidays),
+          owedHours: dodgers_data.fetch(:owed_hours),
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer

@@ -61,6 +61,7 @@ class StaffMemberList extends Component {
                 bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
                 hours={staffMember.get('hours')}
                 acceptedBreaks={staffMember.get('acceptedBreaks')}
+                owedHours={staffMember.get('owedHours')}
                 masterVenue={masterVenue}
                 paidHolidays={paidHolidays}
               />
