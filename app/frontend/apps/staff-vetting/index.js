@@ -12,6 +12,7 @@ import StaffMembersWithoutPhoto from './routes/staff-members-without-photo';
 import StaffMembersOnWrongPayrate from './routes/staff-members-on-wrong-payrate';
 import StaffMembersWithExpiredSiaBadge from './routes/staff-members-with-expired-sia-badge';
 import StaffMembersWithBouncedEmails from './routes/staff-members-with-bounced-emails';
+import StaffMembersWithSameSageId from './routes/staff-members-with-same-sage-id';
 import TimeDodges from './routes/time-dodges';
 
 class StaffVettingApp extends React.Component {
@@ -33,6 +34,7 @@ class StaffVettingApp extends React.Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
+      staffWithSameSageIdCount,
       venues,
       staffTypes,
     } = this.props;
@@ -47,6 +49,7 @@ class StaffVettingApp extends React.Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
+      staffWithSameSageIdCount,
       permissions,
     };
     const imVenues = Immutable.fromJS(venues);
@@ -167,6 +170,19 @@ class StaffVettingApp extends React.Component {
             path="/time_dodges/:weekStartDate?"
             canView={canViewWithTimeDodges}
             render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodgers" />}
+          />
+          <PrivateRoute
+            exact
+            path="/duplicated_sage_id"
+            canView={canViewWithoutAddress}
+            render={props => (
+              <StaffMembersWithSameSageId
+                venues={imVenues}
+                staffTypes={imStaffTypes}
+                count={staffWithSameSageIdCount}
+                title="Staff with Duplicated Sage ID"
+              />
+            )}
           />
         </div>
       </Router>

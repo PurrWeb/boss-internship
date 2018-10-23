@@ -10,10 +10,15 @@ class Api::V1::StaffVettings::StaffMemberSerializer < ActiveModel::Serializer
     :siaBadgeExpiryDate,
     :dateOfBirth,
     :bouncedEmailData,
-    :isSecurityStaff
+    :isSecurityStaff,
+    :sageId
 
   def isSecurityStaff
     object.security?
+  end
+
+  def sageId
+    object.sage_id
   end
 
   def bouncedEmailData

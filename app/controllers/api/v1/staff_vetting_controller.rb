@@ -102,6 +102,8 @@ module Api
       end
 
       def time_dodgers
+        authorize! :view, :time_dodgers
+
         date = date_from_params
         week = RotaWeek.new(date);
         time_dodgers_service = TimeDodgersService.new(week: week)
@@ -115,6 +117,22 @@ module Api
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer
+          ),
+        }, status: 200
+      end
+
+      def staff_with_same_sage_id
+        authorize! :view, :duplicated_sage_id
+
+        staff_members_with_duplicated_sage_id = StaffWithSameSageIdQuery.new.all
+        render json: {
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+            staff_members_with_duplicated_sage_id,
+            serializer: Api::V1::StaffVettings::StaffMemberSerializer
+          ),
+          venues: ActiveModel::Serializer::CollectionSerializer.new(
+            Venue.all,
+            serializer: Api::V1::StaffVettings::VenueSerializer
           ),
         }, status: 200
       end

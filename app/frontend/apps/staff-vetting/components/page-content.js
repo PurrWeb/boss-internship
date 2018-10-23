@@ -48,6 +48,9 @@ class PageContent extends Component {
   };
 
   renderFilter() {
+    if (!this.props.staffMemberFilterRenderer) {
+      return null;
+    }
     return React.cloneElement(
       this.props.staffMemberFilterRenderer({
         onChange: this.onSearchChange,
@@ -58,9 +61,19 @@ class PageContent extends Component {
   }
 
   renderStaffMemberList() {
+    if (!this.props.staffMemberListRenderer) {
+      return null;
+    }
     return React.cloneElement(this.props.staffMemberListRenderer(this.state.filteredStaffMembers), {
       staffTypes: this.props.staffTypes,
     });
+  }
+
+  renderContent() {
+    if (!this.props.contentRenderer) {
+      return null;
+    }
+    return React.cloneElement(this.props.contentRenderer());
   }
 
   onChangeTab = staffMembers => {
@@ -71,6 +84,9 @@ class PageContent extends Component {
   };
 
   renderTabsFilter() {
+    if (!this.props.tabsFilterRenderer) {
+      return null;
+    }
     return React.cloneElement(this.props.tabsFilterRenderer(), {
       venues: this.props.venues,
       staffMembers: this.props.staffMembers,
@@ -82,10 +98,13 @@ class PageContent extends Component {
     return (
       <div>
         {this.renderTabsFilter()}
-        <div className="boss-page-main__group boss-page-main__group_adjust_staff-vetting">
+        <div
+          className={this.props.simpleLayout ? '' : `boss-page-main__group boss-page-main__group_adjust_staff-vetting`}
+        >
           <div className="boss-users">
             {this.renderFilter()}
             {this.renderStaffMemberList()}
+            {this.renderContent()}
           </div>
         </div>
       </div>
@@ -97,8 +116,10 @@ PageContent.propTypes = {
   total: PropTypes.number.isRequired,
   staffMembers: ImmutablePropTypes.list,
   staffTypes: ImmutablePropTypes.list,
-  staffMemberFilterRenderer: PropTypes.func.isRequired,
-  staffMemberListRenderer: PropTypes.func.isRequired,
+  staffMemberFilterRenderer: PropTypes.func,
+  staffMemberListRenderer: PropTypes.func,
+  contentRenderer: PropTypes.func,
+  simpleLayout: PropTypes.bool,
 };
 
 export default PageContent;

@@ -15,6 +15,7 @@ class StaffVetting extends Component {
       staffOnWrongPayrateCount,
       staffWithExpiredSiaBadgeCount,
       staffMembersWithBouncedEmailCount,
+      staffWithSameSageIdCount,
     } = this.props;
 
     const canViewWithoutAddress = oFetch(this.props, 'permissions.staffWithoutAddress.canView');
@@ -26,6 +27,7 @@ class StaffVetting extends Component {
     const canViewWithExpiredSiaBadge = oFetch(this.props, 'permissions.staffWithExpiredSiaBadge.canView');
     const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
     const canViewWithTimeDodges = oFetch(this.props, 'permissions.staffWithWithTimeDodges.canView');
+    const canViewSameSageId = true;
 
     const blocks = {
       withoutEmail: {
@@ -75,6 +77,12 @@ class StaffVetting extends Component {
         href: `/time_dodges`,
         canView: canViewWithTimeDodges,
       },
+      withSameSageId: {
+        title: 'Staff with Duplicated Sage ID',
+        href: `/duplicated_sage_id`,
+        count: staffWithSameSageIdCount,
+        canView: canViewSameSageId,
+      },
     };
     const blocksJsx = Object.values(blocks)
       .map(block => {
@@ -87,6 +95,7 @@ class StaffVetting extends Component {
     const secondRowElements = blocksJsx.slice(2, 4);
     const thirdRowElements = blocksJsx.slice(4, 6);
     const fourthRowElements = blocksJsx.slice(6, 8);
+    const fifthRowElements = blocksJsx.slice(8, 10);
     return (
       <main className="boss-page-main">
         <SimpleDashboard title="Staff Vetting" />
@@ -98,6 +107,7 @@ class StaffVetting extends Component {
                 {secondRowElements.length > 0 && <div className="boss-users__stats-group">{secondRowElements}</div>}
                 {thirdRowElements.length > 0 && <div className="boss-users__stats-group">{thirdRowElements}</div>}
                 {fourthRowElements.length > 0 && <div className="boss-users__stats-group">{fourthRowElements}</div>}
+                {fifthRowElements.length > 0 && <div className="boss-users__stats-group">{fifthRowElements}</div>}
               </div>
             </div>
           </div>
@@ -115,6 +125,7 @@ StaffVetting.propTypes = {
   staffOnWrongPayrateCount: PropTypes.number.isRequired,
   staffWithExpiredSiaBadgeCount: PropTypes.number.isRequired,
   staffMembersWithBouncedEmailCount: PropTypes.number.isRequired,
+  staffWithSameSageIdCount: PropTypes.number.isRequired,
 };
 
 export default StaffVetting;

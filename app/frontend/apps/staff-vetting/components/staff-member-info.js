@@ -94,48 +94,56 @@ function StaffMemberInfo({
             <ul className="boss-user-summary__review-list">
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Master Venue: </span>
-                <span className="boss-user-summary__review-val">{masterVenue}</span>
+                <span className="boss-user-summary__review-val boss-user-summary__review-val_marked">
+                  {masterVenue}
+                </span>
               </li>
-              <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-label">Accepted: </span>
-                <a
-                  className="boss-user-summary__review-val"
-                  target="_blank"
-                  href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
-                >
-                  {hours === 0
-                    ? `0h`
-                    : moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
-                </a>
-              </li>
-              <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-label">Breaks: </span>
-                <a
-                  className="boss-user-summary__review-val"
-                  target="_blank"
-                  href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
-                >
-                  {acceptedBreaks === 0
-                    ? `0h`
-                    : moment
-                        .duration(acceptedBreaks, 'minutes')
-                        .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
-                </a>
-              </li>
-              <li className="boss-user-summary__review-item">
-                <span className="boss-user-summary__review-label">Paid holidays: </span>
-                <a
-                  className="boss-user-summary__review-val"
-                  target="_blank"
-                  href={appRoutes.staffMemberProfileHolidays({ startDate, endDate, staffMemberId: id })}
-                >
-                  {paidHolidays === 0
-                    ? `0h`
-                    : moment
-                        .duration(paidHolidays, 'minutes')
-                        .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
-                </a>
-              </li>
+              {hours !== undefined && (
+                <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Accepted: </span>
+                  <a
+                    className="boss-user-summary__review-val"
+                    target="_blank"
+                    href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
+                  >
+                    {hours === 0
+                      ? `0h`
+                      : moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                  </a>
+                </li>
+              )}
+              {acceptedBreaks !== undefined && (
+                <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Breaks: </span>
+                  <a
+                    className="boss-user-summary__review-val"
+                    target="_blank"
+                    href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
+                  >
+                    {acceptedBreaks === 0
+                      ? `0h`
+                      : moment
+                          .duration(acceptedBreaks, 'minutes')
+                          .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                  </a>
+                </li>
+              )}
+              {paidHolidays !== undefined && (
+                <li className="boss-user-summary__review-item">
+                  <span className="boss-user-summary__review-label">Paid holidays: </span>
+                  <a
+                    className="boss-user-summary__review-val"
+                    target="_blank"
+                    href={appRoutes.staffMemberProfileHolidays({ startDate, endDate, staffMemberId: id })}
+                  >
+                    {paidHolidays === 0
+                      ? `0h`
+                      : moment
+                          .duration(paidHolidays, 'minutes')
+                          .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                  </a>
+                </li>
+              )}
             </ul>
           )}
         </div>

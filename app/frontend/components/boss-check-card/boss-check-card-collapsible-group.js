@@ -16,18 +16,14 @@ class BossCheckCardCollapsibleGroup extends React.PureComponent {
       <div className="boss-check__info-group">
         <div className="boss-check__info-row boss-check__info-row_role_action">
           <div className="boss-check__info-cell">
-            <p className="boss-check__text boss-check__text_role_primary">
-              {this.props.title}
-            </p>
+            <p className="boss-check__text boss-check__text_role_primary">{this.props.title}</p>
           </div>
           <div className="boss-check__info-cell">
             <p
               onClick={this.toggleDropDown}
               className={`boss-check__dropdown-link ${
                 this.props.showCaret
-                  ? this.state.isOpened
-                    ? ''
-                    : 'boss-check__dropdown-link_state_closed'
+                  ? this.state.isOpened ? '' : 'boss-check__dropdown-link_state_closed'
                   : 'boss-check__dropdown-link_state_inactive'
               }`}
             >
@@ -35,11 +31,7 @@ class BossCheckCardCollapsibleGroup extends React.PureComponent {
             </p>
           </div>
         </div>
-        <Collapse
-          isOpened={this.state.isOpened}
-          className="boss-check__dropdown"
-          style={{ display: 'block' }}
-        >
+        <Collapse isOpened={this.state.isOpened} className="boss-check__dropdown" style={{ display: 'block' }}>
           {this.props.children}
         </Collapse>
       </div>
