@@ -26,40 +26,50 @@ class MigrateIncompleteFinanceReportsToVenue
         incomplete_finance_report.
           hours_acceptance_periods.
           find_each do |hours_acceptance_period|
-          hours_acceptance_period.update_attributes!(
-            finance_report: replacement_report
+          # ignore invalid records
+          hours_acceptance_period.update_attribute(
+            :finance_report_id,
+            replacement_report.id
           )
         end
 
         incomplete_finance_report.
           holidays.
           find_each do |holiday|
-          holiday.update_attributes!(
-            finance_report: replacement_report
+          # ignore invalid records
+          holiday.update_attribute(
+            :finance_report_id,
+            replacement_report.id
           )
         end
 
         incomplete_finance_report.
           owed_hours.
           find_each do |owed_hour|
-          owed_hour.update_attributes!(
-            finance_report: replacement_report
+          # ignore invalid records
+          owed_hour.update_attribute(
+            :finance_report_id,
+            replacement_report.id
           )
         end
 
         incomplete_finance_report.
           accessory_requests.
           find_each do |accessory_request|
-            accessory_request.update_attributes!(
-              finance_report: replacement_report
+            # ignore invalid records
+            accessory_request.update_attribute(
+              :finance_report_id,
+              replacement_report.id
             )
           end
 
         incomplete_finance_report.
           accessory_refund_requests.
           find_each do |accessory_refund_request|
-            accessory_refund_request.update_attributes!(
-              finance_report: replacement_report
+            # ignore invalid records
+            accessory_refund_request.update_attribute(
+              :finance_report_id,
+              replacement_report.id
             )
           end
 
