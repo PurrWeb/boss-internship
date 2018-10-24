@@ -59,6 +59,7 @@ class StaffMemberList extends Component {
                 age={withAge && this.getStaffMemberAge(staffMember)}
                 expiredSiaBadge={withSiaBadgeExpiryDate && this.getStaffMemberSiaBadgeExpiryDate(staffMember)}
                 bouncedEmailData={withBouncedEmail && bouncedEmailData && bouncedEmailData.toJS()}
+                acceptedHours={staffMember.get('acceptedHours')}
                 hours={staffMember.get('hours')}
                 acceptedBreaks={staffMember.get('acceptedBreaks')}
                 owedHours={staffMember.get('owedHours')}

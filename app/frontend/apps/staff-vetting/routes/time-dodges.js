@@ -60,28 +60,37 @@ class TimeDodges extends PureComponent {
   fetchStaffMembers = date => {
     return getStaffMembersWithTimeDodges(date).then(res => {
       const staffMembers = oFetch(res, 'data.staffMembers');
-      const acceptedHours = oFetch(res, 'data.acceptedHours');
-      const paidHolidays = oFetch(res, 'data.paidHolidays');
-      const acceptedBreaks = oFetch(res, 'data.acceptedBreaks');
-      const owedHours = oFetch(res, 'data.owedHours');
+      const acceptedHoursData = oFetch(res, 'data.acceptedHours');
+      const paidHolidaysData = oFetch(res, 'data.paidHolidays');
+      const acceptedBreaksData = oFetch(res, 'data.acceptedBreaks');
+      const owedHoursData = oFetch(res, 'data.owedHours');
 
       const imStaffMembers = Immutable.fromJS(
-        staffMembers.map(staffMember => ({
-          ...staffMember,
-          fullName: `${staffMember.firstName} ${staffMember.surname}`,
-          hours: acceptedHours[staffMember.id] || 0,
-          paidHolidays: paidHolidays[staffMember.id] || 0,
-          acceptedBreaks: acceptedBreaks[staffMember.id] || 0,
-          owedHours: owedHours[staffMember.id] || 0,
-        })),
+        staffMembers.map(staffMember => {
+          const acceptedHours = acceptedHoursData[staffMember.id] || 0;
+          const paidHolidays = paidHolidaysData[staffMember.id] || 0;
+          const acceptedBreaks = acceptedBreaksData[staffMember.id] || 0;
+          const owedHours = owedHoursData[staffMember.id] || 0;
+          const hours = acceptedHours + paidHolidays + owedHours;
+
+          return {
+            ...staffMember,
+            fullName: `${staffMember.firstName} ${staffMember.surname}`,
+            acceptedHours,
+            paidHolidays,
+            acceptedBreaks,
+            owedHours,
+            hours,
+          };
+        }),
       );
 
       const imStaffMembersSoftDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays') + staffMember.get('owedHours');
+        const hours = staffMember.get('hours');
         return hours >= TIME_DODGERS_START_LIMIT * 60 && hours <= TIME_DODGERS_END_LIMIT * 60;
       });
       const imStaffMembersHardDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours') + staffMember.get('paidHolidays') + staffMember.get('owedHours');
+        const hours = staffMember.get('hours');
         return hours < TIME_DODGERS_START_LIMIT * 60;
       });
       return {

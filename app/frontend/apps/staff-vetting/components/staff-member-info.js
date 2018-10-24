@@ -22,6 +22,14 @@ function InfoWrapper({ profileLink, id, children, handleInfoClick }) {
   return <div className={`boss-user-summary boss-user-summary_role_review-short`}>{children}</div>;
 }
 
+function renderWeekHours(hours) {
+  return (
+    <div>
+      <b>{`(${moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })})`}</b>
+    </div>
+  );
+}
+
 function StaffMemberInfo({
   id,
   avatarUrl,
@@ -31,6 +39,7 @@ function StaffMemberInfo({
   age,
   expiredSiaBadge,
   bouncedEmailData,
+  acceptedHours,
   hours,
   masterVenue,
   paidHolidays,
@@ -58,7 +67,10 @@ function StaffMemberInfo({
         </div>
         <div className="boss-user-summary__content">
           <div className="boss-user-summary__header">
-            <h2 className="boss-user-summary__name">{fullName}</h2>
+            <h2 className="boss-user-summary__name">
+              {fullName}
+              {hours !== undefined && renderWeekHours(hours)}
+            </h2>
             {!expiredSiaBadge && (
               <p
                 className="boss-button boss-button_type_label boss-user-summary__label"
@@ -99,7 +111,7 @@ function StaffMemberInfo({
                   {masterVenue}
                 </span>
               </li>
-              {hours !== undefined && (
+              {acceptedHours !== undefined && (
                 <li className="boss-user-summary__review-item">
                   <span className="boss-user-summary__review-label">Accepted: </span>
                   <a
@@ -107,9 +119,11 @@ function StaffMemberInfo({
                     target="_blank"
                     href={appRoutes.staffMemberProfileShifts({ startDate, endDate, staffMemberId: id })}
                   >
-                    {hours === 0
+                    {acceptedHours === 0
                       ? `0h`
-                      : moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
+                      : moment
+                          .duration(acceptedHours, 'minutes')
+                          .format('*h[h] m[m]', { trim: 'both', useGrouping: false })}
                   </a>
                 </li>
               )}
