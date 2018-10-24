@@ -66,10 +66,12 @@ class HoursConfirmationController < ApplicationController
         venue: venue
       ).includes(:venue)
 
-      rota_shifts = RotaShift.where(
-        rota: rota,
-        staff_member: staff_members
-      ).includes([:rota, :staff_member])
+      rota_shifts = RotaShift.
+        enabled.
+        where(
+          rota: rota,
+          staff_member: staff_members
+        ).includes([:rota, :staff_member])
 
       clock_in_notes = ClockInNote.where(
         clock_in_day_id: clock_in_days
