@@ -57,7 +57,7 @@ class ClockInOutStaffListItem extends Component {
                 position: 'absolute',
                 top: '331px',
                 left: '456px',
-                padding: '0.6em 0.9em',
+                padding: '1.6em 0.9em 1.3em',
                 backgroundColor: 'white',
                 borderRadius: '5px',
                 border: '1px solid #f2f2f2',
@@ -79,8 +79,8 @@ class ClockInOutStaffListItem extends Component {
                 style={toolTipStyle}
                 onBackgroundClick={this.hideChangeSettingsTooltip.bind(this)}
             >
-                <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block boss-context-menu_adjust_buttons-block-small">
+                <div className="boss-tooltip-portal__content">
+                    <div className="boss-tooltip-portal__actions boss-tooltip-portal__actions_role_column">
                         {this.getAddNoteButton()}
                         {this.getChangePinButton()}
                     </div>
@@ -136,12 +136,12 @@ class ClockInOutStaffListItem extends Component {
         }[breakStatusAfterClick];
 
         return (
-            <a className="boss-button boss-button_big boss-button_role_go-on-break boss-buttons-block_adjust_button"
+            <button className="boss-button boss-button_type_small boss-button_role_break boss-tooltip-portal__action"
                data-test-marker-toggle-staff-status
                onClick={this.onBreakButtonClick.bind(this)}
             >
                 {label}
-            </a>
+            </button>
         );
     }
     drawChangeStatusTooltip() {
@@ -169,23 +169,23 @@ class ClockInOutStaffListItem extends Component {
         const breakButton = this.getBreakButton();
 
         const clockInButton = clockedStatus === 'clocked_out' ? (
-            <a
-               className="boss-button boss-button_big boss-button_role_clock-in boss-buttons-block_adjust_button"
+            <button
+               className="boss-button boss-button_type_small boss-button_role_clock-in boss-tooltip-portal__action"
                data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock in
-            </a>
+            </button>
         ) : null;
 
         const clockOutButton = clockedStatus === 'clocked_out' ? null : (
-            <a
-               className="boss-button boss-button_big boss-button_role_clock-out boss-buttons-block_adjust_button"
+            <button
+               className="boss-button boss-button_type_small boss-button_role_clock-out boss-tooltip-portal__action"
                data-test-marker-toggle-staff-status
                onClick={this.onClockButtonClick.bind(this)}
             >
                 Clock Out
-            </a>
+            </button>
         );
 
         return (
@@ -199,8 +199,8 @@ class ClockInOutStaffListItem extends Component {
                     style={toolTipStyle}
                     onBackgroundClick={this.hideChangeStatusTooltip.bind(this)}
             >
-                <div className="boss-context-menu__content">
-                    <div className="boss-buttons-block">
+                <div className="boss-tooltip-portal__content">
+                    <div className="boss-tooltip-portal__actions boss-tooltip-portal__actions_role_row">
                         {breakButton}
                         {clockInButton}
                         {clockOutButton}
@@ -332,13 +332,13 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return (
-            <a href="#"
-               className="boss-button boss-button_small boss-button_role_add-note boss-buttons-block_adjust_button"
+            <button
+               className="boss-button boss-button_type_small boss-button_role_add-note boss-tooltip-portal__action"
                data-test-marker-add-note
                onClick={this.onClickAddNote.bind(this)}
             >
                 Add Note
-            </a>
+            </button>
         );
     }
     updateClockInStatus({statusValue, staffMemberObject}){
@@ -370,13 +370,13 @@ class ClockInOutStaffListItem extends Component {
         }
 
         return (
-            <a href="#"
-               className="boss-button boss-button_small boss-button_role_change-pin boss-buttons-block_adjust_button"
+            <button
+               className="boss-button boss-button_type_small boss-button_role_change-pin boss-tooltip-portal__action"
                data-test-marker-change-pin-button
                onClick={this.onClickChangePin.bind(this)}
             >
                 Change Pin
-            </a>
+            </button>
         );
     }
     enterManagerMode(){
