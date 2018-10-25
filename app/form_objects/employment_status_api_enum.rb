@@ -25,7 +25,7 @@ class EmploymentStatusApiEnum
   private
   def assert_value_valid!(value)
     raise "supplied value \"#{value}\" invalid" unless (
-      OPTIONS.include?(value) || value == ""
+      OPTIONS.include?(value) || value == nil
     )
   end
 end

@@ -94,7 +94,7 @@ const checklistReducer = handleActions({
     const { id } = action.payload;
     const index = state.get('checklists')
       .findIndex(item => item.get('id') === id);
-      
+
     return state
       .updateIn(['checklists', index, 'isOpen'], isOpen => !isOpen)
   },
@@ -127,7 +127,7 @@ const checklistReducer = handleActions({
     const {checklistId, answerId, value} = action.payload;
     const checklistIndex = state.get('checklists').findIndex(item => item.get('id') === checklistId);
     const answerIndex = state.getIn(['checklists', checklistIndex, 'items']).findIndex(item => item.get('id') === answerId);
-    
+
     return state
       .setIn(['checklists', checklistIndex, 'items', answerIndex, 'answer'], value)
   },
@@ -159,7 +159,7 @@ const checklistReducer = handleActions({
                 .delete('answer')
                 .delete('note')
             })
-          })  
+          })
       }).deleteIn(['errors', `checklist.${checklistId}`])
   },
   [TOGGLE_EDIT_MODE]: (state) => {
@@ -225,10 +225,14 @@ const checklistReducer = handleActions({
       )
   },
   [UPDATE_EDITED_IN_LIST]: (state, action) => {
-    const editedChecklist = fromJS(action.payload);
+    const editedChecklist = fromJS(action.payload)
+      .setIn(['form', 'submitted'], false)
+      .setIn(['form', 'submittedFailed'], false)
+      .setIn(['form', 'valid'], false)
+      .set('isOpen', false);
     const id = editedChecklist.get('id');
     const index = state.get('checklists').findIndex(item => item.get("id") === id);
-    
+
     return state
       .setIn(['checklists', index], editedChecklist)
   },

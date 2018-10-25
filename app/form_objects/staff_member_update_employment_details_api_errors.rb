@@ -8,6 +8,7 @@ class StaffMemberUpdateEmploymentDetailsApiErrors
     result = {}
 
     result[:base] = staff_member.errors[:base] if staff_member.errors[:base].present?
+    result[:employment_status] = staff_member.errors[:employment_status] if staff_member.errors[:employment_status].present?
     result[:master_venue] = staff_member.errors[:master_venue] if staff_member.errors[:master_venue].present?
     result[:other_venues] = staff_member.errors[:work_venues] if staff_member.errors[:work_venues].present?
     result[:staff_type] = staff_member.errors[:staff_type] if staff_member.errors[:staff_type].present?

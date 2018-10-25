@@ -337,7 +337,8 @@ var utils =  {
       }
     },
     quickMenuHighlightResults(result, searchQuery){
-      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+      const searchQueryFilters = searchQuery.replace(/[^A-Za-z0-9 ]/g, '').split(' ').filter(i => i);
+
       const uniqueFilter = searchQueryFilters.filter((v, i, a) => a.indexOf(v) === i);
       const query = new RegExp(uniqueFilter.join("|"), "gi");
 
@@ -362,7 +363,7 @@ var utils =  {
       });
     },
     quickMenuFilter(searchQuery, quickMenu){
-      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+      const searchQueryFilters = searchQuery.replace(/[^A-Za-z0-9 ]/g, '').split(' ').filter(i => i);
       let result = [];
 
       result = searchQueryFilters.reduce((menu, filter) => {
