@@ -15,7 +15,7 @@ export const updateSecurityShiftRequestAction = createAction(types.UPDATE_SECURI
 export const addSecurityShiftRequest = params => (dispatch, getState) => {
   const startsAt = oFetch(params, 'startsAt').toISOString();
   const endsAt = oFetch(params, 'endsAt').toISOString();
-  const venueId = getState().getIn(['pageOptions', 'venueId']);
+  const venueId = oFetch(params, 'venueId');
   const note = oFetch(params, 'note');
   return addSecurityShiftRequestRequest({
     startsAt,
