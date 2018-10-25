@@ -23,6 +23,7 @@ module Api
             json: ActiveModel::Serializer::CollectionSerializer.new(
               payments,
               serializer: Api::V1::StaffMemberProfile::PaymentSerializer,
+              scope: {ability: current_ability},
             ),
             status: 200
           }
