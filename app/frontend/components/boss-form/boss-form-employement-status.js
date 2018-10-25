@@ -11,50 +11,58 @@ const starterEmploymentStatusLabels = {
 
 
 const BossFormEmployementStatus = ({
-    label,
-    required,
-    input: { onBlur, value, onChange, name },
-    meta: { touched, error, warning },
-  }) => {
-    const renderOptions = (name, onChange, onBlur) => {
-      return _.map(starterEmploymentStatusLabels, (statusLabel, key) => {
-        return (
-          <label key={key} className="boss-choice-list__radio-label">
-            <input
-              name={name}
-              checked={key === value}
-              value={key}
-              onChange={onChange}
-              onBlur={onBlur}
-              type="radio"
-              className="boss-choice-list__radio-button"
-            />
-            <span className="boss-choice-list__radio-label-text">
-              {statusLabel}
-            </span>
-          </label>
-        )
-      })
-    }
-
-    return (
-      <div className="boss-form__field">
-        <div className="boss-choice-list">
-          <div className="boss-choice-list__header">
-            <div className="boss-choice-list__title">{label}</div>
-          </div>
-        </div>
-        <div className="boss-choice-list__content">
-          <p className="boss-choice-list__text">
-            Tick one that applies
-          </p>
-          <div className="boss-choice-list__controls">
-            {renderOptions(name, onChange, onBlur)}
-          </div>
-        </div>
-        
-      </div>
-    )
+  label,
+  required,
+  input: { onBlur, value, onChange, name },
+  meta: { touched, error, warning },
+}) => {
+  const renderOptions = (name, onChange, onBlur) => {
+    return _.map(starterEmploymentStatusLabels, (statusLabel, key) => {
+      return (
+        <label key={key} className="boss-choice-list__radio-label">
+          <input
+            name={name}
+            checked={key === value}
+            value={key}
+            onChange={onChange}
+            onBlur={onBlur}
+            type="radio"
+            className="boss-choice-list__radio-button"
+          />
+          <span className="boss-choice-list__radio-label-text">
+            {statusLabel}
+          </span>
+        </label>
+      )
+    })
   }
 
-  export default BossFormEmployementStatus;
+  return (
+    <div className="boss-form__field">
+      <div className="boss-choice-list">
+        <div className="boss-choice-list__header">
+          <div className="boss-choice-list__title">{label}</div>
+        </div>
+      </div>
+      <div className="boss-choice-list__content">
+        {touched &&
+          error && (
+            <div className="boss-form__error">
+              <p className="boss-form__error-text">
+                <span className="boss-form__error-line">{error}</span>
+              </p>
+            </div>
+          )}
+        <p className="boss-choice-list__text">
+          Tick one that applies
+          </p>
+        <div className="boss-choice-list__controls">
+          {renderOptions(name, onChange, onBlur)}
+        </div>
+      </div>
+
+    </div>
+  )
+}
+
+export default BossFormEmployementStatus;

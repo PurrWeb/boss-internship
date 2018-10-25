@@ -107,6 +107,13 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+  validate :employment_status_validation
+
+  def employment_status_validation
+    unless employment_status_a || employment_status_b || employment_status_c || employment_status_d || employment_status_p45_supplied
+      errors.add(:employment_status, "at least one employment status must be applied")
+    end
+  end
 
   def expire_security_app_tokens!
     SecurityAppApiAccessToken.revoke!(user: self)
