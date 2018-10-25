@@ -396,6 +396,10 @@ class StaffMember < ActiveRecord::Base
     !security?
   end
 
+  def owed_hours_time_overlapped?(time:)
+    active_owed_hours.where("starts_at <= ? AND ends_at >= ?", time, time).count != 0
+  end
+
   private
   def setting_password?
     password || password_confirmation

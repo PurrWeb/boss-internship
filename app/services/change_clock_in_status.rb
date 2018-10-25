@@ -16,6 +16,7 @@ class ChangeClockInStatus
     @at = at
     @nested = nested
   end
+
   attr_reader :date, :venue, :staff_member, :requester, :state, :at, :nested
 
   def call
@@ -25,8 +26,17 @@ class ChangeClockInStatus
     clock_in_day = ClockInDay.find_or_initialize_by(
       venue: venue,
       date: date,
-      staff_member: staff_member
+      staff_member: staff_member,
     )
+
+    rota_date = RotaShiftDate.to_rota_date(at)
+    staff_member_holidays = InRangeQuery.new(
+      relation: staff_member.holidays.in_state(:enabled),
+      start_value: rota_date,
+      end_value: rota_date,
+      start_column_name: "start_date",
+      end_column_name: "end_date",
+    ).all
 
     if illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
       result = false
@@ -37,16 +47,24 @@ class ChangeClockInStatus
     elsif !RotaShiftDate.new(date).contains_time?(at)
       raise "at time on wrong day. at: #{at}, date: #{date}"
     elsif last_event(clock_in_day) && (at < last_event(clock_in_day).at)
-      raise 'supplied at time before previous event'
+      raise "supplied at time before previous event"
     elsif !transition_legal(clock_in_day)
       result = false
       errors[:base] ||= []
       errors[:base] << "illegal attempt to transistion from #{clock_in_day.current_clock_in_state} to #{state}"
+    elsif staff_member_holidays.size > 0
+      result = false
+      errors[:base] ||= []
+      errors[:base] << "should be on holidays"
+    elsif state == :clocked_in && staff_member.owed_hours_time_overlapped?(time: at)
+      result = false
+      errors[:base] ||= []
+      errors[:base] << "overlapped with existing owed hour"
     else
       ActiveRecord::Base.transaction(requires_new: nested) do
         if clock_in_day.new_record?
           clock_in_day.update_attributes!(
-            creator: requester
+            creator: requester,
           )
         end
 
@@ -55,17 +73,17 @@ class ChangeClockInStatus
         event_type = event_type_for_transition(from: clock_in_day.current_clock_in_state, to: state)
         current_recorded_clock_in_period = CurrentRecordedClockInPeriodQuery.
           new(
-            clock_in_day: clock_in_day
-          ).
+          clock_in_day: clock_in_day,
+        ).
           first
 
         if !current_recorded_clock_in_period.present?
           current_recorded_clock_in_period = ClockInPeriod.new(
             creator: requester,
             clock_in_day: clock_in_day,
-            starts_at: at
+            starts_at: at,
           )
-        elsif event_type == 'clock_out'
+        elsif event_type == "clock_out"
           result = current_recorded_clock_in_period.update_attributes(ends_at: at)
 
           if !result
@@ -75,34 +93,33 @@ class ChangeClockInStatus
           end
 
           if result
-            if saved_last_event.event_type == 'start_break'
-
+            if saved_last_event.event_type == "start_break"
               add_break_to_period(
                 clock_in_period: current_recorded_clock_in_period,
                 last_event: saved_last_event,
-                at: at
+                at: at,
               )
             end
 
             overlap_query = OverlappingHoursAcceptancePeriodQuery.new(
               clock_in_day: clock_in_day,
               starts_at: current_recorded_clock_in_period.starts_at,
-              ends_at: current_recorded_clock_in_period.ends_at
+              ends_at: current_recorded_clock_in_period.ends_at,
             )
             new_period_will_conflict_with_existing = overlap_query.count > 0
 
             if !new_period_will_conflict_with_existing
               create_hours_confirmation_from_clock_in_period(
                 clock_in_period: current_recorded_clock_in_period,
-                creator: requester
+                creator: requester,
               )
             end
           end
-        elsif event_type == 'end_break'
+        elsif event_type == "end_break"
           add_break_to_period(
             clock_in_period: current_recorded_clock_in_period,
             last_event: saved_last_event,
-            at: at
+            at: at,
           )
         end
 
@@ -113,7 +130,7 @@ class ChangeClockInStatus
             clock_in_period: current_recorded_clock_in_period,
             at: at,
             creator: requester,
-            event_type: event_type
+            event_type: event_type,
           )
         end
 
@@ -127,6 +144,7 @@ class ChangeClockInStatus
   end
 
   private
+
   # Used to disallow staff member trying to clock in somewhere while still
   # clocked in for another venue on the same day
   def illegal_clock_in_attempt?(state: state, clock_in_day: clock_in_day)
@@ -141,35 +159,35 @@ class ChangeClockInStatus
     end
   end
 
- def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
-   clock_in_day = clock_in_period.clock_in_day
+  def create_hours_confirmation_from_clock_in_period(clock_in_period:, creator:)
+    clock_in_day = clock_in_period.clock_in_day
 
-   hours_acceptance_period = HoursAcceptancePeriod.create!(
-     starts_at: clock_in_period.starts_at,
-     ends_at: clock_in_period.ends_at,
-     clock_in_day: clock_in_day,
-     creator: creator
-   )
+    hours_acceptance_period = HoursAcceptancePeriod.create!(
+      starts_at: clock_in_period.starts_at,
+      ends_at: clock_in_period.ends_at,
+      clock_in_day: clock_in_day,
+      creator: creator,
+    )
 
-   clock_in_period.clock_in_breaks.each do |_break|
-     hours_acceptance_break = HoursAcceptanceBreak.create!(
-       hours_acceptance_period: hours_acceptance_period,
-       starts_at: _break.starts_at,
-       ends_at: _break.ends_at
-     )
+    clock_in_period.clock_in_breaks.each do |_break|
+      hours_acceptance_break = HoursAcceptanceBreak.create!(
+        hours_acceptance_period: hours_acceptance_period,
+        starts_at: _break.starts_at,
+        ends_at: _break.ends_at,
+      )
 
-     hours_acceptance_period.hours_acceptance_breaks << hours_acceptance_break
-   end
- end
+      hours_acceptance_period.hours_acceptance_breaks << hours_acceptance_break
+    end
+  end
 
- def add_break_to_period(clock_in_period:, at:, last_event:)
+  def add_break_to_period(clock_in_period:, at:, last_event:)
     new_break = ClockInBreak.create!(
       clock_in_period: clock_in_period,
       starts_at: last_event.at,
-      ends_at: at
+      ends_at: at,
     )
     clock_in_period.clock_in_breaks << new_break
- end
+  end
 
   def last_event(clock_in_day)
     events(clock_in_day).last
@@ -179,36 +197,36 @@ class ChangeClockInStatus
     ClockInEvent.
       joins(:clock_in_period).
       merge(
-        ClockInPeriod.
+      ClockInPeriod.
         joins(:clock_in_day).
         merge(
-          ClockInDay.where(id: clock_in_day.id)
-        )
-      ).
+        ClockInDay.where(id: clock_in_day.id)
+      )
+    ).
       order(:at)
   end
 
   def allowed_event_transations
     {
       clocked_in: [
-        { state: :clocked_out, transition_event: 'clock_out' },
-        { state: :on_break,    transition_event: 'start_break' }
+        {state: :clocked_out, transition_event: "clock_out"},
+        {state: :on_break, transition_event: "start_break"},
       ],
       clocked_out: [
-        { state: :clocked_in, transition_event: 'clock_in' }
+        {state: :clocked_in, transition_event: "clock_in"},
       ],
       on_break: [
-        { state: :clocked_in,  transition_event: 'end_break' },
-        { state: :clocked_out, transition_event: 'clock_out' }
-      ]
+        {state: :clocked_in, transition_event: "end_break"},
+        {state: :clocked_out, transition_event: "clock_out"},
+      ],
     }
   end
 
   def event_type_for_transition(from:, to:)
     allowed_event_transations.fetch(from).
       select do |transition_data|
-        transition_data.fetch(:state) == to
-      end.
+      transition_data.fetch(:state) == to
+    end.
       first.
       fetch(:transition_event)
   end

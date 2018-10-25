@@ -1,13 +1,24 @@
 class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
-  attributes :id, :staff_members, :clock_in_days, :clock_in_notes, :staff_types,
-             :rota_shifts, :venues, :rotas, :page_data
+  attributes \
+    :id,
+    :staff_members,
+    :clock_in_days,
+    :clock_in_notes,
+    :staff_types,
+    :rota_shifts,
+    :venues,
+    :rotas,
+    :page_data
 
   def staff_members
     staff_members = instance_options.fetch(:scope).fetch(:staff_members)
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_members,
-      serializer: Api::V1::StaffMemberSerializer
+      serializer: Api::V1::ClockingWebApp::StaffMemberSerializer,
+      scope: {
+        staff_with_holidays_ids: instance_options.fetch(:scope).fetch(:staff_with_holidays_ids),
+      },
     )
   end
 
@@ -16,7 +27,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       clock_in_days,
-      serializer: Api::V1::ClockInDaySerializer
+      serializer: Api::V1::ClockInDaySerializer,
     )
   end
 
@@ -25,7 +36,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       clock_in_notes,
-      serializer: Api::V1::ClockInNoteSerializer
+      serializer: Api::V1::ClockInNoteSerializer,
     )
   end
 
@@ -34,7 +45,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       staff_types,
-      serializer: Api::V1::StaffTypeSerializer
+      serializer: Api::V1::StaffTypeSerializer,
     )
   end
 
@@ -43,7 +54,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       rota_shifts,
-      serializer: Api::V1::RotaShiftSerializer
+      serializer: Api::V1::RotaShiftSerializer,
     )
   end
 
@@ -52,7 +63,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       venues,
-      serializer: Api::V1::VenueSerializer
+      serializer: Api::V1::VenueSerializer,
     )
   end
 
@@ -61,7 +72,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     ActiveModel::Serializer::CollectionSerializer.new(
       rotas,
-      serializer: Api::V1::RotaSerializer
+      serializer: Api::V1::RotaSerializer,
     )
   end
 
@@ -70,7 +81,7 @@ class Api::V1::ClockInClockOutSerializer < ActiveModel::Serializer
 
     {
       rota_date: rota_date.iso8601,
-      rota_venue_id: object.id
+      rota_venue_id: object.id,
     }
   end
 end

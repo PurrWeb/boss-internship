@@ -5,8 +5,10 @@ import actionCreators from "~/redux/actions"
 import AppComponent from "../app-component"
 import utils from "~/lib/utils"
 
+
 export default class RotaApp extends AppComponent {
     componentWillMount(){
+        require('./styles.css');
         this.interval = setInterval(() => this.ensureOnCorrectDay(), 2000)
 
         var store = this.store;
