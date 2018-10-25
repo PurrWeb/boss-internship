@@ -104,11 +104,14 @@ var updatePlaceHolderValue = function(selector, centValue, colorValue){
   } else {
     var htmlFragments = [];
     var negative = (centValue < 0);
+    var positive = (centValue > 0)
 
     if( colorValue && negative ){
       htmlFragments.push("<span class=\"boss-form__text-primary boss-form__text-extra-large boss-form__text-alert\">");
-    } else if (colorValue && !negative) {
+    } else if (colorValue && positive) {
       htmlFragments.push("<span class=\"boss-form__text-primary boss-form__text-extra-large boss-form__text-success\">")
+    } else if ( colorValue ) {
+      htmlFragments.push("<span class=\"boss-form__text-primary boss-form__text-extra-large\">")
     }
 
     htmlFragments.push("£" + poundValueString(centValue));

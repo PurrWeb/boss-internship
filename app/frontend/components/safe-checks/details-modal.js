@@ -38,7 +38,12 @@ export default class DetailsModal extends React.Component {
     if (this.state.showModal) {
       const varianceCentsText = oFetch(this.props, 'variance_cents_text');
       const varianceCents = oFetch(this.props, 'variance_cents');
-      const varianceLabelClass = varianceCents < 0 ? 'boss-stats__label_state_alert' : 'boss-stats__label_state_success';
+      var varianceLabelClass = "";
+      if (varianceCents < 0) {
+        varianceLabelClass = 'boss-stats__label_state_alert';
+      } else if ( varianceCents > 0) {
+        varianceLabelClass = 'boss-stats__label_state_success';
+      }
 
       return (
           <Modal className="boss-modal-window boss-modal-window_role_details" isOpen={ this.state.showModal } contentLabel={"Details"}>

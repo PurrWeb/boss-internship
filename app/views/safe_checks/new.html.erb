@@ -612,7 +612,10 @@
                   <p class="boss-form__label"><span class="boss-form__label-text">Variance</span></p>
                   <p class="boss-form__text">
                     <div class="js-total-calculation-variance-result">
-                      <span class="boss-form__text-primary boss-form__text-extra-large <%= ((safe_check.variance_cents || 0) < 0) ? "boss-form__text-alert" : "boss-form__text-success" %>">
+                      <% span_class = '' %>
+                      <% span_class = "boss-form__text-alert" if (safe_check.variance_cents || 0) < 0 %>
+                      <% span_class = "boss-form__text-success" if (safe_check.variance_cents || 0) > 0 %>
+                      <span class="boss-form__text-primary boss-form__text-extra-large <%= span_class %>">
                         <%= number_to_currency(
                           (safe_check.variance_cents || 0.0) / 100.0,
                           unit: '£',
