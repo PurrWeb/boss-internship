@@ -44,11 +44,23 @@
         </div>
 
         <% safe_checks.each_with_index do |safe_check, index| %>
-          <div class="boss-table__row <%= (negative?(safe_check.variance_cents) ? 'boss-table__row_state_alert' : '') %>">
-            <div class="boss-table__cell <%= (negative?(safe_check.variance_cents) ? 'boss-table__cell_state_alert' : '') %>">
+          <% table_row_class = '' %>
+          <% table_row_class = 'boss-table__row_state_alert' if safe_check.variance_cents < 0 %>
+          <% table_row_class = 'boss-table__row_state_success' if safe_check.variance_cents > 0 %>
+          <% table_cell_class = '' %>
+          <% table_cell_class = 'boss-table__cell_state_alert' if safe_check.variance_cents < 0 %>
+          <% table_cell_class = 'boss-table__cell_state_success' if safe_check.variance_cents > 0 %>
+          <% label_highlight_class = "" %>
+          <% label_highlight_class = 'boss-table__label_state_alert' if safe_check.variance_cents %>
+          <% cell_value_highlight_class = '' %>
+          <% cell_value_highlight_class = 'boss-table__text_state_alert' if safe_check.variance_cents < 0 %>
+          <% cell_value_highlight_class = 'boss-table__text_state-success' if safe_check.variance_cents > 0 %>
+
+          <div class="boss-table__row <%= table_row_class %>">
+            <div class="boss-table__cell <%= table_cell_class %>">
               <div class="boss-table__info">
-                <p class="boss-table__label <%= (negative?(safe_check.variance_cents) ? 'boss-table__label_state_alert' : '') %>">Variance</p>
-                <p class="boss-table__text <%= (negative?(safe_check.variance_cents) ? 'boss-table__text_state_alert' : '') %>">
+                <p class="boss-table__label <%= label_highlight_class  %>">Variance</p>
+                <p class="boss-table__text <%= cell_value_highlight_class %>">
                   <%= number_to_currency(
                     safe_check.pound_value_for(:variance_cents),
                     unit: '£',
@@ -169,10 +181,18 @@
       </div>
 
       <% safe_checks.each_with_index do |safe_check, index| %>
-        <div data-safe-check class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= negative?(safe_check.variance_cents) ? 'boss-check_state_alert' : '' %>">
+        <% board_highlight_class = "" %>
+        <% board_highlight_class = "boss-check_state_success" if (safe_check.variance_cents || 0) > 0 %>
+        <% board_highlight_class = "boss-check_state_alert" if (safe_check.variance_cents || 0) < 0 %>
+        <% board_cell_highlight_class = "" %>
+        <% board_cell_highlight_class = 'boss-check__cell_state_success' if (safe_check.variance_cents || 0) > 0 %>
+        <% board_cell_highlight_class = 'boss-check__cell_state_alert' if (safe_check.variance_cents || 0) < 0 %>
+        <% board_cell_value_highlight_class = "" %>
+        <% board_cell_value_highlight_class = "boss-check__text_state_alert" if (safe_check.variance_cents || 0) < 0 %>
+        <div data-safe-check class="boss-check boss-check_role_board boss-check_page_safe-checks-index <%= board_highlight_class %>">
           <div class="boss-check__row boss-check__row_role_header">
-            <div class="boss-check__cell boss-check__cell_size_half <%= negative?(safe_check.variance_cents) ? 'boss-check__cell_state_alert' : '' %>">
-              <p class="boss-check__text boss-check__text_marked <%= negative?(safe_check.variance_cents) ? 'boss-check__text_state_alert' : '' %>">
+            <div class="boss-check__cell boss-check__cell_size_half <%= board_cell_highlight_class %>">
+              <p class="boss-check__text boss-check__text_marked <%= board_cell_value_highlight_class %>">
                 <%= number_to_currency(
                   safe_check.pound_value_for(:variance_cents),
                   unit: '£',
@@ -312,7 +332,8 @@
       notes: safe_check.enabled_notes,
       safe_check: safe_check,
       costs: notes_and_coins(safe_check),
-      variance_cents: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
+      variance_cents: safe_check.variance_cents,
+      variance_cents_text: number_to_currency(safe_check.pound_value_for(:variance_cents), unit: '£', precision: 2).gsub("-", "\u2011")
     },
     { class: 'react-modal' }
   ) %>
