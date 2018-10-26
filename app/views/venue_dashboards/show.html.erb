@@ -1,15 +1,13 @@
-<%= javascript_tag do %>
-  venueDashboard = {};
-
-  venueDashboard.venues = <%= camelized_collection_json(venues, Api::V1::VenueSerializer) %>;
-  venueDashboard.messages = <%= camelized_collection_json(messages, Api::V1::DashboardMessageSerializer) %>;
-  venueDashboard.currentUser = <%= Api::V1::UserSerializer.new(current_user).to_json.html_safe %>;
-  venueDashboard.accessToken = "<%= access_token.token %>";
-  venueDashboard.currentVenue = <%= Api::V1::VenueSerializer.new(current_venue).to_json.html_safe %>;
-  venueDashboard.renderWeatherWidget = <%= render_weather_widget.to_s %>;
-
-  window.boss = window.boss || {};
-  window.boss.venueDashboard = venueDashboard;
-<% end %>
-
-<%= react_component('VenueDashboardApp') %>
+<%= react_component('VenueDashboardApp', {
+  accessToken: access_token.token,
+  currentVenue: Api::V1::VenueDashboard::VenueSerializer.new(current_venue),
+  renderWeatherWidget: render_weather_widget,
+  venues: ActiveModel::Serializer::CollectionSerializer.new(
+    venues,
+    serializer: Api::V1::VenueDashboard::VenueSerializer,
+  ),
+  messages: ActiveModel::Serializer::CollectionSerializer.new(
+    messages,
+    serializer: Api::V1::VenueDashboard::MessageSerializer,
+  ),
+}) %>

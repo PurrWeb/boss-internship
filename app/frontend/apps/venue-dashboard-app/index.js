@@ -1,16 +1,16 @@
-import React from 'react'
-import { Provider } from 'react-redux'
-import { configureStore } from '../configure-store';
+import React from 'react';
 
-import VenueDashboardContainer from './containers/venue-dashboard';
-import venueDashboard from './reducers/venue-dashboard'
+import MainDashboard from './components/main-dashboard';
+import MainContent from './components/main-content';
 
 export default class VenueDashboardApp extends React.Component {
   render() {
+    console.log(this.props);
     return (
-      <Provider store={ configureStore({ venueDashboard }) }>
-        <VenueDashboardContainer />
-      </Provider>
-    )
+      <main className="boss-page-main">
+        <MainDashboard {...this.props} />
+        <MainContent {...this.props} />
+      </main>
+    );
   }
 }

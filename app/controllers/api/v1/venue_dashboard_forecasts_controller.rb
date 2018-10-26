@@ -8,9 +8,9 @@ class Api::V1::VenueDashboardForecastsController < APIController
       venue.latitude,
       venue.longitude,
       params: {
-        units: 'uk2',
-        exclude: 'minutely,hourly,alerts,flags'
-      }
+        units: "uk2",
+        exclude: "minutely,hourly,alerts,flags",
+      },
     )
 
     time_forecast = ForecastIO.forecast(
@@ -18,11 +18,11 @@ class Api::V1::VenueDashboardForecastsController < APIController
       venue.longitude,
       time: Time.current.to_i,
       params: {
-        units: 'uk2',
-        exclude: 'currently,minutely,daily,alerts,flags'
-      }
+        units: "uk2",
+        exclude: "currently,minutely,daily,alerts,flags",
+      },
     )
 
-    render json: { current: current_forecast, time: time_forecast }, status: 200
+    render json: {current: current_forecast, time: time_forecast}, status: 200
   end
 end
