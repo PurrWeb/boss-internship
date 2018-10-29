@@ -75,8 +75,10 @@ class DeleteStaffMember
       in_state(:enabled).
       where(staff_member: staff_member)
 
+    current_date = RotaShiftDate.to_rota_date(now)
+
     upcoming_holidays = UpcomingQuery.new(
-      now: now.to_date,
+      now: current_date,
       start_column_name: 'start_date',
       relation: staff_member_holidays
     ).all
