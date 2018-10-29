@@ -29,11 +29,10 @@ class ChangeClockInStatus
       staff_member: staff_member,
     )
 
-    rota_date = RotaShiftDate.to_rota_date(at)
     staff_member_holidays = InRangeQuery.new(
       relation: staff_member.holidays.in_state(:enabled),
-      start_value: rota_date,
-      end_value: rota_date,
+      start_value: date,
+      end_value: date,
       start_column_name: "start_date",
       end_column_name: "end_date",
     ).all
