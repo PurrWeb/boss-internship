@@ -11,6 +11,16 @@ Rollbar.configure do |config|
     config.enabled = false
   end
 
+  config.exception_level_filters.merge!('ActionController::RoutingError' => lambda { |e|
+    e.message =~ %r(No route matches \[[A-Z]+\] "/(.+)")
+    case $1.split("/").first.to_s.downcase
+    when *%w(auth sign_in)
+      'ignore'
+    else
+      'warning'
+    end
+  })
+
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object's `id`,
   # `username`, and `email` methods to fetch those properties. To customize:
