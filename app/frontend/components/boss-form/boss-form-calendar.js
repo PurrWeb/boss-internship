@@ -14,10 +14,12 @@ class BossFormCalendar extends React.Component {
 
     return (
       <div className="boss-form__field">
-        <label className="boss-form__label">
-          <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
-        </label>
-        <BossDatePicker 
+        {label && (
+          <label className="boss-form__label">
+            <span className="boss-form__label-text">{`${label} ${required ? '*' : ''}`}</span>
+          </label>
+        )}
+        <BossDatePicker
           date={value}
           onApply={onChange}
           invalid={!!touched && !!error}

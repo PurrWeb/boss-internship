@@ -16,6 +16,7 @@ const BossFormInput = ({
   placeholder = '',
   autocomplete = true,
   fieldClassName,
+  inputClassName,
 }) => {
   const handleChange = (maskedvalue, floatvalue) => {
     onChange(floatvalue);
@@ -27,7 +28,7 @@ const BossFormInput = ({
         disabled={disabled}
         value={value}
         onChange={handleChange}
-        className={`boss-form__input ${
+        className={`boss-form__input ${inputClassName ? inputClassName : ''} ${
           touched && error ? 'boss-form__input_state_error' : ''
         }`}
         decimalSeparator="."
@@ -40,7 +41,7 @@ const BossFormInput = ({
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        className={`boss-form__input ${
+        className={`boss-form__input ${inputClassName ? inputClassName : ''} ${
           touched && error ? 'boss-form__input_state_error' : ''
         }`}
       />

@@ -21,6 +21,8 @@ const BossFormSelect = ({
   input: { onBlur, value, onChange, name },
   meta: { asyncValidating, touched, error },
   fieldClassName,
+  selectClassNames,
+  labelClassNames,
 }) => {
   const getItemOption = (option, { value, label }) => {
     let normalizedLabel = null;
@@ -73,14 +75,14 @@ const BossFormSelect = ({
   return (
     <div className={`boss-form__field ${className && className} ${fieldClassName && fieldClassName}`}>
       {label && (
-        <label htmlFor={name} className="boss-form__label">
+        <label htmlFor={name} className={`boss-form__label ${labelClassNames ? labelClassNames : ''}`}>
           <span className="boss-form__label-text">{`${label} ${
             required ? '*' : ''
           }`}</span>
         </label>
       )}
       <div
-        className={`boss-form__select ${touched &&
+        className={`boss-form__select ${selectClassNames ? selectClassNames : ''} ${touched &&
           error &&
           'boss-form__select_state_error'}`}
       >
