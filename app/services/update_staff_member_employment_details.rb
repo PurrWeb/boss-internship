@@ -52,6 +52,12 @@ class UpdateStaffMemberEmploymentDetails
       end
 
       result = staff_member.save
+
+      unless staff_member.employment_status_a || staff_member.employment_status_b || staff_member.employment_status_c || staff_member.employment_status_d || staff_member.employment_status_p45_supplied
+        staff_member.errors.add(:employment_status, "at least one employment status must be applied")
+        result = false
+      end
+
       raise ActiveRecord::Rollback unless result
 
       incomplete_finance_reports = staff_member.finance_reports.not_in_state([FinanceReportStateMachine::DONE_STATE, FinanceReportStateMachine::REQUIRING_UPDATE_STATE])
