@@ -10,7 +10,17 @@ class Api::V1::StaffMemberProfile::DisciplinarySerializer < ActiveModel::Seriali
     :expiredAt,
     :createdByUser,
     :disabledByUser,
-    :disabledAt
+    :disabledAt,
+    :levelText,
+    :levelExpiration
+
+  def levelText
+    object.warning_level_text
+  end
+
+  def levelExpiration
+    object.expiration_description
+  end
 
   def createdAt
     object.created_at.iso8601
