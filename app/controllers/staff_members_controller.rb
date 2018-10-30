@@ -100,9 +100,9 @@ class StaffMembersController < ApplicationController
         payslip_end_date: holiday_tab_payslip_end_date_from_params,
       )
 
-      filtered_holidays = index_query.holidays.includes(:creator, holiday_request: [:creator])
+      filtered_holidays = index_query.holidays.includes(creator: [:name], holiday_request: [creator: [:name]])
 
-      filtered_holiday_requests = index_query.holiday_requests.includes([:creator])
+      filtered_holiday_requests = index_query.holiday_requests.includes([creator: [:name]])
 
       holidays_in_tax_year = HolidayInTaxYearQuery.new(
         relation: staff_member.active_holidays,
