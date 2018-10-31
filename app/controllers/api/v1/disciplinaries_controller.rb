@@ -23,6 +23,11 @@ module Api
               filtered_disciplinaries,
               serializer: Api::V1::StaffMemberProfile::DisciplinarySerializer,
             ),
+            warnings: Disciplinary::LEVELS_TEXT,
+            warningLimits: Disciplinary::EXPIRATION_LEVEL_DESCRIPTION,
+            companyName: StaffMemberDisciplinaryMailer::COMPANY_NAME,
+            appealToName: StaffMemberDisciplinaryMailer::APPEAL_TO_NAME,
+            currentUserFullName: current_user.full_name,
             filter: DisciplinariesFilter.new(filter_data: filter_from_params).call,
             permissionsData: Api::V1::StaffMemberProfile::PermissionsSerializer.new(permissions)
           },

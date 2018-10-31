@@ -58,6 +58,13 @@ class Disciplinary extends React.Component {
   };
 
   handleViewDetails = disciplinary => {
+    const [staffMemberFullName, companyName, currentUserFullName, appealToName] = oFetch(
+      this.props,
+      'staffMemberFullName',
+      'companyName',
+      'currentUserFullName',
+      'appealToName',
+    );
     openContentModal({
       config: {
         title: (
@@ -68,9 +75,11 @@ class Disciplinary extends React.Component {
         modalClassName: 'boss-modal-window_role_disciplinary-details',
       },
       props: {
-        nature: oFetch(disciplinary, 'nature'),
-        conduct: oFetch(disciplinary, 'conduct'),
-        consequence: oFetch(disciplinary, 'consequence'),
+        disciplinary,
+        staffMemberFullName,
+        companyName,
+        currentUserFullName,
+        appealToName,
       },
     })(DisciplinaryDetails);
   };
@@ -107,11 +116,38 @@ class Disciplinary extends React.Component {
   };
 
   handleAddDisciplinary = () => {
+    const [
+      staffMemberFullName,
+      warningOptions,
+      warnings,
+      warningLimits,
+      companyName,
+      appealToName,
+      currentUserFullName,
+    ] = oFetch(
+      this.props,
+      'staffMemberFullName',
+      'warningOptions',
+      'warnings',
+      'warningLimits',
+      'companyName',
+      'appealToName',
+      'currentUserFullName',
+    );
     openContentModal({
       submit: this.handleOpenConfirmAddDisciplinaryModal,
       config: {
         title: 'Add Disciplinary',
         modalClassName: 'boss-modal-window_role_add',
+      },
+      props: {
+        staffMemberFullName,
+        warningOptions,
+        warnings,
+        warningLimits,
+        companyName,
+        appealToName,
+        currentUserFullName,
       },
     })(DisciplinaryAdd);
   };
@@ -178,7 +214,9 @@ class Disciplinary extends React.Component {
                         title={level}
                         disciplinaries={disciplinaries}
                         itemRenderer={disciplinary => {
-                          const permission = disablePermissions.find((value, key) => disciplinary.id.toString() === key);
+                          const permission = disablePermissions.find(
+                            (value, key) => disciplinary.id.toString() === key,
+                          );
                           const isDisablable = permission ? permission.get('isDisablable') : false;
                           return (
                             <DisciplinaryItem
@@ -199,7 +237,7 @@ class Disciplinary extends React.Component {
             </div>
           </section>
         </ProfileWrapper>
-      )
+      );
     }
   }
 }

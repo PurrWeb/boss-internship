@@ -243,6 +243,7 @@ var utils =  {
     monthDateFormat: 'dddd',
     tableDateFormat: 'DD MMM YYYY',
     slashDateFormat: 'DD/MM/YYYY',
+    timeWithFullDayAndMonthFormat: 'HH:mm Do MMMM YYYY',
     commonDateFormatWithTime(){
       return 'HH:mm DD-MM-YYYY';
     },

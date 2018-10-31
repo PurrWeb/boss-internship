@@ -10,13 +10,13 @@ class Disciplinary < ActiveRecord::Base
   EXPIRATION_LEVEL_DESCRIPTION = {
     Disciplinary.levels.keys[0] => "6 months",
     Disciplinary.levels.keys[1] => "6 months",
-    Disciplinary.levels.keys[2] => "1 year",
+    Disciplinary.levels.keys[2] => "12 month",
   }
 
   EXPIRATION_LIMITS = {
     Disciplinary.levels.keys[0] => 6.month,
     Disciplinary.levels.keys[1] => 6.month,
-    Disciplinary.levels.keys[2] => 1.year,
+    Disciplinary.levels.keys[2] => 12.month,
   }
 
   belongs_to :staff_member

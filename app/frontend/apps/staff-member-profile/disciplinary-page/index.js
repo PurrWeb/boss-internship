@@ -9,7 +9,12 @@ import { initialProfileLoad } from '../profile-wrapper/actions';
 import profileReducer from '../profile-wrapper/reducers';
 import disciplinariesReducer from './redux/reducers/disciplinaries-reducer';
 import filterReducer from './redux/reducers/filter-reducer';
+import warningLimitsReducer from './redux/reducers/warning-limits-reducer';
+import warningsReducer from './redux/reducers/warnings-reducer';
 import permissionsReducer from './redux/reducers/permissions-reducer';
+import companyNameReducer from './redux/reducers/company-name-reducer';
+import appealToNameReducer from './redux/reducers/appeal-to-name-reducer';
+import currentUserFullNameReducer from './redux/reducers/current-user-full-name-reducer';
 
 class StaffMemberDisiplinaryApp extends React.Component {
   componentWillMount() {
@@ -20,6 +25,11 @@ class StaffMemberDisiplinaryApp extends React.Component {
         disciplinaries: disciplinariesReducer,
         filter: filterReducer,
         permissions: permissionsReducer,
+        warnings: warningsReducer,
+        warningLimits: warningLimitsReducer,
+        companyName: companyNameReducer,
+        appealToName: appealToNameReducer,
+        currentUserFullName: currentUserFullNameReducer,
         form: formReducer,
       }),
     );
