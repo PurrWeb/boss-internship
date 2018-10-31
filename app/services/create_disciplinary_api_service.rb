@@ -14,8 +14,6 @@ class CreateDisciplinaryApiService
   attr_reader :requester, :ability, :staff_member
 
   def call(params:)
-    ability.authorize!(:create, :disciplinary)
-
     disciplinary_params = {
       title: params.fetch(:title),
       conduct: params.fetch(:conduct),
@@ -26,8 +24,11 @@ class CreateDisciplinaryApiService
       level: params.fetch(:level),
     }
 
+    # Action authorization happens here
     model_service_result = CreateDisciplinary.new(
       params: disciplinary_params,
+      requester: current_user,
+      user_ability: ability,
     ).call
 
     api_errors = nil

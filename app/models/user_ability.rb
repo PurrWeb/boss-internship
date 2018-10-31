@@ -632,12 +632,18 @@ class UserAbility
       end
 
       can :view_disciplinaries_page, StaffMember do |staff_member|
-        !user_and_staff_member_same_person?(user: user, staff_member: staff_member) &&
-          user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+        user.has_effective_access_level?(AccessLevel.manager_access_level)
       end
 
-      can [:create, :disable], :disciplinary do
-        user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
+      can [:create_disciplinaries], StaffMember do |staff_member|
+        !user_and_staff_member_same_person?(user: user, staff_member: staff_member) &&
+          can_manage_venue?(user, staff_member.master_venue)
+      end
+
+      can [:disable], Disciplinary do |disciplinary|
+        staff_member = disciplinary.staff_member
+        !user_and_staff_member_same_person?(user: user, staff_member: staff_member) &&
+          can_manage_venue?(user, staff_member.master_venue)
       end
     end
 
