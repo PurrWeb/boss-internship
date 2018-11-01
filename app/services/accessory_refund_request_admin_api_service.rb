@@ -58,13 +58,12 @@ class AccessoryRefundRequestAdminApiService
     Result.new(result, accessory_refund_request, api_errors)
   end
 
-  def complete(now: Time.current)
+  def complete(reusable:, now: Time.current)
     result = true
     if accessory_refund_request.frozen?
       accessory_refund_request.errors.add(:base, "can't complete accessory request that has been frozen")
       result = false
     else
-
       ActiveRecord::Base.transaction do
         staff_member = accessory_refund_request.staff_member
         week = RotaWeek.new(
@@ -83,8 +82,26 @@ class AccessoryRefundRequestAdminApiService
           result = accessory_refund_request.save
         end
 
+        if result && reusable
+          accessory = accessory_refund_request.accessory_request.accessory
+          last_count = accessory.accessory_restocks.last.andand.count || 0
+          delta = 1
+          current_count = last_count + delta
+          staff_member = accessory_refund_request.staff_member
+
+          restock_params = {
+            accessory: accessory,
+            count: current_count,
+            delta: delta,
+            created_by_user: requster_user,
+            accessory_request: accessory_refund_request.accessory_request,
+          }
+
+          accessory_restock_result = CreateAccessoryRestock.new(params: restock_params).call
+          result = accessory_restock_result.success?
+        end
+
         raise ActiveRecord::Rollback unless result
-        result = true
       end
     end
 

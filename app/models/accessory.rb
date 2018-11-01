@@ -7,6 +7,7 @@ class Accessory < ActiveRecord::Base
 
   belongs_to :venue
   has_many :accessory_requests
+  has_many :accessory_restocks
 
   enum accessory_type: [:misc, :uniform]
 

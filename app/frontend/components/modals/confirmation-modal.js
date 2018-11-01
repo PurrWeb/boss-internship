@@ -25,11 +25,23 @@ class ConfirmationModal extends React.Component {
   }
 }
 
-function openConfirmationModal({ title: title = 'Content Modal' }, props = {}, onSubmit, onClose, wrapper) {
+function openConfirmationModal(
+  { title: title = 'Content Modal' },
+  props = {},
+  onSubmit,
+  onClose,
+  wrapper,
+  closeCallback,
+) {
+  const whenCloseClicked = () => {
+    closeCallback();
+    onClose();
+  };
+
   return function(Component) {
     ReactDOM.render(
-      <ConfirmationModal show={true} title={title} onClose={onClose}>
-        <Component onSubmit={onSubmit} onClose={onClose} {...props} />
+      <ConfirmationModal show={true} title={title} onClose={whenCloseClicked}>
+        <Component onSubmit={onSubmit} onClose={whenCloseClicked} {...props} />
       </ConfirmationModal>,
       wrapper,
     );

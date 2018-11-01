@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 class BossCheckCardActions extends React.PureComponent {
   renderChildrens() {
     return React.Children.map(this.props.children, (child, i) => {
-      return React.cloneElement(child, {
-        className: `${child.props.className} boss-check__button`
-      });
+      if (child) {
+        return React.cloneElement(child, {
+          className: `${child.props.className} boss-check__button`
+        });
+      }
     })
   }
 
   render() {
     return (
       <div className="boss-check__row boss-check__row_role_buttons">
-        {this.renderChildrens()}
+        {this.props.children && this.renderChildrens()}
       </div>
     )
   }

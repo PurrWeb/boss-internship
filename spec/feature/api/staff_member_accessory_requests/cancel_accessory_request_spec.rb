@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Staff member cancel accessory requests API endpoint' do
+RSpec.describe "Staff member cancel accessory requests API endpoint", :accessories do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -13,53 +13,55 @@ RSpec.describe 'Staff member cancel accessory requests API endpoint' do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
-  let(:accessory) { FactoryGirl.create(
-    :accessory,
-    venue: venue,
-    user_requestable: true,
-    accessory_type: Accessory.accessory_types[:uniform],
-    size: 'S,M,L,XL,XXL'
-  ) }
+  let(:accessory) {
+    FactoryGirl.create(
+      :accessory,
+      venue: venue,
+      user_requestable: true,
+      accessory_type: Accessory.accessory_types[:uniform],
+      size: "S,M,L,XL,XXL",
+    )
+  }
   let(:now) { Time.current }
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      user: user
+      user: user,
     ).persist!
   end
-  let(:accessory_request) {
-    AccessoryRequestApiService.new(
-      requester: user,
-      staff_member: staff_member,
-      accessory_request: AccessoryRequest.new
-    ).create(params: {size: 'L', accessoryId: accessory.id}).accessory_request
-  }
+  let(:accessory_request) do
+    FactoryGirl.create(:accessory_request,
+                       staff_member: staff_member,
+                       accessory_type: accessory.accessory_type,
+                       price_cents: accessory.price_cents,
+                       size: accessory.size,
+                       accessory: accessory)
+  end
 
   let(:cancel_response) do
     post(url_helpers.cancel_request_api_v1_staff_member_staff_member_accessory_request_path(staff_member, accessory_request))
   end
 
-  context 'before call' do
-    it 'accessories request should exist' do
+  context "before call" do
+    it "accessories request should exist" do
       expect(staff_member.accessory_requests.count).to eq(1)
     end
   end
 
-  context 'cancel accessory request' do
+  context "cancel accessory request" do
     before do
       cancel_response
     end
 
-    it ' status should be canceled' do
+    it "status should be canceled" do
       expect(accessory_request.current_state).to eq("canceled")
     end
 
     it 'it should return created accessory' do
       json = JSON.parse(cancel_response.body)
-      accessory_request_json = json.except("createdAt", "updatedAt", "timeline")
+      accessory_request_json = json.fetch("accessoryRequest")
       filtered_accessory_request_json = accessory_request_json.
         except("createdAt", "updatedAt", "timeline")
-      time_line_json = json.fetch("timeline")
       expect(filtered_accessory_request_json).to eq({
         "id" => accessory_request.id,
         "hasRefundRequest" => accessory_request.has_refund_request?,
@@ -70,9 +72,10 @@ RSpec.describe 'Staff member cancel accessory requests API endpoint' do
         "refundFrozen" => nil,
         "refundPayslipDate" => nil,
         "refundRequestStatus" => nil,
-        "requestFrozen" => nil,
+        "requestFrozen" => false,
       })
 
+      time_line_json = accessory_request_json.fetch("timeline")
       expect(time_line_json.count).to eq(2)
       expect(time_line_json.first.fetch("state")).to eq("pending")
       expect(time_line_json.last.fetch("state")).to eq("canceled")
@@ -80,6 +83,7 @@ RSpec.describe 'Staff member cancel accessory requests API endpoint' do
   end
 
   private
+
   def app
     Rails.application
   end

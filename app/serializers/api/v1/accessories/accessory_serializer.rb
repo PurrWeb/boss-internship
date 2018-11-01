@@ -2,13 +2,30 @@ class Api::V1::Accessories::AccessorySerializer < ActiveModel::Serializer
   attributes \
     :id,
     :name,
-    :accessory_type,
+    :accessoryType,
     :size,
-    :price_cents,
-    :user_requestable,
+    :priceCents,
+    :userRequestable,
     :enabled,
-    :pending_request_count,
-    :pending_refund_count
+    :pendingRequestCount,
+    :pendingRefundCount,
+    :booked,
+    :refunded,
+    :freeItems
+
+  def freeItems
+    object.accessory_restocks.last.andand.count || 0
+  end
+
+  def booked
+    object.accessory_requests.in_state(:completed).count
+  end
+
+  def refunded
+    AccessoryRefundRequest.in_state(:completed).where(
+      accessory_request: object.accessory_requests
+    ).count
+  end
 
   def enabled
     object.enabled?
@@ -26,11 +43,11 @@ class Api::V1::Accessories::AccessorySerializer < ActiveModel::Serializer
     object.user_requestable
   end
 
-  def pending_request_count
+  def pendingRequestCount
     object.accessory_requests.in_state(:pending).count
   end
 
-  def pending_refund_count
+  def pendingRefundCount
     AccessoryRefundRequest.in_state(:pending).where(
       accessory_request: object.accessory_requests
     ).count

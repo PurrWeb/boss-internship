@@ -42,6 +42,10 @@ class AccessoryRefundRequest < ActiveRecord::Base
     AccessoryRefundRequestStateMachine.initial_state
   end
 
+  def accepted?
+    state_machine.current_state == "accepted"
+  end
+
   def completed?
     state_machine.current_state == "completed"
   end

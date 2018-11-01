@@ -56,9 +56,7 @@ export const loadInitialData = () => (dispatch, getState) => {
 export const loadData = () => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
-  const currentPage = parseInt(
-    getState().getIn(['accessoryRequestsPage', 'pagination', 'pageNumber']),
-  );
+  const currentPage = parseInt(getState().getIn(['accessoryRequestsPage', 'pagination', 'pageNumber']));
 
   return loadDataRequest({
     venueId: currentVenue,
@@ -67,15 +65,8 @@ export const loadData = () => (dispatch, getState) => {
 };
 
 export const updatePages = () => (dispatch, getState) => {
-  return dispatch(loadData()).then(loadDataResponse => {
-    const { accessories } = loadDataResponse.data;
-    if (accessories.length === 0) return;
-    const lastAccessory = accessories[accessories.length - 1];
-    const data = {
-      ...loadDataResponse.data,
-      accessories: [lastAccessory],
-    };
-    dispatch(loadInitialAccessoryRequests(data));
+  return dispatch(loadData()).then(resp => {
+    dispatch(loadInitialAccessoryRequests(resp.data));
   });
 };
 
@@ -132,10 +123,7 @@ export const completeAccessoryRequest = ({ requestId, accessoryId }) => (dispatc
   });
 };
 
-export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const acceptAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return acceptAccessoryRefundRequestRequest({
@@ -155,10 +143,7 @@ export const undoAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispa
   });
 };
 
-export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return rejectAccessoryRefundRequestRequest({
@@ -175,16 +160,14 @@ export const rejectAccessoryRefundRequest = ({ requestId, accessoryId }) => (
   });
 };
 
-export const completeAccessoryRefundRequest = ({ requestId, accessoryId }) => (
-  dispatch,
-  getState,
-) => {
+export const completeAccessoryRefundRequest = ({ requestId, accessoryId, reusable }) => (dispatch, getState) => {
   const currentVenue = getState().getIn(['accessoryRequestsPage', 'currentVenue']);
 
   return completeAccessoryRefundRequestRequest({
     venueId: currentVenue,
     accessoryId,
     requestId,
+    reusable,
   }).then(completeResponse => {
     dispatch(removeRefundRequestFromStore(completeResponse.data));
     if (dispatch(checkRequestsCountEmpty(accessoryId))) {

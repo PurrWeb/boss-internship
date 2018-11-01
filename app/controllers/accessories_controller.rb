@@ -9,10 +9,11 @@ class AccessoriesController < ApplicationController
     end
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
-
+    permissions = AccessoriesPagePermissions.new(current_user: current_user).permissions
     render locals: {
       access_token: access_token.token,
-      current_venue: venue_from_params.id
+      current_venue: venue_from_params.id,
+      permissions: permissions,
     }
   end
 

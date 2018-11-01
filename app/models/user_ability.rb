@@ -79,7 +79,11 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
-      can [:create, :edit, :destroy, :enable], :accessory do
+      can [:create, :destroy, :enable], :accessory do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
+      can [:edit, :accessory_inventory], :accessory do
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 

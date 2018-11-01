@@ -35,10 +35,16 @@ const accessoryRequestsReducer = handleActions(
       return state.setIn(['accessoryRequests', index], fromJS(request));
     },
     [constants.REMOVE_REQUEST]: (state, action) => {
-      const request = action.payload;
-      return state.updateIn(['accessoryRequests'], accessoryRequests => {
-        return accessoryRequests.filter(item => item.get('id') !== request.id);
-      });
+      const request = oFetch(action.payload, 'accessoryRequest');
+      const accessory = oFetch(action.payload, 'accessory');
+      return state
+        .updateIn(['accessoryRequests'], accessoryRequests => {
+          return accessoryRequests.filter(item => item.get('id') !== oFetch(request, 'id'));
+        })
+        .updateIn(['accessories'], accessories => {
+          const accessoryIndex = accessories.findIndex(item => item.get('id') === oFetch(accessory, 'id'));
+          return accessories.set(accessoryIndex, fromJS(accessory));
+        });
     },
     [constants.UPDATE_REFUND_REQUEST]: (state, action) => {
       const request = action.payload;
@@ -46,13 +52,19 @@ const accessoryRequestsReducer = handleActions(
       return state.setIn(['accessoryRefundRequests', index], fromJS(request));
     },
     [constants.REMOVE_REFUND_REQUEST]: (state, action) => {
-      const request = action.payload;
-      return state.updateIn(['accessoryRefundRequests'], accessoryRefundRequests => {
-        return accessoryRefundRequests.filter(item => item.get('id') !== request.id);
-      });
+      const request = oFetch(action.payload, 'accessoryRefundRequest');
+      const accessory = oFetch(action.payload, 'accessory');
+      return state
+        .updateIn(['accessoryRefundRequests'], accessoryRefundRequests => {
+          return accessoryRefundRequests.filter(item => item.get('id') !== oFetch(request, 'id'));
+        })
+        .updateIn(['accessories'], accessories => {
+          const accessoryIndex = accessories.findIndex(item => item.get('id') === oFetch(accessory, 'id'));
+          return accessories.set(accessoryIndex, fromJS(accessory));
+        });
     },
     [constants.REMOVE_ACCESSORY]: (state, action) => {
-      const accessoryId = action.payload;
+      const accessoryId = oFetch(action, 'payload');
       return state
         .updateIn(['accessories'], accessories => {
           return accessories.filter(item => item.get('id') !== accessoryId);
@@ -79,7 +91,7 @@ const accessoryRequestsReducer = handleActions(
 
       return state
         .set('pagination', fromJS(pagination))
-        .updateIn(['accessories'], items => items.concat(fromJS(accessories)))
+        .set('accessories', fromJS(accessories))
         .set('accessoryRequests', fromJS(accessoryRequests))
         .set('accessoryRefundRequests', fromJS(accessoryRefundRequests))
         .set('staffMembers', fromJS(staffMembers))

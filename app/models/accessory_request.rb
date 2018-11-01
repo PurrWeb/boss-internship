@@ -59,7 +59,7 @@ class AccessoryRequest < ActiveRecord::Base
   end
 
   def frozen?
-    finance_report.andand.done?
+    !!finance_report.andand.done?
   end
 
   def allowing_past_payslip_date_manupulation

@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 class DashboardActions extends React.Component {
   renderChildrens() {
     return React.Children.map(this.props.children, (child, i) => {
-      return React.cloneElement(child, {
-        className: `${child.props.className} boss-page-dashboard__button`
-      });
+      if (child) {
+        return React.cloneElement(child, {
+          className: `${child.props.className} boss-page-dashboard__button`
+        });
+      }
     })
   }
 
   render() {
     return (
       <div className="boss-page-dashboard__buttons-group">
-        {this.renderChildrens()}
+        {this.props.children && this.renderChildrens()}
       </div>
     )
   }
@@ -22,8 +24,8 @@ class DashboardActions extends React.Component {
 DashboardActions.propTypes = {
   className: PropTypes.string,
   children: PropTypes.oneOfType([
-    PropTypes.array.isRequired,
-    PropTypes.element.isRequired,
+    PropTypes.array,
+    PropTypes.element,
   ])
 }
 

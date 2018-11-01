@@ -24,7 +24,7 @@ class AccessoryRequestApiService
     }.merge(staff_member: staff_member, accessory: accessory, created_by_user: requester)
 
     model_service_result = CreateAccessoryRequest.new(
-      params: accessory_request_params
+      params: accessory_request_params,
     ).call
 
     api_errors = nil
@@ -39,7 +39,7 @@ class AccessoryRequestApiService
 
     model_service_result = CancelAccessoryRequest.new(
       accessory_request: accessory_request,
-      requester: requester
+      requester: requester,
     ).call
 
     api_errors = nil
@@ -49,16 +49,17 @@ class AccessoryRequestApiService
     Result.new(model_service_result.success?, model_service_result.accessory_request, api_errors)
   end
 
-  def refund
+  def refund(reusable)
     ability.authorize!(:refund_request, accessory_request)
 
     refund_accessory_request_params = {
       price_cents: accessory_request.price_cents,
+      reusable: reusable,
     }.merge(staff_member: staff_member, accessory_request: accessory_request, created_by_user: requester)
 
     model_service_result = RefundAccessoryRequest.new(
       params: refund_accessory_request_params,
-      requester: requester
+      requester: requester,
     ).call
 
     api_errors = nil

@@ -15,6 +15,7 @@ class AccessoryList extends React.Component {
 
     return accessories.map((accessory, index) => {
       const name = oFetch(accessory, 'name');
+      const freeItems = oFetch(accessory, 'freeItems');
       const accessoryId = oFetch(accessory, 'id');
       const requests = accessoryRequests.filter(item => oFetch(item, 'accessoryId') === oFetch(accessory, 'id'));
       const refundRequests = accessoryRefundRequests.filter(
@@ -31,6 +32,8 @@ class AccessoryList extends React.Component {
         refundRequestsCount,
         staffMembers,
         accessory,
+        freeItems,
+        venue: this.props.venue,
       };
 
       if (requestsCount === 0 && refundRequestsCount === 0) {

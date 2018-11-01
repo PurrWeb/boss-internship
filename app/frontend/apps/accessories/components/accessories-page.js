@@ -1,11 +1,8 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params';
+import oFetch from 'o-fetch';
 
-import {
-  SimpleDashboard,
-  DashboardFilter,
-  DashboardActions,
-} from '~/components/boss-dashboards';
+import { SimpleDashboard, DashboardFilter, DashboardActions } from '~/components/boss-dashboards';
 
 import { openWarningModal, openContentModal } from '~/components/modals';
 
@@ -13,6 +10,9 @@ import AccessoriesFilter from './accessories-filter';
 import AddAccessory from './add-accessory';
 import EditAccessory from './edit-accessory';
 import AccessoriesList from './accessories-list';
+import EditFreeItems from './edit-free-items';
+import EditFreeItemsHistoryList from './edit-free-items-history-list';
+import EditFreeItemsHistoryItem from './edit-free-items-history-item';
 
 class AccessoriesPage extends React.Component {
   handleLoadMore = () => {
@@ -42,6 +42,13 @@ class AccessoriesPage extends React.Component {
 
   handleRestoreAccessorySubmit = (hideModal, params) => {
     return this.props.actions.restoreAccessory(params.accessory).then(resp => {
+      hideModal();
+      return resp;
+    });
+  };
+
+  handleEditFreeItemsSubmit = (hideModal, values) => {
+    return this.props.actions.updateAccessoryFreeItems(values).then(resp => {
       hideModal();
       return resp;
     });
@@ -86,6 +93,27 @@ class AccessoriesPage extends React.Component {
     })(AddAccessory);
   };
 
+  handleOpenHistory = accessory => {
+    const history = this.props.getHistoryByAccessoryId(oFetch(accessory, 'id')).toJS();
+    openContentModal({
+      config: { title: `${oFetch(accessory, 'name')} History`, modalClassName: 'boss-modal-window_role_history' },
+      props: {
+        accessoryHistory: history,
+        itemRenderer: (historyItem, previousCount) => {
+          return <EditFreeItemsHistoryItem historyItem={historyItem} previousCount={previousCount} />;
+        },
+      },
+    })(EditFreeItemsHistoryList);
+  };
+
+  handleEditFreeItems = accessory => {
+    openContentModal({
+      submit: this.handleEditFreeItemsSubmit,
+      config: { title: `Edit ${oFetch(accessory, 'name')} Inventory` },
+      props: { accessory, onOpenHistory: this.handleOpenHistory },
+    })(EditFreeItems);
+  };
+
   handleFilter = values => {
     const queryString = new URLSearchParams(window.location.search);
     queryString.delete('accessoryType');
@@ -111,26 +139,23 @@ class AccessoriesPage extends React.Component {
   }
 
   render() {
+    const permissions = oFetch(this.props, 'permissions');
+    const canCreate = oFetch(permissions, 'create');
+
     const accessories = this.getAccessories();
-    const isShowLoadMore =
-      accessories.length < this.props.pagination.totalCount;
+    const isShowLoadMore = accessories.length < this.props.pagination.totalCount;
     return (
       <div>
         <SimpleDashboard title="Accessories">
           <DashboardActions>
-            <button
-              className="boss-button boss-button_role_add"
-              onClick={this.handleAddAccessory}
-            >
+            {canCreate && <button className="boss-button boss-button_role_add" onClick={this.handleAddAccessory}>
               Add Accessory
-            </button>
+            </button>}
           </DashboardActions>
-          <DashboardFilter
-            onFilter={this.handleFilter}
-            component={AccessoriesFilter}
-          />
+          <DashboardFilter onFilter={this.handleFilter} component={AccessoriesFilter} />
         </SimpleDashboard>
         <AccessoriesList
+          permissions={permissions}
           accessories={this.getAccessories()}
           totalCount={this.props.pagination.totalCount}
           isShowLoadMore={isShowLoadMore}
@@ -138,6 +163,7 @@ class AccessoriesPage extends React.Component {
           onEdit={this.handleEdit}
           onDisable={this.handleDisable}
           onLoadMoreClick={this.handleLoadMore}
+          onEditFreeItems={this.handleEditFreeItems}
         />
       </div>
     );

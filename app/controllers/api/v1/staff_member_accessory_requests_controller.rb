@@ -9,23 +9,23 @@ module Api
         raise ActiveRecord::RecordNotFound.new unless staff_member.present?
         return nil if staff_member.security?
 
-        payslip_start_date = UIRotaDate.parse(params.fetch('payslip_start_date'))
-        payslip_end_date = UIRotaDate.parse(params.fetch('payslip_end_date'))
+        payslip_start_date = UIRotaDate.parse(params.fetch("payslip_start_date"))
+        payslip_end_date = UIRotaDate.parse(params.fetch("payslip_end_date"))
 
         accessory_requests = StaffMemberProfileAccessoryRequestQuery.new(
           staff_member: staff_member,
           filter_params: {
             payslip_start_date: payslip_start_date,
-            payslip_end_date:  payslip_end_date
-          }
+            payslip_end_date: payslip_end_date,
+          },
         ).all.
-        includes([
+          includes([
           :finance_report,
           :created_by_user,
           :accessory,
           accessory_refund_request: [
-            :staff_member, :created_by_user, :finance_report
-          ]
+            :staff_member, :created_by_user, :finance_report,
+          ],
         ])
 
         venue_accessories = staff_member.master_venue.accessories
@@ -41,9 +41,9 @@ module Api
               serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
             ),
             sPayslipStartDate: UIRotaDate.format(payslip_start_date),
-            sPayslipEndDate: UIRotaDate.format(payslip_end_date)
+            sPayslipEndDate: UIRotaDate.format(payslip_end_date),
           },
-          status: 200
+          status: 200,
         )
       end
 
@@ -85,10 +85,10 @@ module Api
         ).cancel
         if result.success?
           render(
-            json: result.accessory_request,
-            serializer: Api::V1::StaffMemberProfile::AccessoryRequestSerializer,
-            key_transform: :camel_lower,
-            status: 200
+            json: {
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(result.accessory_request),
+            },
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -104,13 +104,13 @@ module Api
           requester: current_user,
           staff_member: staff_member_from_params,
           accessory_request: accessory_request,
-        ).refund
+        ).refund(params.fetch(:reusable))
         if result.success?
           render(
             json: {
-            accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request),
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request),
             },
-            status: 200
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -118,6 +118,7 @@ module Api
       end
 
       private
+
       def accessory_request_params
         params.permit(:size, :accessoryId)
       end

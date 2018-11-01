@@ -120,9 +120,10 @@ export const completeAccessoryRequestRequest = ({ venueId, accessoryId, requestI
   });
 };
 
-export const completeAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId }) => {
+export const completeAccessoryRefundRequestRequest = ({ venueId, accessoryId, requestId, reusable }) => {
   return http().post(`/api/v1/accessory-requests/${requestId}/complete-refund`, {
     venueId,
     accessoryId,
+    reusable,
   });
 };

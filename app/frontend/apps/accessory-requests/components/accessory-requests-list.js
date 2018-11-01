@@ -34,9 +34,9 @@ class AccessoryRequestsList extends Component {
 
       const accessorySize = oFetch(request, 'size') || 'N/A';
       const requestId = oFetch(request, 'id');
-      const accessoryId = oFetch(accessory, 'id');
       const requestStatus = oFetch(request, 'status');
       const frozen = oFetch(request, 'frozen');
+      const reusable = request.reusable;
 
       const requestData = {
         avatarUrl,
@@ -47,6 +47,7 @@ class AccessoryRequestsList extends Component {
         staffMember,
         requestStatus,
         frozen,
+        reusable,
       };
 
       return React.cloneElement(this.props.requestItemRenderer(requestData), {

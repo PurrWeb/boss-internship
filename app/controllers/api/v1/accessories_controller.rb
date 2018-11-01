@@ -17,9 +17,25 @@ module Api
           page: page_from_params,
           per_page: per_page
         )
+
+        ids = paginated_accessories.map(&:id)
+
+        staff_members = StaffMember.joins(accessory_requests: :accessory).where(accessories: {id: ids})
+
+        accessories_history = AccessoryRestock
+          .where(accessory_id: ids)
+
         render(
           json: paginated_accessories,
           meta: {
+            history: ActiveModel::Serializer::CollectionSerializer.new(
+              accessories_history,
+              serializer: Api::V1::Accessories::AccessoryRestockSerializer,
+            ),
+            staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+              staff_members,
+              serializer: Api::V1::Accessories::StaffMemberSerializer,
+            ),
             pageNumber: page_from_params,
             perPage: per_page,
             totalCount: accessories.count,
@@ -73,6 +89,32 @@ module Api
         end
       end
 
+      def update_free_items
+        authorize!(:accessory_inventory, :accessory)
+
+        result = AccessoriesApiService.new(
+          requester: current_user,
+          accessory: venue_from_params.accessories.enabled.find_by(id: params.fetch(:id))
+        ).update_free_items(count: free_items_count_from_params)
+
+        if result.success?
+          accessories_history = result.accessory.accessory_restocks
+
+          render(
+            json: {
+              accessory: Api::V1::Accessories::AccessorySerializer.new(result.accessory),
+              history: ActiveModel::Serializer::CollectionSerializer.new(
+                accessories_history,
+                serializer: Api::V1::Accessories::AccessoryRestockSerializer,
+              )
+            },
+            status: 200
+          )
+        else
+          render json: {errors: result.api_errors.errors}, status: 422
+        end
+      end
+
       def destroy
         authorize!(:destroy, :accessory)
 
@@ -114,6 +156,10 @@ module Api
       end
 
       private
+      def free_items_count_from_params
+        params.fetch(:freeItemsCount)
+      end
+
       def accessories_filter_params
         params.permit(:accessoryType, :status, :name, :userRequestable, :page)
       end

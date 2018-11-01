@@ -35,15 +35,16 @@ ActiveRecord::Schema.define(version: 20180924181537) do
   end
 
   create_table "accessory_refund_requests", force: :cascade do |t|
-    t.integer  "accessory_request_id", limit: 4, null: false
-    t.integer  "staff_member_id",      limit: 4, null: false
+    t.integer  "accessory_request_id", limit: 4,                 null: false
+    t.integer  "staff_member_id",      limit: 4,                 null: false
     t.integer  "price_cents",          limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "created_by_user_id",   limit: 4
     t.datetime "completed_at"
     t.integer  "finance_report_id",    limit: 4
     t.date     "payslip_date"
+    t.boolean  "reusable",                       default: false, null: false
   end
 
   add_index "accessory_refund_requests", ["accessory_request_id", "staff_member_id"], name: "index_accessory_refund_requests_accessory_request_staff_member", unique: true, using: :btree
@@ -79,6 +80,19 @@ ActiveRecord::Schema.define(version: 20180924181537) do
   add_index "accessory_requests", ["created_by_user_id"], name: "index_accessory_requests_on_created_by_user_id", using: :btree
   add_index "accessory_requests", ["finance_report_id"], name: "index_accessory_requests_on_finance_report_id", using: :btree
   add_index "accessory_requests", ["staff_member_id"], name: "index_accessory_requests_on_staff_member_id", using: :btree
+
+  create_table "accessory_restocks", force: :cascade do |t|
+    t.integer  "accessory_id",         limit: 4,             null: false
+    t.integer  "count",                limit: 4, default: 0, null: false
+    t.integer  "delta",                limit: 4,             null: false
+    t.integer  "created_by_user_id",   limit: 4,             null: false
+    t.integer  "accessory_request_id", limit: 4
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "accessory_restocks", ["accessory_id"], name: "index_accessory_restocks_on_accessory_id", using: :btree
+  add_index "accessory_restocks", ["created_by_user_id"], name: "index_accessory_restocks_on_created_by_user_id", using: :btree
 
   create_table "addresses", force: :cascade do |t|
     t.string   "county",     limit: 255

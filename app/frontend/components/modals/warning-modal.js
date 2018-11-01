@@ -8,16 +8,7 @@ import modalDecorator from './modal-decorator';
 
 class WarningModal extends React.Component {
   render() {
-    const {
-      show,
-      title,
-      text,
-      buttonText,
-      onClose,
-      onSubmit,
-      props,
-      buttonClassName,
-    } = this.props;
+    const { show, title, text, buttonText, onClose, onSubmit, props, buttonClassName } = this.props;
 
     return (
       <Modal
@@ -43,11 +34,7 @@ class WarningModal extends React.Component {
             )}
           </div>
           <div className="boss-modal-window__actions">
-            <AsyncButton
-              className={buttonClassName}
-              text={buttonText}
-              onClick={() => onSubmit(props)}
-            />
+            <AsyncButton className={buttonClassName} text={buttonText} onClick={() => onSubmit(props)} />
           </div>
         </div>
       </Modal>
@@ -56,12 +43,22 @@ class WarningModal extends React.Component {
 }
 
 function openWarningModal(
-  { title = 'Warning modal', text = 'Are you sure ?', buttonText = 'Confirm', buttonClassName = 'boss-button boss-button_role_cancel' },
+  {
+    title = 'Warning modal',
+    text = 'Are you sure ?',
+    buttonText = 'Confirm',
+    buttonClassName = 'boss-button boss-button_role_cancel',
+  },
   props = {},
   onSubmit,
   onClose,
   wrapper,
+  closeCallback,
 ) {
+  const whenCloseClicked = () => {
+    closeCallback();
+    onClose();
+  };
   ReactDOM.render(
     <WarningModal
       show={true}
@@ -69,7 +66,7 @@ function openWarningModal(
       text={text || 'Are you sure'}
       buttonText={buttonText || 'Confirm'}
       buttonClassName={buttonClassName}
-      onClose={onClose}
+      onClose={whenCloseClicked}
       onSubmit={onSubmit}
       props={props}
     />,

@@ -1,20 +1,45 @@
 import React, { Component } from 'react';
 import oFetch from 'o-fetch';
-import { BossCheckCard, BossCheckCardCollapsibleGroup } from '~/components/boss-check-card';
+import { BossCheckCard, BossCheckCardCollapsibleGroup, BossCheckRow2 } from '~/components/boss-check-card';
+import { openContentModal } from '~/components/modals';
 
 import { BossTable } from '~/components/boss-table';
 
 import AccessoryRequestsList from './accessory-requests-list';
 import AccessoryRequestItem from './accessory-request-item';
+import ReusableModalContent from './reusable-modal-content';
 
 class AccessoryListItem extends Component {
+  onCompleteAccessoryRefundRequest = ({ accessoryId, requestId, reusable }) => {
+    return this.props.actions.completeAccessoryRefundRequest({ accessoryId, requestId, reusable });
+  };
+
+  renderRemainingItems = amount => {
+    return (
+      <span>
+        <span className={`boss-check__counter ${amount < 0 ? 'boss-check__counter_state_alert' : ''}`}>{amount}</span>{' '}
+        Remaining
+      </span>
+    );
+  };
+
   render() {
     const actions = oFetch(this.props, 'actions');
     const data = oFetch(this.props, 'data');
     const getAccessoryRequestPermission = oFetch(this.props, 'getAccessoryRequestPermission');
     const getAccessoryRefundRequestPermission = oFetch(this.props, 'getAccessoryRefundRequestPermission');
 
-    const [name, requests, staffMembers, refundRequests, accessory, requestsCount, refundRequestsCount] = oFetch(
+    const [
+      name,
+      requests,
+      staffMembers,
+      refundRequests,
+      accessory,
+      requestsCount,
+      refundRequestsCount,
+      freeItems,
+      venue,
+    ] = oFetch(
       data,
       'name',
       'requests',
@@ -23,6 +48,8 @@ class AccessoryListItem extends Component {
       'accessory',
       'requestsCount',
       'refundRequestsCount',
+      'freeItems',
+      'venue',
     );
 
     const [
@@ -33,7 +60,6 @@ class AccessoryListItem extends Component {
       undoAccessoryRequest,
       undoAccessoryRefundRequest,
       completeAccessoryRequest,
-      completeAccessoryRefundRequest,
     ] = oFetch(
       actions,
       'acceptAccessoryRequest',
@@ -43,11 +69,15 @@ class AccessoryListItem extends Component {
       'undoAccessoryRequest',
       'undoAccessoryRefundRequest',
       'completeAccessoryRequest',
-      'completeAccessoryRefundRequest',
     );
 
     return (
       <BossCheckCard title={name} className="boss-check__title_role_accessory">
+        <BossCheckRow2
+          className1="boss-check__text_role_venue"
+          halfOneRenderer={() => oFetch(venue, 'name')}
+          halfTwoRenderer={() => this.renderRemainingItems(freeItems)}
+        />
         <BossCheckCardCollapsibleGroup title="Requests" text={requestsCount} showCaret={requestsCount !== 0}>
           <AccessoryRequestsList
             accessory={accessory}
@@ -88,7 +118,7 @@ class AccessoryListItem extends Component {
                     onAcceptRequest={acceptAccessoryRefundRequest}
                     onRejectRequest={rejectAccessoryRefundRequest}
                     onUndoRequest={undoAccessoryRefundRequest}
-                    onCompleteRequest={completeAccessoryRefundRequest}
+                    onCompleteRequest={this.onCompleteAccessoryRefundRequest}
                     permissions={permissionsJS}
                     data={data}
                   />

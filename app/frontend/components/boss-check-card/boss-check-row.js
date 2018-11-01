@@ -10,7 +10,7 @@ class BossCheckRow extends React.Component {
           {!!this.props.status && <span className="boss-check__title-status">{this.props.status}</span>}
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -18,11 +18,11 @@ BossCheckRow.propTypes = {
   title: PropTypes.string.isRequired,
   status: PropTypes.string,
   className: PropTypes.string,
-}
+};
 
 BossCheckRow.defaultProps = {
   className: '',
-  status: ''
-}
+  status: '',
+};
 
 export default BossCheckRow;

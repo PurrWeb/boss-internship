@@ -1,12 +1,18 @@
 import React from 'react';
 import safeMoment from '~/lib/safe-moment';
+import oFetch from 'o-fetch';
 
 class AccessoryRequestsList extends React.Component {
   renderAccessoryRequestItems(accessoryRequests) {
     return accessoryRequests
       .slice()
       .sort((a, b) => {
-        return safeMoment.iso8601Parse(b.updatedAt) - safeMoment.iso8601Parse(a.updatedAt);
+        const timelineA = oFetch(a, 'timeline');
+        const timelineB = oFetch(b, 'timeline');
+        const aDate = safeMoment.iso8601Parse(oFetch(timelineA[timelineA.length - 1], 'createdAt'));
+        const bDate = safeMoment.iso8601Parse(oFetch(timelineB[timelineB.length - 1], 'createdAt'));
+
+        return bDate - aDate;
       })
       .map((item, index) => {
         return React.cloneElement(this.props.accessoryRequestRendered(item), {

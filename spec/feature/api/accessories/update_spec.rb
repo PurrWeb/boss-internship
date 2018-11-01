@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Update accessory API endpoint' do
+RSpec.describe "Update accessory API endpoint", :accessories do
   include Rack::Test::Methods
   include HeaderHelpers
   include ActiveSupport::Testing::TimeHelpers
@@ -11,10 +11,10 @@ RSpec.describe 'Update accessory API endpoint' do
   let(:venue) { FactoryGirl.create(:venue) }
   let(:user) { FactoryGirl.create(:user, :admin) }
   let(:accessory_misc_type) do
-    'misc'
+    "misc"
   end
   let(:accessory_uniform_type) do
-    'uniform'
+    "uniform"
   end
   let(:name) do
     "Some name"
@@ -32,7 +32,7 @@ RSpec.describe 'Update accessory API endpoint' do
   let(:access_token) do
     WebApiAccessToken.new(
       expires_at: 30.minutes.from_now,
-      user: user
+      user: user,
     ).persist!
   end
   let(:url) do
@@ -51,18 +51,18 @@ RSpec.describe 'Update accessory API endpoint' do
       accessoryType: accessory_misc_type,
       size: nil_size,
       priceCents: price_cents,
-      userRequestable: false
+      userRequestable: false,
     }
   end
 
-  context 'before call' do
-    it 'no accessories should exist' do
+  context "before call" do
+    it "no accessories should exist" do
       expect(venue.accessories.count).to eq(0)
     end
   end
 
-  context 'update accessory for venue' do
-    context ' with valid params' do
+  context "update accessory for venue" do
+    context " with valid params" do
       let(:params) do
         valid_params
       end
@@ -71,11 +71,11 @@ RSpec.describe 'Update accessory API endpoint' do
         response
       end
 
-      it 'should return ok status' do
+      it "should return ok status" do
         expect(response.status).to eq(ok_status)
       end
 
-      it 'it should create accessory' do
+      it "it should create accessory" do
         expect(venue.accessories.count).to eq(1)
         expect(venue.accessories.first.name).to eq(name)
         expect(venue.accessories.first.accessory_type).to eq(accessory_misc_type)
@@ -84,7 +84,7 @@ RSpec.describe 'Update accessory API endpoint' do
         expect(venue.accessories.first.user_requestable).to eq(false)
       end
 
-      it 'it should return updated accessory' do
+      it "it should return updated accessory" do
         json = JSON.parse(response.body)
         expect(json["id"]).to eq(venue.accessories.first.id)
         expect(json["name"]).to eq(venue.accessories.first.name)
@@ -95,11 +95,11 @@ RSpec.describe 'Update accessory API endpoint' do
       end
     end
 
-    context ' with empty params' do
+    context " with empty params" do
       let(:params) do
         valid_params.merge({
-          name: '',
-          accessoryType: '',
+          name: "",
+          accessoryType: "",
         })
       end
 
@@ -107,7 +107,7 @@ RSpec.describe 'Update accessory API endpoint' do
         response
       end
 
-      it 'should return unprocessable_entity status' do
+      it "should return unprocessable_entity status" do
         expect(response.status).to eq(unprocessable_entity_status)
       end
 
@@ -115,22 +115,22 @@ RSpec.describe 'Update accessory API endpoint' do
         expect(venue.accessories.count).to eq(1)
       end
 
-      it 'should return errors json' do
+      it "should return errors json" do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "errors" => {
             "name" => ["can't be blank"],
             "accessoryType" => ["can't be blank"],
-          }
+          },
         })
       end
     end
 
-    context ' with invalid params' do
+    context " with invalid params" do
       let(:params) do
         valid_params.merge({
           accessoryType: accessory_uniform_type,
-          size: '',
+          size: "",
         })
       end
 
@@ -138,7 +138,7 @@ RSpec.describe 'Update accessory API endpoint' do
         response
       end
 
-      it 'should return unprocessable_entity status' do
+      it "should return unprocessable_entity status" do
         expect(response.status).to eq(unprocessable_entity_status)
       end
 
@@ -146,18 +146,19 @@ RSpec.describe 'Update accessory API endpoint' do
         expect(venue.accessories.count).to eq(1)
       end
 
-      it 'should return errors json' do
+      it "should return errors json" do
         json = JSON.parse(response.body)
         expect(json).to eq({
           "errors" => {
             "size" => ["can't be blank"],
-          }
+          },
         })
       end
     end
   end
 
   private
+
   def app
     Rails.application
   end

@@ -6,7 +6,8 @@ class Api::V1::AccessoryRequests::AccessorySerializer < ActiveModel::Serializer
     :size,
     :priceCents,
     :userRequestable,
-    :enabled
+    :enabled,
+    :freeItems
 
   def enabled
     object.enabled?
@@ -22,5 +23,9 @@ class Api::V1::AccessoryRequests::AccessorySerializer < ActiveModel::Serializer
 
   def userRequestable
     object.user_requestable
+  end
+
+  def freeItems
+    object.accessory_restocks.last.andand.count || 0
   end
 end

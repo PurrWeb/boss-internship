@@ -7,15 +7,13 @@ module Api
       def index
         authorize!(:view, :accessory_requests_page)
 
-        per_page = 2
+        per_page = 10
         all_venue_accessories = venue_from_params
           .accessories
         venue_accessories_requests = AccessoryRequest.where(accessory_id: all_venue_accessories.pluck(:id))
         refund_request_accessory_ids = venue_accessories_requests.inject([]) do |acc, request|
           states = ["pending", "accepted"]
-          request.accessory_refund_request.andand.current_state.in?(states) \
-            ? acc << request.accessory_id \
-            : acc
+          request.accessory_refund_request.andand.current_state.in?(states) ? acc << request.accessory_id : acc
         end
         accessories = all_venue_accessories
           .where(id: (venue_accessories_requests.in_state(:pending, :accepted).pluck(:accessory_id) + refund_request_accessory_ids))
@@ -26,7 +24,7 @@ module Api
 
         paginated_accessory = accessories.paginate(
           page: page_from_params,
-          per_page: per_page
+          per_page: per_page,
         )
         accessory_requests_permissions = AccessoryRequestsPagePermissions.new(
           requester: current_user,
@@ -38,19 +36,19 @@ module Api
           json: {
             accessories: ActiveModel::Serializer::CollectionSerializer.new(
               paginated_accessory,
-              serializer: Api::V1::AccessoryRequests::AccessorySerializer
+              serializer: Api::V1::AccessoryRequests::AccessorySerializer,
             ),
             accessoryRequests: ActiveModel::Serializer::CollectionSerializer.new(
               accessory_requests.in_state(:pending, :accepted),
-              serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer
+              serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
             ),
             accessoryRefundRequests: ActiveModel::Serializer::CollectionSerializer.new(
               accessory_refund_requests,
-              serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer
+              serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
             ),
             staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
               staff_members,
-              serializer: Api::V1::SimpleStaffMemberSerializer
+              serializer: Api::V1::SimpleStaffMemberSerializer,
             ),
             permissionsData: Api::V1::AccessoryRequests::PermissionsSerializer.new(accessory_requests_permissions),
             pagination: {
@@ -58,9 +56,9 @@ module Api
               perPage: per_page,
               totalCount: accessories.count,
               totalPages: (accessories.count / per_page) + 1,
-            }
+            },
           },
-          status: 200
+          status: 200,
         )
       end
 
@@ -69,7 +67,7 @@ module Api
 
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_request: request_from_params
+          accessory_request: request_from_params,
         ).accept
 
         if result.success?
@@ -77,7 +75,7 @@ module Api
             json: result.accessory_request,
             serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
             key_transform: :camel_lower,
-            status: 200
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -89,15 +87,16 @@ module Api
 
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_request: request_from_params
+          accessory_request: request_from_params,
         ).reject
 
         if result.success?
           render(
-            json: result.accessory_request,
-            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
-            key_transform: :camel_lower,
-            status: 200
+            json: {
+              accessoryRequest: Api::V1::AccessoryRequests::AccessoryRequestSerializer.new(result.accessory_request),
+              accessory: Api::V1::AccessoryRequests::AccessorySerializer.new(result.accessory_request.accessory),
+            },
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -109,7 +108,7 @@ module Api
 
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_request: request_from_params
+          accessory_request: request_from_params,
         ).undo
 
         if result.success?
@@ -117,7 +116,7 @@ module Api
             json: result.accessory_request,
             serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
             key_transform: :camel_lower,
-            status: 200
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -129,15 +128,16 @@ module Api
 
         result = AccessoryRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_request: request_from_params
+          accessory_request: request_from_params,
         ).complete
 
         if result.success?
           render(
-            json: result.accessory_request,
-            serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
-            key_transform: :camel_lower,
-            status: 200
+            json: {
+              accessoryRequest: Api::V1::AccessoryRequests::AccessoryRequestSerializer.new(result.accessory_request),
+              accessory: Api::V1::AccessoryRequests::AccessorySerializer.new(result.accessory_request.accessory),
+            },
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -149,7 +149,7 @@ module Api
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_refund_request: refund_request_from_params
+          accessory_refund_request: refund_request_from_params,
         ).accept
 
         if result.success?
@@ -157,7 +157,7 @@ module Api
             json: result.accessory_refund_request,
             serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
             key_transform: :camel_lower,
-            status: 200
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -169,15 +169,15 @@ module Api
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_refund_request: refund_request_from_params
+          accessory_refund_request: refund_request_from_params,
         ).reject
-
         if result.success?
           render(
-            json: result.accessory_refund_request,
-            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
-            key_transform: :camel_lower,
-            status: 200
+            json: {
+              accessoryRefundRequest: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer.new(result.accessory_refund_request),
+              accessory: Api::V1::AccessoryRequests::AccessorySerializer.new(result.accessory_refund_request.accessory_request.accessory),
+            },
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -189,7 +189,7 @@ module Api
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_refund_request: refund_request_from_params
+          accessory_refund_request: refund_request_from_params,
         ).undo
 
         if result.success?
@@ -197,7 +197,7 @@ module Api
             json: result.accessory_refund_request,
             serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
             key_transform: :camel_lower,
-            status: 200
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -209,15 +209,16 @@ module Api
 
         result = AccessoryRefundRequestAdminApiService.new(
           requster_user: current_user,
-          accessory_refund_request: refund_request_from_params
-        ).complete
+          accessory_refund_request: refund_request_from_params,
+        ).complete(reusable: params.fetch(:reusable))
 
         if result.success?
           render(
-            json: result.accessory_refund_request,
-            serializer: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer,
-            key_transform: :camel_lower,
-            status: 200
+            json: {
+              accessoryRefundRequest: Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer.new(result.accessory_refund_request),
+              accessory: Api::V1::AccessoryRequests::AccessorySerializer.new(result.accessory_refund_request.accessory_request.accessory),
+            },
+            status: 200,
           )
         else
           render json: {errors: result.api_errors.errors}, status: 422
@@ -233,18 +234,18 @@ module Api
         result = UpdateAccessoryRequestPayslipDate.new(
           accessory_request: accessory_request,
           new_payslip_date: new_payslip_date,
-          requester: current_user
+          requester: current_user,
         ).call
 
-       if result.success?
+        if result.success?
           render(
             json: {
-              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request)
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request),
             },
-            status: 200
+            status: 200,
           )
         else
-          render json: { errors: result.api_errors.errors }, status: 422
+          render json: {errors: result.api_errors.errors}, status: 422
         end
       end
 
@@ -260,22 +261,23 @@ module Api
         result = UpdateAccessoryRefundRequestPayslipDate.new(
           accessory_refund_request: accessory_refund_request,
           new_payslip_date: new_payslip_date,
-          requester: current_user
+          requester: current_user,
         ).call
 
-       if result.success?
+        if result.success?
           render(
             json: {
-              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request.reload)
+              accessoryRequest: Api::V1::StaffMemberProfile::AccessoryRequestSerializer.new(accessory_request.reload),
             },
-            status: 200
+            status: 200,
           )
         else
-          render json: { errors: result.api_errors.errors }, status: 422
+          render json: {errors: result.api_errors.errors}, status: 422
         end
       end
 
       private
+
       def page_from_params
         params[:page].to_i || 1
       end
@@ -287,15 +289,15 @@ module Api
       def request_from_params
         result = AccessoryRequest.find_by(
           accessory: accessory_from_params,
-          id: params.fetch(:id)
+          id: params.fetch(:id),
         )
-        ActiveRecord::Associations::Preloader.new.preload(result, { staff_member: [:master_venue] }) if result
+        ActiveRecord::Associations::Preloader.new.preload(result, {staff_member: [:master_venue]}) if result
         result
       end
 
       def refund_request_from_params
         result = AccessoryRefundRequest.find_by(id: params.fetch(:id)) if accessory_from_params.present?
-        ActiveRecord::Associations::Preloader.new.preload(result, { staff_member: [:master_venue] }) if result
+        ActiveRecord::Associations::Preloader.new.preload(result, {staff_member: [:master_venue], accessory_request: [:accessory]}) if result
         result
       end
 
