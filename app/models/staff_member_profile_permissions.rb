@@ -47,7 +47,7 @@ class StaffMemberProfilePermissions
   def disciplinaries_tab
     {
       canViewPage: user_ability.can?(:view_disciplinaries_page, staff_member),
-      canCreateDisciplinary: user_ability.can?(:create, :disciplinary),
+      canCreateDisciplinary: user_ability.can?(:create_disciplinaries, staff_member),
       disciplinaries: disciplinaries,
     }
   end
@@ -101,7 +101,7 @@ class StaffMemberProfilePermissions
     result = {}
     @disciplinaries.map do |disciplinary|
       result[disciplinary.id] = {
-        isDisablable: user_ability.can?(:disable, :disciplinary)
+        isDisablable: user_ability.can?(:disable, disciplinary)
       }
     end
     result

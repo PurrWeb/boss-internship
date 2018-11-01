@@ -5,12 +5,15 @@ class DisableDisciplinary
     end
   end
 
-  def initialize(disciplinary:, requester:)
+  def initialize(disciplinary:, requester:, user_ability: UserAbility.new(requester))
     @disciplinary = disciplinary
     @requester = requester
+    @user_ability = user_ability
   end
 
   def call
+    user_ability.authorize!(:disable, disciplinary)
+
     success = false
     ActiveRecord::Base.transaction do
       success = disciplinary.update({ disabled_by_user: requester, disabled_at: Time.zone.now })
@@ -20,5 +23,5 @@ class DisableDisciplinary
   end
 
   private
-  attr_reader :disciplinary, :requester
+  attr_reader :disciplinary, :requester, :user_ability
 end

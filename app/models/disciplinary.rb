@@ -43,6 +43,10 @@ class Disciplinary < ActiveRecord::Base
     expired_at < Time.zone.now
   end
 
+  def disabled?
+    disabled_at != nil && disabled_by_user != nil
+  end
+
   def expired_at
     created_at + EXPIRATION_LIMITS[level]
   end

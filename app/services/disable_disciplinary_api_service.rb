@@ -14,7 +14,7 @@ class DisableDisciplinaryApiService
   attr_reader :requester, :ability, :disciplinary
 
   def call
-    ability.authorize!(:disable, :disciplinary)
+    ability.authorize!(:disable, disciplinary)
 
     model_service_result = DisableDisciplinary.new(
       disciplinary: disciplinary,

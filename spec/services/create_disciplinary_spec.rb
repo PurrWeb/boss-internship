@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe CreateDisciplinary do
-  let(:user) { FactoryGirl.create(:user) }
+RSpec.describe CreateDisciplinary, :disciplinary do
+  let(:user) { FactoryGirl.create(:user, :admin) }
   let(:staff_member) { FactoryGirl.create(:staff_member) }
+  let(:user_and_staff_member_same_person) { FactoryGirl.create(:staff_member, user: user) }
   let(:valid_params) do
     {
       title: 'Title',
@@ -14,7 +15,7 @@ RSpec.describe CreateDisciplinary do
       level: 'first_level'
     }
   end
-  let(:service) { described_class.new(params: params) }
+  let(:service) { described_class.new(params: params, requester: user) }
 
   describe 'before call' do
     it 'no disciplinaries should exist' do
@@ -47,6 +48,18 @@ RSpec.describe CreateDisciplinary do
     it 'should return invalid disciplinary' do
       expect(result.disciplinary).to_not be_valid
     end
+    it 'should not create disciplinary' do
+      expect(Disciplinary.count).to eq(0)
+    end
+  end
+
+  describe 'when user and staff member same person' do
+    let(:params) { valid_params.merge({ staff_member: user_and_staff_member_same_person }) }
+
+    it 'raises cancan access denied error' do
+      expect { service.call }.to raise_error(CanCan::AccessDenied)
+    end
+
     it 'should not create disciplinary' do
       expect(Disciplinary.count).to eq(0)
     end

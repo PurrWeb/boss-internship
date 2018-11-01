@@ -36,8 +36,7 @@ module Api
       end
 
       def create
-        authorize!(:create, :disciplinary)
-
+        # Action authorization happens here
         result = CreateDisciplinaryApiService.new(
           requester: current_user,
           staff_member: staff_member_from_params,
@@ -54,7 +53,7 @@ module Api
             json: {
               disciplinary: Api::V1::StaffMemberProfile::DisciplinarySerializer.new(result.disciplinary),
               permissions: {
-                isDisablable: can?(:disable, :disciplinary)
+                isDisablable: can?(:disable, result.disciplinary)
               }
             },
             status: 200
@@ -65,8 +64,7 @@ module Api
       end
 
       def destroy
-        authorize!(:disable, :disciplinary)
-
+        # Action authorization happens here
         result = DisableDisciplinaryApiService.new(
           requester: current_user,
           disciplinary: disciplinary_from_params,
@@ -77,7 +75,7 @@ module Api
             json: {
               disciplinary: Api::V1::StaffMemberProfile::DisciplinarySerializer.new(result.disciplinary),
               permissions: {
-                isDisablable: can?(:disable, :disciplinary)
+                isDisablable: can?(:disable, result.disciplinary)
               }
             },
             status: 200
