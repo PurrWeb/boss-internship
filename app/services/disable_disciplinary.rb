@@ -5,7 +5,7 @@ class DisableDisciplinary
     end
   end
 
-  def initialize(disciplinary:, requester:, user_ability: UserAbility.new(current_user))
+  def initialize(disciplinary:, requester:, user_ability: UserAbility.new(requester))
     @disciplinary = disciplinary
     @requester = requester
     @user_ability = user_ability
