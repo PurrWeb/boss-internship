@@ -22,14 +22,19 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
       size: "S,M,L,XL,XXL",
     )
   }
+  let(:accessory_request_payslip_date) do
+    RotaShiftDate.to_rota_date(now + 1.week)
+  end
   let(:accessory_request) do
     FactoryGirl.create(:accessory_request,
-                       :completed,
-                       staff_member: staff_member,
-                       accessory_type: accessory.accessory_type,
-                       price_cents: accessory.price_cents,
-                       size: accessory.size,
-                       accessory: accessory)
+      :completed,
+      staff_member: staff_member,
+      payslip_date: accessory_request_payslip_date,
+      accessory_type: accessory.accessory_type,
+      price_cents: accessory.price_cents,
+      size: accessory.size,
+      accessory: accessory
+    )
   end
   let(:reusable) { true }
   let(:now) { Time.current }
@@ -55,7 +60,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
 
   describe "when staff member refund request" do
     before do
-      refund_response
+      response
     end
 
     it ' accessory request status should be completed, refund request should be pending' do
@@ -64,7 +69,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
     end
 
     it ' should return refunded accessory request' do
-      json = JSON.parse(refund_response.body).except("createdAt", "updatedAt", "timeline")
+      json = JSON.parse(response.body).except("createdAt", "updatedAt", "timeline")
       accessory_request = staff_member.accessory_requests.first
       accessory_request_json = json.fetch("accessoryRequest")
       timeline_json = accessory_request_json.fetch("timeline")
@@ -104,7 +109,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
 
     context ' refund request' do
       before do
-        refund_response
+        response
       end
 
       it ' accessory request status should be completed, refund request should be pending' do
@@ -113,7 +118,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
       end
 
       it ' should return refunded accessory request' do
-        json = JSON.parse(refund_response.body).except("createdAt", "updatedAt", "timeline")
+        json = JSON.parse(response.body).except("createdAt", "updatedAt", "timeline")
         accessory_request = staff_member.accessory_requests.first
         accessory_request_json = json.fetch("accessoryRequest")
         timeline_json = accessory_request_json.fetch("timeline")
@@ -133,8 +138,8 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
           "refundPayslipDate" => nil
         })
 
-        expect(timeline_json.count).to eq(6)
-        expected_states = ["pending", 'accepted', 'completed', 'pending', 'rejected', 'pending']
+        expect(timeline_json.count).to eq(4)
+        expected_states = ["pending", 'accepted', 'completed', 'pending']
         expected_states.each_with_index do |expected_state, index|
           timeline_json_record = timeline_json[index]
           expect(timeline_json_record.fetch("state")).to eq(expected_state)

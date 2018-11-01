@@ -59,10 +59,9 @@ RSpec.describe "Staff member cancel accessory requests API endpoint", :accessori
 
     it 'it should return created accessory' do
       json = JSON.parse(cancel_response.body)
-      accessory_request_json = json.except("createdAt", "updatedAt", "timeline")
+      accessory_request_json = json.fetch("accessoryRequest")
       filtered_accessory_request_json = accessory_request_json.
         except("createdAt", "updatedAt", "timeline")
-      time_line_json = json.fetch("timeline")
       expect(filtered_accessory_request_json).to eq({
         "id" => accessory_request.id,
         "hasRefundRequest" => accessory_request.has_refund_request?,
@@ -73,9 +72,10 @@ RSpec.describe "Staff member cancel accessory requests API endpoint", :accessori
         "refundFrozen" => nil,
         "refundPayslipDate" => nil,
         "refundRequestStatus" => nil,
-        "requestFrozen" => nil,
+        "requestFrozen" => false,
       })
 
+      time_line_json = accessory_request_json.fetch("timeline")
       expect(time_line_json.count).to eq(2)
       expect(time_line_json.first.fetch("state")).to eq("pending")
       expect(time_line_json.last.fetch("state")).to eq("canceled")
