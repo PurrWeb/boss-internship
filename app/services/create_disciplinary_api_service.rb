@@ -27,7 +27,7 @@ class CreateDisciplinaryApiService
     # Action authorization happens here
     model_service_result = CreateDisciplinary.new(
       params: disciplinary_params,
-      requester: current_user,
+      requester: requester,
       user_ability: ability,
     ).call
 
