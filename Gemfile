@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "2.3.7"
 
+gem 'dotenv-rails', groups: [:development, :test]
 gem "rails", "~> 4.2.0"
 gem 'mysql2', "~> 0.3.20"
 gem "devise", "~> 3.4.0"

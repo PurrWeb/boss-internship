@@ -140,6 +140,10 @@ GEM
       declarative (>= 0.0.8, < 1.0.0)
       representable (>= 2.4.0, <= 3.1.0)
       uber
+    dotenv (2.5.0)
+    dotenv-rails (2.5.0)
+      dotenv (= 2.5.0)
+      railties (>= 3.2, < 6.0)
     erubis (2.7.0)
     eventmachine (1.0.9)
     excon (0.45.4)
@@ -523,6 +527,7 @@ DEPENDENCIES
   database_cleaner
   devise (~> 3.4.0)
   disposable (~> 0.3.0)
+  dotenv-rails
   eventmachine (= 1.0.9)
   factory-helper
   factory_girl_rails
@@ -585,4 +590,4 @@ RUBY VERSION
    ruby 2.3.7p456
 
 BUNDLED WITH
-   1.16.4
+   1.16.5
