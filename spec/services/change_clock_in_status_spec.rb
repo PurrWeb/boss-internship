@@ -61,10 +61,7 @@ describe ChangeClockInStatus, :clocking do
     end
   end
 
-  describe "Break end time" do
-    let(:now) { day_start + 2.hours }
-    let!(:end_seconds) { 40.seconds }
-
+  describe "HoursAcceptancePeriod creation on clock out" do
     context "before call" do
       it "no clock in periods should exist" do
         expect(ClockInPeriod.count).to eq(0)
@@ -81,6 +78,10 @@ describe ChangeClockInStatus, :clocking do
     end
 
     context "when start break and clock out on the same minute" do
+      let(:nearest_minute) { 10 }
+      let(:now) { (day_start + 2.hours).change(min: nearest_minute) }
+      let(:end_seconds) { 40.seconds }
+
       before do
         clock_in(call_time: day_start)
         start_break(call_time: now)
@@ -102,17 +103,39 @@ describe ChangeClockInStatus, :clocking do
       it "hours acceptance period `ends_at` and hours acceptance break `ends_at` should be rounded to nearest minute" do
         hours_acceptance_period = HoursAcceptancePeriod.last
         hours_acceptance_break = HoursAcceptanceBreak.last
-        expect(hours_acceptance_period.ends_at).to eq(hours_acceptance_break.ends_at)
+        period_ends_at = hours_acceptance_period.ends_at
+        break_ends_at = hours_acceptance_break.ends_at
+
+        expect(period_ends_at.sec).to eq(0)
+        expect(break_ends_at.sec).to eq(0)
+        expect(period_ends_at.min).to eq(nearest_minute)
+        expect(break_ends_at.min).to eq(nearest_minute)
       end
       it "hours acceptance period `ends_at` should not be equal clock in period `ends_at`" do
         hours_acceptance_period = HoursAcceptancePeriod.last
         clock_in_period = ClockInPeriod.last
         expect(hours_acceptance_period.ends_at).to_not eq(clock_in_period.ends_at)
       end
+      it "hours acceptance period `ends_at` minute should be equal clock in period `ends_at` minute" do
+        hours_acceptance_period = HoursAcceptancePeriod.last
+        clock_in_period = ClockInPeriod.last
+        hours_acceptance_period_ends_at = hours_acceptance_period.ends_at
+        clock_in_period_ends_at = clock_in_period.ends_at
+
+        expect(hours_acceptance_period_ends_at.min).to eq(clock_in_period_ends_at.min)
+      end
       it "hours acceptance break `ends_at` should not be equal clock in break `ends_at`" do
         clock_in_break = ClockInBreak.last
         hours_acceptance_break = HoursAcceptanceBreak.last
         expect(hours_acceptance_break.ends_at).to_not eq(clock_in_break.ends_at)
+      end
+      it "hours acceptance break `ends_at` minute should be equal clock in break `ends_at` minute" do
+        hours_acceptance_break = HoursAcceptanceBreak.last
+        clock_in_break = ClockInBreak.last
+        hours_acceptance_break_ends_at = hours_acceptance_break.ends_at
+        clock_in_break_ends_at = clock_in_break.ends_at
+
+        expect(hours_acceptance_break_ends_at.min).to eq(clock_in_break_ends_at.min)
       end
       it "hours acceptance period `ends_at` should should have diffrence with clock in period `ends_at`" do
         hours_acceptance_period = HoursAcceptancePeriod.last
