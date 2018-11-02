@@ -32,7 +32,8 @@ class Holiday < ActiveRecord::Base
   attr_accessor :validate_as_creation, :source_request, :validate_as_assignment
 
   def requires_finance_report?
-    staff_member.present? &&
+    !allow_no_finance_report &&
+      staff_member.present? &&
       staff_member.can_have_finance_reports? &&
       paid?
   end
