@@ -1,4 +1,8 @@
 class HoursAcceptancePeriodTimeOverlapValidator
+  OVERLAPPING_PERIOD_VALIDATION_MESSAGE = 'period overlaps existing period'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'conflicting owed hour exists'
+  CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE = 'conflicting holidays exist'
+
   def initialize(period)
     @period = period
   end
@@ -33,7 +37,7 @@ class HoursAcceptancePeriodTimeOverlapValidator
         end
 
         if query.count > 0
-          period.errors.add(:base, 'period overlaps existing period')
+          period.errors.add(:base, OVERLAPPING_PERIOD_VALIDATION_MESSAGE)
         end
       end
 
@@ -45,7 +49,7 @@ class HoursAcceptancePeriodTimeOverlapValidator
         ).all
 
         if conflicting_owed_hours.count > 0
-          period.errors.add(:base, 'conflicting owed hour exists')
+          period.errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
         end
       end
 
@@ -57,7 +61,7 @@ class HoursAcceptancePeriodTimeOverlapValidator
         ).all
 
         if conflicting_holidays.count > 0
-          period.errors.add(:base, 'conflicting holidays exist')
+          period.errors.add(:base, CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE)
         end
       end
     end

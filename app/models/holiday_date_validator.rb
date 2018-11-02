@@ -1,4 +1,9 @@
 class HolidayDateValidator
+  CONFLICTING_HOURS_VALIDATION_MESSAGE = 'Staff member has hours accepted for the day in question'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'Staff member is assigned owed hours on one of these days'
+  CONFLICTING_ROTA_SHIFT_VALIDATION_MESSAGE = 'Staff member is assigned shifts on one of these days'
+  CONFLICTING_HOLIDAY_REQUEST_VALIDATION_MESSAGE = 'Holiday conflicts with an existing holiday request'
+  CONFLICTING_HOLIDAY_VALIDATION_MESSAGE = 'Holiday conflicts with an existing holiday'
   DATE_IN_PAST_CREATION_VALIDATION_MESSAGE = "can't be changed to date in the past"
 
   def initialize(holiday)
@@ -44,7 +49,7 @@ class HolidayDateValidator
         ).all
 
         if overlapping_holidays_exclusive.present?
-          holiday.errors.add(:base, 'Holiday conflicts with an existing holiday')
+          holiday.errors.add(:base, CONFLICTING_HOLIDAY_VALIDATION_MESSAGE)
         end
       end
 
@@ -68,7 +73,7 @@ class HolidayDateValidator
         ).all
 
         if overlapping_holiday_requests.present? && !holiday.validate_as_assignment
-          holiday.errors.add(:base, 'Holiday conflicts with an existing holiday request')
+          holiday.errors.add(:base, CONFLICTING_HOLIDAY_REQUEST_VALIDATION_MESSAGE)
         end
       end
 
@@ -80,7 +85,7 @@ class HolidayDateValidator
         ).all
 
         if conflicting_shifts.present?
-          holiday.errors.add(:base, 'Staff member is assigned shifts on one of these days')
+          holiday.errors.add(:base, CONFLICTING_ROTA_SHIFT_VALIDATION_MESSAGE)
         end
       end
 
@@ -94,7 +99,7 @@ class HolidayDateValidator
         ).all
 
         if conflicting_owed_hours.present?
-          holiday.errors.add(:base, 'Staff member is assigned owed hours on one of these days')
+          holiday.errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
         end
       end
 
@@ -110,7 +115,7 @@ class HolidayDateValidator
         ).all
 
         if conflicting_hours_acceptance_periods.present?
-          holiday.errors.add(:base, 'Staff member has hours accepted for the day in question')
+          holiday.errors.add(:base, CONFLICTING_HOURS_VALIDATION_MESSAGE)
         end
       end
     end

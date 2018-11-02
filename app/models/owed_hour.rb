@@ -1,4 +1,9 @@
 class OwedHour < ActiveRecord::Base
+  CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE = 'conflicting holiday exists'
+  CONFLICTING_HOLIDAY_REQUESTS_VALIDATION_MESSAGE = 'conflicting holiday request exists'
+  CONFLICTING_HAP_PERIOD_VALIDATION_MESSAGE = 'conflicting hour acceptance exists'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'conflicting owed hour exists'
+
   belongs_to :staff_member
   belongs_to :creator, class_name: 'User', foreign_key: :creator_user_id
   belongs_to :parent, class_name: 'OwedHour', foreign_key: :parent_owed_hour_id
@@ -96,7 +101,7 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_owed_hours.count > 0
-        errors.add(:base, 'conflicting owed hour exists')
+        errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
       end
     end
 
@@ -110,7 +115,7 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_holidays.count > 0
-        errors.add(:base, 'conflicting holiday exists')
+        errors.add(:base, CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE)
       end
     end
 
@@ -124,7 +129,7 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_holiday_requests.count > 0
-        errors.add(:base, 'conflicting holiday request exists')
+        errors.add(:base, CONFLICTING_HOLIDAY_REQUESTS_VALIDATION_MESSAGE)
       end
     end
 
@@ -141,7 +146,7 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_hours_acceptances.count > 0
-        errors.add(:base, 'conflicting hour acceptance exists')
+        errors.add(:base, CONFLICTING_HAP_PERIOD_VALIDATION_MESSAGE)
       end
     end
   end
