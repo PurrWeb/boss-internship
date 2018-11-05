@@ -15,11 +15,7 @@ class HoursOverviewController < ApplicationController
       date: date
     )
 
-    staff_venues = if current_user.has_all_venue_access?
-      Venue.all
-    else
-      current_user.venues
-    end
+    venues = Venue.all
 
     clock_in_notes = ClockInNote.
       joins(:clock_in_day).
@@ -80,8 +76,8 @@ class HoursOverviewController < ApplicationController
     end
     render(
       locals: {
-        venues: staff_venues,
-        venue: staff_venues[0],
+        venues: venues,
+        venue: venues[0],
         access_token: access_token,
         clock_in_breaks: clock_in_breaks,
         clock_in_notes: clock_in_notes,
