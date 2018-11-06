@@ -26,7 +26,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   validates :finance_report, presence: true, if: :requires_finance_report?
   validate :finance_repot_matches_date
 
-  include PeriodTimeValidations
+  include HoursAcceptancePeriodTimeValidations
 
   def requires_finance_report?
     staff_member.present? &&

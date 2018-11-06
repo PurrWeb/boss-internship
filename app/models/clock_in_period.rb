@@ -8,7 +8,7 @@ class ClockInPeriod < ActiveRecord::Base
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :starts_at, presence: true
-  include PeriodTimeValidations
+  include ClockInPeriodTimeValidations
 
   delegate :venue, :date, :staff_member, :clock_in_notes, to: :clock_in_day
 

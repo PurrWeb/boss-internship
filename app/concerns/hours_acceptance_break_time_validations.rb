@@ -1,9 +1,10 @@
-module BreakTimeValidations
+module HoursAcceptanceBreakTimeValidations
   extend ActiveSupport::Concern
 
   included do
     validate :times_in_correct_order
     validate :times_within_correct_day
+    validate :ends_at_doesn_have_seconds
     validate do |_break|
       BreakTimeOverlapValidator.new(_break: _break, break_class: _break.class, period_association: period_association).validate
     end
@@ -20,6 +21,12 @@ module BreakTimeValidations
       :hours_acceptance_period
     else
       raise "unsupported break type: #{self.class.name}"
+    end
+  end
+
+  def ends_at_doesn_have_seconds
+    if starts_at.present? && ends_at.present?
+      errors.add(:ends_at, "shouldn't have a seconds") if ends_at.sec > 0
     end
   end
 
