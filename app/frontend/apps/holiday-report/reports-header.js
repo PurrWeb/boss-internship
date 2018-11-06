@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import Popover from 'react-popover';
 import utils from '~/lib/utils';
 import { createHoliday } from './actions';
-import WeekAndVenueSelector from "~/components/week-and-venue-selector";
 import WeekPicker from "~/components/week-picker";
 import openModal from './boss-modal';
 import AddHoliday from './add-holiday';
