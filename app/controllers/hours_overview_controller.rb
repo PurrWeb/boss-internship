@@ -17,6 +17,8 @@ class HoursOverviewController < ApplicationController
 
     venues = Venue.all
 
+    accessible_venues = AccessibleVenuesQuery.new(current_user).all
+
     clock_in_notes = ClockInNote.
       joins(:clock_in_day).
       merge(staff_clock_in_days)
@@ -24,7 +26,7 @@ class HoursOverviewController < ApplicationController
     staff_clock_in_days = staff_clock_in_days.
       includes([:venue, :staff_member, :hours_acceptance_periods])
 
-    hours_confirmation_page_data = HoursConfirmationPageDataQuery.new(staff_clock_in_days, staff_venues).query
+    hours_confirmation_page_data = HoursConfirmationPageDataQuery.new(staff_clock_in_days, accessible_venues).query
 
     rotas = Rota.
       where(
