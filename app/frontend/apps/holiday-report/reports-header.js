@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import { appRoutes } from '~/lib/routes';

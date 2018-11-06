@@ -5,7 +5,6 @@ import _ from 'lodash';
 import { List, Map } from 'immutable';
 
 const BossFormSelect = ({
-<<<<<<< HEAD
   label,
   className,
   options,
