@@ -4,6 +4,7 @@ import humanize from 'string-humanize';
 import _ from 'lodash';
 import { List, Map } from 'immutable';
 import {httpWithoutNotify} from '~/lib/request-api';
+import oFetch from 'o-fetch';
 
 class BossFormStaffmemberSelect extends React.PureComponent{
   state = {
@@ -22,7 +23,7 @@ class BossFormStaffmemberSelect extends React.PureComponent{
     if (typeof this.props.extraOption === 'function') {
       extra = this.props.extraOption(option);
     }
-    
+
     return {
       value: option[value || 'value'],
       label: normalizedLabel || option[label || 'label'],
@@ -43,12 +44,13 @@ class BossFormStaffmemberSelect extends React.PureComponent{
       }
     });
   }
-  
+
   loadOptions = (query, {label, value}) => {
     if (!query) {
 			return;
 		} else {
-      httpWithoutNotify().get('/api/v1/staff_members', {
+      const queryUrl = oFetch(this.props, 'queryUrl');
+      httpWithoutNotify().get(queryUrl, {
         params: {
           query: query,
           venue_id: this.props.venueId,

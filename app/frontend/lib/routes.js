@@ -317,6 +317,9 @@ export const appRoutes = {
         const { cardNumber } = options;
         return `/wtl_cards${cardNumber ? `?card_number=${cardNumber}` : ''}`;
     },
+    addHolidayStaffMembers() {
+        return '/api/v1/holidays/add_holiday_staff_members';
+    }
 }
 
 const apiRoutes = {
