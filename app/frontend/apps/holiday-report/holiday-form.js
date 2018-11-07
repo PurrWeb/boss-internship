@@ -7,7 +7,7 @@ import {
   BossFormStaffmemberSelect,
 } from '~/components/boss-form';
 
-import { appRoutes } from '~/lib/routes';
+import { apiRoutes } from '~/lib/routes';
 
 import {
   ImageOption,
@@ -54,7 +54,7 @@ class HolidayForm extends React.PureComponent {
             required
             venueId={this.props.venueId}
             label="Staff member"
-            queryUrl={appRoutes.addHolidayStaffMembers()}
+            requestRoute={apiRoutes.addHolidayStaffMembers}
             clearable={false}
             normalizeLabel={(option) => `${option.first_name} ${option.surname}`}
             optionValue="id"

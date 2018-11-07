@@ -49,13 +49,11 @@ class BossFormStaffmemberSelect extends React.PureComponent{
     if (!query) {
 			return;
 		} else {
-      const queryUrl = oFetch(this.props, 'queryUrl');
-      httpWithoutNotify().get(queryUrl, {
-        params: {
-          query: query,
-          venue_id: this.props.venueId,
-        }
-      }).then(resp => {
+      const { getPath, method } = oFetch(this.props, 'requestRoute');
+      const venueId = oFetch(this.props, 'venueId');
+      const url = getPath({ query, venueId });
+
+      httpWithoutNotify()({ method, url }).then(resp => {
         this.setState({isLoading: false, options: this.getOptions(resp.data, {label, value})})
       });
     }
