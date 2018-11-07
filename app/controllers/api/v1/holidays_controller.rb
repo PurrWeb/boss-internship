@@ -153,6 +153,14 @@ module Api
         end
       end
 
+      def add_holiday_staff_members
+        filtered_staff_members = AddHolidayStaffMembersQuery
+          .new(requester: current_user)
+          .all(query: name_filter_params, venue: venue_from_params)
+
+        render json: filtered_staff_members, each_serializer: Api::V1::Holidays::StaffMemberSearchSerializer, status: 200
+      end
+
       def holidays_count
         staff_member = StaffMember.find(params.fetch(:staff_member_id))
         tax_year = TaxYear.new(RotaShiftDate.to_rota_date(Time.current))
@@ -188,6 +196,18 @@ module Api
           holiday_type: params.fetch(:holiday_type),
           note: params[:note]
         }
+      end
+
+      def accessible_venues
+        AccessibleVenuesQuery.new(current_user).all
+      end
+
+      def venue_from_params
+        accessible_venues.find_by(id: params[:venue_id])
+      end
+
+      def name_filter_params
+        params.fetch(:query)
       end
 
       def holiday_update_params
