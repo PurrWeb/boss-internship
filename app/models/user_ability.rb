@@ -393,19 +393,18 @@ class UserAbility
       end
 
       can [:view], Holiday do |holiday|
-        can_view_holiday?(user, holiday)
+        can_view_holiday?(user, holiday.staff_member)
       end
 
-      can [:create], Holiday do |holiday|
-        staff_member = holiday.staff_member
-        staff_member.on_hourly_pay_rate? && can_view_holiday?(user, holiday)
+      can [:create_holiday], StaffMember do |staff_member|
+        staff_member.on_hourly_pay_rate? && can_view_holiday?(user, staff_member)
       end
 
       can [:update, :destroy], Holiday do |holiday|
         if holiday.created_from_request?
           holiday.holiday_request.creator != user && can_view_holidays_requests_page?(user)
         else
-          can_view_holiday?(user, holiday)
+          can_view_holiday?(user, holiday.staff_member)
         end
       end
 
@@ -680,10 +679,10 @@ class UserAbility
       user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
   end
 
-  def can_view_holiday?(user, holiday)
+  def can_view_holiday?(user, staff_member)
     user.food_ops_manager? ||
     user.payroll_manager? ||
-      can_edit_staff_member?(user, holiday.staff_member)
+      can_edit_staff_member?(user, staff_member)
   end
 
   def can_view_shift_requests_page?(user)
