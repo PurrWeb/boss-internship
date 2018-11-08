@@ -1,6 +1,6 @@
 class ProcessLegacyOwedHours < ActiveRecord::Migration
   def call(owed_hours_relation:, now: Time.current)
-    owed_hours_relation.find_each do |owed_hour|
+    owed_hours_relation.each do |owed_hour|
       if owed_hour.valid?
         owed_hour.update_attributes!(
           processed_for_legacy_validation_at: now,

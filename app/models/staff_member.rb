@@ -49,6 +49,7 @@ class StaffMember < ActiveRecord::Base
   has_many :owed_hours, inverse_of: :staff_member
   has_many :disciplinaries, inverse_of: :staff_member
   has_many :staff_member_transitions, autosave: false
+  has_many :hours_acceptance_periods, through: :clock_in_days
 
   belongs_to :pay_rate
 

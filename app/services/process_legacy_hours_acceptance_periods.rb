@@ -1,6 +1,6 @@
 class ProcessLegacyHoursAcceptancePeriods < ActiveRecord::Migration
   def call(hours_acceptance_periods_relation:, now: Time.current)
-    hours_acceptance_periods_relation.find_each do |hours_acceptance_period|
+    hours_acceptance_periods_relation.each do |hours_acceptance_period|
       if hours_acceptance_period.valid?
         hours_acceptance_period.update_attributes!(
           processed_for_legacy_validation_at: now,

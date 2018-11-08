@@ -1,6 +1,6 @@
 class ProcessLegacyHolidays < ActiveRecord::Migration
   def call(holidays_relation:, now: Time.current)
-    holidays_relation.find_all do |holiday|
+    holidays_relation.each do |holiday|
       if holiday.valid?
         holiday.update_attributes!(
           processed_for_legacy_validation_at: now,

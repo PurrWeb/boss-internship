@@ -32,9 +32,10 @@ class HolidayDateValidator
     return if date_validations_failed
 
     if dates_present? && holiday.staff_member.present?
-      staff_member_holidays = Holiday.
-        in_state(:enabled).
-        where(staff_member: holiday.staff_member)
+      staff_member_holidays = holiday.
+        staff_member.
+        holidays.
+        in_state(:enabled)
 
       if !holiday.allow_legacy_conflicting_holiday?
         overlapping_holidays = HolidayInRangeQuery.new(
@@ -54,9 +55,10 @@ class HolidayDateValidator
       end
 
       if !holiday.allow_legacy_conflicting_holiday_request?
-        staff_member_holiday_requests = HolidayRequest.
-          in_state(:pending).
-          where(staff_member: holiday.staff_member)
+        staff_member_holiday_requests = holiday.
+          staff_member.
+          holiday_requests.
+          in_state(:pending)
 
         if holiday.source_request.present?
           # Ignore request holiday will be replacing
@@ -105,9 +107,7 @@ class HolidayDateValidator
 
       if !holiday.allow_legacy_overlap_accepted_hours?
         conflicting_hours_acceptance_periods = InRangeQuery.new(
-          relation: HoursAcceptancePeriod.where(
-            clock_in_day: holiday.staff_member.clock_in_days
-          ).accepted,
+          relation: holiday.staff_member.hours_acceptance_periods.accepted,
           start_value: RotaShiftDate.new(holiday.start_date).start_time,
           end_value: RotaShiftDate.new(holiday.end_date).end_time,
           start_column_name: 'starts_at',
