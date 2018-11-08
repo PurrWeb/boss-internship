@@ -24,7 +24,7 @@ class StaffMemberProfilePermissions
 
   def holidays_tab
     {
-      canCreateHolidays: user_ability.can?(:create, Holiday.new(staff_member: staff_member)),
+      canCreateHolidays: user_ability.can?(:create_holiday, staff_member),
       holidays: holidays,
       holidayRequests: holiday_requests
     }

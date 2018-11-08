@@ -1,5 +1,6 @@
 import _ from "underscore"
 import { objectHasBeenProcessed, processBackendObject, processObjectLinks, getClientId } from "./process-backend-object.js"
+import safeMoment from '~/lib/safe-moment';
 
 export function processRotaObject(rota){
     var newRota = processBackendObject(rota);
@@ -106,6 +107,15 @@ export function processRotaShiftObject(shift){
 
 export function processHolidayObject(holiday){
     return processBackendObject(holiday);
+}
+
+export function processHolidayObjectV2(holiday){
+    holiday = processBackendObject(holiday);
+    return Object.assign({}, holiday, {
+        created_by: holiday.creator,
+        start_date: safeMoment.uiDateParse(holiday.start_date).toDate(),
+        end_date: safeMoment.uiDateParse(holiday.end_date).toDate()
+    })
 }
 
 export function processRotaForecastObject(rotaForecast){

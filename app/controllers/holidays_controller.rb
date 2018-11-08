@@ -60,7 +60,7 @@ class HolidaysController < ApplicationController
     staff_member = query.first
     raise ActiveRecord::RecordNotFound.new unless staff_member.present?
 
-    authorize! :create, Holiday.new(staff_member: staff_member)
+    authorize! :create_holiday, staff_member
 
     result = CreateHoliday.new(
       requester: current_user,

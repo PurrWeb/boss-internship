@@ -35,6 +35,10 @@ export default class ReportsBody extends React.Component {
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({staffMemberCollection: Object.values(newProps.staffMembers)});
+  }
+
   staffTypeOptions() {
     return _.map(Object.values(this.props.staffTypes), (staffType) => {
       return {

@@ -125,7 +125,7 @@
     "react-router-dom": "^4.2.2",
     "react-rte": "^0.14.2",
     "react-scroll": "^1.5.2",
-    "react-select": "^1.0.0-rc.3",
+    "react-select": "^1.1.0",
     "react-spinner": "^0.2.7",
     "react-tabs": "^1.1.0",
     "react-tag-input": "^4.7.2",

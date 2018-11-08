@@ -11,9 +11,10 @@ const BossFormSelect = ({
   optionValue,
   optionLabel,
   normalizeLabel,
+  extraOption,
   required,
-  multi,
-  placeholder,
+  multi = false,
+  placeholder = 'Select ...',
   disabled,
   clearable = true,
   valueComponent = undefined,
@@ -26,15 +27,21 @@ const BossFormSelect = ({
 }) => {
   const getItemOption = (option, { value, label }) => {
     let normalizedLabel = null;
+    let extra = {};
 
     if (typeof normalizeLabel === 'function') {
       normalizedLabel = normalizeLabel(option);
+    }
+
+    if (typeof extraOption === 'function') {
+      extra = extraOption(option);
     }
 
     return {
       ...option,
       value: option[value || 'value'],
       label: normalizedLabel || option[label || 'label'],
+      ...extra
     };
   };
 
@@ -96,11 +103,12 @@ const BossFormSelect = ({
           clearable={clearable}
           ignoreCase
           disabled={disabled}
+          clearable={clearable}
           valueComponent={valueComponent}
           optionComponent={optionComponent}
-          placeholder={placeholder || 'Select ...'}
+          placeholder={placeholder}
           value={getValue(value)}
-          multi={multi || false}
+          multi={multi}
         />
       </div>
       {touched &&

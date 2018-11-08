@@ -52,7 +52,7 @@ class HolidayApiService
   end
 
   def create(params)
-    assert_action_permitted(:create)
+    assert_action_permitted(:create_holiday)
 
     holiday_params = {
       start_date: UIRotaDate.parse_if_present(params.fetch(:start_date)),
@@ -76,8 +76,8 @@ class HolidayApiService
   private
   def assert_action_permitted(action)
     case action
-    when :create
-      ability.authorize!(:create, holiday)
+    when :create_holiday
+      ability.authorize!(:create_holiday, holiday.staff_member)
     when :update
       ability.authorize!(:update, holiday)
     when :destroy

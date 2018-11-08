@@ -14,3 +14,4 @@ export BossFormTextArea from './boss-form-textarea';
 export BossFormTagInput from './boss-form-tag-input';
 export BossFormSwitcher from './boss-form-switcher';
 export BossFormDaterangePicker from './boss-form-daterange-picker';
+export BossFormStaffmemberSelect from './boss-form-staffmember-select';

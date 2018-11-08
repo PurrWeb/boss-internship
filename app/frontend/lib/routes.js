@@ -1,6 +1,7 @@
 import utils from "~/lib/utils"
 import moment from "moment"
 import oFetch from "o-fetch"
+import queryString from 'query-string';
 
 var staffMemberPaymentsAppPath = (staffMemberId, queryStringParams) => {
     if (staffMemberId === undefined) {
@@ -320,6 +321,13 @@ export const appRoutes = {
 }
 
 const apiRoutes = {
+    addHolidayStaffMembers: {
+        getPath: function({query, venueId}) {
+            const urlQuery = queryString.stringify({ query, venue_id: venueId });
+            return `/api/v1/holidays/add_holiday_staff_members?${urlQuery}`;
+        },
+        method: 'GET',
+    },
     dashboardMessages: {
         getPath: function() {
             return '/api/v1/dashboard_messages';

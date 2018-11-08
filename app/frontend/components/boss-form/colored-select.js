@@ -140,37 +140,113 @@ export class ColoredOption extends React.Component {
   }
 }
 
+@option
 export class ColoredSingleOption extends React.Component {
-  handleMouseDown = event => {
-    event.preventDefault();
-    event.stopPropagation();
-    this.props.onSelect(this.props.option, event);
-  };
-
-  handleMouseEnter = event => {
-    this.props.onFocus(this.props.option, event);
-  };
-
-  handleMouseMove = event => {
-    if (this.props.isFocused) return;
-    this.props.onFocus(this.props.option, event);
-  };
-
   render() {
     return (
-      <div
-        className={this.props.className}
-        onMouseDown={this.handleMouseDown}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseMove={this.handleMouseMove}
-        title={this.props.option.title}
-      >
-        <span
-          className="Select-color-indicator"
-          style={{ backgroundColor: this.props.option.color }}
-        />
-        {this.props.children}
+      <div>
+        <span className="Select-color-indicator" style={{backgroundColor: this.props.option.color}}></span>
+        <span>{this.props.option.label}</span>
       </div>
-    );
+    )
+  }
+}
+
+function option(Component) {
+  return class Option extends React.Component {
+    handleMouseDown = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.props.onSelect(this.props.option, event);
+    }
+
+    handleMouseEnter = (event) => {
+      this.props.onFocus(this.props.option, event);
+    }
+
+    handleMouseMove = (event) => {
+      if (this.props.isFocused) return;
+      this.props.onFocus(this.props.option, event);
+    }
+
+    render() {
+      return (
+        <div
+          className={this.props.className}
+          onMouseDown={this.handleMouseDown}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseMove={this.handleMouseMove}
+          title={this.props.option.title}
+        >
+          <Component {...this.props}/>
+        </div>
+      )
+    }
+  }
+}
+
+function value(Component) {
+  return class Value extends React.Component {
+    handleMouseDown = (event) => {
+      if (event.type === 'mousedown' && event.button !== 0) {
+        return;
+      }
+      if (this.props.onClick) {
+        event.stopPropagation();
+        this.props.onClick(this.props.value, event);
+        return;
+      }
+      if (this.props.value.href) {
+        event.stopPropagation();
+      }
+    }
+
+    handleTouchEndRemove = (event) => {
+      if(this.dragging) return;
+      this.onRemove(event);
+    }
+
+    handleTouchMove = (event) => {
+      this.dragging = true;
+    }
+
+    handleTouchStart = (event) => {
+      this.dragging = false;
+    }
+
+    render() {
+      return (
+        <div className="Select-value">
+          <Component {...this.props} />
+        </div>
+      )
+    }
+  }
+}
+
+@option
+export class ImageOption extends React.Component {
+  render() {
+    return (
+      <span className="Select-staff-member">
+        <span className="Select-staff-member-avatar">
+          <img src={this.props.option.image} alt=""/>
+        </span>
+        <span className="Select-staff-member-name">{this.props.option.label}</span>
+      </span>
+    )
+  }
+}
+@value
+export class ImageValue extends React.Component {
+  render() {
+    return (
+      <span className="Select-staff-member">
+        <span className="Select-staff-member-avatar">
+          <img src={this.props.value.image} alt=""/>
+        </span>
+        <span className="Select-staff-member-name">{this.props.value.label}</span>
+      </span>
+    )
   }
 }

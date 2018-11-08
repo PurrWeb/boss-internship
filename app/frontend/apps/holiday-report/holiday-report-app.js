@@ -1,39 +1,20 @@
 import React, { Component } from 'react'
 import { Provider } from "react-redux"
 import {createStore, compose } from "redux"
-import utils from "~/lib/utils"
 import HolidayReportView from './holiday-report-view'
-import actionCreators from "~/redux/actions"
-import oFetch from "o-fetch"
-import { processHolidayAppViewData } from "~/lib/backend-data/process-backend-objects"
+import reducers from './reducers';
+import configureStore from '~/apps/store';
+import oFetch from 'o-fetch';
+
+import {
+  initialLoad,
+} from './actions'
 
 export default class HolidayReportApp extends Component {
     componentWillMount(){
-        const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-        var data = this.getViewData();
-        data = processHolidayAppViewData(data);
-
-        var staffTypes = oFetch(data, "staffTypes");
-        var staffMembers = oFetch(data, "staffMembers");
-        var holidays = oFetch(data, "holidays");
-        var venues = oFetch(data, "venues");
-        var pageData = oFetch(data, "pageData");
-        var holidaysCount = oFetch(data, "holidaysCount");
-        var staffMembersCount = oFetch(data, "staffMembersCount");
-        this.store = createStore(function(){
-            return {
-                staffTypes: utils.indexByClientId(staffTypes),
-                staffMembers: utils.indexByClientId(staffMembers),
-                holidays: utils.indexByClientId(holidays),
-                venues: utils.indexByClientId(venues),
-                pageOptions: pageData,
-                holidaysCount,
-                staffMembersCount
-            }
-        },
-        composeEnhancers()
-      );
+      this.store = {};
+      this.store = configureStore(reducers);
+      this.store.dispatch(initialLoad(this.getViewData()));
     }
     getViewData(){
         if (this.props.viewData) {

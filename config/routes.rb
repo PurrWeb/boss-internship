@@ -455,9 +455,13 @@ Rails.application.routes.draw do
             resources :rota_shifts, only: [:create]
           end
         end
-        resources :holidays, only: :show
+        resources :holidays, only: [:show] do
+          collection do
+            get :add_holiday_staff_members
+          end
+        end
         resources :holiday_reports, only: :index
-        resources :staff_members, only: [:show, :create] do
+        resources :staff_members, only: [:index, :show, :create] do
           post :send_app_download_email
           post :send_verification
           post :resend_verification

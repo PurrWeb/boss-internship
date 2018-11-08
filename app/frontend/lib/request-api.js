@@ -1,16 +1,24 @@
 import axios from 'axios';
 import notify from '~/components/global-notification';
 
-export default function http({ ...messages }, interval) {
-  const { successMessage, errorMessage, showNotification = true } = messages;
-
+function getInstance() {
   if (!window.boss.accessToken) {
     throw Error('Access token must be present !!!');
   }
 
-  let instance = axios.create({
+  return axios.create({
     headers: { Authorization: `Token token="${window.boss.accessToken}"` },
   });
+}
+
+export function httpWithoutNotify() {
+  return getInstance();
+}
+
+export default function http({...messages}, interval) {
+  const { successMessage, errorMessage, showNotification = true } = messages;
+
+  const instance = getInstance();
 
   if (showNotification) {
     instance.interceptors.response.use(
