@@ -4,23 +4,23 @@ describe ReviveStaffMember do
   let(:requester) { FactoryGirl.create(:user) }
   let(:sage_id) { 'SAGE_ID' }
   let(:today) { Time.current.to_date - 2.days}
+  let(:starts_at) { today - 3.weeks }
   let(:staff_member) do
     FactoryGirl.create(
       :staff_member,
       :disabled,
       sage_id: sage_id,
-      starts_at: today - 3.weeks,
+      starts_at: starts_at,
     )
   end
   let(:new_starts_at) { today - 1.day }
-  let(:staff_member_params) do
-    { starts_at: new_starts_at }
-  end
+  let(:system_user) { FactoryGirl.create(:user) }
   let(:service) do
     ReviveStaffMember.new(
       requester: requester,
       staff_member: staff_member,
-      starts_at: starts_at,
+      starts_at: new_starts_at,
+      system_user: system_user,
     )
   end
 
@@ -43,24 +43,32 @@ describe ReviveStaffMember do
       allow(staff_member).to(
         receive(:assign_attributes)
       )
-      allow(staff_member).to receive(:starts_at_changed?).and_return(true)
+      allow(staff_member).to receive(:starts_at_changed?).and_return(starts_at_changed)
       allow(staff_member).to receive(:save).and_return(update_result)
     end
 
     context "when update is successful" do
       let(:update_result) { true }
+      let(:starts_at_changed) { true }
 
       specify 'sage id is cleared' do
-        expect(staff_member).to receive(:sage_id=).with(nil)
+        expect(staff_member).to receive(:sage_id=).with(nil).ordered
+        expect(staff_member).to receive(:save).ordered.and_return(true).ordered
         service.call
       end
 
-      specify 'staff member is updated' do
+      specify 'staff member is marked retake avatar' do
+        expect(staff_member).to receive(:marked_retake_avatar_user=).with(system_user)
+        expect(staff_member).to receive(:save).ordered.and_return(true).ordered
+        service.call
+      end
+
+      specify 'staff member supplied starts at' do
         expect(staff_member).to(
           receive(:assign_attributes).
-            with(starts_at: starts_at)
-        )
-        expect(staff_member).to receive(:save).and_return(true)
+            with(starts_at: new_starts_at)
+        ).ordered
+        expect(staff_member).to receive(:save).ordered.and_return(true)
         service.call
       end
 
@@ -83,6 +91,9 @@ describe ReviveStaffMember do
       end
 
       context 'when start_at is not updated' do
+        let(:new_starts_at) { starts_at }
+        let(:starts_at_changed) { false }
+
         specify 'staff member is not enabled' do
           service.call
           expect(staff_member.reload).to_not be_enabled
@@ -96,6 +107,7 @@ describe ReviveStaffMember do
 
       context "when save is unsuccessful" do
         let(:update_result) { false }
+        let(:starts_at_changed) { true }
 
         specify "staff member is not enabled" do
           service.call
@@ -105,33 +117,6 @@ describe ReviveStaffMember do
         specify 'sage id is still set' do
           service.call
           expect(staff_member.reload.sage_id).to eq(sage_id)
-        end
-      end
-
-      context 'when staff member is marked as retake photo' do
-        before do
-          MarkRetakeAvatar.new(requester: requester, staff_member: staff_member).call
-        end
-
-        context 'before call' do
-          it 'should be marked as retake' do
-            expect(staff_member).to be_marked_retake_avatar
-          end
-        end
-
-        context 'after call' do
-          let(:staff_member_params) do
-            { starts_at: today }
-          end
-
-          specify 'should fail' do
-            expect(service.call.success?).to eq(false)
-          end
-
-          specify 'should ask for avatar' do
-            service.call
-            expect(staff_member.errors[:avatar]).to eq(["must change when reactivating staff member"])
-          end
         end
       end
     end
