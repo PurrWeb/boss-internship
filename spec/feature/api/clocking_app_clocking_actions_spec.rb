@@ -206,8 +206,11 @@ RSpec.describe 'Clocking App Clocking actions' do
         hours_acceptance_period = HoursAcceptancePeriod.last
 
         expect(hours_acceptance_period.clock_in_day).to eq(clock_in_period.clock_in_day)
-        expect(hours_acceptance_period.starts_at).to eq(clock_in_period.starts_at)
-        expect(hours_acceptance_period.ends_at).to eq(clock_in_period.ends_at)
+        rounded_clock_in_period_starts_at =  clock_in_period.starts_at.change(sec: 0)
+        expect(hours_acceptance_period.starts_at).to eq(rounded_clock_in_period_starts_at)
+
+        rounded_clock_in_period_ends_at = clock_in_period.ends_at.change(sec: 0)
+        expect(hours_acceptance_period.ends_at).to eq(rounded_clock_in_period_ends_at)
       end
     end
 
