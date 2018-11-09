@@ -4,7 +4,8 @@ module HoursAcceptanceBreakTimeValidations
   included do
     validate :times_in_correct_order
     validate :times_within_correct_day
-    validate :ends_at_doesn_have_seconds
+    validate :ends_at_is_minute
+    validate :starts_at_is_minute
     validate do |_break|
       BreakTimeOverlapValidator.new(_break: _break, break_class: _break.class, period_association: period_association).validate
     end
@@ -24,9 +25,15 @@ module HoursAcceptanceBreakTimeValidations
     end
   end
 
-  def ends_at_doesn_have_seconds
-    if starts_at.present? && ends_at.present?
-      errors.add(:ends_at, "shouldn't have a seconds") if ends_at.sec > 0
+  def starts_at_is_minute
+    if starts_at.present?
+      errors.add(:starts_at, "must be a minute") if starts_at.sec > 0
+    end
+  end
+
+  def ends_at_is_minute
+    if ends_at.present?
+      errors.add(:ends_at, "must be a minute") if ends_at.sec > 0
     end
   end
 
