@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181109132743) do
+ActiveRecord::Schema.define(version: 20181109133907) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
