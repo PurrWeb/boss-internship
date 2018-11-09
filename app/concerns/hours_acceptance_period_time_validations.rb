@@ -18,13 +18,13 @@ module HoursAcceptancePeriodTimeValidations
   end
 
   def starts_at_is_minute
-    if starts_at.present?
+    if !allow_legacy_seconds_in_times && starts_at.present?
       errors.add(:starts_at, 'must be a minute') if starts_at.sec > 0
     end
   end
 
   def ends_at_is_minute
-    if ends_at.present?
+    if !allow_legacy_seconds_in_times && ends_at.present?
       errors.add(:ends_at, "must be a minute") if ends_at.sec > 0
     end
   end
