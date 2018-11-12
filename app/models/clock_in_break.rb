@@ -5,7 +5,7 @@ class ClockInBreak < ActiveRecord::Base
   validates :starts_at, presence: true
   validates :ends_at, presence: true
 
-  include BreakTimeValidations
+  include ClockInBreakTimeValidations
 
   def disabled?
     false

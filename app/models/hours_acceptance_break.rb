@@ -9,7 +9,7 @@ class HoursAcceptanceBreak < ActiveRecord::Base
   validates :ends_at, presence: true
   validate :disable_valid
 
-  include BreakTimeValidations
+  include HoursAcceptanceBreakTimeValidations
 
   def self.enabled
     where(disabled_at: nil)

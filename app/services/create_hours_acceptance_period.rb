@@ -61,15 +61,17 @@ class CreateHoursAcceptancePeriod
           })
         end
       end
-
-      breaks.each do |_break|
-        success = _break.update_attributes(
-          hours_acceptance_period: hours_acceptance_period
-        )
-        hours_acceptance_period.hours_acceptance_breaks << _break
+      success = hours_acceptance_period.valid?
+      if success
+        breaks.each do |_break|
+          success = _break.update_attributes(
+            hours_acceptance_period: hours_acceptance_period
+          )
+          hours_acceptance_period.hours_acceptance_breaks << _break
+        end
+        success = hours_acceptance_period.save
       end
 
-      success = hours_acceptance_period.save
       if success && hours_acceptance_period.accepted?
         DailyReport.mark_for_update!(
           date: hours_acceptance_period.date,

@@ -162,8 +162,8 @@ class ChangeClockInStatus
     clock_in_day = clock_in_period.clock_in_day
 
     hours_acceptance_period = HoursAcceptancePeriod.create!(
-      starts_at: clock_in_period.starts_at,
-      ends_at: clock_in_period.ends_at,
+      starts_at: round_down_to_nearest_minute(date_time: clock_in_period.starts_at),
+      ends_at: round_down_to_nearest_minute(date_time: clock_in_period.ends_at),
       clock_in_day: clock_in_day,
       creator: creator,
     )
@@ -171,12 +171,16 @@ class ChangeClockInStatus
     clock_in_period.clock_in_breaks.each do |_break|
       hours_acceptance_break = HoursAcceptanceBreak.create!(
         hours_acceptance_period: hours_acceptance_period,
-        starts_at: _break.starts_at,
-        ends_at: _break.ends_at,
+        starts_at: round_down_to_nearest_minute(date_time: _break.starts_at),
+        ends_at: round_down_to_nearest_minute(date_time: _break.ends_at),
       )
 
       hours_acceptance_period.hours_acceptance_breaks << hours_acceptance_break
     end
+  end
+
+  def round_down_to_nearest_minute(date_time:)
+    date_time.change(:sec => 0)
   end
 
   def add_break_to_period(clock_in_period:, at:, last_event:)

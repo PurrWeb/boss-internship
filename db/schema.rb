@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180924181537) do
+ActiveRecord::Schema.define(version: 20181109133907) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -544,14 +544,15 @@ ActiveRecord::Schema.define(version: 20180924181537) do
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
 
   create_table "hours_acceptance_breaks", force: :cascade do |t|
-    t.integer  "hours_acceptance_period_id", limit: 4,   null: false
-    t.datetime "starts_at",                              null: false
-    t.datetime "ends_at",                                null: false
+    t.integer  "hours_acceptance_period_id",    limit: 4,                   null: false
+    t.datetime "starts_at",                                                 null: false
+    t.datetime "ends_at",                                                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "disabled_at"
-    t.integer  "disabled_by_id",             limit: 4
-    t.string   "disabled_by_type",           limit: 255
+    t.integer  "disabled_by_id",                limit: 4
+    t.string   "disabled_by_type",              limit: 255
+    t.boolean  "allow_legacy_seconds_in_times",             default: false, null: false
   end
 
   add_index "hours_acceptance_breaks", ["disabled_at"], name: "index_hours_acceptance_breaks_on_disabled_at", using: :btree
@@ -559,18 +560,19 @@ ActiveRecord::Schema.define(version: 20180924181537) do
   add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
-    t.integer  "creator_id",        limit: 4,                       null: false
-    t.string   "creator_type",      limit: 255,                     null: false
-    t.string   "reason_note",       limit: 255
-    t.datetime "starts_at",                                         null: false
-    t.datetime "ends_at",                                           null: false
-    t.integer  "clock_in_day_id",   limit: 4
-    t.string   "status",            limit: 255, default: "pending", null: false
+    t.integer  "creator_id",                    limit: 4,                       null: false
+    t.string   "creator_type",                  limit: 255,                     null: false
+    t.string   "reason_note",                   limit: 255
+    t.datetime "starts_at",                                                     null: false
+    t.datetime "ends_at",                                                       null: false
+    t.integer  "clock_in_day_id",               limit: 4
+    t.string   "status",                        limit: 255, default: "pending", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "finance_report_id", limit: 4
+    t.integer  "finance_report_id",             limit: 4
     t.datetime "accepted_at"
-    t.integer  "accepted_by_id",    limit: 4
+    t.integer  "accepted_by_id",                limit: 4
+    t.boolean  "allow_legacy_seconds_in_times",             default: false,     null: false
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree

@@ -42,6 +42,150 @@ describe CreateHoursAcceptancePeriod do
     ]
   end
 
+  context "when HoursAcceptancePeriod starts_at has a seconds" do
+    context 'before call' do
+      specify 'no periods should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      specify 'no breaks should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+    end
+
+    context 'after call' do
+      let(:starts_at) { start_of_day + 2.hours + 10.seconds }
+
+      it "shouldn't succeed" do
+        call_service
+        expect(result.success?).to_not eq(true)
+      end
+
+      it "should return error message" do
+        errors = result.api_errors.errors
+        expect(errors[:startsAt]).to eq(["must be a minute"])
+      end
+
+      it "should not create a period" do
+        call_service
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      it "should not create a breaks" do
+        call_service
+        expect(HoursAcceptanceBreak.count).to eq(0)
+      end
+    end
+  end
+
+  context "when HoursAcceptancePeriod ends_at has a seconds" do
+    context 'before call' do
+      specify 'no periods should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      specify 'no breaks should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+    end
+
+    context 'after call' do
+      let(:ends_at) { start_of_day + shift_duration_hours.hours + 10.seconds }
+
+      it "shouldn't succeed" do
+        call_service
+        expect(result.success?).to_not eq(true)
+      end
+
+      it "should return error message" do
+        errors = result.api_errors.errors
+        expect(errors[:endsAt]).to eq(["must be a minute"])
+      end
+
+      it "should not create a period" do
+        call_service
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      it "should not create a breaks" do
+        call_service
+        expect(HoursAcceptanceBreak.count).to eq(0)
+      end
+    end
+  end
+
+  context "when HoursAcceptanceBreak starts_at has a seconds" do
+    context 'before call' do
+      specify 'no periods should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      specify 'no breaks should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+    end
+
+    context 'after call' do
+      let(:break_starts_at) { start_of_day + 2.hours + 10.seconds }
+
+      it "shouldn't succeed" do
+        call_service
+        expect(result.success?).to_not eq(true)
+      end
+
+      it "should return error message" do
+        breaks_errors = result.api_errors.errors[:breaks]
+        expect(breaks_errors.first[:startsAt]).to eq(["must be a minute"])
+      end
+
+      it "should not create a period" do
+        call_service
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      it "should not create a breaks" do
+        call_service
+        expect(HoursAcceptanceBreak.count).to eq(0)
+      end
+    end
+  end
+
+  context "when HoursAcceptanceBreak ends_at has a seconds" do
+    context 'before call' do
+      specify 'no periods should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      specify 'no breaks should exist' do
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+    end
+
+    context 'after call' do
+      let(:break_ends_at) { break_starts_at + 1.hour + 10.seconds }
+
+      it "shouldn't succeed" do
+        call_service
+        expect(result.success?).to_not eq(true)
+      end
+
+      it "should return error message" do
+        breaks_errors = result.api_errors.errors[:breaks]
+        expect(breaks_errors.first[:endsAt]).to eq(["must be a minute"])
+      end
+
+      it "should not create a period" do
+        call_service
+        expect(HoursAcceptancePeriod.count).to eq(0)
+      end
+
+      it "should not create a breaks" do
+        call_service
+        expect(HoursAcceptanceBreak.count).to eq(0)
+      end
+    end
+  end
+
   context 'no finance report exists' do
     context 'before call' do
       specify 'no periods should exist' do
