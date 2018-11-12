@@ -5,7 +5,7 @@ class AddHolidayStaffMembersQuery
   end
 
   def all(query: nil, venue: nil)
-    staff_members = query.present? ? StaffMember.all : StaffMember.none
+    staff_members = query.present? ? StaffMember.enabled : StaffMember.none
 
     fragments = (query || "").split
     if fragments.count > 0

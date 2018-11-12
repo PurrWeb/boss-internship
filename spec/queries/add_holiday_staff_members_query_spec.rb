@@ -15,9 +15,17 @@ describe AddHolidayStaffMembersQuery, :holiday do
         surname: "Joneser",
       )
     end
-    let(:staff_member) do
+    let(:enabled_staff_member) do
       FactoryGirl.create(
         :staff_member,
+        name: staff_member_name,
+        master_venue: venue,
+      )
+    end
+    let(:disabled_staff_member) do
+      FactoryGirl.create(
+        :staff_member,
+        :disabled,
         name: staff_member_name,
         master_venue: venue,
       )
@@ -28,6 +36,8 @@ describe AddHolidayStaffMembersQuery, :holiday do
     end
 
     context "before call" do
+      let(:staff_member) { enabled_staff_member }
+
       specify "staff members should exist" do
         expect(StaffMember.count).to eq(1)
       end
@@ -36,47 +46,63 @@ describe AddHolidayStaffMembersQuery, :holiday do
     context 'after call' do
       let(:result) { query.all(query: query_string) }
 
-      context 'query is wrong name' do
-        let(:query_string) { 'foo' }
+      context 'staff_member is enabled' do
+        let(:staff_member) { enabled_staff_member }
 
-        it 'should not match staff_member' do
-          expect(result.count).to eq(0)
+        context 'query is wrong name' do
+          let(:query_string) { 'foo' }
+
+          it 'should not match staff_member' do
+            expect(result.count).to eq(0)
+          end
+        end
+
+        context 'query full name exact match' do
+          let(:query_string) { staff_member.full_name }
+
+          it 'should match staff_member' do
+            expect(result.count).to eq(1)
+            expect(result[0].id).to eq(staff_member.id)
+          end
+        end
+
+        context 'query is first name only' do
+          let(:query_string) { staff_member.first_name }
+
+          it 'should match staff_member' do
+            expect(result.count).to eq(1)
+            expect(result[0].id).to eq(staff_member.id)
+          end
+        end
+
+        context 'query is surname only' do
+          let(:query_string) { staff_member.surname }
+
+          it 'should match staff_member' do
+            expect(result.count).to eq(1)
+            expect(result[0].id).to eq(staff_member.id)
+          end
+        end
+
+        context 'query is full name with different case' do
+          let(:query_string) { staff_member.full_name.downcase }
+
+          it 'should match staff member' do
+            expect(result.count).to eq(1)
+            expect(result[0].id).to eq(staff_member.id)
+          end
         end
       end
 
-      context 'query full name exact match' do
-        let(:query_string) { staff_member.full_name }
+      context 'staff member is disabled' do
+        let(:staff_member) { disabled_staff_member }
 
-        it 'should match staff_member' do
-          expect(result.count).to eq(1)
-          expect(result[0].id).to eq(staff_member.id)
-        end
-      end
+        context 'query full name exact match' do
+          let(:query_string) { staff_member.full_name }
 
-      context 'query is first name only' do
-        let(:query_string) { staff_member.first_name }
-
-        it 'should match staff_member' do
-          expect(result.count).to eq(1)
-          expect(result[0].id).to eq(staff_member.id)
-        end
-      end
-
-      context 'query is surname only' do
-        let(:query_string) { staff_member.surname }
-
-        it 'should match staff_member' do
-          expect(result.count).to eq(1)
-          expect(result[0].id).to eq(staff_member.id)
-        end
-      end
-
-      context 'query is full name with different case' do
-        let(:query_string) { staff_member.full_name.downcase }
-
-        it 'should match staff member' do
-          expect(result.count).to eq(1)
-          expect(result[0].id).to eq(staff_member.id)
+          it 'should not match staff_member' do
+            expect(result.count).to eq(0)
+          end
         end
       end
     end
