@@ -1,7 +1,7 @@
 class StaffMember < ActiveRecord::Base
   has_secure_password validations: false
   include SearchCop
-  
+
   search_scope :search do
     attributes name: ["name.first_name", "name.surname"]
   end
