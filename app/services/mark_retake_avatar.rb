@@ -14,5 +14,6 @@ class MarkRetakeAvatar
       marked_retake_avatar_at: now,
       marked_retake_avatar_user: requester
     )
+    staff_member
   end
 end
