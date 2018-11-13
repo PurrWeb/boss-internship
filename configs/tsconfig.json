@@ -8,10 +8,14 @@
     "noImplicitReturns": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "ES5",
-    "lib": ["dom", "es6"],
+    "lib": [
+      "dom",
+      "es6"
+    ],
     "jsx": "react",
     "sourceMap": true,
     "types": [
