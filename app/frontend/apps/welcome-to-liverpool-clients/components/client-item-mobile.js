@@ -82,12 +82,12 @@ class ClientItemMobile extends React.Component {
           </div>
         </div>
         <div className="boss-check__row boss-check__row_role_buttons">
-          <Link
-            to={`/profile/${id}`}
+          <button
+            onClick={() => this.props.onGoToProfile(id)}
             className="boss-button boss-button_type_small boss-button_role_view-details-light boss-check__button"
           >
             Details
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -97,6 +97,7 @@ class ClientItemMobile extends React.Component {
 ClientItemMobile.propTypes = {
   client: PropTypes.object.isRequired,
   onResendVerificationEmailClick: PropTypes.func.isRequired,
+  onGoToProfile: PropTypes.func.isRequired,
 };
 
 export default ClientItemMobile;

@@ -26,7 +26,9 @@ class ClientsPage extends React.Component {
     };
     oFetch(this.props, 'changeFilter')(filter);
     document.title = 'Welcome to Liverpool Clients';
-    await this.props.getWtlClients(filter);
+    if (this.props.clients.size === 0) {
+      await this.props.getWtlClients(filter);
+    }
     this.setState({ fetching: false });
   };
 
@@ -55,6 +57,11 @@ class ClientsPage extends React.Component {
       cardNumber: filterQuery.card_number ? filterQuery.card_number : null,
     };
     return this.props.loadMore(filter);
+  };
+
+  goToProfile = id => {
+    this.props.loadWtlClient({ client: null });
+    this.props.history.push(`/profile/${id}`);
   };
 
   render() {
@@ -98,12 +105,14 @@ class ClientsPage extends React.Component {
             <PureToJSClientItem
               onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
               client={client}
+              onGoToProfile={this.goToProfile}
             />
           )}
           itemRendererMobile={client => (
             <PureToJSClientItemMobile
               onResendVerificationEmailClick={this.props.resendWtlClientVerificationEmailAction}
               client={client}
+              onGoToProfile={this.goToProfile}
             />
           )}
         />
@@ -119,6 +128,7 @@ ClientsPage.propTypes = {
   changeFilter: PropTypes.func.isRequired,
   loadMore: PropTypes.func.isRequired,
   getWtlClients: PropTypes.func.isRequired,
+  loadWtlClient: PropTypes.func.isRequired,
   resendWtlClientVerificationEmailAction: PropTypes.func.isRequired,
 };
 

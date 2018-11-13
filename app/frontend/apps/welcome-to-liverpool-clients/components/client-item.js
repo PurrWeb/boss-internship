@@ -58,12 +58,12 @@ class ClientItem extends React.Component {
         <div className="boss-table__cell">
           <div className="boss-table__info">
             <div className="boss-table__actions">
-              <Link
-                to={`/profile/${id}`}
+              <button
+                onClick={() => this.props.onGoToProfile(id)}
                 className="boss-button boss-button_type_small boss-button_role_view-details-light boss-table__action"
               >
                 Details
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -75,6 +75,7 @@ class ClientItem extends React.Component {
 ClientItem.propTypes = {
   client: PropTypes.object.isRequired,
   onResendVerificationEmailClick: PropTypes.func.isRequired,
+  onGoToProfile: PropTypes.func.isRequired,
 };
 
 export default ClientItem;
