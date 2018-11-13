@@ -64,6 +64,10 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const isActive = (currentPage, page) => {
+  return currentPage === page ? 'boss-button_state_active' : '';
+};
+
 @connect(mapStateToProps, mapDispatchToProps)
 class ProfileWrapper extends React.PureComponent {
   getHandleDisableStaffMemberSubmit(staffMember) {
@@ -97,6 +101,78 @@ class ProfileWrapper extends React.PureComponent {
       submit: this.handleEnableProfileSubmit,
       config: { title: 'Enable Staff Member' },
     })(EnableProfile);
+  };
+
+  renderCardActions = (currentPage, isSecurityStaff, canViewDisciplinary) => {
+    return (
+      <div className="boss-page-dashboard__switches">
+        <a
+          href={`profile`}
+          className={`${isActive(
+            currentPage,
+            'profile',
+          )} boss-button boss-button_type_small boss-button_role_profile boss-page-dashboard__switch`}
+        >
+          Profile
+        </a>
+        <a
+          href={`holidays`}
+          className={`${isActive(
+            currentPage,
+            'holidays',
+          )} boss-button boss-button_type_small boss-button_role_holidays boss-page-dashboard__switch`}
+        >
+          Holidays
+        </a>
+        <a
+          href={`owed_hours`}
+          className={`${isActive(
+            currentPage,
+            'owed_hours',
+          )} boss-button boss-button_type_small boss-button_role_timelog boss-page-dashboard__switch`}
+        >
+          Owed hours
+        </a>
+        <a
+          href={`shifts`}
+          className={`${isActive(
+            currentPage,
+            'shifts',
+          )} boss-button boss-button_type_small boss-button_role_timelog boss-page-dashboard__switch`}
+        >
+          Shifts
+        </a>
+        {!isSecurityStaff && (
+          <a
+            href={`accessories`}
+            className={`${isActive(
+              currentPage,
+              'accessories',
+            )} boss-button boss-button_type_small boss-button_role_accessories boss-page-dashboard__switch`}
+          >
+            Accessories
+          </a>
+        )}
+        <a
+          href={`payments`}
+          className={`${isActive(
+            currentPage,
+            'payments',
+          )} boss-button boss-button_type_small boss-button_role_payments boss-page-dashboard__switch`}
+        >
+          Payments
+        </a>
+        {canViewDisciplinary && <a
+          href={`disciplinaries`}
+          className={`${isActive(
+            currentPage,
+            'disciplinary',
+          )} boss-button boss-button_type_small boss-button_role_disciplinary boss-page-dashboard__switch`}
+        >
+          Disciplinary
+        </a>}
+      </div>
+    );
   };
 
   render() {
@@ -135,8 +211,10 @@ class ProfileWrapper extends React.PureComponent {
     const editAvatarFormInitial = {
       avatar: staffMember.get('avatar'),
     };
-
+    const jsStaffMember = staffMember.toJS();
     const jobType = staffTypes.find(type => type.get('id') === staffMember.get('staff_type'));
+    const isSecurityStaff = oFetch(jsStaffMember, 'is_security_staff');
+    const canViewDisciplinary = oFetch(permissionsData.toJS(), 'disciplinariesTab.canViewPage');
 
     return (
       <div>
@@ -152,21 +230,24 @@ class ProfileWrapper extends React.PureComponent {
           )}
           {!editProfile && (
             <Dashboard>
-              <StaffMemberCard
-                currentPage={currentPage}
-                staffMember={staffMember.toJS()}
-                jobType={jobType.toJS()}
-                onEditAvatar={showEditAvatarModal}
-                venues={venues.toJS()}
-                permissionsData={permissionsData}
-              />
-              <StaffMemberProfileActions
-                staffMember={staffMember}
-                permissionsData={permissionsData}
-                onEditProfile={startEditProfile}
-                onDisableStaffMember={showDisableStaffMemberModal}
-                onEnableProfile={this.handleEnableProfile}
-              />
+              <div className="boss-page-dashboard__group">
+                <StaffMemberCard
+                  currentPage={currentPage}
+                  staffMember={jsStaffMember}
+                  jobType={jobType.toJS()}
+                  onEditAvatar={showEditAvatarModal}
+                  venues={venues.toJS()}
+                  permissionsData={permissionsData}
+                />
+                <StaffMemberProfileActions
+                  staffMember={staffMember}
+                  permissionsData={permissionsData}
+                  onEditProfile={startEditProfile}
+                  onDisableStaffMember={showDisableStaffMemberModal}
+                  onEnableProfile={this.handleEnableProfile}
+                />
+              </div>
+              {this.renderCardActions(currentPage, isSecurityStaff, canViewDisciplinary)}
             </Dashboard>
           )}
         </DashboardWrapper>

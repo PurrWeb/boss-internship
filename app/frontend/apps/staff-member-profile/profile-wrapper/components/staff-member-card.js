@@ -34,8 +34,6 @@ const StaffMemberCard = ({
   const jobTypeName = oFetch(jobType, 'name');
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
-  const isSecurityStaff = oFetch(staffMember, 'is_security_staff');
-  const canViewDisciplinary = oFetch(permissionsData.toJS(), 'disciplinariesTab.canViewPage');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -90,85 +88,9 @@ const StaffMemberCard = ({
 
   const renderCardContacts = (email, phoneNumber) => {
     return (
-      <div key={1} className="boss-user-summary__contacts">
+      <div className="boss-user-summary__contacts">
         {renderEmail(email)}
         {renderPhoneNumber(phoneNumber)}
-      </div>
-    );
-  };
-  const isActive = (currentPage, page) => {
-    return currentPage === page ? 'boss-button_state_active' : '';
-  };
-
-  const renderCardActions = () => {
-    return (
-      <div key={2} className="boss-user-summary__meta">
-        <a
-          href={`profile`}
-          className={`${isActive(
-            currentPage,
-            'profile',
-          )} boss-button boss-button_type_small boss-button_role_profile boss-user-summary__switch`}
-        >
-          Profile
-        </a>
-        <a
-          href={`holidays`}
-          className={`${isActive(
-            currentPage,
-            'holidays',
-          )} boss-button boss-button_type_small boss-button_role_holidays boss-user-summary__switch`}
-        >
-          Holidays
-        </a>
-        <a
-          href={`owed_hours`}
-          className={`${isActive(
-            currentPage,
-            'owed_hours',
-          )} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
-        >
-          Owed hours
-        </a>
-        <a
-          href={`shifts`}
-          className={`${isActive(
-            currentPage,
-            'shifts',
-          )} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
-        >
-          Shifts
-        </a>
-        {!isSecurityStaff && (
-          <a
-            href={`accessories`}
-            className={`${isActive(
-              currentPage,
-              'accessories',
-            )} boss-button boss-button_type_small boss-button_role_accessories boss-user-summary__switch`}
-          >
-            Accessories
-          </a>
-        )}
-        <a
-          href={`payments`}
-          className={`${isActive(
-            currentPage,
-            'payments',
-          )} boss-button boss-button_type_small boss-button_role_payments boss-user-summary__switch`}
-        >
-          Payments
-        </a>
-        {canViewDisciplinary && <a
-          href={`disciplinaries`}
-          className={`${isActive(
-            currentPage,
-            'disciplinary',
-          )} boss-button boss-button_type_small boss-button_role_disciplinary boss-page-dashboard__switch`}
-        >
-          Disciplinary
-        </a>}
-
       </div>
     );
   };
@@ -251,7 +173,7 @@ const StaffMemberCard = ({
             })}
 
           {masterVenue && renderMasterVenue(masterVenue)}
-          {[renderCardContacts(email, phoneNumber), renderCardActions()]}
+          {renderCardContacts(email, phoneNumber)}
         </div>
       </div>
     </div>
