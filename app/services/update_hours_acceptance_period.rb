@@ -102,6 +102,10 @@ class UpdateHoursAcceptancePeriod
         result = result && period_saved
 
         if result
+          # Without this hours_acceptance_breaks_enabled association
+          # is not updated
+          hours_acceptance_period.reload
+
           DailyReport.mark_for_update!(
             date: hours_acceptance_period.date,
             venue: hours_acceptance_period.venue
