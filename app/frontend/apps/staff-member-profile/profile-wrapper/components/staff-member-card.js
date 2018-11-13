@@ -15,7 +15,8 @@ const StaffMemberCard = ({
   onEditAvatar,
   currentPage,
   venues,
-  permissionsData
+  permissionsData,
+  onForceRetakeAvatar,
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(
@@ -23,7 +24,7 @@ const StaffMemberCard = ({
     'surname',
   )}`;
   const masterVenueId = oFetch(staffMember, 'master_venue');
-  const masterVenue = masterVenueId &&  _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
+  const masterVenue = masterVenueId && _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
   const email = oFetch(staffMember, 'email');
   const phoneNumber = oFetch(staffMember, 'phone_number');
   const disabled = oFetch(staffMember, 'disabled');
@@ -34,6 +35,8 @@ const StaffMemberCard = ({
   const jobTypeName = oFetch(jobType, 'name');
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
+  const retakeAvatar = oFetch(staffMember, 'retakeAvatar');
+  const canForceRetakeAvatar = oFetch(permissionsData.toJS(), 'canForceRetakeAvatar');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -63,13 +66,13 @@ const StaffMemberCard = ({
         {email}
       </p>
     ) : (
-      <a
-        href={`mailto:${email}`}
-        className="boss-user-summary__link boss-user-summary__link_role_email"
-      >
-        {email}
-      </a>
-    );
+        <a
+          href={`mailto:${email}`}
+          className="boss-user-summary__link boss-user-summary__link_role_email"
+        >
+          {email}
+        </a>
+      );
   };
 
   const renderFullName = (fullName, disabled = false) => {
@@ -126,7 +129,7 @@ const StaffMemberCard = ({
         </li>
         <li className="boss-user-summary__review-item">
           <span className="boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_exclamation boss-user-summary__label">
-            { isFlagged ? 'Flagged' : 'Disabled' }
+            {isFlagged ? 'Flagged' : 'Disabled'}
           </span>
         </li>
       </ul>
@@ -147,6 +150,22 @@ const StaffMemberCard = ({
                 >
                   Edit
                 </button>
+              )}
+              {canForceRetakeAvatar && !retakeAvatar && (
+                <button
+                  type="button"
+                  className="boss-user-summary__avatar-icon boss-user-summary__avatar-icon_role_retake"
+                  onClick={onForceRetakeAvatar}
+                >
+                  Retake
+                </button>
+              )}
+              {retakeAvatar && (
+                <div className="boss-user-summary__avatar-overlay">
+                  <p className="boss-user-summary__avatar-overlay-text boss-user-summary__avatar-overlay-text_role_retake">
+                    Please retake picture
+                  </p>
+                </div>
               )}
             </div>
           </div>

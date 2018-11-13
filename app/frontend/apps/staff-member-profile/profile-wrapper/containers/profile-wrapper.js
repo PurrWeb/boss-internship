@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import oFetch from 'o-fetch';
-import { openContentModal } from '~/components/modals';
+import { openContentModal, openWarningModal } from '~/components/modals';
 
 import DashboardWrapper from '~/components/dashboard-wrapper';
 import ContentWrapper from '~/components/content-wrapper';
@@ -28,6 +28,7 @@ import {
   disableStaffMemberRequest,
   showEditAvatarModal,
   hideEditAvatarModal,
+  forceRetakeAvatar,
 } from '../actions';
 
 const mapStateToProps = state => {
@@ -58,6 +59,7 @@ const mapDispatchToProps = dispatch => {
         showEditAvatarModal,
         hideEditAvatarModal,
         enableStaffMember,
+        forceRetakeAvatar,
       },
       dispatch,
     ),
@@ -175,6 +177,28 @@ class ProfileWrapper extends React.PureComponent {
     );
   };
 
+  handleForceRetakeAvatar = (handleClose, { staffMemberId }) => {
+    const forceRetakeAvatar = oFetch(this.props, 'actions.forceRetakeAvatar');
+    return forceRetakeAvatar(staffMemberId).finally(resp => {
+      handleClose();
+    });
+  };
+
+  handleForceRetakeAvatarModal = () => {
+    const staffMember = oFetch(this.props, 'staffMember');
+    const staffMemberId = oFetch(staffMember.toJS(), 'id');
+
+    openWarningModal({
+      submit: this.handleForceRetakeAvatar,
+      config: {
+        title: 'WARNING !!!',
+        text: 'Are You Sure?',
+        buttonText: 'Force Retake',
+      },
+      props: { staffMemberId },
+    });
+  };
+
   render() {
     const {
       staffMember,
@@ -236,6 +260,7 @@ class ProfileWrapper extends React.PureComponent {
                   staffMember={jsStaffMember}
                   jobType={jobType.toJS()}
                   onEditAvatar={showEditAvatarModal}
+                  onForceRetakeAvatar={this.handleForceRetakeAvatarModal}
                   venues={venues.toJS()}
                   permissionsData={permissionsData}
                 />

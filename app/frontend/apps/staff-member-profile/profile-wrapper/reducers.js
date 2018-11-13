@@ -27,6 +27,7 @@ const initialState = fromJS({
   editAvatarModal: false,
   permissionsData: {
     canEnable: false,
+    canForceRetakeAvatar: false,
   },
 });
 
@@ -44,7 +45,6 @@ const profileReducer = handleActions(
       const accessiblePayRateIds = oFetch(payload, 'accessiblePayRateIds');
       const appDownloadLinks = oFetch(payload, 'appDownloadLinks');
       const permissionsData = oFetch(payload, 'permissionsData');
-
       return state
         .set('staffMember', fromJS(staffMember))
         .set('accessToken', fromJS(accessToken))

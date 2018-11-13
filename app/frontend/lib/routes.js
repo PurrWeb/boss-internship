@@ -328,6 +328,12 @@ const apiRoutes = {
         },
         method: 'GET',
     },
+    makeRetakeAvatar: {
+        getPath(staffMemberId) {
+            return `/api/v1/staff_members/${staffMemberId}/make_retake_avatar`;
+        },
+        method: 'POST',
+    },
     dashboardMessages: {
         getPath: function() {
             return '/api/v1/dashboard_messages';
