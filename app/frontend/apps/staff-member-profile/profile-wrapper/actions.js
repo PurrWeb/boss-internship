@@ -7,7 +7,7 @@ import {
   updateEmploymentDetails,
   updatePersonalDetails,
   updateContactDetails,
-  forceRetakeAvatarRequest,
+  markRetakeAvatarRequest,
 } from './requests';
 
 import {
@@ -22,8 +22,8 @@ import {
   UPDATE_DOWNLOAD_LINK_LAST_SENT_AT,
 } from './constants';
 
-export const forceRetakeAvatar = staffMemberId => (dispatch, getState) => {
-  return forceRetakeAvatarRequest(staffMemberId).then(resp => {
+export const markRetakeAvatar = staffMemberId => (dispatch, getState) => {
+  return markRetakeAvatarRequest(staffMemberId).then(resp => {
     dispatch(updateStaffMember(resp.data));
   });
 };

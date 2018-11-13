@@ -328,9 +328,9 @@ const apiRoutes = {
         },
         method: 'GET',
     },
-    makeRetakeAvatar: {
+    markRetakeAvatar: {
         getPath(staffMemberId) {
-            return `/api/v1/staff_members/${staffMemberId}/make_retake_avatar`;
+            return `/api/v1/staff_members/${staffMemberId}/mark_retake_avatar`;
         },
         method: 'POST',
     },

@@ -4,14 +4,14 @@ import oFetch from 'o-fetch';
 import utils from '~/lib/utils';
 import http from '~/lib/request-api';
 import { apiRoutes } from '~/lib/routes';
-export const forceRetakeAvatarRequest = staffMemberId => {
+export const markRetakeAvatarRequest = staffMemberId => {
   return http(
     {
       successMessage: 'Force Retake Successfully',
       errorMessage: 'Force Retake Failed',
     },
     5000,
-  ).post(apiRoutes.makeRetakeAvatar.getPath(staffMemberId));
+  ).post(apiRoutes.markRetakeAvatar.getPath(staffMemberId));
 };
 
 export const updateAvatar = ({ staffMemberId, avatarUrl }) => {

@@ -28,7 +28,7 @@ import {
   disableStaffMemberRequest,
   showEditAvatarModal,
   hideEditAvatarModal,
-  forceRetakeAvatar,
+  markRetakeAvatar,
 } from '../actions';
 
 const mapStateToProps = state => {
@@ -59,7 +59,7 @@ const mapDispatchToProps = dispatch => {
         showEditAvatarModal,
         hideEditAvatarModal,
         enableStaffMember,
-        forceRetakeAvatar,
+        markRetakeAvatar,
       },
       dispatch,
     ),
@@ -177,19 +177,19 @@ class ProfileWrapper extends React.PureComponent {
     );
   };
 
-  handleForceRetakeAvatar = (handleClose, { staffMemberId }) => {
-    const forceRetakeAvatar = oFetch(this.props, 'actions.forceRetakeAvatar');
-    return forceRetakeAvatar(staffMemberId).finally(resp => {
+  handleMarkRetakeAvatar = (handleClose, { staffMemberId }) => {
+    const markRetakeAvatar = oFetch(this.props, 'actions.markRetakeAvatar');
+    return markRetakeAvatar(staffMemberId).finally(resp => {
       handleClose();
     });
   };
 
-  handleForceRetakeAvatarModal = () => {
+  handleMarkRetakeAvatarModal = () => {
     const staffMember = oFetch(this.props, 'staffMember');
     const staffMemberId = oFetch(staffMember.toJS(), 'id');
 
     openWarningModal({
-      submit: this.handleForceRetakeAvatar,
+      submit: this.handleMarkRetakeAvatar,
       config: {
         title: 'WARNING !!!',
         text: 'Are You Sure?',
@@ -260,7 +260,7 @@ class ProfileWrapper extends React.PureComponent {
                   staffMember={jsStaffMember}
                   jobType={jobType.toJS()}
                   onEditAvatar={showEditAvatarModal}
-                  onForceRetakeAvatar={this.handleForceRetakeAvatarModal}
+                  onMarkRetakeAvatar={this.handleMarkRetakeAvatarModal}
                   venues={venues.toJS()}
                   permissionsData={permissionsData}
                 />

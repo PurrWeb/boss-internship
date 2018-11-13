@@ -16,7 +16,7 @@ const StaffMemberCard = ({
   currentPage,
   venues,
   permissionsData,
-  onForceRetakeAvatar,
+  onMarkRetakeAvatar,
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(
@@ -35,8 +35,8 @@ const StaffMemberCard = ({
   const jobTypeName = oFetch(jobType, 'name');
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
-  const retakeAvatar = oFetch(staffMember, 'retakeAvatar');
-  const canForceRetakeAvatar = oFetch(permissionsData.toJS(), 'canForceRetakeAvatar');
+  const markedRetakeAvatar = oFetch(staffMember, 'markedRetakeAvatar');
+  const canMarkRetakeAvatar = oFetch(permissionsData.toJS(), 'canMarkRetakeAvatar');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -151,16 +151,16 @@ const StaffMemberCard = ({
                   Edit
                 </button>
               )}
-              {canForceRetakeAvatar && !retakeAvatar && (
+              {canMarkRetakeAvatar && !markedRetakeAvatar && (
                 <button
                   type="button"
                   className="boss-user-summary__avatar-icon boss-user-summary__avatar-icon_role_retake"
-                  onClick={onForceRetakeAvatar}
+                  onClick={onMarkRetakeAvatar}
                 >
                   Retake
                 </button>
               )}
-              {retakeAvatar && (
+              {markedRetakeAvatar && (
                 <div className="boss-user-summary__avatar-overlay">
                   <p className="boss-user-summary__avatar-overlay-text boss-user-summary__avatar-overlay-text_role_retake">
                     Please retake picture

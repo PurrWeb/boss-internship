@@ -27,7 +27,7 @@ const initialState = fromJS({
   editAvatarModal: false,
   permissionsData: {
     canEnable: false,
-    canForceRetakeAvatar: false,
+    canMarkRetakeAvatar: false,
   },
 });
 
