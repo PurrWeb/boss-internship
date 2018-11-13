@@ -297,6 +297,7 @@ describe HoursAcceptancePeriod do
       before do
         break1
         break2
+        period.reload
       end
 
       specify do
@@ -305,7 +306,7 @@ describe HoursAcceptancePeriod do
     end
 
     context '#.hours_acceptance_breaks_enabled' do
-      let!(:break1) do
+      let(:break1) do
         period.save!
 
         period.hours_acceptance_breaks.create!(
@@ -314,13 +315,19 @@ describe HoursAcceptancePeriod do
         )
       end
 
-      let!(:break2) do
+      let(:break2) do
         period.hours_acceptance_breaks.create!(
           starts_at: start_of_day + 1.hours,
           ends_at: start_of_day + 2.hours,
           disabled_by: user,
           disabled_at: start_of_day.end_of_day
         )
+      end
+
+      before do
+        break1
+        break2
+        period.reload
       end
 
       specify 'to be equal to #.hours_acceptance_breaks.enabled' do
