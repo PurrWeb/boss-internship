@@ -22,8 +22,8 @@ class StaffMemberProfilePermissions
     user_ability.can?(:enable, staff_member)
   end
 
-  def can_force_retake_avatar?
-    user_ability.can?(:force_retake_avatar, staff_member)
+  def can_mark_retake_avatar?
+    user_ability.can?(:mark_retake_avatar, staff_member)
   end
 
   def holidays_tab
