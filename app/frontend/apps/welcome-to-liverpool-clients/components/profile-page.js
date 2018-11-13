@@ -34,18 +34,20 @@ class ProfilePage extends React.PureComponent {
   };
 
   componentDidMount = async () => {
-    const client = oFetch(this.props, 'client');
+    let client = oFetch(this.props, 'client');
     if (!client) {
       this.setState({ clientFetching: true });
-      await this.props.getWtlClient({ id: this.props.clientId });
+      const clientData = await this.props.getWtlClient({ id: this.props.clientId });
+      client = oFetch(clientData, 'client');
       this.setState({ clientFetching: false });
     } else {
-      const fullName = oFetch(client, 'fullName');
-      document.title = `${fullName} Profile`;
-      const response = await fetchWtlClientHistoryRequest(client);
-      const history = oFetch(response, 'data.history');
-      this.setState({ fetching: false, history });
+      this.props.loadWtlClient({ client });
     }
+    const fullName = oFetch(client, 'fullName');
+    document.title = `${fullName} Profile`;
+    const response = await fetchWtlClientHistoryRequest(client);
+    const history = oFetch(response, 'data.history');
+    this.setState({ fetching: false, history });
   };
 
   handleFilter = (startDate, endDate) => {
@@ -82,6 +84,11 @@ class ProfilePage extends React.PureComponent {
     }
   };
 
+  backToHomePage = () => {
+    this.props.loadWtlClient({ client: null });
+    this.props.history.push('/');
+  };
+
   render() {
     if (this.state.clientFetching) {
       return <Spinner />;
@@ -89,7 +96,7 @@ class ProfilePage extends React.PureComponent {
 
     const [client, enableClientRequested, disableClientRequested] = oFetch(
       this.props,
-      'client',
+      'clientsProfile',
       'enableClientRequested',
       'disableClientRequested',
     );
@@ -112,7 +119,7 @@ class ProfilePage extends React.PureComponent {
         >
           <DashboardActions>
             <button
-              onClick={() => this.props.history.goBack()}
+              onClick={this.backToHomePage}
               className="boss-button boss-button_role_primary boss-page-dashboard__button"
             >
               Return to Index

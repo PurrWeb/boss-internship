@@ -13,6 +13,7 @@ import {
   getWtlClients,
   filterWtlClients,
   resendWtlClientVerificationEmailAction,
+  loadWtlClient,
 } from '../redux/actions';
 
 const mapStateToProps = state => {
@@ -34,6 +35,7 @@ const mapDispatchToProps = {
   loadMore,
   getWtlClients,
   filterWtlClients,
+  loadWtlClient,
   resendWtlClientVerificationEmailAction,
 };
 

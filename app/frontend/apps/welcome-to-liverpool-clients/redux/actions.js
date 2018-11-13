@@ -35,6 +35,7 @@ export const getWtlClient = params => (dispatch, getState) => {
   return getWtlClientRequest(params).then(response => {
     const data = oFetch(response, 'data');
     dispatch(loadWtlClient(data));
+    return data;
   });
 };
 

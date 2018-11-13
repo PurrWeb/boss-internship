@@ -6,8 +6,27 @@ import safeMoment from '~/lib/safe-moment';
 import { SimpleDashboard, DashboardActions } from '~/components/boss-dashboards';
 import ProfileEditForm from './profile-edit-form';
 import NotFound from './not-found';
+import Spinner from '~/components/spinner';
 
 class ProfileEdit extends React.Component {
+  state = {
+    clientFetching: true,
+  };
+
+  componentDidMount = async () => {
+    let client = oFetch(this.props, 'client');
+    if (!client) {
+      this.setState({ clientFetching: true });
+      const clientData = await this.props.getWtlClient({ id: this.props.clientId });
+      client = oFetch(clientData, 'client');
+    } else {
+      this.props.loadWtlClient({ client });
+    }
+    const fullName = oFetch(client, 'fullName');
+    document.title = `${fullName} Edit Profile`;
+    this.setState({ clientFetching: false });
+  };
+
   handleEditSubmit = values => {
     return oFetch(this.props, 'updateClientProfileRequested')(values).then(() => {
       const clientId = oFetch(this.props, 'client.id');
@@ -16,7 +35,10 @@ class ProfileEdit extends React.Component {
   };
 
   render() {
-    const client = oFetch(this.props, 'client');
+    if (this.state.clientFetching) {
+      return <Spinner />;
+    }
+    const client = oFetch(this.props, 'clientsProfile');
     const universities = oFetch(this.props, 'universities');
     if (!client) {
       return <NotFound />;
