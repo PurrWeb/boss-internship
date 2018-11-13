@@ -47,6 +47,7 @@ module Clockwork
     Rollbar.error(e)
   end
 
+  every(20.seconds, "ProcessLegacyRecordsJob")
   every(15.seconds, "ProcessDailyReportsJob")
   every(20.minutes, "ShiftUpdateNotificationJob")
   every(30.seconds, "ProcessFinanceReportUpdatesJob")

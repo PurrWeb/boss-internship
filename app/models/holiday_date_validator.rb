@@ -1,4 +1,9 @@
 class HolidayDateValidator
+  CONFLICTING_HOURS_VALIDATION_MESSAGE = 'Staff member has hours accepted for the day in question'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'Staff member is assigned owed hours on one of these days'
+  CONFLICTING_ROTA_SHIFT_VALIDATION_MESSAGE = 'Staff member is assigned shifts on one of these days'
+  CONFLICTING_HOLIDAY_REQUEST_VALIDATION_MESSAGE = 'Holiday conflicts with an existing holiday request'
+  CONFLICTING_HOLIDAY_VALIDATION_MESSAGE = 'Holiday conflicts with an existing holiday'
   DATE_IN_PAST_CREATION_VALIDATION_MESSAGE = "can't be changed to date in the past"
 
   def initialize(holiday)
@@ -27,81 +32,91 @@ class HolidayDateValidator
     return if date_validations_failed
 
     if dates_present? && holiday.staff_member.present?
-      staff_member_holidays = Holiday.
-        in_state(:enabled).
-        where(staff_member: holiday.staff_member)
+      staff_member_holidays = holiday.
+        staff_member.
+        holidays.
+        in_state(:enabled)
 
-      overlapping_holidays = HolidayInRangeQuery.new(
-        relation: staff_member_holidays,
-        start_date: holiday.start_date,
-        end_date: holiday.end_date
-      ).all
+      if !holiday.allow_legacy_conflicting_holiday?
+        overlapping_holidays = HolidayInRangeQuery.new(
+          relation: staff_member_holidays,
+          start_date: holiday.start_date,
+          end_date: holiday.end_date
+        ).all
 
-      overlapping_holidays_exclusive = ExclusiveOfQuery.new(
-        relation: overlapping_holidays,
-        excluded: holiday
-      ).all
+        overlapping_holidays_exclusive = ExclusiveOfQuery.new(
+          relation: overlapping_holidays,
+          excluded: holiday
+        ).all
 
-      if overlapping_holidays_exclusive.present?
-        holiday.errors.add(:base, 'Holiday conflicts with an existing holiday')
+        if overlapping_holidays_exclusive.present?
+          holiday.errors.add(:base, CONFLICTING_HOLIDAY_VALIDATION_MESSAGE)
+        end
       end
 
-      staff_member_holiday_requests = HolidayRequest.
-        in_state(:pending).
-        where(staff_member: holiday.staff_member)
+      if !holiday.allow_legacy_conflicting_holiday_request?
+        staff_member_holiday_requests = holiday.
+          staff_member.
+          holiday_requests.
+          in_state(:pending)
 
-      if holiday.source_request.present?
-        # Ignore request holiday will be replacing
-        staff_member_holidays = ExclusiveOfQuery.new(
+        if holiday.source_request.present?
+          # Ignore request holiday will be replacing
+          staff_member_holidays = ExclusiveOfQuery.new(
+            relation: staff_member_holiday_requests,
+            excluded: holiday.source_request
+          )
+        end
+
+        overlapping_holiday_requests = HolidayInRangeQuery.new(
           relation: staff_member_holiday_requests,
-          excluded: holiday.source_request
-        )
+          start_date: holiday.start_date,
+          end_date: holiday.end_date
+        ).all
+
+        if overlapping_holiday_requests.present? && !holiday.validate_as_assignment
+          holiday.errors.add(:base, CONFLICTING_HOLIDAY_REQUEST_VALIDATION_MESSAGE)
+        end
       end
 
-      overlapping_holiday_requests = HolidayInRangeQuery.new(
-        relation: staff_member_holiday_requests,
-        start_date: holiday.start_date,
-        end_date: holiday.end_date
-      ).all
+      if !holiday.allow_legacy_conflicting_rota_shift?
+        conflicting_shifts = ShiftInDateRangeQuery.new(
+          staff_member: holiday.staff_member,
+          start_date: holiday.start_date,
+          end_date: holiday.end_date
+        ).all
 
-      if overlapping_holiday_requests.present? && !holiday.validate_as_assignment
-        holiday.errors.add(:base, 'Holiday conflicts with an existing holiday request')
+        if conflicting_shifts.present?
+          holiday.errors.add(:base, CONFLICTING_ROTA_SHIFT_VALIDATION_MESSAGE)
+        end
       end
 
-      conflicting_shifts = ShiftInDateRangeQuery.new(
-        staff_member: holiday.staff_member,
-        start_date: holiday.start_date,
-        end_date: holiday.end_date
-      ).all
+      if !holiday.allow_legacy_conflicting_owed_hours?
+        conflicting_owed_hours = InRangeQuery.new(
+          relation: holiday.staff_member.active_owed_hours,
+          start_value: holiday.start_date,
+          end_value: holiday.end_date,
+          start_column_name: 'date',
+          end_column_name: 'date'
+        ).all
 
-      if conflicting_shifts.present?
-        holiday.errors.add(:base, 'Staff member is assigned shifts on one of these days')
+        if conflicting_owed_hours.present?
+          holiday.errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
+        end
       end
 
-      conflicting_owed_hours = InRangeQuery.new(
-        relation: holiday.staff_member.active_owed_hours,
-        start_value: holiday.start_date,
-        end_value: holiday.end_date,
-        start_column_name: 'date',
-        end_column_name: 'date'
-      ).all
+      if !holiday.allow_legacy_overlap_accepted_hours?
+        conflicting_hours_acceptance_periods = InRangeQuery.new(
+          relation: holiday.staff_member.hours_acceptance_periods.accepted,
+          start_value: RotaShiftDate.new(holiday.start_date).start_time,
+          end_value: RotaShiftDate.new(holiday.end_date).end_time,
+          start_column_name: 'starts_at',
+          end_column_name: 'starts_at'
+        ).all
 
-      if conflicting_owed_hours.present?
-        holiday.errors.add(:base, 'Staff member is assigned owed hours on one of these days')
-      end
-
-      conflicting_hours_acceptance_periods = InRangeQuery.new(
-        relation: HoursAcceptancePeriod.where(
-          clock_in_day: holiday.staff_member.clock_in_days
-        ).accepted,
-        start_value: RotaShiftDate.new(holiday.start_date).start_time,
-        end_value: RotaShiftDate.new(holiday.end_date).end_time,
-        start_column_name: 'starts_at',
-        end_column_name: 'starts_at'
-      ).all
-
-      if conflicting_hours_acceptance_periods.present?
-        holiday.errors.add(:base, 'Staff member has hours accepted for the day in question')
+        if conflicting_hours_acceptance_periods.present?
+          holiday.errors.add(:base, CONFLICTING_HOURS_VALIDATION_MESSAGE)
+        end
       end
     end
   end

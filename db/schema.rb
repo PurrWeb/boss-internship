@@ -522,23 +522,32 @@ ActiveRecord::Schema.define(version: 20181109133907) do
   add_index "holiday_transitions", ["holiday_id", "sort_key"], name: "index_holiday_transitions_parent_sort", unique: true, using: :btree
 
   create_table "holidays", force: :cascade do |t|
-    t.date     "start_date",                      null: false
-    t.date     "end_date",                        null: false
-    t.string   "holiday_type",      limit: 255,   null: false
-    t.integer  "creator_user_id",   limit: 4,     null: false
-    t.integer  "staff_member_id",   limit: 4,     null: false
-    t.text     "note",              limit: 65535
+    t.date     "start_date",                                                             null: false
+    t.date     "end_date",                                                               null: false
+    t.string   "holiday_type",                             limit: 255,                   null: false
+    t.integer  "creator_user_id",                          limit: 4,                     null: false
+    t.integer  "staff_member_id",                          limit: 4,                     null: false
+    t.text     "note",                                     limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_holiday_id", limit: 4
-    t.integer  "finance_report_id", limit: 4
-    t.date     "payslip_date",                    null: false
+    t.integer  "parent_holiday_id",                        limit: 4
+    t.integer  "finance_report_id",                        limit: 4
+    t.date     "payslip_date",                                                           null: false
+    t.datetime "processed_for_legacy_validation_at"
+    t.boolean  "legacy_validation_process_issue"
+    t.boolean  "allow_no_finance_report",                                default: false, null: false
+    t.boolean  "allow_legacy_conflicting_rota_shift",                    default: false, null: false
+    t.boolean  "allow_legacy_overlap_accepted_hours",                    default: false, null: false
+    t.boolean  "allow_legacy_conflicting_holiday",                       default: false, null: false
+    t.boolean  "allow_legacy_conflicting_holiday_request",               default: false, null: false
+    t.boolean  "allow_legacy_conflicting_owed_hours",                    default: false, null: false
   end
 
   add_index "holidays", ["end_date"], name: "index_holidays_on_end_date", using: :btree
   add_index "holidays", ["holiday_type"], name: "index_holidays_on_holiday_type", using: :btree
   add_index "holidays", ["payslip_date", "staff_member_id"], name: "index_holidays_on_payslip_date_and_staff_member_id", using: :btree
   add_index "holidays", ["payslip_date"], name: "index_holidays_on_payslip_date", using: :btree
+  add_index "holidays", ["processed_for_legacy_validation_at"], name: "legacy_validation", using: :btree
   add_index "holidays", ["staff_member_id"], name: "index_holidays_on_staff_member_id", using: :btree
   add_index "holidays", ["start_date", "end_date", "staff_member_id"], name: "index_holidays_on_start_date_and_end_date_and_staff_member_id", using: :btree
   add_index "holidays", ["start_date"], name: "index_holidays_on_start_date", using: :btree
@@ -560,23 +569,32 @@ ActiveRecord::Schema.define(version: 20181109133907) do
   add_index "hours_acceptance_breaks", ["hours_acceptance_period_id"], name: "index_hours_acceptance_breaks_on_hours_acceptance_period_id", using: :btree
 
   create_table "hours_acceptance_periods", force: :cascade do |t|
-    t.integer  "creator_id",                    limit: 4,                       null: false
-    t.string   "creator_type",                  limit: 255,                     null: false
-    t.string   "reason_note",                   limit: 255
-    t.datetime "starts_at",                                                     null: false
-    t.datetime "ends_at",                                                       null: false
-    t.integer  "clock_in_day_id",               limit: 4
-    t.string   "status",                        limit: 255, default: "pending", null: false
+    t.integer  "creator_id",                          limit: 4,                       null: false
+    t.string   "creator_type",                        limit: 255,                     null: false
+    t.string   "reason_note",                         limit: 255
+    t.datetime "starts_at",                                                           null: false
+    t.datetime "ends_at",                                                             null: false
+    t.integer  "clock_in_day_id",                     limit: 4
+    t.string   "status",                              limit: 255, default: "pending", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "finance_report_id",             limit: 4
+    t.integer  "finance_report_id",                   limit: 4
     t.datetime "accepted_at"
-    t.integer  "accepted_by_id",                limit: 4
-    t.boolean  "allow_legacy_seconds_in_times",             default: false,     null: false
+    t.integer  "accepted_by_id",                      limit: 4
+    t.datetime "processed_for_legacy_validation_at"
+    t.boolean  "legacy_validation_process_issue"
+    t.boolean  "allow_invalid_breaks",                            default: false,     null: false
+    t.boolean  "allow_no_finance_report",                         default: false,     null: false
+    t.boolean  "allow_no_accepter",                               default: false,     null: false
+    t.boolean  "allow_legacy_overlap_accepted_hours",             default: false,     null: false
+    t.boolean  "allow_legacy_conflicting_holiday",                default: false,     null: false
+    t.boolean  "allow_legacy_conflicting_owed_hours",             default: false,     null: false
+    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
   add_index "hours_acceptance_periods", ["clock_in_day_id"], name: "index_hours_acceptance_periods_on_clock_in_day_id", using: :btree
+  add_index "hours_acceptance_periods", ["processed_for_legacy_validation_at"], name: "legacy_validation", using: :btree
   add_index "hours_acceptance_periods", ["status", "clock_in_day_id"], name: "index_hours_acceptance_periods_on_status_and_clock_in_day_id", using: :btree
   add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
 
@@ -854,21 +872,28 @@ ActiveRecord::Schema.define(version: 20181109133907) do
   add_index "ops_diaries", ["venue_id"], name: "index_ops_diaries_on_venue_id", using: :btree
 
   create_table "owed_hours", force: :cascade do |t|
-    t.date     "date",                                             null: false
-    t.integer  "minutes",             limit: 4,                    null: false
-    t.integer  "creator_user_id",     limit: 4,                    null: false
-    t.integer  "staff_member_id",     limit: 4,                    null: false
-    t.text     "note",                limit: 65535,                null: false
-    t.integer  "parent_owed_hour_id", limit: 4
+    t.date     "date",                                                                   null: false
+    t.integer  "minutes",                                  limit: 4,                     null: false
+    t.integer  "creator_user_id",                          limit: 4,                     null: false
+    t.integer  "staff_member_id",                          limit: 4,                     null: false
+    t.text     "note",                                     limit: 65535,                 null: false
+    t.integer  "parent_owed_hour_id",                      limit: 4
     t.datetime "disabled_at"
-    t.integer  "disabled_by_user_id", limit: 4
+    t.integer  "disabled_by_user_id",                      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "finance_report_id",   limit: 4
-    t.boolean  "require_times",                     default: true, null: false
+    t.integer  "finance_report_id",                        limit: 4
+    t.boolean  "require_times",                                          default: true,  null: false
     t.datetime "starts_at"
     t.datetime "ends_at"
-    t.date     "payslip_date",                                     null: false
+    t.date     "payslip_date",                                                           null: false
+    t.datetime "processed_for_legacy_validation_at"
+    t.boolean  "legacy_validation_process_issue"
+    t.boolean  "allow_no_finance_report",                                default: false, null: false
+    t.boolean  "allow_legacy_overlap_accepted_hours",                    default: false, null: false
+    t.boolean  "allow_legacy_conflicting_holiday",                       default: false, null: false
+    t.boolean  "allow_legacy_conflicting_owed_hours",                    default: false, null: false
+    t.boolean  "allow_legacy_conflicting_holiday_request",               default: false, null: false
   end
 
   add_index "owed_hours", ["date", "staff_member_id"], name: "index_owed_hours_on_date_and_staff_member_id", using: :btree
@@ -876,6 +901,7 @@ ActiveRecord::Schema.define(version: 20181109133907) do
   add_index "owed_hours", ["disabled_at"], name: "index_owed_hours_on_disabled_at", using: :btree
   add_index "owed_hours", ["payslip_date", "staff_member_id"], name: "index_owed_hours_on_payslip_date_and_staff_member_id", using: :btree
   add_index "owed_hours", ["payslip_date"], name: "index_owed_hours_on_payslip_date", using: :btree
+  add_index "owed_hours", ["processed_for_legacy_validation_at"], name: "legacy_validation", using: :btree
   add_index "owed_hours", ["staff_member_id"], name: "index_owed_hours_on_staff_member_id", using: :btree
 
   create_table "pay_rates", force: :cascade do |t|

@@ -15,21 +15,30 @@ class HoursAcceptancePeriod < ActiveRecord::Base
     where(disabled_at: nil)
   }, class_name: 'HoursAcceptanceBreak'
 
-  validates_associated :hours_acceptance_breaks_enabled
+  validates_associated :hours_acceptance_breaks_enabled, unless: :allow_invalid_breaks?
   validates :starts_at, presence: true
   validates :ends_at, presence: true
   validates :clock_in_day, presence: true
   validates :creator, presence: true
   validates :status, inclusion: { in: STATES, message: 'is required' }
-  validates :accepted_at, presence: true, if: :accepted?
-  validates :accepted_by, presence: true, if: :accepted?
+  validates :accepted_at, presence: true, if: :requires_accepted_at?
+  validates :accepted_by, presence: true, if: :requires_accepted_by?
   validates :finance_report, presence: true, if: :requires_finance_report?
   validate :finance_repot_matches_date
 
   include HoursAcceptancePeriodTimeValidations
 
+  def requires_accepted_at?
+    accepted? && !allow_no_accepter?
+  end
+
+  def requires_accepted_by?
+    accepted? && !allow_no_accepter?
+  end
+
   def requires_finance_report?
-    staff_member.present? &&
+    !allow_no_finance_report? &&
+      staff_member.present? &&
       staff_member.can_have_finance_reports? &&
       accepted?
   end

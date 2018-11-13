@@ -1,4 +1,8 @@
 class HoursAcceptancePeriodTimeOverlapValidator
+  OVERLAPPING_PERIOD_VALIDATION_MESSAGE = 'period overlaps existing period'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'conflicting owed hour exists'
+  CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE = 'conflicting holidays exist'
+
   def initialize(period)
     @period = period
   end
@@ -15,44 +19,50 @@ class HoursAcceptancePeriodTimeOverlapValidator
           )
         )
 
-      relation = relation.enabled.accepted
+      if !period.allow_legacy_overlap_accepted_hours?
+        relation = relation.enabled.accepted
 
-      query = InRangeQuery.new(
-        relation: relation,
-        start_value: starts_at,
-        end_value: ends_at,
-        include_boundaries: []
-      ).all
-
-      if period.persisted?
-        query = ExclusiveOfQuery.new(
-          relation: query,
-          excluded: period
+        query = InRangeQuery.new(
+          relation: relation,
+          start_value: starts_at,
+          end_value: ends_at,
+          include_boundaries: []
         ).all
+
+        if period.persisted?
+          query = ExclusiveOfQuery.new(
+            relation: query,
+            excluded: period
+          ).all
+        end
+
+        if query.count > 0
+          period.errors.add(:base, OVERLAPPING_PERIOD_VALIDATION_MESSAGE)
+        end
       end
 
-      if query.count > 0
-        period.errors.add(:base, 'period overlaps existing period')
+      if !period.allow_legacy_conflicting_owed_hours?
+        conflicting_owed_hours = InRangeQuery.new(
+          relation: staff_member.active_owed_hours,
+          start_value: starts_at,
+          end_value: ends_at
+        ).all
+
+        if conflicting_owed_hours.count > 0
+          period.errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
+        end
       end
 
-      conflicting_owed_hours = InRangeQuery.new(
-        relation: staff_member.active_owed_hours,
-        start_value: starts_at,
-        end_value: ends_at
-      ).all
+      if !period.allow_legacy_conflicting_holiday?
+        conflicting_holidays = HolidayInRangeQuery.new(
+          relation: staff_member.holidays.in_state(:enabled),
+          start_date: date,
+          end_date: date
+        ).all
 
-      if conflicting_owed_hours.count > 0
-        period.errors.add(:base, 'conflicting owed hour exists')
-      end
-
-      conflicting_holidays = HolidayInRangeQuery.new(
-        relation: staff_member.holidays.in_state(:enabled),
-        start_date: date,
-        end_date: date
-      ).all
-
-      if conflicting_holidays.count > 0
-        period.errors.add(:base, 'conflicting holidays exist')
+        if conflicting_holidays.count > 0
+          period.errors.add(:base, CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE)
+        end
       end
     end
   end

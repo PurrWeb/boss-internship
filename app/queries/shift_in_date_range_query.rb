@@ -6,7 +6,7 @@ class ShiftInDateRangeQuery
   end
 
   def all
-    query = RotaShift.enabled.where(staff_member: staff_member)
+    query = staff_member.rota_shifts.enabled
 
     InRangeQuery.new(
       relation: query,

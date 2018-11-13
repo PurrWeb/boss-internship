@@ -1,4 +1,9 @@
 class OwedHour < ActiveRecord::Base
+  CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE = 'conflicting holiday exists'
+  CONFLICTING_HOLIDAY_REQUESTS_VALIDATION_MESSAGE = 'conflicting holiday request exists'
+  CONFLICTING_HAP_PERIOD_VALIDATION_MESSAGE = 'conflicting hour acceptance exists'
+  CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE = 'conflicting owed hour exists'
+
   belongs_to :staff_member
   belongs_to :creator, class_name: 'User', foreign_key: :creator_user_id
   belongs_to :parent, class_name: 'OwedHour', foreign_key: :parent_owed_hour_id
@@ -25,7 +30,8 @@ class OwedHour < ActiveRecord::Base
   attr_accessor :validate_as_creation
 
   def requires_finance_report?
-    staff_member.present? &&
+    !allow_no_finance_report &&
+      staff_member.present? &&
       staff_member.can_have_finance_reports? &&
       enabled?
   end
@@ -77,9 +83,11 @@ class OwedHour < ActiveRecord::Base
   def no_time_conflicts
     return unless (
       enabled?  &&
-      staff_member.present?
+      staff_member.present? &&
+      has_times?
     )
-    if has_times?
+
+    if !allow_legacy_conflicting_owed_hours?
       staff_member_active_owed_hours = staff_member.active_owed_hours
       if persisted?
         staff_member_active_owed_hours = staff_member_active_owed_hours.
@@ -93,11 +101,11 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_owed_hours.count > 0
-        errors.add(:base, 'conflicting owed hour exists')
+        errors.add(:base, CONFLICTING_OWED_HOURS_VALIDATION_MESSAGE)
       end
     end
 
-    if has_times?
+    if !allow_legacy_conflicting_holiday?
       conflicting_holidays = InRangeQuery.new(
         relation: staff_member.active_holidays,
         start_value: date,
@@ -107,9 +115,11 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_holidays.count > 0
-        errors.add(:base, 'conflicting holiday exists')
+        errors.add(:base, CONFLICTING_HOLIDAYS_VALIDATION_MESSAGE)
       end
+    end
 
+    if !allow_legacy_conflicting_holiday_request?
       conflicting_holiday_requests = InRangeQuery.new(
         relation: staff_member.holiday_requests.enabled,
         start_value: date,
@@ -119,11 +129,11 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_holiday_requests.count > 0
-        errors.add(:base, 'conflicting holiday request exists')
+        errors.add(:base, CONFLICTING_HOLIDAY_REQUESTS_VALIDATION_MESSAGE)
       end
     end
 
-    if has_times?
+    if !allow_legacy_overlap_accepted_hours?
       conflicting_hours_acceptances = InRangeQuery.new(
         relation: HoursAcceptancePeriod.
           accepted.
@@ -136,7 +146,7 @@ class OwedHour < ActiveRecord::Base
       ).all
 
       if conflicting_hours_acceptances.count > 0
-        errors.add(:base, 'conflicting hour acceptance exists')
+        errors.add(:base, CONFLICTING_HAP_PERIOD_VALIDATION_MESSAGE)
       end
     end
   end
