@@ -26,6 +26,13 @@ FactoryGirl.define do
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
 
+    trait :marked_retake_avatar do
+      after(:create) do |staff_member|
+        user = FactoryGirl.create(:user)
+        staff_member.update!(marked_retake_avatar_at: Time.now, marked_retake_avatar_user: user)
+      end
+    end
+
     trait :flagged do
       after(:create) do |staff_member|
         FactoryGirl.create(
