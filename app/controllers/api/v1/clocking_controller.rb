@@ -10,7 +10,7 @@ module Api
           render locals: { clock_in_day: result.clock_in_day }
         else
           if result.marked_retake_avatar?
-            return render json: {}, status: 401
+            return render json: {}, status: 403
           else
             render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
           end

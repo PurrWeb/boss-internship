@@ -165,7 +165,7 @@ export const updateClockInStatus = createApiRequestActionCreator({
         },
         getFailureActionData(responseData, requestOptions, getState){
             const { requestStatus } = responseData;
-            if (requestStatus === 401) {
+            if (requestStatus === 403) {
                 return openWarningModal({
                     submit: (handleClose) => handleClose(),
                     config: {
