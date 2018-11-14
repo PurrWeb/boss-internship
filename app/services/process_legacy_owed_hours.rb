@@ -33,8 +33,9 @@ class ProcessLegacyOwedHours < ActiveRecord::Migration
         conflicting_owed_hours_exist = true
       end
 
+      update_successful = false
       if no_finance_report_exists || overlapping_accepted_hours_exist || conflicting_holiday_exist || conflicting_owed_hours_exist || conflicting_holiday_request_exist
-        owed_hour.update_attributes!(
+        update_successful = owed_hour.update_attributes(
           allow_no_finance_report: no_finance_report_exists,
           allow_legacy_overlap_accepted_hours: overlapping_accepted_hours_exist,
           allow_legacy_conflicting_holiday: conflicting_holiday_exist,
@@ -42,7 +43,9 @@ class ProcessLegacyOwedHours < ActiveRecord::Migration
           allow_legacy_conflicting_holiday_request: conflicting_holiday_request_exist,
           processed_for_legacy_validation_at: now,
         )
-      else
+      end
+
+      if !update_successful
         owed_hour.update_attribute(:legacy_validation_process_issue, true)
       end
     end
