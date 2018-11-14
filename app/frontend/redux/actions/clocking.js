@@ -14,6 +14,7 @@ import {setApiKey} from "./api-key"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
+import { openWarningModal } from '~/components/modals';
 
 var actionTypes = [];
 
@@ -163,6 +164,17 @@ export const updateClockInStatus = createApiRequestActionCreator({
             }
         },
         getFailureActionData(responseData, requestOptions, getState){
+            const { requestStatus } = responseData;
+            if (requestStatus === 401) {
+                return openWarningModal({
+                    submit: (handleClose) => handleClose(),
+                    config: {
+                      title: 'WARNING !!!',
+                      text: 'You need to ask manager to retake picture.',
+                      buttonText: 'Submit',
+                    },
+                  });
+            }
             return {
                 clockInDay: getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
             };
