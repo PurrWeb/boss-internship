@@ -69,6 +69,16 @@ FactoryGirl.define do
       password 'password'
     end
 
+    trait :manager do
+      after(:build) do |object|
+        manager_staff_type = StaffType.manager.first
+        if !manager_staff_type.present?
+          manager_staff_type = FactoryGirl.create(:manager_staff_type)
+        end
+        object.staff_type = manager_staff_type
+      end
+    end
+
     trait :security do
       after(:build) do |object|
         security_staff_type = StaffType.security.first

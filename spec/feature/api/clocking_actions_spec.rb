@@ -75,7 +75,27 @@ RSpec.describe 'Clocking actions' do
     end
 
     context "when staff member has a retake avatar mark" do
+      let(:staff_member) { FactoryGirl.create(:staff_member) }
       let(:target_staff_member) { FactoryGirl.create(:staff_member, :marked_retake_avatar) }
+      let(:access_token) do
+        ApiAccessToken.new(
+          staff_member: target_staff_member,
+          api_key: api_key
+        ).persist!
+      end
+      context "when manager make the clock_in action" do
+        let(:staff_member) { FactoryGirl.create(:staff_member, :manager) }
+        let(:access_token) do
+          ApiAccessToken.new(
+            staff_member: staff_member,
+            api_key: api_key
+          ).persist!
+        end
+        it "should succeed" do
+          response = post(url, params)
+          expect(response.status).to eq(ok_status)
+        end
+      end
 
       it "should be marked to retake avatar" do
         expect(target_staff_member.marked_retake_avatar?).to eq(true)

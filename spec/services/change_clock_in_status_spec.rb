@@ -39,9 +39,18 @@ describe ChangeClockInStatus, :clocking do
       expect(result.success?).to eq(true)
     end
 
-    context "staff member has a retake avatar mark" do
+    context "staff member has a retake avatar mark and allow_retake_avatar service flag is true" do
       let(:staff_member) { FactoryGirl.create(:staff_member, :marked_retake_avatar, master_venue: venue) }
       let(:allow_retake_avatar) { true }
+      let(:requester) { staff_member }
+
+      context "when manager make the clock_in action" do
+        let(:requester) { FactoryGirl.create(:staff_member, :manager, master_venue: venue) }
+
+        it "should succeed" do
+          expect(result.success?).to eq(true)
+        end
+      end
 
       it "should be marked to retake avatar" do
         expect(staff_member.marked_retake_avatar?).to eq(true)
@@ -50,6 +59,7 @@ describe ChangeClockInStatus, :clocking do
       it "should fail" do
         expect(result.success?).to eq(false)
       end
+
       it "should return marked_retake_avatar? true" do
         expect(result.marked_retake_avatar?).to eq(true)
       end
