@@ -106,22 +106,39 @@ RSpec.describe 'Api access' do
         perform_call
       end
 
-      it 'should return a staff member record' do
+      it 'should return rota and rotaShift objects' do
         json = JSON.parse(response.body)
+        expect(json.keys).to eq(["rotaShift", "rota"])
 
-        expect(
-          json
-        ).to include(
+        rota_shift_json = json.fetch("rotaShift")
+        expect(rota_shift_json.keys).to eq([
           "id",
-          "starts_at" => starts_at.iso8601,
-          "ends_at" => ends_at.iso8601
-        )
+          "rotaId",
+          "shiftType",
+          "startsAt",
+          "endsAt",
+          "staffMemberId",
+        ])
+        new_shift = RotaShift.last
+        expect(rota_shift_json.fetch("id")).to eq(new_shift.id)
+        expect(rota_shift_json.fetch("rotaId")).to eq(new_shift.rota.id)
+        expect(rota_shift_json.fetch("shiftType")).to eq(new_shift.shift_type)
+        expect(rota_shift_json.fetch("startsAt")).to eq(new_shift.starts_at.iso8601)
+        expect(rota_shift_json.fetch("endsAt")).to eq(new_shift.ends_at.iso8601)
+        expect(rota_shift_json.fetch("staffMemberId")).to eq(new_shift.staff_member.id)
 
-        expect(
-          json["staff_member"]
-        ).to include(
-          "id" => staff_member.id
-        )
+        new_shift_rota = new_shift.rota
+        rota_json = json.fetch("rota")
+        expect(rota_json.keys).to eq([
+          "id",
+          "venue",
+          "date",
+          "status",
+        ])
+        expect(rota_json.fetch("id")).to eq(new_shift_rota.id)
+        expect(rota_json.fetch("venueId")).to eq(new_shift_rota.venue.id)
+        expect(rota_json.fetch("date")).to eq(UIRotaDate.format(new_shift_rota.date))
+        expect(rota_json.fetch("status")).to eq(new_shift_rota.status)
       end
 
       it 'should create a RotaShift record' do
