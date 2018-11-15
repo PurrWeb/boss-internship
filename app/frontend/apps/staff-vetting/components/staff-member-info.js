@@ -25,7 +25,7 @@ function InfoWrapper({ profileLink, id, children, handleInfoClick }) {
 function renderWeekHours(hours) {
   return (
     <div>
-      <b>{`(${moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })})`}</b>
+      <b className="boss-user-summary__marked boss-user-summary__marked_role_alert">{`(${moment.duration(hours, 'minutes').format('*h[h] m[m]', { trim: 'both', useGrouping: false })})`}</b>
     </div>
   );
 }
