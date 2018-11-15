@@ -36,9 +36,10 @@ class ChangeClockInStatus
   def call
     errors = {}
     result = true
+
     marked_retake_avatar = staff_member.marked_retake_avatar?
     if allow_retake_avatar
-      if marked_retake_avatar
+      if marked_retake_avatar && !requester.has_manager_mode_access?
         return Result.new(success: false, clock_in_day: nil, errors: nil, marked_retake_avatar: marked_retake_avatar)
       end
     end
