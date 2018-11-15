@@ -113,19 +113,19 @@ RSpec.describe 'Api access' do
         rota_shift_json = json.fetch("rotaShift")
         expect(rota_shift_json.keys).to eq([
           "id",
-          "rotaId",
-          "shiftType",
-          "startsAt",
-          "endsAt",
-          "staffMemberId",
+          "rota",
+          "shift_type",
+          "starts_at",
+          "ends_at",
+          "staff_member",
         ])
         new_shift = RotaShift.last
         expect(rota_shift_json.fetch("id")).to eq(new_shift.id)
-        expect(rota_shift_json.fetch("rotaId")).to eq(new_shift.rota.id)
-        expect(rota_shift_json.fetch("shiftType")).to eq(new_shift.shift_type)
-        expect(rota_shift_json.fetch("startsAt")).to eq(new_shift.starts_at.iso8601)
-        expect(rota_shift_json.fetch("endsAt")).to eq(new_shift.ends_at.iso8601)
-        expect(rota_shift_json.fetch("staffMemberId")).to eq(new_shift.staff_member.id)
+        expect(rota_shift_json.fetch("rota")).to eq(new_shift.rota.id)
+        expect(rota_shift_json.fetch("shift_type")).to eq(new_shift.shift_type)
+        expect(rota_shift_json.fetch("starts_at")).to eq(new_shift.starts_at.utc.iso8601)
+        expect(rota_shift_json.fetch("ends_at")).to eq(new_shift.ends_at.utc.iso8601)
+        expect(rota_shift_json.fetch("staff_member")).to eq(new_shift.staff_member.id)
 
         new_shift_rota = new_shift.rota
         rota_json = json.fetch("rota")
@@ -136,7 +136,7 @@ RSpec.describe 'Api access' do
           "status",
         ])
         expect(rota_json.fetch("id")).to eq(new_shift_rota.id)
-        expect(rota_json.fetch("venueId")).to eq(new_shift_rota.venue.id)
+        expect(rota_json.fetch("venue")).to eq(new_shift_rota.venue.id)
         expect(rota_json.fetch("date")).to eq(UIRotaDate.format(new_shift_rota.date))
         expect(rota_json.fetch("status")).to eq(new_shift_rota.status)
       end
