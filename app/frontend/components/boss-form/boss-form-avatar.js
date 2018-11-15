@@ -11,6 +11,11 @@ const VALID_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const MAX_FILE_SIZE = 10000000;
 
 class BossFormAvatar extends React.PureComponent {
+  static defaultProps = {
+    markedRetakeAvatar: false,
+    disableUpload: false,
+  };
+
   constructor(props) {
     super(props);
     const {
@@ -169,6 +174,8 @@ class BossFormAvatar extends React.PureComponent {
     const {
       input: { onBlur, value, onChange, name },
       meta: { touched, error, warning },
+      markedRetakeAvatar,
+      disableUpload,
     } = this.props;
 
     return (
@@ -185,12 +192,22 @@ class BossFormAvatar extends React.PureComponent {
           this.renderCropperBlock()
         ) : (
           <div className="boss-add-avatar-block">
-            <div className="boss-add-avatar-block__preview">
+            <div className="boss-add-avatar-block__preview" style={{ position: 'relative' }}>
               <img
                 src={this.state.avatarUrl}
                 alt="Avatar"
                 className="boss-add-avatar-block__preview-image"
               />
+              {(markedRetakeAvatar && disableUpload) && (
+                <div style={{ width: '240px', height: '240px' }} className="boss-user-summary__avatar-overlay">
+                  <p
+                    style={{ fontSize: '36px' }}
+                    className="boss-user-summary__avatar-overlay-text boss-user-summary__avatar-overlay-text_role_retake"
+                  >
+                    Please retake picture
+                  </p>
+                </div>
+              )}
             </div>
             <ImagesPicker
               ref={ref => {

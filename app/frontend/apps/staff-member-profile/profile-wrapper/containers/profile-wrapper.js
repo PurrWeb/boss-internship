@@ -239,6 +239,7 @@ class ProfileWrapper extends React.PureComponent {
     const jobType = staffTypes.find(type => type.get('id') === staffMember.get('staff_type'));
     const isSecurityStaff = oFetch(jsStaffMember, 'is_security_staff');
     const canViewDisciplinary = oFetch(permissionsData.toJS(), 'disciplinariesTab.canViewPage');
+    const markedRetakeAvatar = oFetch(jsStaffMember, 'markedRetakeAvatar');
 
     return (
       <div>
@@ -246,7 +247,7 @@ class ProfileWrapper extends React.PureComponent {
           <DisableStaffMemberForm onSubmit={this.getHandleDisableStaffMemberSubmit(staffMember)} />
         </ContentModal>
         <ContentModal show={editAvatarModal} onClose={hideEditAvatarModal} title="Edit Avatar">
-          <EditAvatarForm initialValues={editAvatarFormInitial} />
+          <EditAvatarForm markedRetakeAvatar={markedRetakeAvatar} initialValues={editAvatarFormInitial} />
         </ContentModal>
         <DashboardWrapper>
           {editProfile && (
