@@ -3,6 +3,7 @@ import { combineReducers } from 'redux-immutable';
 
 import { handleActions } from 'redux-actions';
 import { reducer as formReducer } from 'redux-form/immutable';
+import oFetch from 'o-fetch';
 import SafeMoment from '~/lib/safe-moment';
 import utils from '~/lib/utils';
 
@@ -20,8 +21,8 @@ import {
   SET_MULTIPLE_SHIFT_STAFF_ID,
   SET_STAFF_TYPES_FILTER,
   UPDATE_STAFF_MEMBER_SHIFT_INFO,
+  ADD_ROTA,
 } from './constants';
-
 
 const initialState = fromJS({
   accessToken: null,
@@ -30,6 +31,8 @@ const initialState = fromJS({
   staffTypes: [],
   staffMembers: [],
   rotaShifts: [],
+  rota: null,
+  rotas: [],
   isAddingNewShift: false,
   isGraphDetailsOpen: false,
   graphDetails: null,
@@ -59,7 +62,7 @@ const rotaDailyReducer = handleActions({
     const imRotas = fromJS(rotas);
     const imStaffMembers = fromJS(staffMembers).map(staffMember => {
       const {weekRotaShifts, hoursOnWeek} = utils.calculateStaffRotaShift(staffMember, imWeekRotaShifts, imRotas, imVenues);
-      
+      console.log(staffMember.get('id'), weekRotaShifts, hoursOnWeek);
       const holidays = imHolidays.filter(holiday => holiday.getIn(['staff_member', 'id']) === staffMember.get('id'));
       const holidaysOnWeek = holidays.reduce((summ, holiday) => {
         return summ = summ + holiday.get('days');
@@ -99,15 +102,24 @@ const rotaDailyReducer = handleActions({
       .set('graphDetails', null)
       .set('isGraphDetailsOpen', false)
   },
+  [ADD_ROTA]: (state, action) => {
+    const rota = oFetch(action.payload, 'rota');
+    const rotas = state.get('rotas');
+
+    if (rotas.findIndex(r => r.get('id') === oFetch(rota, 'id')) === -1) {
+      return state.update('rotas', rotas => rotas.push(fromJS(rota)));
+    }
+    return state;
+  },
   [UPDATE_STAFF_MEMBER_SHIFT_INFO]: (state, action) => {
     const staffMemberId = action.payload;
     const staffMemberIndex = state.get('staffMembers').findIndex(staffMember => staffMember.get('id') === staffMemberId);
-    
+    const imRotas = state.get('rotas');
+    const imVenues = state.get('venues');
+
     return state.update('staffMembers', staffMembers => {
       return staffMembers.update(staffMemberIndex, staffMember => {
         const imWeekRotaShifts = state.get('weekRotaShifts');
-        const imRotas = state.get('rotas');
-        const imVenues = state.get('venues');
         const {weekRotaShifts, hoursOnWeek} = utils.calculateStaffRotaShift(staffMember, imWeekRotaShifts, imRotas, imVenues);
         return staffMember
           .set('weekRotaShifts', weekRotaShifts)
@@ -122,10 +134,10 @@ const rotaDailyReducer = handleActions({
       ends_at,
       shift_type,
     } = action.payload;
-    
+
     const shiftIndex = state.get('rotaShifts').findIndex(shift => shift.get('id') === id);
     const weekShiftIndex = state.get('weekRotaShifts').findIndex(shift => shift.get('id') === id);
-    
+
     return state.update('rotaShifts', shifts => {
       return shifts.update(shiftIndex, shift => {
           return shift
@@ -157,8 +169,8 @@ const rotaDailyReducer = handleActions({
       starts_at,
       ends_at,
       shift_type,
-      staff_member: staff_member.id,
-      rota: rota.id,
+      staff_member: staff_member,
+      rota: rota,
     }
     return state
       .update('rotaShifts', shifts => shifts.push(fromJS(newRotaShift)))
