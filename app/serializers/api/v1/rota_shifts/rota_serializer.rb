@@ -1,4 +1,4 @@
-class Api::V1::RotaDaily::RotaSerializer < ActiveModel::Serializer
+class Api::V1::RotaShifts::RotaSerializer < ActiveModel::Serializer
   attributes :id, :venue, :date, :status
 
   def venue

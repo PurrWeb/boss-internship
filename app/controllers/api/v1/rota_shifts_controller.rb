@@ -25,7 +25,10 @@ module Api
 
         if result.success?
           frontend_updates.dispatch
-          render 'show', locals: { rota_shift: result.rota_shift }
+          render json: {
+            rotaShift: Api::V1::RotaShifts::RotaShiftSerializer.new(result.rota_shift),
+            rota: Api::V1::RotaShifts::RotaSerializer.new(result.rota_shift.rota)
+          }
         else
           render(
             'error',
@@ -48,7 +51,10 @@ module Api
 
         if result.success?
           frontend_updates.dispatch
-          render 'show', locals: { rota_shift: result.rota_shift }
+          render json: {
+            rotaShift: Api::V1::RotaShifts::RotaShiftSerializer.new(result.rota_shift),
+            rota: Api::V1::RotaShifts::RotaSerializer.new(result.rota_shift.rota)
+          }
         else
           render(
             'error',
