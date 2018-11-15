@@ -240,6 +240,12 @@ class StaffMember < ActiveRecord::Base
     end
   end
 
+  def has_manager_mode_access?
+    manager? ||
+      bar_supervisor? ||
+      general_manager?
+  end
+
   def marked_retake_avatar?
     marked_retake_avatar_at.present?
   end
