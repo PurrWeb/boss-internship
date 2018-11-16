@@ -14,14 +14,17 @@ export function handleSubmit(values, dispatch, props) {
   const action = () => {
     return dispatch(addShift(values.toJS()))
       .catch(resp => {
-        let errors = resp.response.data.errors;
-        if (errors) {
-          if (errors.base) {
-            errors._error = errors.base
-          }
+        if (resp.response && resp.response.data && resp.response.data.errors) {
+          let errors = resp.response.data.errors;
+          if (errors) {
+            if (errors.base) {
+              errors._error = errors.base
+            }
 
-          throw new SubmissionError({...errors});
+            throw new SubmissionError({...errors});
+          }
         }
+        throw resp;
       });
   }
 
@@ -56,7 +59,7 @@ class AddShift extends React.Component {
       ends_at: null,
       shift_type: "normal",
     }
-    
+
     return (
       <AddShiftForm
         submittion={this.handleSubmit}

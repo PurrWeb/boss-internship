@@ -87,6 +87,7 @@ var utils =  {
       const weekRotaShifts = shifts
         .filter(shift => shift.get('staff_member') === staffMember.get('id'))
         .map(rotaShift => {
+          console.log(rotas, rotaShift);
           const rota = rotas.find(rota => rota.get('id') === rotaShift.get('rota'));
           const venue = venues.find(venue => venue.get('id') === rota.get('venue'));
           return rotaShift.set('venueName', venue.get('name'));

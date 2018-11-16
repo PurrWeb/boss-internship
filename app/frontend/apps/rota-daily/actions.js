@@ -1,6 +1,7 @@
 
 import { createAction } from 'redux-actions';
 import moment from 'moment';
+import oFetch from 'o-fetch';
 import notify from '~/components/global-notification';
 import { submit } from 'redux-form/immutable';
 
@@ -19,6 +20,7 @@ import {
   SET_STAFF_TYPES_FILTER,
   SET_ROTA_STATUS,
   UPDATE_STAFF_MEMBER_SHIFT_INFO,
+  ADD_ROTA,
 } from './constants';
 
 import {
@@ -40,13 +42,18 @@ export const closeMultipleShift = createAction(CLOSE_MULTIPLE_SHIFT);
 export const setMultipleShiftStaffId = createAction(SET_MULTIPLE_SHIFT_STAFF_ID);
 export const setStaffTypesFilter = createAction(SET_STAFF_TYPES_FILTER);
 export const updateStaffMemberShiftInfo = createAction(UPDATE_STAFF_MEMBER_SHIFT_INFO);
+export const addRota = createAction(ADD_ROTA);
 
 export const initialLoad = createAction(INITIAL_LOAD);
 
 export const updateStaffMemberShift = (values) => (dispatch, getState) => {
   return updateStaffMemberShiftRequest(values).then(resp => {
-    dispatch(updateRotaShift(resp.data));
-    dispatch(updateStaffMemberShiftInfo(resp.data.staff_member.id));
+    const rota = oFetch(resp, 'data.rota');
+    const rotaShift = oFetch(resp, 'data.rotaShift');
+    const staffMemberId = oFetch(rotaShift, 'staff_member');
+    dispatch(addRota({ rota }));
+    dispatch(updateRotaShift(rotaShift));
+    dispatch(updateStaffMemberShiftInfo(staffMemberId));
     dispatch(closeGraphDetails());
   })
 }
@@ -71,7 +78,10 @@ export const addShift = (values) => (dispatch, getState) => {
   }
 
   return addShiftRequest(values, venueId, rotaDate).then(resp => {
-    dispatch(addRotaShift(resp.data));
+    const rota = oFetch(resp, 'data.rota');
+    const rotaShift = oFetch(resp, 'data.rotaShift');
+    dispatch(addRota({ rota }));
+    dispatch(addRotaShift(rotaShift));
     dispatch(updateStaffMemberShiftInfo(values.staff_member_id));
     return resp;
   })
