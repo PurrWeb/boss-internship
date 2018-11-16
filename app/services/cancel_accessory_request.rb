@@ -14,7 +14,7 @@ class CancelAccessoryRequest
     success = true
     if accessory_request.frozen?
       accessory_request.errors.add(:base, "can't cancel accessory request that has been frozen")
-      result = false
+      success = false
     else
       success = accessory_request.transition_to(:canceled, requster_user_id: requester.id)
     end
