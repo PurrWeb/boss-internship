@@ -581,6 +581,7 @@ ActiveRecord::Schema.define(version: 20181109133907) do
     t.integer  "finance_report_id",                   limit: 4
     t.datetime "accepted_at"
     t.integer  "accepted_by_id",                      limit: 4
+    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
     t.datetime "processed_for_legacy_validation_at"
     t.boolean  "legacy_validation_process_issue"
     t.boolean  "allow_invalid_breaks",                            default: false,     null: false
@@ -589,7 +590,6 @@ ActiveRecord::Schema.define(version: 20181109133907) do
     t.boolean  "allow_legacy_overlap_accepted_hours",             default: false,     null: false
     t.boolean  "allow_legacy_conflicting_holiday",                default: false,     null: false
     t.boolean  "allow_legacy_conflicting_owed_hours",             default: false,     null: false
-    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
