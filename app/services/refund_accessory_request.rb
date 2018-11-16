@@ -17,7 +17,7 @@ class RefundAccessoryRequest
     refund_request_rejected = refund_request.present? && refund_request.current_state == "rejected"
 
     accessory_refund_request = if refund_request_rejected
-      if refund_request.frozen?
+      if refund_request.boss_frozen?
         refund_request.errors.add(:base, "can't refund accessory request that has been frozen")
         success = false
       else

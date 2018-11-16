@@ -84,7 +84,7 @@ class DeleteStaffMember
     ).all.includes(:finance_report)
 
     upcoming_holidays.each do |holiday|
-      continue if holiday.frozen?
+      continue if holiday.boss_frozen?
       DeleteHoliday.new(
         requester: requester,
         holiday: holiday

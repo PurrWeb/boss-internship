@@ -12,7 +12,7 @@ class CancelAccessoryRequest
 
   def call
     success = true
-    if accessory_request.frozen?
+    if accessory_request.boss_frozen?
       accessory_request.errors.add(:base, "can't cancel accessory request that has been frozen")
       success = false
     else
