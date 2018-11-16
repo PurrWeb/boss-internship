@@ -187,6 +187,6 @@ class OwedHour < ActiveRecord::Base
   end
 
   def boss_frozen?
-    finance_report.andand.done?
+    !!finance_report.andand.done?
   end
 end

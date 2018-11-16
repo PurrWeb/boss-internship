@@ -84,7 +84,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
         "status" => accessory_request.current_state,
         "refundRequestStatus" => accessory_request.accessory_refund_request.current_state,
         "payslipDate" => UIRotaDate.format(accessory_request.payslip_date),
-        "refundFrozen" => nil,
+        "refundFrozen" => false,
         "refundPayslipDate" => nil,
         "requestFrozen" => false,
       })
@@ -134,7 +134,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
           "refundRequestStatus" => accessory_request.accessory_refund_request.current_state,
           "requestFrozen" => accessory_request.frozen?,
           "payslipDate" => UIRotaDate.format(accessory_request.payslip_date),
-          "refundFrozen" => nil,
+          "refundFrozen" => false,
           "refundPayslipDate" => nil
         })
 
