@@ -12,7 +12,7 @@ class AccessoryRequestAdminApiService
 
   def accept
     result = true
-    if accessory_request.frozen?
+    if accessory_request.boss_frozen?
       accessory_request.errors.add(:base, "can't accept accessory request that has been frozen")
       result = false
     else
@@ -28,7 +28,7 @@ class AccessoryRequestAdminApiService
 
   def reject
     result = true
-    if accessory_request.frozen?
+    if accessory_request.boss_frozen?
       accessory_request.errors.add(:base, "can't reject accessory request that has been frozen")
       result = false
     else
@@ -44,7 +44,7 @@ class AccessoryRequestAdminApiService
 
   def undo
     result = true
-    if accessory_request.frozen?
+    if accessory_request.boss_frozen?
       accessory_request.errors.add(:base, "can't undo accessory request that has been frozen")
       result = false
     else
@@ -60,7 +60,7 @@ class AccessoryRequestAdminApiService
 
   def complete(now: Time.current)
     result = true
-    if accessory_request.frozen?
+    if accessory_request.boss_frozen?
       accessory_request.errors.add(:base, "can't complete accessory request that has been frozen")
       result = false
     else

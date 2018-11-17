@@ -62,10 +62,10 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
   end
 
   def requestFrozen
-    object.frozen?
+    object.boss_frozen?
   end
 
   def refundFrozen
-    object.accessory_refund_request.andand.frozen?
+    object.accessory_refund_request.andand.boss_frozen?
   end
 end

@@ -25,6 +25,6 @@ class Api::V1::AccessoryRequests::AccessoryRefundRequestSerializer < ActiveModel
   end
 
   def frozen
-    object.frozen?
+    !!object.boss_frozen?
   end
 end

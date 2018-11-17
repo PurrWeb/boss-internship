@@ -42,7 +42,7 @@ class Api::V1::StaffMemberProfile::HoursAcceptancePeriodSerializer < ActiveModel
   end
 
   def frozen
-    object.frozen?
+    object.boss_frozen?
   end
 
   def venueId

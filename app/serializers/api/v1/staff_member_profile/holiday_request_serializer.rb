@@ -33,7 +33,7 @@ class Api::V1::StaffMemberProfile::HolidayRequestSerializer < ActiveModel::Seria
   end
 
   def frozen
-    object.frozen?
+    object.boss_frozen?
   end
 
   def payslip_date

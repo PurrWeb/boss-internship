@@ -58,7 +58,7 @@ class AccessoryRequest < ActiveRecord::Base
     completed? && accessory_refund_request.present?
   end
 
-  def frozen?
+  def boss_frozen?
     !!finance_report.andand.done?
   end
 

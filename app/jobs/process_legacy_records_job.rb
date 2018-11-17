@@ -3,6 +3,7 @@ class ProcessLegacyRecordsJob < ActiveJob::Base
     record_slice_size = 50
 
     next_hours_acceptance_periods_for_process = HoursAcceptancePeriod.
+      enabled.
       accepted.
       where(
         processed_for_legacy_validation_at: nil,

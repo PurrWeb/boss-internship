@@ -12,7 +12,7 @@ class AccessoryRefundRequestAdminApiService
 
   def accept
     result = true
-    if accessory_refund_request.frozen?
+    if accessory_refund_request.boss_frozen?
       accessory_refund_request.errors.add(:base, "can't accept refund for accessory request that has been frozen")
       result = false
     else
@@ -28,7 +28,7 @@ class AccessoryRefundRequestAdminApiService
 
   def reject
     result = true
-    if accessory_refund_request.frozen?
+    if accessory_refund_request.boss_frozen?
       accessory_refund_request.errors.add(:base, "can't reject refund for accessory request that has been frozen")
       result = false
     else
@@ -44,7 +44,7 @@ class AccessoryRefundRequestAdminApiService
 
   def undo
     result = true
-    if accessory_refund_request.frozen?
+    if accessory_refund_request.boss_frozen?
       accessory_refund_request.errors.add(:base, "can't undo accessory request that has been frozen")
       result = false
     else
@@ -60,7 +60,7 @@ class AccessoryRefundRequestAdminApiService
 
   def complete(reusable:, now: Time.current)
     result = true
-    if accessory_refund_request.frozen?
+    if accessory_refund_request.boss_frozen?
       accessory_refund_request.errors.add(:base, "can't complete accessory request that has been frozen")
       result = false
     else

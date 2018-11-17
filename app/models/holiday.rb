@@ -79,7 +79,7 @@ class Holiday < ActiveRecord::Base
   end
 
   def editable?
-    staff_member.enabled? && !frozen?
+    staff_member.enabled? && !boss_frozen?
   end
 
   def days
@@ -87,8 +87,8 @@ class Holiday < ActiveRecord::Base
     day_delta + 1
   end
 
-  def frozen?
-    finance_report.andand.done?
+  def boss_frozen?
+    !!finance_report.andand.done?
   end
 
   private

@@ -30,7 +30,7 @@ class HolidayRequest < ActiveRecord::Base
     )
   end
 
-  def frozen?
+  def boss_frozen?
     false
   end
 

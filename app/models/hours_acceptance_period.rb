@@ -55,7 +55,7 @@ class HoursAcceptancePeriod < ActiveRecord::Base
   end
 
   def editable?
-    !frozen?
+    !boss_frozen?
   end
 
   def self.accepted
@@ -74,8 +74,8 @@ class HoursAcceptancePeriod < ActiveRecord::Base
     clock_in_day.venue
   end
 
-  def frozen?
-    finance_report.andand.done?
+  def boss_frozen?
+    !!finance_report.andand.done?
   end
 
   def enabled?

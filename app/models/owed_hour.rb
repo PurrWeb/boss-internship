@@ -156,7 +156,7 @@ class OwedHour < ActiveRecord::Base
   end
 
   def editable?
-    staff_member.enabled? && !frozen?
+    staff_member.enabled? && !boss_frozen?
   end
 
   def enabled?
@@ -186,7 +186,7 @@ class OwedHour < ActiveRecord::Base
     end
   end
 
-  def frozen?
-    finance_report.andand.done?
+  def boss_frozen?
+    !!finance_report.andand.done?
   end
 end

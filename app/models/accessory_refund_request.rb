@@ -50,8 +50,8 @@ class AccessoryRefundRequest < ActiveRecord::Base
     state_machine.current_state == "completed"
   end
 
-  def frozen?
-    finance_report.andand.done?
+  def boss_frozen?
+    !!finance_report.andand.done?
   end
 
   delegate \

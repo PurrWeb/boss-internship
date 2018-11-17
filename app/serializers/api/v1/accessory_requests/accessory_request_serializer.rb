@@ -20,6 +20,6 @@ class Api::V1::AccessoryRequests::AccessoryRequestSerializer < ActiveModel::Seri
   end
 
   def frozen
-    object.frozen?
+    object.boss_frozen?
   end
 end
