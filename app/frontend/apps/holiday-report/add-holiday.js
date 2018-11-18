@@ -7,12 +7,10 @@ import HolidayForm from './holiday-form';
 class AddHoliday extends React.PureComponent {
   handleSubmit = (values, dispatch) => {
     return this.props.onSubmit(values, dispatch).catch((resp) => {
-      console.log(resp);
-      const errors = resp.response.data.errors;
-      
-      if (errors) {
+      if (resp.response && resp.response.data && resp.response.data.errors) {
+        const errors = resp.response.data.errors;
         let base = {};
-        
+
         if (errors.base) {
           base = {
             _error: errors.base
