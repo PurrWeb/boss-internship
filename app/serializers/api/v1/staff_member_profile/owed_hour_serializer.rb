@@ -46,6 +46,6 @@ class Api::V1::StaffMemberProfile::OwedHourSerializer < ActiveModel::Serializer
   end
 
   def frozen
-    object.frozen?
+    object.boss_frozen?
   end
 end
