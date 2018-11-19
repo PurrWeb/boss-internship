@@ -28,9 +28,13 @@ RSpec.describe 'Mark Retake Avatar endpoint' do
     expect(response.status).to eq(ok_status)
   end
 
-  specify 'it should return empty json response' do
+  specify 'it should return serialized staff member json' do
     json = JSON.parse(response.body)
-    expect(json).to eq({})
+    staff_member.reload
+
+    staff_member_json = JSON.parse(Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member).to_json)
+    expect(json).to eq(staff_member_json)
+    expect(staff_member_json['markedRetakeAvatar']).to eq(true)
   end
 
   private
