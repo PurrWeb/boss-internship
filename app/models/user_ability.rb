@@ -412,7 +412,13 @@ class UserAbility
         end
       end
 
-      can [:create, :destroy], HolidayRequest do |holiday_request|
+      can [:create_holiday_request], StaffMember do |staff_member|
+        user.food_ops_manager? ||
+        user.payroll_manager? ||
+          can_edit_staff_member?(user, staff_member)
+      end
+
+      can [:destroy], HolidayRequest do |holiday_request|
         user.food_ops_manager? ||
         user.payroll_manager? ||
           can_edit_staff_member?(user, holiday_request.staff_member)

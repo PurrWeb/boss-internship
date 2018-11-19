@@ -14,9 +14,9 @@ class CreateHolidayRequest
   def call
     success = false
     holiday_request = nil
-
+    staff_member = params.fetch(:staff_member)
     holiday_request = HolidayRequest.new(params)
-    ability.authorize!(:create, holiday_request)
+    ability.authorize!(:create_holiday_request, staff_member)
 
     success = holiday_request.save
 
