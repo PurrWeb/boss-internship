@@ -169,9 +169,9 @@ export const updateClockInStatus = createApiRequestActionCreator({
                 return openWarningModal({
                     submit: (handleClose) => handleClose(),
                     config: {
-                      title: 'WARNING !!!',
-                      text: 'You need to ask manager to retake picture.',
-                      buttonText: 'Submit',
+                      title: 'Photo Update Required!!!',
+                      text: 'You cannot complete this action until you supply a new photo. Please contact a manager to resolve this issue.',
+                      buttonText: 'Close',
                     },
                   });
             }
