@@ -158,7 +158,12 @@ module Api
           .new(requester: current_user)
           .all(query: name_filter_params, venue: venue_from_params)
 
-        render json: filtered_staff_members, each_serializer: Api::V1::Holidays::StaffMemberSearchSerializer, status: 200
+        render(
+          json: filtered_staff_members,
+          each_serializer: Api::V1::Holidays::StaffMemberSearchSerializer,
+          scope: {ability: UserAbility.new(current_user)},
+          status: 200,
+        )
       end
 
       def holidays_count

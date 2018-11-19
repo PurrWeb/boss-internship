@@ -9,16 +9,18 @@ class AddHolidayStaffMembersQuery
 
     fragments = (query || "").split
     if fragments.count > 0
-    staff_members = staff_members.search(
-      or: fragments.map do |fragment|
-        {query: fragment}
-      end
-    )
+      staff_members = staff_members.search(
+        or: fragments.map do |fragment|
+          {query: fragment}
+        end,
+      )
     end
 
     staff_members = staff_members.where(master_venue: venue) if venue.present?
 
-    staff_members.select {|staff_member| ability.can?(:create_holiday, staff_member)}
+    staff_members.select do |staff_member|
+      ability.can?(:create_holiday, staff_member) || ability.can?(:create_holiday_request, staff_member)
+    end
   end
 
   private
