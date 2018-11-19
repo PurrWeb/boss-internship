@@ -46,6 +46,7 @@ export default handleActions({
     }
   },
   [ADD_HOLIDAY]: (state, action) => {
+    console.log(ADD_HOLIDAY);
     const momentRange = extendMoment(moment);
     const {weekStartDate, weekEndDate} = state.pageOptions;
     const {start_date} = action.payload;
@@ -66,6 +67,7 @@ export default handleActions({
     return state;
   },
   [ADD_STAFF_MEMBER]: (state, action) => {
+    console.log(ADD_STAFF_MEMBER);
     const staffMember = action.payload;
     if (!(`CLIENT_ID_${oFetch(staffMember, 'id')}` in oFetch(state, 'staffMembers'))) {
       const proccessedStaffMember = processStaffMemberObject(staffMember);
@@ -86,7 +88,7 @@ export default handleActions({
     holidays.forEach(holiday => {
       const startDateWeekday = safeMoment.iso8601Parse(oFetch(holiday, 'start_date')).isoWeekday();
       const endDateWeekday = safeMoment.iso8601Parse(oFetch(holiday, 'end_date')).isoWeekday();
-      
+
       for (let i = startDateWeekday; i<= endDateWeekday; i ++) {
         if (holidaysCount[i] === undefined) {
           holidaysCount[i] = 0;
@@ -94,7 +96,7 @@ export default handleActions({
         holidaysCount[i] = holidaysCount[i] + 1;
       }
     });
-    
+
     return {
       ...state,
       holidaysCount: holidaysCount

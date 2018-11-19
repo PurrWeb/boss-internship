@@ -73,7 +73,7 @@ export default class HolidayRow extends React.Component {
       const mStartDate = safeMoment.uiDateParse(holiday.start_date);
       const startDateText = mStartDate.format('ddd Do MMM');
       const mEndDate = safeMoment.uiDateParse(holiday.end_date);
-      const endDateText = mStartDate.format('ddd Do MMM');
+      const endDateText = mEndDate.format('ddd Do MMM');
       const mCreatedAt = safeMoment.iso8601Parse(holiday.created_at);
       const dateText = startDateText === endDateText ? startDateText : `${startDateText} - ${endDateText}`
       const sPayslipDate = oFetch(holiday, 'payslip_date');
