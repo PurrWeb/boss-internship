@@ -161,6 +161,10 @@ class User < ActiveRecord::Base
     state_machine.current_state == 'disabled'
   end
 
+  def has_manager_mode_access?
+    has_effective_access_level?(AccessLevel.manager_access_level)
+  end
+
   def dev?
     role == DEV_ROLE
   end

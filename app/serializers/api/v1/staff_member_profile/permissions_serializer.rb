@@ -1,5 +1,9 @@
 class Api::V1::StaffMemberProfile::PermissionsSerializer < ActiveModel::Serializer
-  attributes :canEnable, :holidaysTab, :owedHoursTab, :accessoriesTab, :disciplinariesTab
+  attributes :canEnable, :canMarkRetakeAvatar, :holidaysTab, :owedHoursTab, :accessoriesTab, :disciplinariesTab
+
+  def canMarkRetakeAvatar
+    object.can_mark_retake_avatar?
+  end
 
   def canEnable
     object.can_enable?

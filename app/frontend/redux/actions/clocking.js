@@ -14,6 +14,7 @@ import {setApiKey} from "./api-key"
 import {
     loadInitialClockInOutAppState
 } from "./app-data"
+import { openWarningModal } from '~/components/modals';
 
 var actionTypes = [];
 
@@ -163,6 +164,17 @@ export const updateClockInStatus = createApiRequestActionCreator({
             }
         },
         getFailureActionData(responseData, requestOptions, getState){
+            const { requestStatus } = responseData;
+            if (requestStatus === 403) {
+                return openWarningModal({
+                    submit: (handleClose) => handleClose(),
+                    config: {
+                      title: 'Photo Update Required!!!',
+                      text: 'You cannot complete this action until you supply a new photo. Please contact a manager to resolve this issue.',
+                      buttonText: 'Close',
+                    },
+                  });
+            }
             return {
                 clockInDay: getNewClockInDayFromUpdateStatusResponse(responseData, requestOptions, getState)
             };

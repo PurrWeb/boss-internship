@@ -56,6 +56,11 @@
               <%= link_to staff_member_path(id: staff_member.id), class: 'boss-table__link' do %>
                 <div class="boss-avatar boss-avatar_type_combined">
                   <%= image_tag(staff_member.avatar_url, class: 'boss-avatar__image') %>
+                  <% if staff_member.marked_retake_avatar? %>
+                    <div class="boss-avatar__overlay">
+                        <p class="boss-avatar__overlay-text boss-avatar__overlay-text_role_retake">Please retake picture</p>
+                    </div>
+                  <% end %>
                 </div>
               <% end %>
             </div>

@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import { connect } from "react-redux"
+import oFetch from 'o-fetch';
 import utils from "~/lib/utils"
 import StaffShiftList from "~/components/staff-shift-list"
 import StaffTypeBadge from "~/components/staff-type-badge"
@@ -42,12 +43,17 @@ class ClockInOutStaffListItem extends Component {
     hideChangeSettingsTooltip() {
         this.setState({isChangeSettingsTooltipActive: false})
     }
-    drawUserAvatar(url, status){
+    drawUserAvatar(url, status, isMarkedRetakeAvatar){
         const statusForClassName = status.toLowerCase().replace(/( |_)/g, '-');
 
         return (
-            <div className={`boss-info-table__user-avatar-container boss-info-table__user-avatar-container_${statusForClassName}`}>
+            <div className={`boss-info-table__user-avatar-container boss-info-table__user-avatar-container_${statusForClassName}`} style={{position: 'relative'}}>
                 <img src={url} className="boss-info-table__user-avatar-image" />
+                {isMarkedRetakeAvatar && (
+                    <div className="boss-avatar__overlay">
+                        <p className="boss-avatar__overlay-text boss-avatar__overlay-text_role_retake">Please retake picture</p>
+                    </div>
+                )}
             </div>
         );
     }
@@ -227,11 +233,11 @@ class ClockInOutStaffListItem extends Component {
                id={this.changeStatusButtonId}
             >(change)</button>
         );
-
+        const isMarkedRetakeAvatar = oFetch(staffMember, 'markedRetakeAvatar');
         return (
             <div className={`boss-info-table__tr test-staff-row ${staffMember.isOnHolidays ? 'info-table__tr_state_on-holiday' : ''}`}>
                 <div className="boss-info-table__td info-table__td">
-                    {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue)}
+                    {this.drawUserAvatar(staffMember.avatar_url, clockInStatusValue, isMarkedRetakeAvatar)}
                     <div className="boss-info-table__user-info">
                         <div className="boss-info-table__user-name">
                             {staffMember.first_name} {staffMember.surname}

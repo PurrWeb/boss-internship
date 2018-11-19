@@ -116,6 +116,15 @@ module Api
         end
       end
 
+      def mark_retake_avatar
+        staff_member = StaffMember.find(params[:staff_member_id])
+        authorize!(:mark_retake_avatar, staff_member)
+
+        staff_member = MarkRetakeAvatar.new(requester: current_user, staff_member: staff_member).call
+
+        render json: staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
+      end
+
       def show
         staff_member = StaffMember.find(params.fetch(:id))
         authorize! :edit, staff_member

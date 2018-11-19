@@ -462,6 +462,7 @@ Rails.application.routes.draw do
         end
         resources :holiday_reports, only: :index
         resources :staff_members, only: [:index, :show, :create] do
+          post :mark_retake_avatar
           post :send_app_download_email
           post :send_verification
           post :resend_verification

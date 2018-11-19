@@ -41,10 +41,15 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :password_set_at,
              :is_flagged,
              :is_weekly_payrate,
-             :sageId
+             :sageId,
+             :markedRetakeAvatar
 
   def age
     object.age
+  end
+
+  def markedRetakeAvatar
+    object.marked_retake_avatar?
   end
 
   def date_of_birth

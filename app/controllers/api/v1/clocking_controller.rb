@@ -9,7 +9,11 @@ module Api
         if result.success?
           render locals: { clock_in_day: result.clock_in_day }
         else
-          render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+          if result.marked_retake_avatar?
+            return render json: {}, status: 403
+          else
+            render 'errors', status: :unprocessable_entity, locals: { errors: result.errors, clock_in_day: result.clock_in_day }
+          end
         end
       end
 
@@ -93,7 +97,8 @@ module Api
           staff_member: staff_member,
           state: to_state,
           at: at,
-          requester: staff_member_from_token
+          requester: staff_member_from_token,
+          allow_retake_avatar: true,
         ).call
 
         if result.success?

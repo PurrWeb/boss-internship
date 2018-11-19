@@ -174,6 +174,10 @@ class StaffMemberApiUpdateService
 
     api_errors = nil
     if result
+      if staff_member.marked_retake_avatar?
+        staff_member.clear_update_avatar!
+      end
+
       frontend_updates.update_staff_member_profile(staff_member: staff_member)
     else
       api_errors = StaffMemberUpdateAvatarApiErrors.new(staff_member: staff_member)

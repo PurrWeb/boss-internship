@@ -15,7 +15,8 @@ const StaffMemberCard = ({
   onEditAvatar,
   currentPage,
   venues,
-  permissionsData
+  permissionsData,
+  onMarkRetakeAvatar,
 }) => {
   const avatar = oFetch(staffMember, 'avatar');
   const fullName = `${oFetch(staffMember, 'first_name')} ${oFetch(
@@ -23,7 +24,7 @@ const StaffMemberCard = ({
     'surname',
   )}`;
   const masterVenueId = oFetch(staffMember, 'master_venue');
-  const masterVenue = masterVenueId &&  _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
+  const masterVenue = masterVenueId && _.find(venues, venue => { return oFetch(venue, 'id') === masterVenueId });
   const email = oFetch(staffMember, 'email');
   const phoneNumber = oFetch(staffMember, 'phone_number');
   const disabled = oFetch(staffMember, 'disabled');
@@ -34,8 +35,8 @@ const StaffMemberCard = ({
   const jobTypeName = oFetch(jobType, 'name');
   const jobTypeColor = oFetch(jobType, 'color');
   const bouncedEmail = oFetch(staffMember, 'bounced_email');
-  const isSecurityStaff = oFetch(staffMember, 'is_security_staff');
-  const canViewDisciplinary = oFetch(permissionsData.toJS(), 'disciplinariesTab.canViewPage');
+  const markedRetakeAvatar = oFetch(staffMember, 'markedRetakeAvatar');
+  const canMarkRetakeAvatar = oFetch(permissionsData.toJS(), 'canMarkRetakeAvatar');
 
   const renderPhoneNumber = phoneNumber => {
     return phoneNumber ? (
@@ -65,13 +66,13 @@ const StaffMemberCard = ({
         {email}
       </p>
     ) : (
-      <a
-        href={`mailto:${email}`}
-        className="boss-user-summary__link boss-user-summary__link_role_email"
-      >
-        {email}
-      </a>
-    );
+        <a
+          href={`mailto:${email}`}
+          className="boss-user-summary__link boss-user-summary__link_role_email"
+        >
+          {email}
+        </a>
+      );
   };
 
   const renderFullName = (fullName, disabled = false) => {
@@ -90,85 +91,9 @@ const StaffMemberCard = ({
 
   const renderCardContacts = (email, phoneNumber) => {
     return (
-      <div key={1} className="boss-user-summary__contacts">
+      <div className="boss-user-summary__contacts">
         {renderEmail(email)}
         {renderPhoneNumber(phoneNumber)}
-      </div>
-    );
-  };
-  const isActive = (currentPage, page) => {
-    return currentPage === page ? 'boss-button_state_active' : '';
-  };
-
-  const renderCardActions = () => {
-    return (
-      <div key={2} className="boss-user-summary__meta">
-        <a
-          href={`profile`}
-          className={`${isActive(
-            currentPage,
-            'profile',
-          )} boss-button boss-button_type_small boss-button_role_profile boss-user-summary__switch`}
-        >
-          Profile
-        </a>
-        <a
-          href={`holidays`}
-          className={`${isActive(
-            currentPage,
-            'holidays',
-          )} boss-button boss-button_type_small boss-button_role_holidays boss-user-summary__switch`}
-        >
-          Holidays
-        </a>
-        <a
-          href={`owed_hours`}
-          className={`${isActive(
-            currentPage,
-            'owed_hours',
-          )} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
-        >
-          Owed hours
-        </a>
-        <a
-          href={`shifts`}
-          className={`${isActive(
-            currentPage,
-            'shifts',
-          )} boss-button boss-button_type_small boss-button_role_timelog boss-user-summary__switch`}
-        >
-          Shifts
-        </a>
-        {!isSecurityStaff && (
-          <a
-            href={`accessories`}
-            className={`${isActive(
-              currentPage,
-              'accessories',
-            )} boss-button boss-button_type_small boss-button_role_accessories boss-user-summary__switch`}
-          >
-            Accessories
-          </a>
-        )}
-        <a
-          href={`payments`}
-          className={`${isActive(
-            currentPage,
-            'payments',
-          )} boss-button boss-button_type_small boss-button_role_payments boss-user-summary__switch`}
-        >
-          Payments
-        </a>
-        {canViewDisciplinary && <a
-          href={`disciplinaries`}
-          className={`${isActive(
-            currentPage,
-            'disciplinary',
-          )} boss-button boss-button_type_small boss-button_role_disciplinary boss-page-dashboard__switch`}
-        >
-          Disciplinary
-        </a>}
-
       </div>
     );
   };
@@ -204,7 +129,7 @@ const StaffMemberCard = ({
         </li>
         <li className="boss-user-summary__review-item">
           <span className="boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_exclamation boss-user-summary__label">
-            { isFlagged ? 'Flagged' : 'Disabled' }
+            {isFlagged ? 'Flagged' : 'Disabled'}
           </span>
         </li>
       </ul>
@@ -225,6 +150,22 @@ const StaffMemberCard = ({
                 >
                   Edit
                 </button>
+              )}
+              {canMarkRetakeAvatar && !markedRetakeAvatar && (
+                <button
+                  type="button"
+                  className="boss-user-summary__avatar-icon boss-user-summary__avatar-icon_role_retake"
+                  onClick={onMarkRetakeAvatar}
+                >
+                  Retake
+                </button>
+              )}
+              {markedRetakeAvatar && (
+                <div className="boss-user-summary__avatar-overlay">
+                  <p className="boss-user-summary__avatar-overlay-text boss-user-summary__avatar-overlay-text_role_retake">
+                    Please retake picture
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -251,7 +192,7 @@ const StaffMemberCard = ({
             })}
 
           {masterVenue && renderMasterVenue(masterVenue)}
-          {[renderCardContacts(email, phoneNumber), renderCardActions()]}
+          {renderCardContacts(email, phoneNumber)}
         </div>
       </div>
     </div>

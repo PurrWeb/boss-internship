@@ -26,6 +26,13 @@ FactoryGirl.define do
     staff_type
     avatar { Rack::Test::UploadedFile.new(TestImageHelper.arnie_face_path) }
 
+    trait :marked_retake_avatar do
+      after(:create) do |staff_member|
+        user = FactoryGirl.create(:user)
+        staff_member.update!(marked_retake_avatar_at: Time.now, marked_retake_avatar_user: user)
+      end
+    end
+
     trait :flagged do
       after(:create) do |staff_member|
         FactoryGirl.create(
@@ -60,6 +67,16 @@ FactoryGirl.define do
     trait :with_password do
       verified_at { 5.minutes.ago }
       password 'password'
+    end
+
+    trait :manager do
+      after(:build) do |object|
+        manager_staff_type = StaffType.manager.first
+        if !manager_staff_type.present?
+          manager_staff_type = FactoryGirl.create(:manager_staff_type)
+        end
+        object.staff_type = manager_staff_type
+      end
     end
 
     trait :security do

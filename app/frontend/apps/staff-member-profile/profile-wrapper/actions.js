@@ -7,6 +7,7 @@ import {
   updateEmploymentDetails,
   updatePersonalDetails,
   updateContactDetails,
+  markRetakeAvatarRequest,
 } from './requests';
 
 import {
@@ -20,6 +21,12 @@ import {
   UPDATE_STAFF_MEMBER,
   UPDATE_DOWNLOAD_LINK_LAST_SENT_AT,
 } from './constants';
+
+export const markRetakeAvatar = staffMemberId => (dispatch, getState) => {
+  return markRetakeAvatarRequest(staffMemberId).then(resp => {
+    dispatch(updateStaffMember(resp.data));
+  });
+};
 
 export const updateAvatarRequest = avatarUrl => (dispatch, getState) => {
   const staffMemberId = getState().getIn(['profile', 'staffMember', 'id']);

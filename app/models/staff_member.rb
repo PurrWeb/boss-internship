@@ -8,6 +8,8 @@ class StaffMember < ActiveRecord::Base
 
   MALE_GENDER = 'male'
   FEMALE_GENDER = 'female'
+  MARK_RETAKE_USER_MUST_NOT_BE_PRESENT_MESSAGE = 'must only be set if staff member is marked as retake avatar'
+  MARK_RETAKE_USER_MUST_BE_PRESENT_MESSAGE = 'must be set if staff member is marked as retake avatar'
 
   GENDERS = [MALE_GENDER, FEMALE_GENDER]
 
@@ -53,6 +55,8 @@ class StaffMember < ActiveRecord::Base
 
   belongs_to :pay_rate
 
+  belongs_to :marked_retake_avatar_user, class_name: "User", foreign_key: :marked_retake_avatar_user_id
+
   scope :weekly_finance_reports, -> (date) { joins(:finance_reports).where(finance_reports: {week_start: date})  }
   scope :with_aged_payrates, -> { joins(:pay_rate).where(pay_rates: { name: PayRate::AGED_PAYRATE_NAMES }) }
   scope :regular, -> { joins(:staff_type).merge(StaffType.not_security)}
@@ -92,6 +96,9 @@ class StaffMember < ActiveRecord::Base
   validates :creator, presence: true
   validates :starts_at, presence: true
   validates :pay_rate, presence: true
+  validates :marked_retake_avatar_user, absence: true, unless: :marked_retake_avatar?
+  validates :marked_retake_avatar_user, presence: true, if: :marked_retake_avatar?
+
   validate do |staff_member|
     StaffMemberVenueValidator.new(staff_member).validate
   end
@@ -113,6 +120,14 @@ class StaffMember < ActiveRecord::Base
   before_validation :check_rollbar_guid
 
   delegate :current_state, to: :state_machine
+
+  def clear_update_avatar!
+    update_attributes!(
+      marked_retake_avatar_at: nil,
+      marked_retake_avatar_user: nil,
+      override_retake_avatar_restrictions: false
+    )
+  end
 
   def expire_security_app_tokens!
     SecurityAppApiAccessToken.revoke!(user: self)
@@ -223,6 +238,16 @@ class StaffMember < ActiveRecord::Base
     if disabled?
       User.find(state_machine.last_transition.metadata.fetch("requster_user_id"))
     end
+  end
+
+  def has_manager_mode_access?
+    manager? ||
+      bar_supervisor? ||
+      general_manager?
+  end
+
+  def marked_retake_avatar?
+    marked_retake_avatar_at.present?
   end
 
   def flagged?

@@ -5,10 +5,11 @@ class ReviveStaffMember
     end
   end
 
-  def initialize(requester:, staff_member:, starts_at:)
+  def initialize(requester:, staff_member:, starts_at:, system_user: User.first)
     @requester = requester
     @staff_member = staff_member
     @starts_at = starts_at
+    @system_user = system_user
   end
 
   def call
@@ -21,6 +22,9 @@ class ReviveStaffMember
 
       # Sage ID changes when restarting a staff member
       staff_member.sage_id = nil
+
+      staff_member.marked_retake_avatar_user = system_user
+      staff_member.marked_retake_avatar_at = now
 
       StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
@@ -59,7 +63,7 @@ class ReviveStaffMember
 
   private
 
-  attr_reader :requester, :staff_member, :starts_at
+  attr_reader :requester, :staff_member, :starts_at, :system_user
 
   def update_realted_daily_reports(staff_member)
     DailyReportDatesEffectedByStaffMemberOnWeeklyPayRateQuery.new(

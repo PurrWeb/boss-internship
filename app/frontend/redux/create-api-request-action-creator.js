@@ -107,7 +107,10 @@ export default function createApiRequestActionCreator(actionOptions){
                         if (responseOptions.errors && responseOptions.errors.base){
                             alert(responseOptions.errors.base.join("\n"));
                         } else {
-                            alert(JSON.stringify(responseOptions.errors));
+                            const {requestStatus} = responseOptions;
+                            if (requestStatus !== 403) {
+                                alert(JSON.stringify(responseOptions.errors));
+                            }
                         }
                     }
 

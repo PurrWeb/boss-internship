@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe ChangeClockInStatus, :clocking do
   include ActiveSupport::Testing::TimeHelpers
+  let(:allow_retake_avatar) { false }
   let(:day_start) { RotaShiftDate.new(Time.current).start_time }
   let(:date) { RotaShiftDate.to_rota_date(now) }
   let(:staff_member) { FactoryGirl.create(:staff_member, master_venue: venue) }
@@ -19,6 +20,7 @@ describe ChangeClockInStatus, :clocking do
         staff_member: staff_member,
         state: state,
         at: now,
+        allow_retake_avatar: allow_retake_avatar,
       )
     end
     let(:result) { service.call }
@@ -35,6 +37,32 @@ describe ChangeClockInStatus, :clocking do
 
     it "should succeed" do
       expect(result.success?).to eq(true)
+    end
+
+    context "staff member has a retake avatar mark and allow_retake_avatar service flag is true" do
+      let(:staff_member) { FactoryGirl.create(:staff_member, :marked_retake_avatar, master_venue: venue) }
+      let(:allow_retake_avatar) { true }
+      let(:requester) { staff_member }
+
+      context "when manager make the clock_in action" do
+        let(:requester) { FactoryGirl.create(:staff_member, :manager, master_venue: venue) }
+
+        it "should succeed" do
+          expect(result.success?).to eq(true)
+        end
+      end
+
+      it "should be marked to retake avatar" do
+        expect(staff_member.marked_retake_avatar?).to eq(true)
+      end
+
+      it "should fail" do
+        expect(result.success?).to eq(false)
+      end
+
+      it "should return marked_retake_avatar? true" do
+        expect(result.marked_retake_avatar?).to eq(true)
+      end
     end
 
     context "staff member is already clocked in at other venue" do

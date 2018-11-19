@@ -3,6 +3,16 @@ import { SECURITY_TYPE_ID } from './constants';
 import oFetch from 'o-fetch';
 import utils from '~/lib/utils';
 import http from '~/lib/request-api';
+import { apiRoutes } from '~/lib/routes';
+export const markRetakeAvatarRequest = staffMemberId => {
+  return http(
+    {
+      successMessage: 'Force Retake Successfully',
+      errorMessage: 'Force Retake Failed',
+    },
+    5000,
+  ).post(apiRoutes.markRetakeAvatar.getPath(staffMemberId));
+};
 
 export const updateAvatar = ({ staffMemberId, avatarUrl }) => {
   return http({ successMessage: 'Avatar Updated Successfully', errorMessage: 'Updating Avatar Failed' }, 5000).post(

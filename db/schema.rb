@@ -1271,6 +1271,9 @@ ActiveRecord::Schema.define(version: 20181109133907) do
     t.datetime "verified_at"
     t.datetime "password_set_at"
     t.string   "sage_id",                               limit: 255
+    t.datetime "marked_retake_avatar_at"
+    t.integer  "marked_retake_avatar_user_id",          limit: 4
+    t.boolean  "override_retake_avatar_restrictions",                 default: false, null: false
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

@@ -1,13 +1,26 @@
 class ChangeClockInStatus
-  class Result < Struct.new(:success, :clock_in_day, :errors)
+  class Result
+    def initialize(success:, clock_in_day:, errors:, marked_retake_avatar:)
+      @success = success
+      @clock_in_day = clock_in_day
+      @errors = errors
+      @marked_retake_avatar = marked_retake_avatar
+    end
+
     def success?
       success
     end
+
+    def marked_retake_avatar?
+      marked_retake_avatar
+    end
+
+    attr_reader :success, :clock_in_day, :errors, :marked_retake_avatar
   end
 
   STATES = [:clocked_in, :clocked_out, :on_break]
 
-  def initialize(date:, venue:, staff_member:, requester:, state:, at:, nested: false)
+  def initialize(date:, venue:, staff_member:, requester:, state:, at:, nested: false, allow_retake_avatar: false)
     @date = date
     @venue = venue
     @staff_member = staff_member
@@ -15,13 +28,21 @@ class ChangeClockInStatus
     @state = state
     @at = at
     @nested = nested
+    @allow_retake_avatar = allow_retake_avatar
   end
 
-  attr_reader :date, :venue, :staff_member, :requester, :state, :at, :nested
+  attr_reader :date, :venue, :staff_member, :requester, :state, :at, :nested, :allow_retake_avatar
 
   def call
     errors = {}
     result = true
+
+    marked_retake_avatar = staff_member.marked_retake_avatar?
+    if allow_retake_avatar
+      if marked_retake_avatar && !requester.has_manager_mode_access?
+        return Result.new(success: false, clock_in_day: nil, errors: nil, marked_retake_avatar: marked_retake_avatar)
+      end
+    end
 
     clock_in_day = ClockInDay.find_or_initialize_by(
       venue: venue,
@@ -139,7 +160,7 @@ class ChangeClockInStatus
 
     clock_in_day.reload if clock_in_day.persisted?
 
-    Result.new(result, clock_in_day, errors)
+    Result.new(success: result, clock_in_day: clock_in_day, errors: errors, marked_retake_avatar: marked_retake_avatar)
   end
 
   private
