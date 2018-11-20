@@ -6,7 +6,6 @@ export const withGlobalErrorHandler = (promise) => {
     if (rollbarPresent()) {
       Rollbar.error(err, null, getRollbarPayload());
     }
-    console.log(err);
     errorHandler.throwErrorPage();
   });
 };

@@ -26,7 +26,6 @@ class StaffWithSameSageId extends Component {
         const imGrouppedByVenueAndSageId = imStaffMembers
           .groupBy(s => s.get('venueId'))
           .map((staffMembersByVenue, venueId) => staffMembersByVenue.groupBy(s => s.get('sageId')));
-        console.log(imGrouppedByVenueAndSageId);
         this.setState({
           staffMembers: imStaffMembers,
           grouppedStaffMembers: imGrouppedByVenueAndSageId,

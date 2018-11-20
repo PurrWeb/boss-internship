@@ -112,8 +112,6 @@ export default class WeatherWidget extends React.Component {
       return null;
     }
 
-    console.log(data);
-
     const [currently, daily] = oFetch(data, 'current.currently', 'current.daily.data');
     const hourly = oFetch(data, 'time.hourly.data');
 
