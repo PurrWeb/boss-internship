@@ -15,7 +15,10 @@ const EditProfilePage = ({
     genderValues,
     staffMember,
     onSubmissionComplete,
+    permissionsData,
   }) => {
+  const canEditSageId = oFetch(permissionsData.toJS(), 'canEditSageId');
+
   let staffMemberData = staffMember.toJS();
   const contactDetailsFormInitial = {
     email_address: oFetch(staffMemberData, 'email'),
@@ -40,6 +43,7 @@ const EditProfilePage = ({
     master_venue: oFetch(staffMemberData, 'master_venue'),
     other_venues: oFetch(staffMemberData, 'other_venues'),
     sage_id: oFetch(staffMemberData, 'sageId'),
+    allow_no_sage_id: oFetch(staffMemberData, 'allowNoSageId'),
     starts_at: safeMoment.uiDateParse(oFetch(staffMemberData, 'starts_at')),
     staff_type: oFetch(staffMemberData, 'staff_type'),
     sia_badge_number: oFetch(staffMemberData, 'sia_badge_number'),
@@ -71,6 +75,7 @@ const EditProfilePage = ({
             <EmploymentDetailsForm
               initialValues={employmentDetailsFormInitial}
               staffTypes={staffTypes}
+              canEditSageId={canEditSageId}
               onSubmissionComplete={onSubmissionComplete}
               accessiblePayRates={accessiblePayRates}
               accessibleVenues={accessibleVenues}

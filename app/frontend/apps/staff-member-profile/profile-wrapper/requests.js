@@ -58,6 +58,7 @@ export const updateEmploymentDetails = payload => {
     staff_type,
     sia_badge_expiry_date,
     sia_badge_number,
+    allow_no_sage_id,
   } = payload;
 
   let fields = {
@@ -70,6 +71,7 @@ export const updateEmploymentDetails = payload => {
     pay_rate_id: pay_rate,
     other_venue_ids: other_venues,
     staff_type_id: staff_type,
+    allow_no_sage_id,
   };
 
   if (staff_type === SECURITY_TYPE_ID) {

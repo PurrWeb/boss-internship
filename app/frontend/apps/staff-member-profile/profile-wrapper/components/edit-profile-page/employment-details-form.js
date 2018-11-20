@@ -2,9 +2,10 @@ import React from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import { connect } from 'react-redux';
 import { formValueSelector, change } from 'redux-form/immutable';
-
+import oFetch from 'o-fetch';
 import BossFormSelect from '~/components/boss-form/boss-form-select';
 import BossFormInput from '~/components/boss-form/boss-form-input';
+import { BossFormCheckbox } from '~/components/boss-form';
 import BossFormCalendar from '~/components/boss-form/boss-form-calendar';
 import BossFormEmployementStatus from '~/components/boss-form/boss-form-employement-status';
 import notify from '~/components/global-notification';
@@ -28,6 +29,8 @@ let EmploymentDetailsForm = ({
     onSubmissionComplete,
     isSecurityStaff,
     dispatch,
+    canEditSageId,
+    allowNoSageId,
   }) => {
 
   const submission = (values, dispatch) => {
@@ -145,15 +148,27 @@ let EmploymentDetailsForm = ({
         type="text"
         label="National Insurance Number"
       />
-
-      <Field
-       component={BossFormInput}
-       required
-       name="sage_id"
-       type="text"
-       label="Sage ID"
-      />
-
+      {canEditSageId && (
+        <div className="boss-form__group boss-form__group_role_board-outline js-sage-id">
+          <div className="boss-form__row boss-form__row_justify_end boss-form__row_layout_nowrap">
+            <Field
+              component={BossFormCheckbox}
+              className="boss-form__field_layout_actual"
+              name="allow_no_sage_id"
+              left={false}
+              label="This staff member does not require a Sage ID"
+            />
+          </div>
+          <Field
+            component={BossFormInput}
+            required={!allowNoSageId}
+            disabled={allowNoSageId}
+            name="sage_id"
+            type="text"
+            label="Sage ID"
+          />
+        </div>
+      )}
       <Field
         component={BossFormEmployementStatus}
         required
@@ -175,8 +190,11 @@ let EmploymentDetailsForm = ({
 EmploymentDetailsForm = reduxForm({
   form: 'employment-details-form',
   onChange: (values, dispatch, props) => {
-    if(values.get('staff_type') === SECURITY_TYPE_ID) {
+    if (values.get('staff_type') === SECURITY_TYPE_ID) {
       dispatch(change('employment-details-form', 'master_venue', null));
+    }
+    if (values.get('allow_no_sage_id') === true) {
+      dispatch(change('employment-details-form', 'sage_id', null));
     }
   },
   validate,
@@ -184,10 +202,11 @@ EmploymentDetailsForm = reduxForm({
 
 const selector = formValueSelector('employment-details-form');
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isSecurityStaff: selector(state, 'staff_type') === SECURITY_TYPE_ID,
-  }
+    allowNoSageId: !!selector(state, 'allow_no_sage_id'),
+  };
 };
 
 export default connect(mapStateToProps)(EmploymentDetailsForm);
