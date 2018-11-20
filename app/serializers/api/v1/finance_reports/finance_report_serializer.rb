@@ -21,6 +21,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
     :netWagesCents,
     :canSeeNetWages,
     :staffMemberSageId,
+    :staffMemberAllowNoSageId,
     :staffMemberDisabled,
     :containsTimeShiftedOwedHours,
     :containsTimeShiftedHolidays,
@@ -167,6 +168,10 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
 
   def staffMemberSageId
     object.staff_member.sage_id
+  end
+
+  def staffMemberAllowNoSageId
+    object.staff_member.allow_no_sage_id
   end
 
   def containsTimeShiftedOwedHours
