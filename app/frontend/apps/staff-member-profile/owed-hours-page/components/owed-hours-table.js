@@ -41,8 +41,21 @@ export const getOwedHourUIData = owedHourJS => {
     .format('Do MMMM YYYY - HH:mm');
   const editable = oFetch(owedHourJS, 'editable');
   const payslipDate = oFetch(owedHourJS, 'payslipDate');
+  const frozen = oFetch(owedHourJS, 'frozen');
 
-  return { hasDate, date, times, durationHours, durationMinutes, note, creator, created, editable, payslipDate };
+  return {
+    hasDate,
+    date,
+    times,
+    durationHours,
+    durationMinutes,
+    note,
+    creator,
+    created,
+    editable,
+    payslipDate,
+    frozen,
+  };
 };
 
 const ActionsCell = props => {
@@ -55,6 +68,7 @@ const ActionsCell = props => {
     editable,
     isStaffMemberDisabled,
     owedHourPermissions,
+    frozen,
   ] = oFetch(
     props,
     'label',
@@ -65,6 +79,7 @@ const ActionsCell = props => {
     'editable',
     'isStaffMemberDisabled',
     'owedHourPermissions',
+    'frozen',
   );
 
   const onEdit = owedHour => {
@@ -88,7 +103,8 @@ const ActionsCell = props => {
   return (
     <div className="boss-table__cell">
       {editable &&
-        !isStaffMemberDisabled && (
+        !isStaffMemberDisabled &&
+        !frozen && (
           <div className="boss-table__info">
             <p className="boss-table__label">{label}</p>
             <p className="boss-table__actions">
@@ -142,7 +158,7 @@ const CreatedByCell = ({ label, creator, created }) => {
 
 const Row = ({ owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled, owedHourPermissions }) => {
   const owedHourJS = owedHour.toJS();
-  const [date, times, durationHours, durationMinutes, creator, created, note, editable, payslipDate] = oFetch(
+  const [date, times, durationHours, durationMinutes, creator, created, note, editable, payslipDate, frozen] = oFetch(
     getOwedHourUIData(owedHourJS),
     'date',
     'times',
@@ -153,10 +169,11 @@ const Row = ({ owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled, 
     'note',
     'editable',
     'payslipDate',
+    'frozen',
   );
 
   return (
-    <div className="boss-table__row">
+    <div className={`boss-table__row ${frozen ? 'boss-table__row_state_frozen' : ''}`}>
       <SimpleCell label="Date" text={date} />
       <SimpleCell label="Times" text={times} />
       <SimpleCell label="Duration (hours)" text={durationHours} />
@@ -165,6 +182,7 @@ const Row = ({ owedHour, deleteOwedHours, openEditModal, isStaffMemberDisabled, 
       <SimpleCell label="Note" text={note} />
       <SimpleCell label="Payslip Date" text={payslipDate} />
       <ActionsCell
+        frozen={frozen}
         editable={editable}
         label="Actions"
         owedHourId={oFetch(owedHourJS, 'id')}

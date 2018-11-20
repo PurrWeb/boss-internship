@@ -10,7 +10,8 @@ class Api::V1::StaffMemberProfile::OwedHourSerializer < ActiveModel::Serializer
     :payslipDate,
     :createdAt,
     :createdBy,
-    :note
+    :note,
+    :frozen
 
   def date
     UIRotaDate.format(object.date)
@@ -42,5 +43,9 @@ class Api::V1::StaffMemberProfile::OwedHourSerializer < ActiveModel::Serializer
 
   def createdBy
     object.creator.full_name
+  end
+
+  def frozen
+    object.boss_frozen?
   end
 end
