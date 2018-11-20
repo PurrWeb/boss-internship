@@ -26,6 +26,10 @@ class StaffMemberProfilePermissions
     user_ability.can?(:mark_retake_avatar, staff_member)
   end
 
+  def can_edit_sage_id?
+    user_ability.can?(:edit, :sage_id)
+  end
+
   def holidays_tab
     {
       canCreateHolidays: user_ability.can?(:create_holiday, staff_member),
