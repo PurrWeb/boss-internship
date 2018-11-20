@@ -58,7 +58,6 @@ gem 'ably-rest', '~> 1.0'
 gem 'search_cop'
 gem 'forecast_io'
 gem 'rack-cors', require: 'rack/cors'
-gem 'search_cop'
 
 group :production, :development do
   gem 'redis', '~>3.2'
@@ -73,6 +72,7 @@ group :development, :test do
   gem "bullet"
   gem 'quiet_assets'
   gem 'factory-helper'
+  gem 'spring-commands-rspec'
   gem "rb-fsevent",        :require => false
 end
 
