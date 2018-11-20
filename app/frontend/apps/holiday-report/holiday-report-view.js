@@ -6,7 +6,8 @@ import ReportsHeader from "./reports-header"
 import ReportsBody from "./reports-body"
 import _ from 'lodash';
 import {
-  createHoliday,
+  createHolidayAction,
+  createHolidayRequestAction,
 } from './actions';
 export class HolidayReportView extends React.Component {
   render() {
@@ -39,7 +40,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({
-      createHoliday,
+      createHolidayAction,
+      createHolidayRequestAction,
     }, dispatch)
   };
 }

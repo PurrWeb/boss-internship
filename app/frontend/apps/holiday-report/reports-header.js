@@ -1,4 +1,5 @@
 import React from 'react';
+import oFetch from 'o-fetch';
 import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import { appRoutes } from '~/lib/routes';
 import safeMoment from '~/lib/safe-moment';
@@ -53,9 +54,18 @@ export default class ReportsHeader extends React.Component {
     }
   }
 
-  submit = (hideModal, values) => {
-    return this.props.actions.createHoliday(values, hideModal);
-  }
+  submit = (hideModal, values, dispatch, canCreateHoliday) => {
+    console.log(canCreateHoliday);
+    const [createHolidayAction, createHolidayRequestAction] = oFetch(
+      this.props,
+      'actions.createHolidayAction',
+      'actions.createHolidayRequestAction',
+    );
+    if (canCreateHoliday) {
+      return createHolidayAction(values, hideModal);
+    }
+    return createHolidayRequestAction(values, hideModal);
+  };
 
   renderAddHolidayButton() {
     return (
