@@ -108,14 +108,13 @@ class ReportItem extends Component {
         </div>
       );
     }
-    if (!sageId && allowNoSageId) {
+    if (allowNoSageId) {
       return (
         <div className="boss-table__cell">
           <div className="boss-table__text" />
         </div>
       );
-    }
-    if (!sageId && !allowNoSageId) {
+    } else {
       return (
         <div className="boss-table__cell boss-table__cell_state_alert">
           <a href={appRoutes.staffMember(staffMemberId)}>
