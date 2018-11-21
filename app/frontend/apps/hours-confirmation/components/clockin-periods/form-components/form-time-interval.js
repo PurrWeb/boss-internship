@@ -5,7 +5,7 @@ import safeMoment from '~/lib/safe-moment';
 import moment from 'moment';
 import oFetch from 'o-fetch';
 import RotaDate from '~/lib/rota-date';
-
+import ReactDOM from 'react-dom';
 import {
   getPossibleShiftStartTimeStrings,
   getPossibleShiftEndTimeStrings,
@@ -72,6 +72,21 @@ class FromTimeInterval extends React.Component {
     const newDate = shiftRotaDate.getDateFromShiftEndTimeString(newValue);
     endsAt.input.onChange(newDate);
   }
+  onInputKeyDown = event => {
+    switch (event.keyCode) {
+      case 9: // TAB
+        const startsAtInput = ReactDOM.findDOMNode(this.startsAtRef).querySelector('input');
+        const endsAtInput = ReactDOM.findDOMNode(this.endsAtRef).querySelector('input');
+        const startsAtFocused = document.activeElement === startsAtInput;
+        if (startsAtFocused) {
+          endsAtInput.focus();
+        } else {
+          startsAtInput.focus();
+        }
+        event.preventDefault();
+        break;
+    }
+  };
 
   render() {
     let startsAt, endsAt;
@@ -101,6 +116,8 @@ class FromTimeInterval extends React.Component {
         loadOptions={(input, callback) =>
           this.getStartsAtOptions(input, callback, shiftRotaDate)
         }
+        onInputKeyDown={this.onInputKeyDown}
+        ref={node => this.startsAtRef = node}
         clearable={false}
         searchable={true}
         onChange={value => this.updateStartsTime(value, shiftRotaDate)}
@@ -112,6 +129,8 @@ class FromTimeInterval extends React.Component {
         loadOptions={(input, callback) =>
           this.getEndsAtOptions(input, callback, shiftRotaDate)
         }
+        onInputKeyDown={this.onInputKeyDown}
+        ref={node => this.endsAtRef = node}
         clearable={false}
         searchable={true}
         onChange={value => this.updateEndsTime(value, shiftRotaDate)}
