@@ -7,10 +7,14 @@ module Api
 
           if result.success?
             render json: {
-              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event)
+              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event),
             }
           else
-            render json: { errors: {} }, status: 422
+            if result.marked_retake_avatar?
+              return render json: {}, status: 403
+            else
+              render json: {errors: {}}, status: 422
+            end
           end
         end
 
@@ -19,10 +23,10 @@ module Api
 
           if result.success?
             render json: {
-              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event)
+              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event),
             }
           else
-            render json: { errors: {} }, status: 422
+            render json: {errors: {}}, status: 422
           end
         end
 
@@ -31,10 +35,10 @@ module Api
 
           if result.success?
             render json: {
-              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event)
+              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event),
             }
           else
-            render json: { errors: {} }, status: 422
+            render json: {errors: {}}, status: 422
           end
         end
 
@@ -43,14 +47,15 @@ module Api
 
           if result.success?
             render json: {
-              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event)
+              clockInEvent: Api::ClockingApp::V1::ClockInEventSerializer.new(result.clock_in_day.last_clock_in_event),
             }
           else
-            render json: { errors: {} }, status: 422
+            render json: {errors: {}}, status: 422
           end
         end
 
         private
+
         def transition_state(to_state:)
           staff_member = staff_member_from_params
           venue = venue_from_api_key
@@ -65,7 +70,8 @@ module Api
             staff_member: staff_member,
             state: to_state,
             at: at,
-            requester: current_staff_member
+            requester: current_staff_member,
+            allow_retake_avatar: true,
           ).call
 
           if result.success?
