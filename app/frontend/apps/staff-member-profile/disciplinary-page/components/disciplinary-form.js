@@ -156,11 +156,8 @@ const selector = formValueSelector('disciplinary-form');
 export default connect((state, ownProps) => {
   const level = selector(state, 'level');
   if (level) {
-    console.log(level);
     const warnings = oFetch(ownProps, 'warnings');
-    console.log(warnings);
     const warningLimits = oFetch(ownProps, 'warningLimits');
-    console.log(warningLimits);
     const warningMessage = warnings[level];
     const warningLimit = warningLimits[level];
     return {

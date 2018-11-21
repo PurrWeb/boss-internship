@@ -62,7 +62,6 @@ const rotaDailyReducer = handleActions({
     const imRotas = fromJS(rotas);
     const imStaffMembers = fromJS(staffMembers).map(staffMember => {
       const {weekRotaShifts, hoursOnWeek} = utils.calculateStaffRotaShift(staffMember, imWeekRotaShifts, imRotas, imVenues);
-      console.log(staffMember.get('id'), weekRotaShifts, hoursOnWeek);
       const holidays = imHolidays.filter(holiday => holiday.getIn(['staff_member', 'id']) === staffMember.get('id'));
       const holidaysOnWeek = holidays.reduce((summ, holiday) => {
         return summ = summ + holiday.get('days');

@@ -13,7 +13,7 @@ FactoryGirl.define do
     creator factory: :user
     starts_at { 1.day.ago }
     association :master_venue, factory: :venue
-
+    allow_no_sage_id false
     pay_rate
 
     employment_status_a false

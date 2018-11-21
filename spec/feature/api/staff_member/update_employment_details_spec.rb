@@ -20,6 +20,7 @@ RSpec.describe 'Update Employment Details' do
     end
     FactoryGirl.create(:staff_member, create_params)
   end
+  let(:allow_no_sage_id) { false }
   let(:venue) { staff_member.master_venue }
   let(:user_venues) { related_with_user_venues }
   let(:user) { FactoryGirl.create(:user, venues: user_venues) }
@@ -50,6 +51,7 @@ RSpec.describe 'Update Employment Details' do
       pay_rate_id: new_pay_rate.id,
       national_insurance_number: new_national_insurance_number,
       sage_id: new_sage_id,
+      allow_no_sage_id: allow_no_sage_id,
     }
   end
   let(:response) do
@@ -86,11 +88,59 @@ RSpec.describe 'Update Employment Details' do
     set_authorization_header(access_token.token)
   end
 
+  context 'when master venue was not changed' do
+    let(:params) do
+      valid_params.merge({master_venue_id: old_master_venue.id})
+    end
+    context 'when user has ability to edit sage_id' do
+      let(:user) { FactoryGirl.create(:user, :admin, venues: user_venues) }
+      before do
+        response
+      end
+      it 'should return ok status' do
+        expect(response.status).to eq(ok_status)
+      end
+      it 'should update sage_id' do
+        staff_member.reload
+
+        expect(staff_member.sage_id).to eq(new_sage_id)
+      end
+    end
+    context 'when user has no ability to edit sage_id' do
+      before do
+        response
+      end
+      it 'should return ok status' do
+        expect(response.status).to eq(ok_status)
+      end
+      it 'should not update sage_id' do
+        staff_member.reload
+
+        expect(staff_member.sage_id).to eq(old_sage_id)
+      end
+    end
+  end
+
+  context 'when master venue was changed' do
+    let(:params) do
+      valid_params.merge({master_venue_id: new_master_venue.id})
+    end
+    before do
+      response
+    end
+    it 'should return ok status' do
+      expect(response.status).to eq(ok_status)
+    end
+    it 'should clear sage_id' do
+      staff_member.reload
+      expect(staff_member.sage_id).to eq(nil)
+    end
+  end
+
   context 'when valid params supplied' do
     let(:params) do
       valid_params
     end
-
     before do
       response
     end

@@ -241,6 +241,11 @@ class UserAbility
         can_view_main_vettings_page?(user)
       end
 
+      can :edit, :sage_id do
+        user.payroll_manager? ||
+          user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can [:view, :accept, :complete, :edit], :change_order_reports do
         user.has_effective_access_level?(AccessLevel.area_manager_access_level)
       end

@@ -6,6 +6,7 @@ class BossFormCheckbox extends React.Component {
       input,
       label,
       required,
+      left = true,
       className = '',
       type = 'checkbox',
       meta: { touched, error, warning },
@@ -17,9 +18,10 @@ class BossFormCheckbox extends React.Component {
             {...input}
             type={type}
             placeholder={label}
+            checked={input.value}
             className={`boss-form__checkbox-input ${touched && error && 'boss-form__checkbox-input_state_error'}`}
           />
-          <span className="boss-form__checkbox-label-text">
+          <span className={`boss-form__checkbox-label-text ${!left ? 'boss-form__checkbox-label-text_layout_reverse' : ''}`}>
              {label}
           </span>
         </label>

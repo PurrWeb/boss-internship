@@ -22,10 +22,8 @@ class ReportItem extends Component {
     const sundayHoursCount = utils.round(oFetch(report, 'sundayHoursCount'), 2);
     const staffMemberId = oFetch(this.props, 'report.staffMemberId');
     const weekDates = oFetch(this.props, 'weekDates');
-    const status = oFetch(report, 'status');
     const hoursPending = oFetch(report, 'hoursPending');
     const daysNeedingCompletion = oFetch(report, 'daysNeedingCompletion');
-    const pendingCalculation = oFetch(report, 'pendingCalculation');
 
     return [
       mondayHoursCount,
@@ -38,10 +36,19 @@ class ReportItem extends Component {
     ].map((dayHoursCount, index) => {
       const weekDate = weekDates[index];
       if (hoursPending === true && daysNeedingCompletion[weekDate]) {
-        const tooltipContent = <span><a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>{daysNeedingCompletion[weekDate].join(', ')}</a></span>;
+        const tooltipContent = (
+          <span>
+            <a target="_blank" href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}>
+              {daysNeedingCompletion[weekDate].join(', ')}
+            </a>
+          </span>
+        );
         return (
           <div key={index} className={this.getCellClassName({ alertStyles: true })} style={cellStyle}>
-            <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName({ alertStyles: true })} boss-table__link`}>
+            <a
+              href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}
+              className={`${this.getTextClassName({ alertStyles: true })} boss-table__link`}
+            >
               {dayHoursCount}
             </a>
             {this.renderTooltip(tooltipContent)}
@@ -50,8 +57,11 @@ class ReportItem extends Component {
       } else {
         return (
           <div key={index} className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
-            <p style={{marginBottom: 0}} className={this.getTextClassName({ alertStyles: false })}>
-              <a href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)} className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}>
+            <p style={{ marginBottom: 0 }} className={this.getTextClassName({ alertStyles: false })}>
+              <a
+                href={appRoutes.staffMemberHoursOverview(staffMemberId, weekDate)}
+                className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}
+              >
                 {dayHoursCount}
               </a>
             </p>
@@ -79,13 +89,7 @@ class ReportItem extends Component {
 
   renderTooltip(content) {
     return (
-      <Tooltip
-        arrow
-        theme="light"
-        position="right"
-        interactive
-        html={content}
-      >
+      <Tooltip arrow theme="light" position="right" interactive html={content}>
         <span className="boss-table__tooltip">
           <span className="boss-tooltip boss-tooltip_role_alert">
             <span className="boss-tooltip__icon" />
@@ -94,6 +98,38 @@ class ReportItem extends Component {
       </Tooltip>
     );
   }
+
+  renderSageId = props => {
+    const [sageId, allowNoSageId, staffMemberId] = oFetch(props, 'sageId', 'allowNoSageId', 'staffMemberId');
+    if (sageId) {
+      return (
+        <div className="boss-table__cell">
+          <div className="boss-table__text">{sageId}</div>
+        </div>
+      );
+    }
+    if (allowNoSageId) {
+      return (
+        <div className="boss-table__cell">
+          <div className="boss-table__text" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="boss-table__cell boss-table__cell_state_alert">
+          <a href={appRoutes.staffMember(staffMemberId)}>
+            <p className="boss-table__text boss-table__text_state_alert">
+              <span className="boss-table__tooltip">
+                <span className="boss-tooltip boss-tooltip_role_alert">
+                  <span className="boss-tooltip__icon" />
+                </span>
+              </span>
+            </p>
+          </a>
+        </div>
+      );
+    }
+  };
 
   render() {
     const report = oFetch(this.props, 'report');
@@ -115,9 +151,9 @@ class ReportItem extends Component {
     const netWagesCents = oFetch(report, 'netWagesCents');
     const canSeeNetWages = oFetch(report, 'canSeeNetWages');
     const sageId = oFetch(report, 'staffMemberSageId');
+    const allowNoSageId = oFetch(report, 'staffMemberAllowNoSageId');
     const containsTimeShiftedOwedHours = oFetch(report, 'containsTimeShiftedOwedHours');
     const containsTimeShiftedHolidays = oFetch(report, 'containsTimeShiftedHolidays');
-    const daysNeedingCompletion = oFetch(report, 'daysNeedingCompletion');
     const pendingCalculation = oFetch(report, 'pendingCalculation');
     const staffMemberDisabled = oFetch(report, 'staffMemberDisabled');
     const hoursPending = oFetch(report, 'hoursPending');
@@ -126,7 +162,7 @@ class ReportItem extends Component {
     let effectiveStatus = status;
     if (effectiveStatus === 'ready' && !completionDateReached) {
       effectiveStatus = 'pending';
-    } else if((effectiveStatus === 'ready') && hoursPending) {
+    } else if (effectiveStatus === 'ready' && hoursPending) {
       effectiveStatus = 'incomplete';
     }
 
@@ -140,16 +176,16 @@ class ReportItem extends Component {
     });
     const fullNameCellClassName = classNames({
       'boss-table__cell': true,
-      'boss-table__cell_indicator_user-disabled': staffMemberDisabled
+      'boss-table__cell_indicator_user-disabled': staffMemberDisabled,
     });
     const fullNameCellTextClassName = classNames({
       'boss-table__text': true,
-      'boss-table__text_indicator_accessory': acessories !== 0
+      'boss-table__text_indicator_accessory': acessories !== 0,
     });
     const rowClassName = classNames({
       'boss-table__row': true,
       'boss-table__row_state_alert': hoursPending,
-      'boss-table__row_state_pre-calculated': pendingCalculation
+      'boss-table__row_state_pre-calculated': pendingCalculation,
     });
     const owedHoursClassName = classNames({
       'boss-table__cell': true,
@@ -172,22 +208,7 @@ class ReportItem extends Component {
             </a>
           </p>
         </div>
-        { sageId && <div className="boss-table__cell">
-          <div className="boss-table__text">
-            {sageId}
-          </div>
-        </div> }
-        { !sageId && <div className="boss-table__cell boss-table__cell_state_alert">
-            <a href={appRoutes.staffMember(staffMemberId)} >
-              <p className="boss-table__text boss-table__text_state_alert">
-                <span className="boss-table__tooltip">
-                  <span className="boss-tooltip boss-tooltip_role_alert">
-                    <span className="boss-tooltip__icon"></span>
-                  </span>
-                </span>
-              </p>
-            </a>
-          </div> }
+        {this.renderSageId({ sageId, allowNoSageId, staffMemberId })}
         {this.renderWeekDaysCells()}
         <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
           <p className={this.getTextClassName({ alertStyles: false })}>{weeklyHours}</p>
@@ -198,7 +219,14 @@ class ReportItem extends Component {
           </div>
         ) : (
           <div className={owedHoursClassName} style={cellStyle}>
-            <a href={appRoutes.staffMemberOwedHours({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})} className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}>
+            <a
+              href={appRoutes.staffMemberOwedHours({
+                staffMemberId: staffMemberId,
+                mPayslipStartDate: mStartDate,
+                mPayslipEndDate: mEndDate,
+              })}
+              className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}
+            >
               {owedHours}
             </a>
           </div>
@@ -221,10 +249,12 @@ class ReportItem extends Component {
           <p className={this.getTextClassName({ alertStyles: false })}>{payRateDescription}</p>
         </div>
         <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
-          <p className={`${this.getTextClassName({ alertStyles: false })} boss-table__text_role_important`}>{totalHoursCount}</p>
+          <p className={`${this.getTextClassName({ alertStyles: false })} boss-table__text_role_important`}>
+            {totalHoursCount}
+          </p>
         </div>
         <div className={this.getCellClassName({ alertStyles: false })} style={cellStyle}>
-          <p className={this.getTextClassName({ alertStyles: false })} style={total < 0 ? { color: 'red'} : {}}>
+          <p className={this.getTextClassName({ alertStyles: false })} style={total < 0 ? { color: 'red' } : {}}>
             {utils.moneyFormat(total)}
           </p>
         </div>
@@ -235,7 +265,11 @@ class ReportItem extends Component {
         ) : (
           <div className={holidayDaysCountClassName} style={cellStyle}>
             <a
-              href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({staffMemberId: staffMemberId, mPayslipStartDate: mStartDate, mPayslipEndDate: mEndDate})}
+              href={appRoutes.staffMemberProfileHolidaysTabFromFinanceReport({
+                staffMemberId: staffMemberId,
+                mPayslipStartDate: mStartDate,
+                mPayslipEndDate: mEndDate,
+              })}
               className={`${this.getTextClassName({ alertStyles: false })} boss-table__link`}
             >
               {holidayDaysCount}
@@ -244,12 +278,12 @@ class ReportItem extends Component {
         )}
         <div className="boss-table__cell">
           <p className="boss-table__text">
-            { netWagesCents && <span>{ canSeeNetWages ? utils.moneyFormat(netWagesCents / 100.0) : 'XXXX'  }</span> }
+            {netWagesCents && <span>{canSeeNetWages ? utils.moneyFormat(netWagesCents / 100.0) : 'XXXX'}</span>}
           </p>
         </div>
         <div className="boss-table__cell">
           <p className={statusClassName}>{humanize(effectiveStatus)}</p>
-          { effectiveStatus === 'ready' && (
+          {effectiveStatus === 'ready' && (
             <div className="boss-table__actions">
               <button
                 onClick={() => onMarkCompleted({ staffMemberId, isNegativeTotal })}
