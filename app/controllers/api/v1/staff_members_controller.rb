@@ -347,7 +347,7 @@ module Api
           master_venue_id: params.fetch("master_venue_id"),
           other_venue_ids: params.fetch("other_venue_ids") || [],
           staff_type_id: params.fetch("staff_type_id"),
-          allow_no_sage_id: params.fetch(:allow_no_sage_id),
+          allow_no_sage_id: params.fetch("allow_no_sage_id"),
           sia_badge_number: params["sia_badge_number"],
           sia_badge_expiry_date: params["sia_badge_expiry_date"],
         })
