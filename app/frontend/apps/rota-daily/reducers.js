@@ -60,7 +60,15 @@ const rotaDailyReducer = handleActions({
     const imHolidays = fromJS(holidays);
     const imVenues = fromJS(venues);
     const imRotas = fromJS(rotas);
-    const imStaffMembers = fromJS(staffMembers).map(staffMember => {
+
+    // Order staff members on rota page (security staff are last)
+    const imGroupedStaffMembers = fromJS(staffMembers)
+      .groupBy(x => x.get('staff_type') === 11 ? 'security' : 'others');
+    const imOrderedStaffMembers = List([])
+      .concat(imGroupedStaffMembers.get('others').sortBy(s => s.get('first_name')))
+      .concat(imGroupedStaffMembers.get('security'));
+
+    const imStaffMembers = imOrderedStaffMembers.map(staffMember => {
       const {weekRotaShifts, hoursOnWeek} = utils.calculateStaffRotaShift(staffMember, imWeekRotaShifts, imRotas, imVenues);
       const holidays = imHolidays.filter(holiday => holiday.getIn(['staff_member', 'id']) === staffMember.get('id'));
       const holidaysOnWeek = holidays.reduce((summ, holiday) => {
