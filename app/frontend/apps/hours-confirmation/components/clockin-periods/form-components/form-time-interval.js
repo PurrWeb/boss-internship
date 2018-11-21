@@ -11,6 +11,20 @@ import {
   getPossibleShiftEndTimeStrings,
 } from '~/lib/possible-shift-time-strings';
 
+function isValueValid(value) {
+  const [hour, minute] = value.split(':');
+  if (!hour || !minute) {
+    return false;
+  }
+  if (hour < 0 || hour > 24) {
+    return false;
+  }
+  if (minute < 0 || minute > 59) {
+    return false;
+  }
+  return true;
+}
+
 class FromTimeInterval extends React.Component {
   static propTypes = {};
   static defaultProps = {
@@ -42,7 +56,6 @@ class FromTimeInterval extends React.Component {
     if (!newValue.value) {
       return;
     }
-
     let startsAt;
     const { isFromBreaks } = this.props;
 
@@ -72,15 +85,23 @@ class FromTimeInterval extends React.Component {
     const newDate = shiftRotaDate.getDateFromShiftEndTimeString(newValue);
     endsAt.input.onChange(newDate);
   }
-  onInputKeyDown = event => {
+  onInputKeyDown = (event, shiftRotaDate) => {
     switch (event.keyCode) {
       case 9: // TAB
         const startsAtInput = ReactDOM.findDOMNode(this.startsAtRef).querySelector('input');
         const endsAtInput = ReactDOM.findDOMNode(this.endsAtRef).querySelector('input');
         const startsAtFocused = document.activeElement === startsAtInput;
         if (startsAtFocused) {
+          if (!isValueValid(startsAtInput.value)) {
+            return;
+          }
+          this.updateStartsTime(startsAtInput, shiftRotaDate);
           endsAtInput.focus();
         } else {
+          if (!isValueValid(endsAtInput.value)) {
+            return;
+          }
+          this.updateEndsTime(endsAtInput, shiftRotaDate);
           startsAtInput.focus();
         }
         event.preventDefault();
@@ -116,7 +137,7 @@ class FromTimeInterval extends React.Component {
         loadOptions={(input, callback) =>
           this.getStartsAtOptions(input, callback, shiftRotaDate)
         }
-        onInputKeyDown={this.onInputKeyDown}
+        onInputKeyDown={e => this.onInputKeyDown(e, shiftRotaDate)}
         ref={node => this.startsAtRef = node}
         clearable={false}
         searchable={true}
@@ -129,7 +150,7 @@ class FromTimeInterval extends React.Component {
         loadOptions={(input, callback) =>
           this.getEndsAtOptions(input, callback, shiftRotaDate)
         }
-        onInputKeyDown={this.onInputKeyDown}
+        onInputKeyDown={e => this.onInputKeyDown(e, shiftRotaDate)}
         ref={node => this.endsAtRef = node}
         clearable={false}
         searchable={true}
