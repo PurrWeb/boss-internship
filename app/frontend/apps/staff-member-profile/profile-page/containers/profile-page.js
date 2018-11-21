@@ -93,7 +93,7 @@ class ProfilePage extends React.PureComponent {
 
     let masterVenueId = staffMember["master_venue"];
     let masterVenueValue = masterVenueId ? oFetch(findById(venues, masterVenueId), 'name') : 'N/A';
-    const sageIdValue = sageId ? sageId : !sageId && !allowNoSageId ? 'NotSet' : 'N/A';
+    const sageIdValue = sageId ? sageId : !sageId && !allowNoSageId ? 'Not Set' : 'N/A';
     return (
       <ProfileWrapper
         currentPage="profile"
