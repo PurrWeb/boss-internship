@@ -189,11 +189,11 @@ class ReportItem extends Component {
     });
     const owedHoursClassName = classNames({
       'boss-table__cell': true,
-      'boss-table__cell_indicator_clock-warning': owedHours !== 0 && containsTimeShiftedOwedHours,
+      'boss-table__cell_indicator_clock-warning': (owedHours !== 0) && containsTimeShiftedOwedHours,
     });
     const holidayDaysCountClassName = classNames({
       'boss-table__cell': true,
-      'boss-table__cell_indicator_clock-warning': holidayDaysCount !== 0 && containsTimeShiftedHolidays,
+      'boss-table__cell_indicator_clock-warning': (holidayDaysCount !== 0) && containsTimeShiftedHolidays,
     });
     return (
       <div className={rowClassName}>
