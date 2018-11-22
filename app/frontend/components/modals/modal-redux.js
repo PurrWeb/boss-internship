@@ -5,7 +5,7 @@ import configureStore from '~/apps/store';
 export default function modalRedux(reducers) {
   return function(Component) {
     return class extends React.Component {
-      componentDidMount = () => {
+      componentWillMount = () => {
         this.store = configureStore(reducers);
       }
 
