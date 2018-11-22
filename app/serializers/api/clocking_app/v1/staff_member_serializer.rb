@@ -4,7 +4,8 @@ class Api::ClockingApp::V1::StaffMemberSerializer < ActiveModel::Serializer
     :firstName,
     :surname,
     :staffTypeId,
-    :avatarUrl
+    :avatarUrl,
+    :markedRetakeAvatar
 
   def firstName
     object.andand.name.first_name
@@ -20,5 +21,9 @@ class Api::ClockingApp::V1::StaffMemberSerializer < ActiveModel::Serializer
 
   def avatarUrl
     object.avatar_url
+  end
+
+  def markedRetakeAvatar
+    object.marked_retake_avatar?
   end
 end
