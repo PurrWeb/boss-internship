@@ -64,9 +64,13 @@ const rotaDailyReducer = handleActions({
     // Order staff members on rota page (security staff are last)
     const imGroupedStaffMembers = fromJS(staffMembers)
       .groupBy(x => x.get('staff_type') === 11 ? 'security' : 'others');
-    const imOrderedStaffMembers = List([])
+    let imOrderedStaffMembers = List([])
       .concat(imGroupedStaffMembers.get('others').sortBy(s => s.get('first_name')))
-      .concat(imGroupedStaffMembers.get('security'));
+
+    //When no security staff exists concating would cause an undefined item at the end of imGroupedStaffMembers list
+    if(imGroupedStaffMembers.get("security")) {
+      imOrderedStaffMembers = imOrderedStaffMembers.concat(imGroupedStaffMembers.get('security'));
+    }
 
     const imStaffMembers = imOrderedStaffMembers.map(staffMember => {
       const {weekRotaShifts, hoursOnWeek} = utils.calculateStaffRotaShift(staffMember, imWeekRotaShifts, imRotas, imVenues);
