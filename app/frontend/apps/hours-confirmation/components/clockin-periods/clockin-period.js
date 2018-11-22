@@ -2,6 +2,20 @@ import React, { Component } from 'react';
 import ClockInPeriodForm from './clockin-period-form';
 import AcceptedClockInPeriod from './accepted-clockin-period';
 import oFetch from 'o-fetch';
+import safeMoment from '~/lib/safe-moment';
+
+function dropStartsEndsTimeSeconds(items) {
+  return items.map(item => {
+    if (!item.startsAt || !item.endsAt) {
+      throw new Error(`Entry doesn't have a startsAt or endsAt key`);
+    }
+    return {
+      ...item,
+      startsAt: safeMoment.iso8601Parse(item.startsAt).second(0),
+      endsAt: safeMoment.iso8601Parse(item.endsAt).second(0),
+    };
+  });
+}
 
 class ClockInPeriod extends Component {
   renderPeriodByStatus(period) {
@@ -17,7 +31,6 @@ class ClockInPeriod extends Component {
     const staffMember = oFetch(period, 'staffMember');
     const rotaedStats = oFetch(this.props, 'rotaedStats');
     const hoursAcceptanceStats = oFetch(this.props, 'hoursAcceptanceStats');
-
     if (status === 'pending') {
       const initialValues = {
         id: id || null,
@@ -27,7 +40,7 @@ class ClockInPeriod extends Component {
         startsAt,
         endsAt,
         reasonNote,
-        breaks,
+        breaks: dropStartsEndsTimeSeconds(breaks),
         venueId,
       };
 

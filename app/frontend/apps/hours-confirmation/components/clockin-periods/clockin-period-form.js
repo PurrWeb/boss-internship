@@ -123,7 +123,7 @@ class ClockInPeriodForm extends Component {
 
   acceptPeriod = ({ values }) => {
     return this.props.onAcceptPeriod(values.toJS()).catch(err => {
-      if (err.response.data.errors) {
+      if (err.response && err.response.data && err.response.data.errors) {
         const errors = err.response.data.errors;
         const breaksErrors = errors.breaks;
         const breaksErrorsSet = new Set();
@@ -294,7 +294,7 @@ class ClockInPeriodForm extends Component {
       </div>
     );
   };
-  
+
   renderBaseError = errors => {
     if (Array.isArray(errors)) {
       return errors.map((error, index) => (
@@ -307,13 +307,25 @@ class ClockInPeriodForm extends Component {
         </li>
       ));
     } else {
-      return (
-        <div className="boss-modal-window__alert">
-          <div className="boss-alert boss-alert_role_area boss-alert_context_above">
-            <p className="boss-alert__text">{errors}</p>
+      if (errors.breaks) {
+        return errors.breaks.map((error, index) => (
+          <li key={index.toString()} className="boss-user-summary__review-item boss-user-summary__review-item_space_extra">
+            <div className="boss-alert">
+              <p className="boss-alert__text">
+                <span className="boss-alert__text-marked">{error}</span>
+              </p>
+            </div>
+          </li>
+        ));
+      } else {
+        return (
+          <div className="boss-modal-window__alert">
+            <div className="boss-alert boss-alert_role_area boss-alert_context_above">
+              <p className="boss-alert__text">{errors}</p>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
   };
 
@@ -322,7 +334,7 @@ class ClockInPeriodForm extends Component {
     const date = oFetch(period, 'date');
     return (
       <form className="boss-time-shift__form">
-      { error && this.renderBaseError(error) }
+        { error && this.renderBaseError(error) }
         <div className="boss-time-shift__log">
           <div className="boss-time-shift__group">
             <Fields
