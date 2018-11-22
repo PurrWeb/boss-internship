@@ -66,6 +66,43 @@ RSpec.describe 'Clocking App Clocking actions' do
       end
     end
 
+    context "when staff member has a retake avatar mark" do
+      let(:target_staff_member) { FactoryGirl.create(:staff_member, :marked_retake_avatar) }
+      let(:access_token) do
+        ApiAccessToken.new(
+          staff_member: target_staff_member,
+          api_key: api_key
+        ).persist!
+      end
+
+      context "when staff member is clocked in from manager mode" do
+        let(:staff_member) { FactoryGirl.create(:staff_member, :manager) }
+        let(:access_token) do
+          ApiAccessToken.new(
+            staff_member: staff_member,
+            api_key: api_key
+          ).persist!
+        end
+        it "should succeed" do
+          response = post(url, params)
+          expect(response.status).to eq(ok_status)
+        end
+      end
+
+      context "when staff member tries to clock themselves in" do
+        let(:staff_member) { FactoryGirl.create(:staff_member) }
+
+        it "should be marked to retake avatar" do
+          expect(target_staff_member.marked_retake_avatar?).to eq(true)
+        end
+
+        it "should fail" do
+          response = post(url, params)
+          expect(response.status).to eq(forbidden_entity_status)
+        end
+      end
+    end
+
     specify 'should work' do
       response = post(url, params)
       expect(response.status).to eq(ok_status)
@@ -570,5 +607,9 @@ RSpec.describe 'Clocking App Clocking actions' do
 
   def unprocessable_entity_status
     422
+  end
+
+  def forbidden_entity_status
+    403
   end
 end
