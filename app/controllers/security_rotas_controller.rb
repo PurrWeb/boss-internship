@@ -123,7 +123,7 @@ class SecurityRotasController < ApplicationController
     week_shift_requests = SecurityShiftRequest.
       accepted.
       where(starts_at: week_start_time..week_end_time).
-      includes([:created_shift, :creator])
+      includes([:created_shift, :creator, :security_shift_request_transitions])
 
     week_rotas = Rota.where(date: [week.start_date..week.end_date])
 
