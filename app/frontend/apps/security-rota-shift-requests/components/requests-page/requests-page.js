@@ -7,17 +7,19 @@ import DashboardWeekSelect from '~/components/boss-dashboards/dashboard-week-sel
 import RequestsContent from './requests-content';
 import RequestsFilter from './requests-filter';
 import RequestItem from './requests-item';
+import safeMoment from "~/lib/safe-moment";
 
 class RequestsPage extends PureComponent {
   handleDateChage = selection => {
+    const mStartDate = safeMoment.uiDateParse(oFetch(selection, 'startUIDate'));
     this.goToSecurityRotaShiftRequestsPage({
-      startDate: selection.startUIDate,
+      mStartDate: mStartDate,
     });
   };
 
-  goToSecurityRotaShiftRequestsPage({ startDate }) {
+  goToSecurityRotaShiftRequestsPage({ mStartDate }) {
     location.href = appRoutes.securityRotaShiftRequests({
-      startDate,
+      mStartDate,
     });
   }
 
