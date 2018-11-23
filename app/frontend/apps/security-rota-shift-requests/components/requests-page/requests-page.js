@@ -8,7 +8,6 @@ import RequestsContent from './requests-content';
 import RequestsFilter from './requests-filter';
 import RequestItem from './requests-item';
 import safeMoment from "~/lib/safe-moment";
-import oFetch from 'o-fetch';
 
 class RequestsPage extends PureComponent {
   handleDateChage = selection => {

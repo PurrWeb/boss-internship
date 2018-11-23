@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { appRoutes } from '~/lib/routes';
+import safeMoment from "~/lib/safe-moment";
 
 export default function RotaFilter({ currentRotaDay, page = 'daily', securityShiftRequestsCount }) {
+  const mCurrentRotaDay = safeMoment.uiDateParse(currentRotaDay);
+
   return (
     <div className="boss-form__field boss-form__field_role_control boss-form__field_layout_min">
       <p className="boss-form__label boss-form__label_type_icon-single boss-form__label_type_icon-date">
@@ -51,6 +55,7 @@ export default function RotaFilter({ currentRotaDay, page = 'daily', securityShi
         ) : (
           <a
             href={`/security_rotas/${currentRotaDay}/requests`}
+            href={appRoutes.securityRotaShiftRequests({ mStartDate: mCurrentRotaDay })}
             className="boss-form__switcher-label"
           >
             <span className="boss-form__switcher-label-text boss-form__switcher-label-text_type_border">

@@ -4,6 +4,7 @@ import moment from 'moment';
 import oFetch from 'o-fetch';
 import safeMoment from '~/lib/safe-moment';
 import { RadioGroup, Radio } from 'react-radio-group';
+import { appRoutes } from '~/lib/routes';
 
 export default class WeekFilter extends React.PureComponent {
   state = {
@@ -11,10 +12,11 @@ export default class WeekFilter extends React.PureComponent {
   };
 
   changeURLDate = date => {
+    const mDate = safeMoment.uiDateParse(date);
     window.history.pushState(
       'state',
       'title',
-      `/security_rotas/${date}/requests`,
+      appRoutes.securityRotaShiftRequests({mStartDate: mDate}),
     );
   };
 
