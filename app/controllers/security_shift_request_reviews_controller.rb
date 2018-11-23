@@ -16,8 +16,10 @@ class SecurityShiftRequestReviewsController < ApplicationController
     access_token = current_user.current_access_token ||
       WebApiAccessToken.new(user: current_user).persist!
 
+    all_security_shift_requests = SecurityShiftRequest.all
+
     security_shift_requests = InRangeQuery.new({
-      relation: SecurityShiftRequest.all.includes([:created_shift, :creator]),
+      relation: all_security_shift_requests.includes([:created_shift, :creator, :security_shift_request_transitions]),
       start_value: RotaShiftDate.new(week.start_date).start_time,
       end_value: RotaShiftDate.new(week.end_date).end_time,
     }).all
@@ -27,7 +29,7 @@ class SecurityShiftRequestReviewsController < ApplicationController
     rota_shifts = RotaShift
                     .joins(:security_shift_request)
                     .where(security_shift_requests: {id: assigned_security_shift_requests})
-                    .includes([:staff_member])
+                    .includes([:staff_member, :rota])
 
     staff_members = StaffMember
                       .where(id: rota_shifts.pluck(:staff_member_id).uniq)
