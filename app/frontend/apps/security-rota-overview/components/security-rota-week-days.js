@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import safeMoment from '~/lib/safe-moment';
 import moment from 'moment';
 import utils from '~/lib/utils';
+import { appRoutes } from "~/lib/routes";
 
 class RotaWeekDays extends Component {
   state = {
@@ -30,6 +31,8 @@ class RotaWeekDays extends Component {
   renderTabList(week) {
     const highlightDate = safeMoment.uiDateParse(this.state.highlightDate);
     return week.map((item, index) => {
+      const mCurrentDate = safeMoment.uiDateParse(item);
+
       const modifiedItem = safeMoment.uiDateParse(item);
       const tabClassName = highlightDate.isSame(modifiedItem, 'days') ? 'boss-paginator__action_state_active' : '';
       const formatedDate = highlightDate.isSame(modifiedItem, 'days')
@@ -46,7 +49,7 @@ class RotaWeekDays extends Component {
           </button>
           <div className="boss-paginator__meta">
             <a
-              href={`/security-shift-requests/${item}`}
+              href={appRoutes.securityRotaShiftRequests({ mStartDate: mCurrentDate }) }
               className="boss-paginator__meta-link boss-paginator__meta-link_role_button-light"
             >
               Requests: {this.props.securityShiftRequestsCount[item]}
