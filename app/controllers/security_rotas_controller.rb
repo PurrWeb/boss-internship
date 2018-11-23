@@ -104,25 +104,26 @@ class SecurityRotasController < ApplicationController
     week_end_time = RotaShiftDate.new(week.end_date).end_time
     staff_types = StaffType.where(role: 'security')
 
-    staff_members = StaffMember
-                    .enabled
-                    .joins(:staff_type)
-                    .merge(staff_types)
-                    .includes(:name)
-                    .includes(:staff_type)
-                    .includes(:master_venue)
-                    .uniq
+    staff_members = StaffMember.
+      enabled.
+      joins(:staff_type).
+      merge(staff_types).
+      includes(:name).
+      includes(:staff_type).
+      includes(:master_venue).
+      uniq
 
-    week_rota_shifts = RotaShift
-                        .enabled
-                        .joins(:staff_member)
-                        .merge(staff_members)
-                        .where(starts_at: week_start_time..week_end_time)
-                        .includes(:rota)
-    week_shift_requests = SecurityShiftRequest
-                          .accepted
-                          .where(starts_at: week_start_time..week_end_time)
-                          .includes([:created_shift, :creator])
+    week_rota_shifts = RotaShift.
+      enabled.
+      joins(:staff_member).
+      merge(staff_members).
+      where(starts_at: week_start_time..week_end_time).
+      includes(:rota)
+
+    week_shift_requests = SecurityShiftRequest.
+      accepted.
+      where(starts_at: week_start_time..week_end_time).
+      includes([:created_shift, :creator])
 
     week_rotas = Rota.where(date: [week.start_date..week.end_date])
 
