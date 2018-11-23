@@ -87,7 +87,6 @@ class SecurityRotasController < ApplicationController
       week_rota_shifts: week_rota_shifts,
       week_security_venue_shifts: week_security_venue_shifts,
       holidays: holidays,
-      staff_types: staff_types,
       week_rotas: week_rotas,
       security_shift_requests_count: security_shift_requests_count,
     }
