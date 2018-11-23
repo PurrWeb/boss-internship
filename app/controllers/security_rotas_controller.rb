@@ -70,7 +70,7 @@ class SecurityRotasController < ApplicationController
       date: date,
       staff_member: staff_members,
     ).includes([:staff_member])
-    security_shift_requests_count = SecurityShiftPendingRequestsCountQuery.new(week: week).all[UIRotaDate.format(date)]
+    security_shift_requests_count = SecurityShiftRequestsNeedingAssignCountQuery.new(week: week).all[UIRotaDate.format(date)]
 
     access_token = current_user.current_access_token || WebApiAccessToken.new(user: current_user).persist!
 
@@ -87,7 +87,6 @@ class SecurityRotasController < ApplicationController
       week_rota_shifts: week_rota_shifts,
       week_security_venue_shifts: week_security_venue_shifts,
       holidays: holidays,
-      staff_types: staff_types,
       week_rotas: week_rotas,
       security_shift_requests_count: security_shift_requests_count,
     }
@@ -104,25 +103,26 @@ class SecurityRotasController < ApplicationController
     week_end_time = RotaShiftDate.new(week.end_date).end_time
     staff_types = StaffType.where(role: 'security')
 
-    staff_members = StaffMember
-                    .enabled
-                    .joins(:staff_type)
-                    .merge(staff_types)
-                    .includes(:name)
-                    .includes(:staff_type)
-                    .includes(:master_venue)
-                    .uniq
+    staff_members = StaffMember.
+      enabled.
+      joins(:staff_type).
+      merge(staff_types).
+      includes(:name).
+      includes(:staff_type).
+      includes(:master_venue).
+      uniq
 
-    week_rota_shifts = RotaShift
-                        .enabled
-                        .joins(:staff_member)
-                        .merge(staff_members)
-                        .where(starts_at: week_start_time..week_end_time)
-                        .includes(:rota)
-    week_shift_requests = SecurityShiftRequest
-                          .accepted
-                          .where(starts_at: week_start_time..week_end_time)
-                          .includes([:created_shift, :creator])
+    week_rota_shifts = RotaShift.
+      enabled.
+      joins(:staff_member).
+      merge(staff_members).
+      where(starts_at: week_start_time..week_end_time).
+      includes(:rota)
+
+    week_shift_requests = SecurityShiftRequest.
+      accepted.
+      where(starts_at: week_start_time..week_end_time).
+      includes([:created_shift, :creator, :security_shift_request_transitions])
 
     week_rotas = Rota.where(date: [week.start_date..week.end_date])
 
@@ -179,7 +179,7 @@ class SecurityRotasController < ApplicationController
       .joins(:staff_member)
       .merge(staff_members)
       .includes(:rota)
-    security_shift_requests_count = SecurityShiftPendingRequestsCountQuery.new(week: week).all
+    security_shift_requests_count = SecurityShiftRequestsNeedingAssignCountQuery.new(week: week).all
 
     render locals: {
       access_token: access_token,

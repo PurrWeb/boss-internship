@@ -1,4 +1,4 @@
-class SecurityShiftPendingRequestsCountQuery
+class SecurityShiftRequestsNeedingAssignCountQuery
   def initialize(week:)
     @week = week
   end
@@ -8,7 +8,7 @@ class SecurityShiftPendingRequestsCountQuery
     week_end_time = RotaShiftDate.new(week.end_date).end_time
 
     week_security_shift_requests = SecurityShiftRequest
-      .pending
+      .accepted
       .where(starts_at: week_start_time..week_end_time)
     result = (week.start_date..week.end_date).inject({}) do |acc, day|
       acc[UIRotaDate.format(day)] = 0
