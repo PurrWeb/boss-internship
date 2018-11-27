@@ -6,8 +6,10 @@ RSpec.describe 'Staff member pages access' do
   def app
     Rails.application
   end
+  let(:default_questionnaire) { Questionnaire.create! }
 
   before do
+    default_questionnaire
     login_as user if user.present?
   end
 
