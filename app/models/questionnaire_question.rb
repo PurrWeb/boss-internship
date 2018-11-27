@@ -7,6 +7,9 @@ class QuestionnaireQuestion < ActiveRecord::Base
 
   # Validations
   validates :text, presence: true
+  validates :questionnaire, presence: true
+  validates :questionnaire_category, presence: true
+  validates :questionnaire_area, presence: true
 
   def self.required
     where(type: 'RequiredQuestion')
