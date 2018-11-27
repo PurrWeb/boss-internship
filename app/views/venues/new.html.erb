@@ -19,28 +19,6 @@
         step: 0.01
       ) %>
 
-  <% reminder_users = User.enabled.with_all_venue_access.includes(:name) %>
-  <% managers = UsersManagingVenueQuery.new(venue: venue).all %>
-  <% if managers.present? %>
-    <% reminder_users = reminder_users.where('users.id NOT IN (?)', managers.pluck(:id)) %>
-  <% end %>
-  <%= form.select(
-      :reminder_user_ids,
-      options_for_select(
-        reminder_users.map do |user|
-          [user.full_name, user.id]
-        end,
-        form.object.reminder_users.pluck(:id)
-      ),
-      {
-        label: 'Reminder email recipients',
-        help: 'Users specified here here will receive reminder emails as well as managers set to manage the venue who receive reminders by default.',
-        include_blank: true
-      },
-      class: 'chosen-select',
-      multiple: true
-    ) %>
-
   <%= form.select(
         :fruit_order_fields,
         options_for_select(

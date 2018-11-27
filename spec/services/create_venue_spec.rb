@@ -7,12 +7,10 @@ describe CreateVenue do
   let(:current_week) { RotaWeek.new(today) }
   let(:call_time) { start_of_day + 10.hours }
   let(:user) { FactoryGirl.create(:user) }
-  let(:reminder_users) { [] }
   let(:service) do
     CreateVenue.new(
       requester: user,
-      params: create_params,
-      reminder_users: reminder_users
+      params: create_params
     )
   end
   let(:call_service) { service.call }

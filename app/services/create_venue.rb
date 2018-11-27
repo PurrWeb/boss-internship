@@ -5,12 +5,11 @@ class CreateVenue
     end
   end
 
-  def initialize(requester:, params:, reminder_users:)
+  def initialize(requester:, params:)
     @requester = requester
     @params = params
-    @reminder_users = reminder_users
   end
-  attr_reader :requester, :params, :reminder_users
+  attr_reader :requester, :params
 
   def call
     success = false
@@ -21,7 +20,6 @@ class CreateVenue
     ActiveRecord::Base.transaction do
       venue = Venue.create(
         creator: requester,
-        reminder_users: reminder_users,
         name: params[:name],
         fruit_order_fields: params[:fruit_order_fields],
         till_float_cents: params[:till_float_cents],

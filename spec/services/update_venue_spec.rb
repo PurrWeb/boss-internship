@@ -19,12 +19,10 @@ describe UpdateVenue do
       master_venue: venue
     )
   end
-  let(:reminder_users) { [] }
   let(:service) do
     UpdateVenue.new(
       venue: venue,
       params: update_params,
-      reminder_users: reminder_users
     )
   end
   let(:call_service) { service.call }
