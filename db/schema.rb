@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181119133534) do
+ActiveRecord::Schema.define(version: 20181127184556) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1370,13 +1370,6 @@ ActiveRecord::Schema.define(version: 20181119133534) do
   add_index "users", ["staff_member_id"], name: "index_users_on_staff_member_id", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   add_index "users", ["would_rehire"], name: "index_users_on_would_rehire", using: :btree
-
-  create_table "venue_reminder_users", force: :cascade do |t|
-    t.integer  "venue_id",   limit: 4, null: false
-    t.integer  "user_id",    limit: 4, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "venue_users", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false
