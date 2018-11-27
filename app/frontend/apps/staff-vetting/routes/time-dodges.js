@@ -148,6 +148,7 @@ class TimeDodges extends PureComponent {
       startDate: urlStartDate,
       endDate: urlEndDate,
     });
+    this.clearTabFilter();
     this.fetchStaffMembers(urlStartDate).then(
       ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers }) => {
         this.setState({
@@ -181,6 +182,10 @@ class TimeDodges extends PureComponent {
     );
   };
 
+  takeClearFunc = clearFunc => {
+    this.clearTabFilter = clearFunc;
+  };
+
   render() {
     if (!this.state.isLoaded) {
       return null;
@@ -197,6 +202,7 @@ class TimeDodges extends PureComponent {
         staffTypes={this.props.staffTypes}
         tabsFilterRenderer={() => (
           <TabFilter
+            getClearFunc={clearFunc => this.takeClearFunc(clearFunc)}
             timeDodgers={{
               imStaffMembersHardDodgers,
               imStaffMembersSoftDodgers,
