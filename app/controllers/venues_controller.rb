@@ -19,9 +19,7 @@ class VenuesController < ApplicationController
   def create
     authorize!(:create, :venues)
 
-    venue = Venue.new
-
-    result = UpdateVenue.new(venue: venue, params: create_params, reminder_users: reminder_users_from_params).call
+    result = CreateVenue.new(requester: current_user, params: create_params, reminder_users: reminder_users_from_params).call
     if result.success?
       frontend_updates = FrontendUpdates.new
       frontend_updates.create_venue(venue: result.venue)
