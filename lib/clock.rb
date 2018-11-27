@@ -52,7 +52,6 @@ module Clockwork
   every(20.minutes, "ShiftUpdateNotificationJob")
   every(30.seconds, "ProcessFinanceReportUpdatesJob")
   every(1.week, "ChangeOrderReminderJob",     at: "Sunday 23:00", tz: 'Europe/London')
-  every(1.week, "TuesdayFruitOrderReminderJob", at: "Sunday 23:00", tz: 'Europe/London')
   every(1.week, "FridayFruitOrderReminderJob", at: "Thursday 23:00", tz: 'Europe/London')
   every(1.hour, "BackupDatabaseJob",      at: "**:00")
   every(1.day,  "CleanBackupsJob",        at: "23:00")
