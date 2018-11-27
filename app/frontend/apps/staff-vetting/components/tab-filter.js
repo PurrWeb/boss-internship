@@ -8,6 +8,16 @@ class TabFilter extends Component {
     activeTabIndex: -1,
   };
 
+  componentDidMount = () => {
+    this.props.getClearFunc && this.props.getClearFunc(this.clearFilter);
+  };
+
+  clearFilter = () => {
+    this.setState({
+      activeTabIndex: -1,
+    });
+  };
+
   getVenues() {
     if (!this.props.showVenues) {
       return [];
@@ -114,7 +124,7 @@ class TabFilter extends Component {
   render() {
     const tabs = [...this.getVenues(), ...this.getPayRates(), ...this.getSecurity(), ...this.getTimeDodges()];
     return (
-      <div className="boss-page-main__controls">
+      <div ref={node => (this.ref = node)} className="boss-page-main__controls">
         {tabs.map((tab, index) => (
           <button
             key={index}
