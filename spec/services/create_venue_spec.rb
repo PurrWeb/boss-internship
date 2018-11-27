@@ -17,6 +17,11 @@ describe CreateVenue do
   end
   let(:call_service) { service.call }
   let(:result) { call_service }
+  let(:default_questionnaire) { Questionnaire.create! }
+
+  before do
+    default_questionnaire
+  end
 
   describe 'creating venue' do
     let(:fruit_order_fields) { FruitOrder::FIELDS.first(5) }
@@ -41,6 +46,12 @@ describe CreateVenue do
     it 'should succeed' do
       call_service
       expect(result.success?).to eq(true)
+    end
+
+    it 'should have default questionnaire assigned to it' do
+      call_service
+      expect(result.venue.questionnaires.count).to eq(1)
+      expect(result.venue.questionnaires.first).to eq(default_questionnaire)
     end
 
     it 'should create the venue with supplied values' do

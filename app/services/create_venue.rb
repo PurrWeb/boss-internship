@@ -15,6 +15,8 @@ class CreateVenue
   def call
     success = false
     venue = nil
+    default_questionnaire = Questionnaire.first
+    raise 'Default questionnaire must exist' unless default_questionnaire.present?
 
     ActiveRecord::Base.transaction do
       venue = Venue.create(
@@ -26,7 +28,8 @@ class CreateVenue
         safe_float_cents: params[:safe_float_cents],
         change_order_site_id: params[:change_order_site_id],
         latitude: params[:latitude],
-        longitude: params[:longitude]
+        longitude: params[:longitude],
+        questionnaires: [default_questionnaire]
       )
       success = venue.persisted?
       raise ActiveRecord::Rollback unless success

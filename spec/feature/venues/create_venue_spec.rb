@@ -6,8 +6,10 @@ RSpec.feature 'Creating a venue' do
   let(:venues_index_page) { PageObject::VenuesIndexPage.new }
   let(:prospective_venue) { FactoryGirl.build(:venue, name: 'Party Place')}
   let(:mock_ably_service) { double('ably service') }
+  let(:default_questionnaire) { Questionnaire.create! }
 
   before do
+    default_questionnaire
     allow(AblyService).to receive(:new).and_return(mock_ably_service)
     allow(mock_ably_service).to receive(:security_app_data_update)
     login_as(dev_user)
