@@ -1,5 +1,15 @@
+import errorHandler from '~/lib/error-handlers';
+import { rollbarPresent, getRollbarPayload } from '~/lib/rollbar-helpers';
 import './polyfills';
 import 'whatwg-fetch';
+
+window.addEventListener('unhandledrejection', e => {
+  if (rollbarPresent()) {
+    Rollbar.error(e, null, getRollbarPayload());
+  }
+  errorHandler.throwErrorPage();
+});
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
