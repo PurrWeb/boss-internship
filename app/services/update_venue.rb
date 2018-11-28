@@ -5,27 +5,21 @@ class UpdateVenue
     end
   end
 
-  def initialize(venue:, params:, reminder_users:)
+  def initialize(venue:, params:)
     @venue = venue
     @params = params
-    @reminder_users = reminder_users
   end
-  attr_reader :venue, :params, :reminder_users
+  attr_reader :venue, :params
 
   def call
     success = false
     old_name = venue.name
     ActiveRecord::Base.transaction do
       success = venue.update_attributes(params)
-      if success
-        if old_name != venue.name
-          venue.finance_reports.not_in_state([FinanceReportStateMachine::REQUIRING_UPDATE_STATE, FinanceReportStateMachine::DONE_STATE]).find_each do |finance_report|
-            finance_report.mark_requiring_update!
-          end
+      if success && old_name != venue.name
+        venue.finance_reports.not_in_state([FinanceReportStateMachine::REQUIRING_UPDATE_STATE, FinanceReportStateMachine::DONE_STATE]).find_each do |finance_report|
+          finance_report.mark_requiring_update!
         end
-
-        venue.reminder_users = reminder_users
-        success = venue.save
       end
       raise ActiveRecord::Rollback unless success
     end

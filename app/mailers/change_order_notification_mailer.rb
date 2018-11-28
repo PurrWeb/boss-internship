@@ -1,21 +1,4 @@
 class ChangeOrderNotificationMailer < ApplicationMailer
-  def change_order_reminder(user_id:, venue_name:)
-    user = User.find(user_id)
-
-    mail(
-      to: user.email,
-      subject: "Change order Reminder for #{venue_name}"
-    ) do |format|
-      format.html do
-        render locals: { venue_name: venue_name }
-      end
-
-      format.text do
-        render locals: { venue_name: venue_name }
-      end
-    end
-  end
-
   def completed_change_order_mail(to:, change_order_ids:)
     change_orders = ChangeOrder.where(id: change_order_ids)
     generated_at = Time.zone.now

@@ -19,7 +19,7 @@ class VenuesController < ApplicationController
   def create
     authorize!(:create, :venues)
 
-    result = CreateVenue.new(requester: current_user, params: create_params, reminder_users: reminder_users_from_params).call
+    result = CreateVenue.new(requester: current_user, params: create_params).call
     if result.success?
       frontend_updates = FrontendUpdates.new
       frontend_updates.create_venue(venue: result.venue)
@@ -36,7 +36,7 @@ class VenuesController < ApplicationController
   def edit
     authorize!(:edit, :venues)
 
-    venue = Venue.includes(reminder_users: [:name]).find(params[:id])
+    venue = Venue.find(params[:id])
 
     render locals: { venue: venue }
   end
@@ -45,7 +45,7 @@ class VenuesController < ApplicationController
     authorize!(:edit, :venues)
     venue = Venue.find(params[:id])
 
-    result = UpdateVenue.new(venue: venue, params: update_params, reminder_users: reminder_users_from_params).call
+    result = UpdateVenue.new(venue: venue, params: update_params).call
     if result.success?
       frontend_updates = FrontendUpdates.new
       frontend_updates.update_venue(venue: result.venue)
@@ -106,10 +106,6 @@ class VenuesController < ApplicationController
       end
     end
     result
-  end
-
-  def reminder_users_from_params
-    User.enabled.where(id: Array(params[:venue][:reminder_user_ids]))
   end
 
   def fruit_order_fields_from_params

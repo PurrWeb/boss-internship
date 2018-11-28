@@ -7,8 +7,6 @@ RSpec.describe Venue, type: :model do
   it { should have_many(:staff_member_venues) }
   it { should have_many(:master_staff_members) }
   it { should have_many(:other_staff_members) }
-  it { should have_many(:venue_reminder_users) }
-  it { should have_many(:reminder_users) }
   it { should have_many(:maintenance_tasks) }
   it { should have_and_belong_to_many :dashboard_messages }
 
