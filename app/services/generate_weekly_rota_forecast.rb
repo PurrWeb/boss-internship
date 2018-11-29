@@ -8,16 +8,27 @@ class GenerateWeeklyRotaForecast
   attr_reader :rota_forecasts, :week
 
   def call
+    #Ensure all forcasts supplied are in the correct week
+    if rota_forecasts.any? { |rota_forecast| week != RotaWeek.new(rota_forecast.date) }
+      raise 'All supplied forcasts must be in the same week'
+    end
+    venue = rota_forecasts.first.rota.venue
+    if rota_forecasts.any? { |rota_forecast| venue.id != rota_forecast.rota.venue.id }
+      raise 'All supplied forecasts must be for the same venue'
+    end
+
     composite_rota_forecast = GenerateCompositeRotaForecast.new(
       rota_forecasts: rota_forecasts,
     ).call
 
     new_overhead_total_cents = exact_weekly_overhead_value(
       week: week,
-      venue: rota_forecasts.first.rota.venue
+      venue: venue
     )
 
     CompositeRotaForecast.new(
+      week_start: week.start_date,
+      venue: venue,
       forecasted_take_cents: composite_rota_forecast.forecasted_take_cents,
       total_cents: composite_rota_forecast.total_cents,
       staff_total_cents: composite_rota_forecast.staff_total_cents,

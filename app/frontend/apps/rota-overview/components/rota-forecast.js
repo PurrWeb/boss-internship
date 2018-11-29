@@ -3,6 +3,7 @@ import React from "react"
 import utils from "~/lib/utils"
 import Spinner from "~/components/spinner"
 import ComponentErrors from "~/components/component-errors"
+import oFetch from 'o-fetch';
 
 export default class RotaForecast extends React.Component {
     static propTypes = {
@@ -50,18 +51,21 @@ export default class RotaForecast extends React.Component {
     getForecastBody(){
         var dataRows = getDataRows(this.props.rotaForecast);
         var dataRowComponents = dataRows.map(
-            (row) => this.getDataRowComponent(row)
+          (row) => this.getForcastDataRowComponent(row)
         );
 
         return <div>
-            {dataRowComponents}
+          {dataRowComponents}
         </div>;
     }
 
     getForecastFooter() {
         var dataRows = getFooterRows(this.props.rotaForecast);
         var dataRowComponents = dataRows.map(
-            (row) => this.getDataRowComponent(row)
+            (row) => this.getStandardDataRowComponent({
+              row: row,
+              useAlertStyling: false,
+            })
         );
 
         return <div className="boss-forecast__group boss-forecast__group_role_footer">
@@ -125,8 +129,22 @@ export default class RotaForecast extends React.Component {
                 extraStyle={{marginBottom: -10, marginTop: 10}} />
 
     }
-    getDataRowComponent(row){
-      const rowPercentageClass = row.percentage > 0 ? 'boss-button_role_secondary' : 'boss-button_role_alert';
+
+    getForcastDataRowComponent(row){
+      const thresholdPercentage = oFetch(row, 'thresholdPercentage');
+      const rowPercentage = oFetch(row, 'percentage');
+      const useAlertStyling = (rowPercentage <= 0) || (thresholdPercentage && rowPercentage > thresholdPercentage);
+
+      return this.getStandardDataRowComponent({
+        row: row,
+        useAlertStyling: useAlertStyling
+      })
+    }
+
+    getStandardDataRowComponent(options){
+      const row = oFetch(options, 'row');
+      const useAlertStyling = oFetch(options, 'useAlertStyling');
+      const rowPercentageClass = useAlertStyling ? 'boss-button_role_alert' : 'boss-button_role_secondary';
 
       return <div className="boss-forecast__row" key={row.title}>
           <div className="boss-forecast__cell">
@@ -167,27 +185,32 @@ function getDataRows(rotaForecast){
         {
           title: "Overheads",
           total: rotaForecast.overhead_total_cents,
-          percentage: rotaForecast.overhead_total_percentage
+          percentage: rotaForecast.overhead_total_percentage,
+          thresholdPercentage: oFetch(rotaForecast, 'venue_overheads_threshold_percentage'),
         },
         {
             title: "Staff",
             total: rotaForecast.staff_total_cents,
-            percentage: rotaForecast.staff_total_percentage
+            percentage: rotaForecast.staff_total_percentage,
+            thresholdPercentage: oFetch(rotaForecast, 'venue_staff_threshold_percentage'),
         },
         {
             title: "PRs",
             total: rotaForecast.pr_total_cents,
-            percentage: rotaForecast.pr_total_percentage
+            percentage: rotaForecast.pr_total_percentage,
+            thresholdPercentage: oFetch(rotaForecast, 'venue_pr_threshold_percentage'),
         },
         {
             title: "Kitchen",
             total: rotaForecast.kitchen_total_cents,
-            percentage: rotaForecast.kitchen_total_percentage
+            percentage: rotaForecast.kitchen_total_percentage,
+            thresholdPercentage: oFetch(rotaForecast, 'venue_kitchen_threshold_percentage'),
         },
         {
             title: "Security",
             total: rotaForecast.security_total_cents,
-            percentage: rotaForecast.security_total_percentage
+            percentage: rotaForecast.security_total_percentage,
+            thresholdPercentage: oFetch(rotaForecast, 'venue_security_threshold_percentage'),
         },
     ];
 }

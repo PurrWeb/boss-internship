@@ -5,7 +5,8 @@ class Api::V1::RotaForecastSerializer < ActiveModel::Serializer
              :total_percentage, :overhead_total_cents, :overhead_total_percentage,
              :staff_total_cents, :staff_total_percentage, :pr_total_cents,
              :pr_total_percentage, :kitchen_total_cents, :kitchen_total_percentage,
-             :security_total_cents, :security_total_percentage
+             :security_total_cents, :security_total_percentage,
+             :venue_overheads_threshold_percentage, :venue_staff_threshold_percentage, :venue_pr_threshold_percentage, :venue_kitchen_threshold_percentage, :venue_security_threshold_percentage
 
   def url
     api_v1_venue_rota_forecast_url(
@@ -75,5 +76,25 @@ class Api::V1::RotaForecastSerializer < ActiveModel::Serializer
 
   def security_total_percentage
     object.security_total_percentage
+  end
+
+  def venue_overheads_threshold_percentage
+    object.venue.overheads_threshold_percentage
+  end
+
+  def venue_staff_threshold_percentage
+    object.venue.staff_threshold_percentage
+  end
+
+  def venue_pr_threshold_percentage
+    object.venue.pr_threshold_percentage
+  end
+
+  def venue_kitchen_threshold_percentage
+    object.venue.kitchen_threshold_percentage
+  end
+
+  def venue_security_threshold_percentage
+    object.venue.security_threshold_percentage
   end
 end
