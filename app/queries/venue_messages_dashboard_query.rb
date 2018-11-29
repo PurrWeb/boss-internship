@@ -20,6 +20,6 @@ class VenueMessagesDashboardQuery
   attr_reader :venue
 
   def preload_fields
-    [:disabled_by_user, :created_by_user]
+    [:disabled_by_user, created_by_user: [:name]]
   end
 end
