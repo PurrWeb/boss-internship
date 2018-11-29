@@ -48,9 +48,49 @@
     step: 0.0000001
   ) %>
 
-  <%= form.text_field(
+  <%= form.number_field(
         :change_order_site_id,
         label: 'Change Order Site ID'
+      ) %>
+
+  <%= form.number_field(
+        :overheads_threshold_percentage,
+        prepend: '%',
+        value: form.object.overheads_threshold_percentage,
+        label: 'Overheads Rota Forecast Threshold Percentage',
+        step: 0.1,
+      ) %>
+
+  <%= form.number_field(
+        :staff_threshold_percentage,
+        prepend: '%',
+        value: form.object.staff_threshold_percentage,
+        label: 'Staff Rota Forecast Threshold Percentage',
+        step: 0.1,
+      ) %>
+
+  <%= form.number_field(
+        :pr_threshold_percentage,
+        prepend: '%',
+        value: form.object.pr_threshold_percentage,
+        label: 'PR Rota Forecast Threshold Percentage',
+        step: 0.1,
+      ) %>
+
+  <%= form.number_field(
+        :kitchen_threshold_percentage,
+        prepend: '%',
+        value: form.object.kitchen_threshold_percentage,
+        label: 'Kitchen Rota Forecast Threshold Percentage',
+        step: 0.1,
+      ) %>
+
+  <%= form.number_field(
+        :security_threshold_percentage,
+        prepend: '%',
+        value: form.object.security_threshold_percentage,
+        label: 'Security Rota Forecast Threshold Percentage',
+        step: 0.1,
       ) %>
 
   <%= form.submit('Update') %>
