@@ -5,7 +5,8 @@ import 'whatwg-fetch';
 
 window.addEventListener('unhandledrejection', e => {
   if (rollbarPresent()) {
-    Rollbar.error(e, null, getRollbarPayload());
+    Rollbar.configure({ payload: getRollbarPayload() });
+    Rollbar.error(e);
   }
   errorHandler.throwErrorPage();
 });
