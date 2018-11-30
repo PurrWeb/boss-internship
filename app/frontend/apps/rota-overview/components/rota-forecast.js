@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import utils from '~/lib/utils';
-import Spinner from '~/components/spinner';
 import ComponentErrors from '~/components/component-errors';
 import oFetch from 'o-fetch';
+import { Tooltip } from 'react-tippy';
 
 export default class RotaForecast extends React.Component {
   static propTypes = {
@@ -133,34 +133,59 @@ export default class RotaForecast extends React.Component {
   getForcastDataRowComponent(row) {
     const thresholdPercentage = oFetch(row, 'thresholdPercentage');
     const rowPercentage = oFetch(row, 'percentage');
-    const useAlertStyling = rowPercentage <= 0 || (thresholdPercentage && rowPercentage > thresholdPercentage);
+    const useAlertStyling = rowPercentage <= 0 || (thresholdPercentage && rowPercentage > parseFloat(thresholdPercentage));
 
     return this.getStandardDataRowComponent({
       row: row,
       useAlertStyling: useAlertStyling,
+      thresholdPercentage,
     });
   }
 
-  getStandardDataRowComponent(options) {
-    const row = oFetch(options, 'row');
-    const useAlertStyling = oFetch(options, 'useAlertStyling');
+  getPercentageBadgeContent = ({ useAlertStyling, percentage, thresholdPercentage }) => {
     const rowPercentageClass = useAlertStyling ? 'boss-button_role_alert' : 'boss-button_role_secondary';
+    const badgeContent = (
+      <p
+        className={
+          'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' +
+          rowPercentageClass
+        }
+      >
+        {percentage !== null ? Math.round(percentage * 100) / 100 + '%' : '0%'}
+      </p>
+    );
+    if (thresholdPercentage === null) {
+      return badgeContent;
+    }
+    return (
+      <Tooltip arrow theme="light" position="right" interactive html={this.getThresholdContent(thresholdPercentage)}>
+        {badgeContent}
+      </Tooltip>
+    );
+  };
 
+  getThresholdContent = thresholdPercentage => {
+    return (
+      <div className="boss-tooltip-portal__content">
+        <div className="boss-tooltip-portal__text">
+          {'Threshold: '}
+          <span className="boss-tooltip-portal__text-marked">{thresholdPercentage}%</span>
+        </div>
+      </div>
+    );
+  };
+
+  getStandardDataRowComponent({ thresholdPercentage = null, ...options }) {
+    const row = oFetch(options, 'row');
+
+    const useAlertStyling = oFetch(options, 'useAlertStyling');
     return (
       <div className="boss-forecast__row" key={row.title}>
         <div className="boss-forecast__cell">{row.title}</div>
         <div className="boss-forecast__cell">&pound;{utils.formatMoney(row.total / 100)}</div>
         <div className="boss-forecast__cell">
-          {row.percentage !== undefined && (
-            <p
-              className={
-                'boss-button boss-button_type_small boss-button_type_no-behavior boss-button_role_secondary ' +
-                rowPercentageClass
-              }
-            >
-              {row.percentage !== null ? Math.round(row.percentage * 100) / 100 + '%' : '0%'}
-            </p>
-          )}
+          {row.percentage !== undefined &&
+            this.getPercentageBadgeContent({ useAlertStyling, percentage: row.percentage, thresholdPercentage })}
         </div>
       </div>
     );
