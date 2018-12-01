@@ -33,7 +33,6 @@ class PayrollReportsController < ApplicationController
 
     staff_members = StaffMember.
       where(
-        master_venue: venue,
         pay_rate: pay_rates
       )
 
