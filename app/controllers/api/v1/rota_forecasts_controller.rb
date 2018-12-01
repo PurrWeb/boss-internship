@@ -90,7 +90,9 @@ module Api
           week: week
         ).call
 
-        render locals: { week: week, weekly_forecast: weekly_forecast }
+        render json: {
+          weekly_rota_forecast: Api::V1::WeeklyRotaForecastSerializer.new(weekly_forecast, scope: { week: week })
+        }
       end
 
       private

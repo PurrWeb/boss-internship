@@ -14,6 +14,18 @@ class GenerateCompositeRotaForecast
     security_total_cents = 0
     overhead_total_cents = 0
 
+    #Ensure all forcasts supplied are in the same week
+    rota_week = RotaWeek.new(
+      rota_forecasts.first.date
+    )
+    if rota_forecasts.any? { |rota_forecast| rota_week != RotaWeek.new(rota_forecast.date) }
+      raise 'All supplied forcasts must be in the same week'
+    end
+    venue = rota_forecasts.first.rota.venue
+    if rota_forecasts.any? { |rota_forecast| venue.id != rota_forecast.rota.venue.id }
+      raise 'All supplied forecasts must be for the same venue'
+    end
+
     rota_forecasts.each do |rota_forecast|
       forecasted_take_cents = forecasted_take_cents + rota_forecast.forecasted_take_cents
       total_cents = total_cents + rota_forecast.total_cents
@@ -25,6 +37,8 @@ class GenerateCompositeRotaForecast
     end
 
     CompositeRotaForecast.new(
+      venue: venue,
+      week_start: rota_week.start_date,
       forecasted_take_cents: forecasted_take_cents,
       total_cents: total_cents,
       overhead_total_cents: overhead_total_cents,

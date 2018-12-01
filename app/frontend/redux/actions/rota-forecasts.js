@@ -31,7 +31,7 @@ export const updateRotaForecast = createApiRequestActionCreator({
         },
         data: ({forecastedTakeCents}) => {return {forecasted_take_cents: forecastedTakeCents} },
         getSuccessActionData: function(responseData){
-            
+
             notify('Forecast Updated Successfully', {
               interval: 5000,
               status: 'success'
@@ -54,7 +54,7 @@ export const fetchWeeklyRotaForecast = createApiRequestActionCreator({
         },
         getSuccessActionData: function(responseData){
             return {
-              weeklyRotaForecast: responseData,
+              weeklyRotaForecast: oFetch(responseData, 'weekly_rota_forecast'),
             };
         }
     })

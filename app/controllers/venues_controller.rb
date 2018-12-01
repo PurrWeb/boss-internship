@@ -81,12 +81,38 @@ class VenuesController < ApplicationController
         :name,
         :longitude,
         :latitude,
-        :change_order_site_id
+        :change_order_site_id,
+        *Venue::ROTA_THRESHOLD_FIELDS
       ).merge(
         fruit_order_fields: fruit_order_fields_from_params
       ).merge(
         float_field_values
+      ).merge(
+        rota_threshold_values
       )
+  end
+
+  def rota_threshold_values
+    result = {}
+    Venue::ROTA_THRESHOLD_FIELDS.each do |field|
+      venue_params = params.fetch(:venue)
+      if venue_params.fetch(field).present?
+        val = venue_params.fetch(field)
+        begin
+          val = Float(venue_params.fetch(field))
+        rescue ArgumentError
+          #Do nothing parse failed
+        end
+
+        # Convert 0 values to nil
+        if val == 0.0
+          result[field] = nil
+        else
+          result[field] = venue_params.fetch(field)
+        end
+      end
+    end
+    result
   end
 
   def float_field_values

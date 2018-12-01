@@ -1,5 +1,7 @@
 class Venue < ActiveRecord::Base
   VENUE_TYPE = "normal".freeze
+  ROTA_THRESHOLD_FIELDS = [:overheads_threshold_percentage, :staff_threshold_percentage, :pr_threshold_percentage, :kitchen_threshold_percentage, :security_threshold_percentage]
+
   # Associations
   belongs_to :creator, class_name: 'User'
   has_one :api_key
@@ -29,6 +31,12 @@ class Venue < ActiveRecord::Base
 
   # Validations
   validates :rollbar_guid, presence: true
+
+  validates :overheads_threshold_percentage, numericality: { greater_than: 0.0 }, allow_nil: true
+  validates :staff_threshold_percentage, numericality: { greater_than: 0.0 }, allow_nil: true
+  validates :pr_threshold_percentage, numericality: { greater_than: 0.0 }, allow_nil: true
+  validates :kitchen_threshold_percentage, numericality: { greater_than: 0.0 }, allow_nil: true
+  validates :security_threshold_percentage, numericality: { greater_than: 0.0 }, allow_nil: true
   validates :safe_float_cents,
     numericality: { greater_than_or_equal_to: 0 }
   validates :till_float_cents,
