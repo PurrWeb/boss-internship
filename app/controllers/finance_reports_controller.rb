@@ -37,7 +37,6 @@ class FinanceReportsController < ApplicationController
     end
 
     staff_members = StaffMember.
-      can_have_finance_reports.
       where(
         pay_rate: pay_rates
       )
