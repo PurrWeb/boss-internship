@@ -4,9 +4,10 @@ import './polyfills';
 import 'whatwg-fetch';
 
 window.addEventListener('unhandledrejection', e => {
+  console.dir(e);
   if (rollbarPresent()) {
     Rollbar.configure({ payload: getRollbarPayload() });
-    Rollbar.error(e);
+    Rollbar.error(e.reason);
   }
   errorHandler.throwErrorPage();
 });
