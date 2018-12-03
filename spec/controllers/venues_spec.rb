@@ -24,7 +24,12 @@ RSpec.describe VenuesController do
             'reminder_user_ids'=>[''],
             'fruit_order_fields'=>[''],
             'latitude' => '',
-            'longitude' => ''
+            'longitude' => '',
+            'overheads_threshold_percentage' => '',
+            'staff_threshold_percentage' => '',
+            'security_threshold_percentage' => '',
+            'pr_threshold_percentage' => '',
+            'kitchen_threshold_percentage' => '',
           }}
         )
 
@@ -48,7 +53,12 @@ RSpec.describe VenuesController do
             'reminder_user_ids'=>[''],
             'fruit_order_fields'=>[''],
             'latitude' => 6.666666,
-            'longitude' => 5.555555
+            'longitude' => 5.555555,
+            'overheads_threshold_percentage' => '1',
+            'staff_threshold_percentage' => '2',
+            'security_threshold_percentage' => '3',
+            'pr_threshold_percentage' => '4',
+            'kitchen_threshold_percentage' => '5',
           }}
         )
 
@@ -57,6 +67,11 @@ RSpec.describe VenuesController do
         )
         expect(venue.reload.latitude).to eq(6.666666)
         expect(venue.reload.longitude).to eq(5.555555)
+        expect(venue.overheads_threshold_percentage).to eq(1.0)
+        expect(venue.staff_threshold_percentage).to eq(2.0)
+        expect(venue.security_threshold_percentage).to eq(3.0)
+        expect(venue.pr_threshold_percentage).to eq(4.0)
+        expect(venue.kitchen_threshold_percentage).to eq(5.0)
       end
     end
   end
