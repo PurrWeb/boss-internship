@@ -19,8 +19,13 @@ module Api
           .where(id: (venue_accessories_requests.in_state(:pending, :accepted).pluck(:accessory_id) + refund_request_accessory_ids))
         all_accessory_requests = AccessoryRequest.where(accessory_id: accessories.pluck(:id))
         accessory_requests = all_accessory_requests.in_state([:pending, :accepted])
-        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending, :accepted).where(accessory_request_id: all_accessory_requests.pluck(:id))
+
+        accessory_refund_requests = AccessoryRefundRequest.in_state(:pending, :accepted).
+        where(accessory_request_id: all_accessory_requests.pluck(:id)).
+        includes(:accessory_request)
+
         staff_members = StaffMember.where(id: accessory_requests.pluck(:staff_member_id).concat(accessory_refund_requests.pluck(:staff_member_id)))
+
 
         paginated_accessory = accessories.paginate(
           page: page_from_params,
@@ -28,7 +33,7 @@ module Api
         )
         accessory_requests_permissions = AccessoryRequestsPagePermissions.new(
           requester: current_user,
-          accessory_requests: accessory_requests.in_state(:pending, :accepted),
+          accessory_requests: accessory_requests,
           accessory_refund_requests: accessory_refund_requests
         )
 
@@ -39,7 +44,7 @@ module Api
               serializer: Api::V1::AccessoryRequests::AccessorySerializer,
             ),
             accessoryRequests: ActiveModel::Serializer::CollectionSerializer.new(
-              accessory_requests.in_state(:pending, :accepted),
+              accessory_requests,
               serializer: Api::V1::AccessoryRequests::AccessoryRequestSerializer,
             ),
             accessoryRefundRequests: ActiveModel::Serializer::CollectionSerializer.new(
