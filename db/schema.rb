@@ -581,7 +581,6 @@ ActiveRecord::Schema.define(version: 20181129131637) do
     t.integer  "finance_report_id",                   limit: 4
     t.datetime "accepted_at"
     t.integer  "accepted_by_id",                      limit: 4
-    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
     t.datetime "processed_for_legacy_validation_at"
     t.boolean  "legacy_validation_process_issue"
     t.boolean  "allow_invalid_breaks",                            default: false,     null: false
@@ -590,6 +589,7 @@ ActiveRecord::Schema.define(version: 20181129131637) do
     t.boolean  "allow_legacy_overlap_accepted_hours",             default: false,     null: false
     t.boolean  "allow_legacy_conflicting_holiday",                default: false,     null: false
     t.boolean  "allow_legacy_conflicting_owed_hours",             default: false,     null: false
+    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
@@ -1310,6 +1310,46 @@ ActiveRecord::Schema.define(version: 20181129131637) do
   end
 
   add_index "staff_types", ["name"], name: "index_staff_types_on_name", unique: true, using: :btree
+
+  create_table "time_dodger_offence_levels", force: :cascade do |t|
+    t.date     "tax_year_start",            null: false
+    t.integer  "staff_member_id", limit: 4, null: false
+    t.integer  "offence_level",   limit: 4
+    t.integer  "review_level",    limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "time_dodger_offence_levels", ["staff_member_id"], name: "index_time_dodger_offence_levels_on_staff_member_id", using: :btree
+
+  create_table "time_dodger_offences", force: :cascade do |t|
+    t.integer  "staff_member_id", limit: 4, null: false
+    t.date     "week_start",                null: false
+    t.integer  "minutes",         limit: 4, null: false
+    t.integer  "accepted_hours",  limit: 4, null: false
+    t.integer  "paid_holidays",   limit: 4, null: false
+    t.integer  "owed_hours",      limit: 4, null: false
+    t.integer  "accepted_breaks", limit: 4, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "time_dodger_offences", ["staff_member_id"], name: "index_time_dodger_offences_on_staff_member_id", using: :btree
+
+  create_table "time_dodger_review_actions", force: :cascade do |t|
+    t.integer  "creator_user_id",              limit: 4,     null: false
+    t.integer  "time_dodger_offence_level_id", limit: 4,     null: false
+    t.integer  "disabled_by_user_id",          limit: 4,     null: false
+    t.datetime "disabled_at"
+    t.integer  "review_level",                 limit: 4,     null: false
+    t.text     "note",                         limit: 65535, null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "time_dodger_review_actions", ["creator_user_id"], name: "index_time_dodger_review_actions_on_creator_user_id", using: :btree
+  add_index "time_dodger_review_actions", ["disabled_by_user_id"], name: "index_time_dodger_review_actions_on_disabled_by_user_id", using: :btree
+  add_index "time_dodger_review_actions", ["time_dodger_offence_level_id"], name: "index_time_dodger_review_actions_on_time_dodger_offence_level_id", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string   "file",           limit: 255
