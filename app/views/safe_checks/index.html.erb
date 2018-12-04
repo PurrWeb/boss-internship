@@ -44,6 +44,9 @@
         </div>
 
         <% safe_checks.each_with_index do |safe_check, index| %>
+          <% ash_cash_present = safe_check.ash_cash_cents > 0 %>
+          <% security_plus_present = safe_check.security_plus_cents > 0 %>
+
           <% table_row_class = '' %>
           <% table_row_class = 'boss-table__row_state_alert' if safe_check.variance_cents < 0 %>
           <% table_row_class = 'boss-table__row_state_success' if safe_check.variance_cents > 0 %>
@@ -114,13 +117,13 @@
                   ) %>
                 </p>
               </div>
-              <% if safe_check.ash_cash_cents > 0 %>
+              <% if ash_cash_present %>
                 <div class="boss-corner boss-corner_position_top-right boss-corner_color_accent-green">
                   <p class="boss-corner__label boss-corner__label_size_l">ASH</p>
                 </div>
               <% end %>
 
-              <% if safe_check.security_plus_cents > 0 %>
+              <% if security_plus_present %>
                 <div class="boss-corner boss-corner_position_bottom-right boss-corner_color_accent-purple">
                     <p class="boss-corner__label boss-corner__label_size_l">S+</p>
                 </div>
@@ -181,6 +184,9 @@
       </div>
 
       <% safe_checks.each_with_index do |safe_check, index| %>
+        <% ash_cash_present = safe_check.ash_cash_cents > 0 %>
+        <% security_plus_present = safe_check.security_plus_cents > 0 %>
+
         <% board_highlight_class = "" %>
         <% board_highlight_class = "boss-check_state_success" if (safe_check.variance_cents || 0) > 0 %>
         <% board_highlight_class = "boss-check_state_alert" if (safe_check.variance_cents || 0) < 0 %>
@@ -211,6 +217,17 @@
           <div class="boss-check__row">
             <div class="boss-check__cell">
               <p class="boss-check__text boss-check__text_role_user <%= positive?(safe_check.enabled_notes.count) && 'boss-check__text_indicator_att' %>"><%= safe_check.checked_by_note %></p>
+              <% if ash_cash_present || security_plus_present %>
+                <p class="boss-check__text">
+                  <% if ash_cash_present %>
+                    <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-green boss-button_type_no-behavior boss-check__label">ASH</span>
+                  <% end %>
+
+                  <% if security_plus_present %>
+                    <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-purple boss-button_type_no-behavior boss-check__label">S+</span>
+                  <% end %>
+                </p>
+              <% end %>
             </div>
           </div>
 
@@ -255,10 +272,10 @@
                   ) %>
                 </p>
                 <p class="boss-check__text">
-                  <% if safe_check.ash_cash_cents > 0 %>
+                  <% if ash_cash_present %>
                     <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-green boss-button_type_no-behavior boss-check__label">ASH</span>
                   <% end %>
-                  <% if safe_check.security_plus_cents > 0 %>
+                  <% if security_plus_present %>
                   <span class="boss-button boss-button_type_ultra-small boss-button_color_accent-purple boss-button_type_no-behavior boss-check__label">S+</span>
                   <% end %>
                 </p>
