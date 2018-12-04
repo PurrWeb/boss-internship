@@ -178,7 +178,7 @@ class UserAbility
       can [:accept, :complete, :reject, :undo], AccessoryRefundRequest do |accessory_refund_request|
         if accessory_refund_request.staff_member.disabled?
           user.payroll_manager? ||
-            user.has_effective_access_level?(AccessLevel.admin_access_level)
+            user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
         else
           user.food_ops_manager? ||
             user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
