@@ -270,6 +270,36 @@ describe HolidayDateValidator do
     end
   end
 
+  context 'shift exists at start of next day' do
+    let(:start_date) { current_week.start_date + 2.days }
+    let(:end_date) { start_date + 1.day }
+    let(:shift_date) { end_date + 1.day }
+    let(:shift_starts_at) { RotaShiftDate.new(shift_date).start_time }
+    let(:shift_ends_at) { shift_starts_at + 2.hours }
+    let(:rota) do
+      FactoryGirl.create(
+        :rota,
+        date: shift_date
+      )
+    end
+    let!(:shift) do
+      FactoryGirl.create(
+        :rota_shift,
+        rota: rota,
+        staff_member: holiday.staff_member,
+        starts_at: shift_starts_at,
+        ends_at: shift_ends_at
+      )
+    end
+
+    specify 'should be valid' do
+      validator.validate
+      expect(
+        holiday.errors.count
+      ).to eq(0)
+    end
+  end
+
   context 'overlapping owed_hour exist' do
     let(:now) { Time.current }
     let(:start_date) { RotaShiftDate.to_rota_date(now) }

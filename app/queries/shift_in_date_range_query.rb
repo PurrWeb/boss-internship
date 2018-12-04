@@ -11,7 +11,8 @@ class ShiftInDateRangeQuery
     InRangeQuery.new(
       relation: query,
       start_value: RotaShiftDate.new(start_date).start_time,
-      end_value: RotaShiftDate.new(end_date).end_time
+      end_value: RotaShiftDate.new(end_date).end_time,
+      include_boundaries: [:end]
     ).all
   end
 
