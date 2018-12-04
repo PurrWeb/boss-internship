@@ -61,6 +61,7 @@ class StaffMember < ActiveRecord::Base
   scope :with_aged_payrates, -> { joins(:pay_rate).where(pay_rates: { name: PayRate::AGED_PAYRATE_NAMES }) }
   scope :regular, -> { joins(:staff_type).merge(StaffType.not_security)}
   scope :on_weekly_pay_rate, -> { joins(:pay_rate).merge(PayRate.weekly)}
+  scope :with_master_venue, -> { where.not(master_venue: nil) }
 
   mount_uploader :avatar, AvatarUploader
   validates :avatar, {
