@@ -14,10 +14,12 @@ describe HolidayDateValidator do
       holiday.validate_as_creation = true
     end
   end
-  let(:now) { RotaWeek.new(Time.current.to_date).start_date }
+  let(:now) { Time.current }
+  let(:today) { RotaShiftDate.to_rota_date(now) }
+  let(:current_week) { RotaWeek.new(today) }
   let(:staff_member) { FactoryGirl.build(:staff_member) }
   let(:validator) { HolidayDateValidator.new(holiday) }
-  let(:payslip_date) { RotaWeek.new(RotaShiftDate.to_rota_date(now)).start_date }
+  let(:payslip_date) { current_week.start_date }
 
   around(:each) do |example|
     travel_to now do
@@ -26,7 +28,7 @@ describe HolidayDateValidator do
   end
 
   context 'dates are in the past' do
-    let(:past_week) { RotaWeek.new(now - 3.weeks) }
+    let(:past_week) { RotaWeek.new(current_week.start_date - 3.weeks) }
     let(:past_week_start ) { past_week.start_date }
     let(:start_date) { past_week_start }
     let(:end_date) { past_week_start + 1.day}
@@ -91,7 +93,7 @@ describe HolidayDateValidator do
 
     context 'validating the existing holiday' do
       let(:validator) { HolidayDateValidator.new(existing_holiday) }
-      let(:existing_holiday_start_date) { now.to_date + 1.day }
+      let(:existing_holiday_start_date) { today + 1.day }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 2.days }
 
       specify 'no error should be added' do
@@ -101,7 +103,7 @@ describe HolidayDateValidator do
     end
 
     context 'end of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday + 1.day }
+      let(:existing_holiday_start_date) { current_week.start_date + 1.day }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 3.days }
       let(:start_date) { existing_holiday_start_date - 1.days }
       let(:end_date) { existing_holiday_start_date + 1.day }
@@ -120,10 +122,10 @@ describe HolidayDateValidator do
     end
 
     context 'start of holiday overlaps with existing' do
-      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday + 1.day }
-      let(:existing_holiday_end_date) { Time.zone.now.to_date.monday + 3.days }
-      let(:start_date) { Time.zone.now.to_date.monday }
-      let(:end_date) { Time.zone.now.to_date.monday + 2.days }
+      let(:existing_holiday_start_date) { current_week.start_date + 1.day }
+      let(:existing_holiday_end_date) { current_week.start_date + 3.days }
+      let(:start_date) { current_week.start_date }
+      let(:end_date) { current_week.start_date + 2.days }
 
       specify 'an error message should be added on base' do
         validator.validate
@@ -139,7 +141,7 @@ describe HolidayDateValidator do
     end
 
     context 'existing holiday dates encloses new dates' do
-      let(:existing_holiday_start_date) { Time.zone.now.to_date.monday }
+      let(:existing_holiday_start_date) { current_week.start_date }
       let(:existing_holiday_end_date) { existing_holiday_start_date + 6.days }
       let(:start_date) { existing_holiday_start_date + 1.days }
       let(:end_date) { existing_holiday_end_date - 1.day }
@@ -177,7 +179,7 @@ describe HolidayDateValidator do
     end
 
     context 'end of holiday_request overlaps with existing' do
-      let(:existing_holiday_request_start_date) { Time.zone.now.to_date.monday + 1.day }
+      let(:existing_holiday_request_start_date) { current_week.start_date + 1.day }
       let(:existing_holiday_request_end_date) { existing_holiday_request_start_date + 3.days }
       let(:start_date) { existing_holiday_request_start_date - 1.days }
       let(:end_date) { existing_holiday_request_start_date + 1.day }
@@ -196,10 +198,10 @@ describe HolidayDateValidator do
     end
 
     context 'start of holiday_request overlaps with existing' do
-      let(:existing_holiday_request_start_date) { Time.zone.now.to_date.monday + 1.day }
-      let(:existing_holiday_request_end_date) { Time.zone.now.to_date.monday + 3.days }
-      let(:start_date) { Time.zone.now.to_date.monday }
-      let(:end_date) { Time.zone.now.to_date.monday + 2.days }
+      let(:existing_holiday_request_start_date) { current_week.start_date + 1.day }
+      let(:existing_holiday_request_end_date) { current_week.start_date + 3.days }
+      let(:start_date) { current_week.start_date }
+      let(:end_date) { current_week.start_date + 2.days }
 
       specify 'an error message should be added on base' do
         validator.validate
@@ -215,7 +217,7 @@ describe HolidayDateValidator do
     end
 
     context 'existing holiday_request dates encloses new dates' do
-      let(:existing_holiday_request_start_date) { Time.zone.now.to_date.monday }
+      let(:existing_holiday_request_start_date) { current_week.start_date }
       let(:existing_holiday_request_end_date) { existing_holiday_request_start_date + 6.days }
       let(:start_date) { existing_holiday_request_start_date + 1.days }
       let(:end_date) { existing_holiday_request_end_date - 1.day }
@@ -235,9 +237,9 @@ describe HolidayDateValidator do
   end
 
   context 'overlapping shift exist' do
-    let(:start_date) { Time.zone.now.to_date.monday + 2.days }
+    let(:start_date) { current_week.start_date + 2.days }
     let(:end_date) { start_date + 1.day }
-    let(:shift_starts_at) { start_date.beginning_of_day + 10.hours }
+    let(:shift_starts_at) { RotaShiftDate.new(start_date).start_time + 10.hours }
     let(:shift_ends_at) { shift_starts_at + 2.hours }
     let(:rota) do
       FactoryGirl.create(
@@ -272,7 +274,7 @@ describe HolidayDateValidator do
     let(:now) { Time.current }
     let(:start_date) { RotaShiftDate.to_rota_date(now) }
     let(:end_date) { start_date }
-    let(:owed_hour_starts_at) { start_date.beginning_of_day + 10.hours }
+    let(:owed_hour_starts_at) { RotaShiftDate.new(start_date).start_time + 10.hours }
     let(:owed_hour_ends_at) { owed_hour_starts_at + 2.hours }
     let(:owed_hour) do
       FactoryGirl.create(
@@ -307,7 +309,7 @@ describe HolidayDateValidator do
   context 'holiday is not conatined within one week' do
     let(:start_date) do
       # Saturday
-      Time.zone.now.beginning_of_week.to_date + 6.days
+      current_week.start_date + 6.days
     end
     let(:end_date) do
       # the next Wednesday
@@ -333,7 +335,7 @@ describe HolidayDateValidator do
     let(:venue) { FactoryGirl.create(:venue) }
     let(:start_date) { RotaShiftDate.to_rota_date(now) }
     let(:end_date) { start_date }
-    let(:hour_acceptance_period_starts_at) { start_date.beginning_of_day + 10.hours }
+    let(:hour_acceptance_period_starts_at) { RotaShiftDate.new(start_date).start_time + 10.hours }
     let(:hour_acceptance_period_ends_at) { hour_acceptance_period_starts_at + 2.hours }
     let(:clock_in_day) do
       result = ClockInDay.find_by(staff_member: staff_member, date: start_date, venue: venue)
@@ -385,7 +387,7 @@ describe HolidayDateValidator do
   context 'holiday is not conatined within one week' do
     let(:start_date) do
       # Saturday
-      Time.zone.now.beginning_of_week.to_date + 6.days
+      current_week.start_date + 6.days
     end
     let(:end_date) do
       # the next Wednesday
