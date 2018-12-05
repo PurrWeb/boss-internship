@@ -49,15 +49,16 @@ function StaffMemberInfo({
   endDate,
   owedHours,
 }) {
-  const handleInfoClick = e => {
-    if (bouncedEmailData) {
-      e.preventDefault();
-      bouncedEmailModal(bouncedEmailData);
-    }
+  const handleBouncedEmailInfoClick = e => {
+    e.preventDefault();
+    bouncedEmailModal(bouncedEmailData);
+  };
+  const nullHandleInfoClick = e => {
+    //Do nothing
   };
   return (
     <div className="boss-users__flow-item">
-      <InfoWrapper handleInfoClick={handleInfoClick} id={id} profileLink={profileLink}>
+      <InfoWrapper handleInfoClick={nullHandleInfoClick} id={id} profileLink={profileLink}>
         <div className="boss-user-summary__side">
           <div className="boss-user-summary__avatar">
             <div className="boss-user-summary__avatar-inner">
@@ -98,7 +99,7 @@ function StaffMemberInfo({
           )}
           {bouncedEmailData ? (
             <ul className="boss-user-summary__review-list">
-              <li className="boss-user-summary__review-item">
+              <li className="boss-user-summary__review-item" onClick={handleBouncedEmailInfoClick}>
                 <span className="boss-user-summary__review-wrap">{bouncedEmailData.email}</span>
               </li>
             </ul>
