@@ -1314,8 +1314,8 @@ ActiveRecord::Schema.define(version: 20181204142011) do
   create_table "time_dodger_offence_levels", force: :cascade do |t|
     t.date     "tax_year_start",            null: false
     t.integer  "staff_member_id", limit: 4, null: false
-    t.integer  "offence_level",   limit: 4
-    t.integer  "review_level",    limit: 4
+    t.integer  "offence_level",   limit: 4, null: false
+    t.integer  "review_level",    limit: 4, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -1339,7 +1339,7 @@ ActiveRecord::Schema.define(version: 20181204142011) do
   create_table "time_dodger_review_actions", force: :cascade do |t|
     t.integer  "creator_user_id",              limit: 4,     null: false
     t.integer  "time_dodger_offence_level_id", limit: 4,     null: false
-    t.integer  "disabled_by_user_id",          limit: 4,     null: false
+    t.integer  "disabled_by_user_id",          limit: 4
     t.datetime "disabled_at"
     t.integer  "review_level",                 limit: 4,     null: false
     t.text     "note",                         limit: 65535, null: false

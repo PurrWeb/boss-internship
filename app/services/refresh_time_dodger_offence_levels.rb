@@ -1,4 +1,4 @@
-class RecalculateOffenceLevel
+class RefreshTimeDodgerOffenceLevels
   DODGES_THRESHOLD = 5
 
   def initialize(tax_year:)
