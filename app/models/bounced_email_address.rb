@@ -39,7 +39,7 @@ class BouncedEmailAddress
   end
 
   def self.find_by_email(email:)
-    bounce_record_json = JSON.parse(redis.get(bounce_record_key(email: email)))
+    bounce_record_json = JSON.parse(redis.get(bounce_record_key(email: email.downcase)))
     bounce_record_json.merge("updated_at" => update_time) if bounce_record_json.present?
   end
 
