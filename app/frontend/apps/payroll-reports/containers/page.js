@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     venueId: state.getIn(['page', 'venueId']),
     staffTypesWithFinanceReports: getStaffTypesWithFinanceReports(state),
     weekDates: getWeekDates(state),
-    payRateFilter: state.getIn(['page', 'payRateFilter']),
+    filterType: state.getIn(['page', 'filterType']),
   };
 };
 

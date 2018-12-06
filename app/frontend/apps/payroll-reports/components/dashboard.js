@@ -6,7 +6,7 @@ import safeMoment from '~/lib/safe-moment';
 import classNames from 'classnames';
 import Popover from 'react-popover';
 import BossWeekPicker from '~/components/react-dates/boss-week-picker';
-import PayRatesFilter from './pay-rates-filter';
+import PayrollReportsFilter from './payroll-reports-filter';
 import { appRoutes } from '~/lib/routes';
 
 class Dashboard extends Component {
@@ -36,8 +36,8 @@ class Dashboard extends Component {
     const date = safeMoment.uiDateParse(oFetch(this.props, 'date'));
     const startDate = safeMoment.uiDateParse(this.props.startDate).format(utils.commonDateFormatCalendar());
     const endDate = safeMoment.uiDateParse(this.props.endDate).format(utils.commonDateFormatCalendar());
-    const onPayRateChange = oFetch(this.props, 'onPayRateChange');
-    const payRateFilter = oFetch(this.props, 'payRateFilter');
+    const onFilterChange = oFetch(this.props, 'onFilterChange');
+    const filterType = oFetch(this.props, 'filterType');
     const popoverClass = classNames({
       'boss-page-dashboard__meta-item boss-page-dashboard__meta-item_type_faded boss-page-dashboard__meta-item_role_date boss-page-dashboard__meta-item_role_popover': true,
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
@@ -50,7 +50,7 @@ class Dashboard extends Component {
               <h1 className="boss-page-dashboard__title">{title}</h1>
               <div className="boss-page-dashboard__buttons-group">
                 <a
-                  href={appRoutes.payrollReportsPdfDownload({ date, venueId, payRateFilter })}
+                  href={appRoutes.payrollReportsPdfDownload({ date, venueId, filterType })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
                   Download PDF
@@ -76,7 +76,7 @@ class Dashboard extends Component {
                 </Popover>
               </div>
               <div className="boss-page-dashboard__controls-group">
-                <PayRatesFilter onPayRateChange={onPayRateChange} />
+                <PayrollReportsFilter onFilterChange={onFilterChange} />
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ Dashboard.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   onDateChange: PropTypes.func.isRequired,
-  onPayRateChange: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
 };
 
 export default Dashboard;

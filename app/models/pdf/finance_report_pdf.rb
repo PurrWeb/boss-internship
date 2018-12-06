@@ -4,16 +4,14 @@ class FinanceReportPDF
 
   def initialize(
     report_title:,
-    venue:,
-    week:,
-    filter_by_weekly_pay_rate:,
+    finance_report_page_filter:,
     display_pay_rate_type: true,
     display_totals: true
   )
     @report_title = report_title
-    @venue = venue
-    @week = week
-    @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
+    @venue = finance_report_page_filter.venue
+    @week = finance_report_page_filter.week
+    @filter_by_weekly_pay_rate = finance_report_page_filter.filter_staff_by_weekly_pay_rate?
     @display_pay_rate_type = display_pay_rate_type
     @display_totals = display_totals
     @reports_by_staff_type = {}

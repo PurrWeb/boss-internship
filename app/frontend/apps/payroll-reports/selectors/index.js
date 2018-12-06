@@ -3,24 +3,27 @@ import oFetch from 'o-fetch';
 import Immutable from 'immutable';
 import _ from 'underscore';
 import safeMoment from '~/lib/safe-moment';
+import { PAYROLL_REPORT_SHOW_ALL_FILTER_TYPE, PAYROLL_REPORT_SALARY_ONLY_FILTER_TYPE } from '../constants';
 
 export const staffTypesSelector = state => state.get('staffTypes');
 export const financeReportsSelector = state => state.get('financeReports');
 export const staffMembersSelector = state => state.get('staffMembers');
-export const payRateFilterSelector = state => state.getIn(['page', 'payRateFilter']);
+export const filterTypeSelector = state => state.getIn(['page', 'filterType']);
 export const startDateSelector = state => state.getIn(['page', 'startDate']);
 
 export const getFilteredFinanceReports = createSelector(
   financeReportsSelector,
-  payRateFilterSelector,
-  (financeReports, payRateFilter) => {
-    if (payRateFilter === 'all') {
+  filterTypeSelector,
+  (financeReports, filterType) => {
+    if (filterType === PAYROLL_REPORT_SHOW_ALL_FILTER_TYPE) {
       return financeReports;
-    } else {
+    } else if (filterType === PAYROLL_REPORT_SALARY_ONLY_FILTER_TYPE) {
       return financeReports.filter(financeReport => {
         const payRateType = _.last(financeReport.get('payRateDescription').split('/')) === 'h' ? 'hourly' : 'weekly';
-        return payRateType === payRateFilter;
+        return payRateType === 'weekly';
       });
+    } else {
+      throw new Error(`Unsupported filter type ${filterType} encountered`)
     }
   },
 );

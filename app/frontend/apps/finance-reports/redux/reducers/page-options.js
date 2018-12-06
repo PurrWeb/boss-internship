@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import oFetch from 'o-fetch';
-
+import { FINANCE_REPORT_SHOW_ALL_FILTER_TYPE } from '../../constants';
 import * as types from '../types';
 
 const initialState = Immutable.Map();
@@ -16,12 +16,12 @@ export default handleActions(
       const date = oFetch(payload, 'date');
       const venue = oFetch(payload, 'venue');
       const venueId = oFetch(venue, 'id');
-      const payRateFilter = 'all';
-      return Immutable.fromJS({ date, startDate, endDate, venueId, payRateFilter, permissions });
+      const filterType = FINANCE_REPORT_SHOW_ALL_FILTER_TYPE;
+      return Immutable.fromJS({ date, startDate, endDate, venueId, filterType, permissions });
     },
     [types.CHANGE_PAY_RATE_FILTER]: (state, action) => {
-      const payRateFilter = oFetch(action, 'payload.filter');
-      return state.set('payRateFilter', payRateFilter);
+      const filterType = oFetch(action, 'payload.filter');
+      return state.set('filterType', filterType);
     },
   },
   initialState,

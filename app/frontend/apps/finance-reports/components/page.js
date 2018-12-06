@@ -27,7 +27,7 @@ class Page extends Component {
     });
   }
 
-  handlePayRateChange = filter => {
+  handleFilterChange = filter => {
     const changePayRateFilter = oFetch(this.props, 'changePayRateFilter');
     changePayRateFilter({ filter });
   };
@@ -105,7 +105,7 @@ class Page extends Component {
     const endDate = oFetch(this.props, 'endDate');
     const date = oFetch(this.props, 'date');
     const venueId = oFetch(this.props, 'venueId');
-    const payRateFilter = oFetch(this.props, 'payRateFilter');
+    const filterType = oFetch(this.props, 'filterType');
     const weekDates = oFetch(this.props, 'weekDates');
     const allReady = oFetch(this.props, 'allReady');
     const permissions = oFetch(this.props, 'permissions');
@@ -147,9 +147,9 @@ class Page extends Component {
           startDate={startDate}
           endDate={endDate}
           venueId={venueId}
-          payRateFilter={payRateFilter}
+          filterType={filterType}
           onDateChange={this.handleDateChange}
-          onPayRateChange={this.handlePayRateChange}
+          onFilterChange={this.handleFilterChange}
           canExportToCSV={canExportToCSV}
           showPDFDownloadLink={showPDFDownloadLink}
         />
@@ -202,7 +202,7 @@ Page.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   venueId: PropTypes.number.isRequired,
-  payRateFilter: PropTypes.string.isRequired,
+  filterType: PropTypes.string.isRequired,
   staffTypesWithFinanceReports: ImmutablePropTypes.list.isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   changePayRateFilter: PropTypes.func.isRequired,

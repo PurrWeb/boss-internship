@@ -20,16 +20,17 @@
   </div>
 
   <div class="row">
-    <% if pay_rate_filtering == 'weekly' %>
+    <% if filter_type == FinanceReportPageFilter::FILTER_BY_SALARY_ONLY %>
       <div class="shrink column">
-        <p>Displaying Weekly Only</p>
+        <p>Displaying Salary Only</p>
       </div>
       <div class="shrink column">
         <%= link_to(
               "Show All",
               pay_rate_filter_path_helper.call(
                   venue_id: venue.id,
-                  week_start:  week.start_date && UIRotaDate.format(week.start_date)
+                  week_start:  week.start_date && UIRotaDate.format(week.start_date),
+                 filter_type: FinanceReportPageFilter::SHOW_ALL_FILTER_TYPE,
               ),
               class: 'boss2-button'
             ) %>
@@ -44,7 +45,7 @@
               pay_rate_filter_path_helper.call(
                 venue_id: venue.id,
                 week_start:  week.start_date && UIRotaDate.format(week.start_date),
-                pay_rate_filter: 'weekly'
+                filter_type: FinanceReportPageFilter::FILTER_BY_SALARY_ONLY,
               ),
               class: 'boss2-button'
             ) %>
@@ -58,7 +59,7 @@
             pay_rate_filter_path_helper.call(
               venue_id: venue.id,
               week_start:  week.start_date && UIRotaDate.format(week.start_date),
-              pay_rate_filter: params[:pay_rate_filter],
+              filter_type: params[:filter_type],
               format: :pdf
             ),
             class: 'boss2-button boss2-button_role_download'

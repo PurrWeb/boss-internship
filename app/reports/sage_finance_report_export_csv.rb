@@ -1,10 +1,10 @@
 require 'csv'
 
 class SageFinanceReportExportCSV
-  def initialize(venue:, week:, filter_by_weekly_pay_rate:)
-    @venue = venue
-    @week = week
-    @filter_by_weekly_pay_rate = filter_by_weekly_pay_rate
+  def initialize(finance_report_page_filter:)
+    @venue = finance_report_page_filter.venue
+    @week = finance_report_page_filter.week
+    @filter_by_weekly_pay_rate = finance_report_page_filter.filter_staff_by_weekly_pay_rate?
   end
   attr_reader :venue, :week, :filter_by_weekly_pay_rate
 
