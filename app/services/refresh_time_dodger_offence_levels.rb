@@ -1,15 +1,15 @@
 class RefreshTimeDodgerOffenceLevels
   DODGES_THRESHOLD = 5
 
-  def initialize(tax_year:)
-    @tax_year = tax_year
+  def initialize(monday_tax_year:)
+    @monday_tax_year = monday_tax_year
   end
 
   def call
     time_dodger_offence = InRangeQuery.new(
       relation: TimeDodgerOffence.hard_dodgers,
-      start_value: tax_year.start_date,
-      end_value: tax_year.end_date,
+      start_value: monday_tax_year.start_date,
+      end_value: monday_tax_year.end_date,
       start_column_name: "week_start",
       end_column_name: "week_start",
     ).all
@@ -19,7 +19,7 @@ class RefreshTimeDodgerOffenceLevels
         count = dodges.count
         offence_level = count / DODGES_THRESHOLD
         time_dodger_offence_level = TimeDodgerOffenceLevel.find_or_initialize_by(
-          tax_year_start: tax_year.start_date,
+          tax_year_start: monday_tax_year.start_date,
           staff_member_id: id,
         )
 
@@ -33,5 +33,5 @@ class RefreshTimeDodgerOffenceLevels
 
   private
 
-  attr_reader :tax_year
+  attr_reader :monday_tax_year
 end
