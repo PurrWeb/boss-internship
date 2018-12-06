@@ -1,11 +1,68 @@
 import React, { Component } from 'react';
 import oFetch from 'o-fetch';
+import moment from 'moment';
+import momentDurationFormatSetup from 'moment-duration-format';
+import { openContentModal, MODAL_TYPE1 } from '~/components/modals';
+import safeMoment from '~/lib/safe-moment';
+import utils from '~/lib/utils';
+
+momentDurationFormatSetup(moment);
+
+class OffenderHistoryModalContent extends Component {
+  render() {
+    const [staffMemberId, history] = oFetch(this.props, 'staffMemberId', 'history');
+
+    return (
+      <div className="boss-modal-window__overview">
+        <div className="boss-overview">
+          <div className="boss-overview__group">
+            <ul className="boss-overview__activity">
+              {history.map((item, index) => {
+                const [dodgedMinutes, weekStart] = oFetch(item, 'dodgedMinutes', 'weekStart');
+                const formattedDate = safeMoment.uiDateParse(weekStart).format(utils.commonDateFormatWithDay());
+                const formattedTime = moment
+                  .duration(dodgedMinutes, 'minutes')
+                  .format('*h[h] m[m]', { trim: 'both', useGrouping: false });
+                return (
+                  <li key={index} className="boss-overview__activity-item">
+                    <p className="boss-overview__text">
+                      {formattedDate} - <span className="boss-overview__text-marked">{formattedTime}</span>
+                    </p>
+                    <a href="#" className="boss-overview__link boss-overview__link_role_details">
+                      Details
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default class OffenderInfo extends Component {
+  handleOpenHistoryModal = (fullName, history, staffMemberId) => {
+    openContentModal({
+      submit: this.handleMarkHandledClick,
+      config: {
+        title: (
+          <span>
+            <span className="boss-modal-window__marked">{fullName}</span> Offences
+          </span>
+        ),
+        type: MODAL_TYPE1,
+        modalClassName: 'boss-modal-window_role_offences',
+      },
+      props: { history, staffMemberId },
+    })(OffenderHistoryModalContent);
+  };
+
   render() {
     const onMarkHandledClick = oFetch(this.props, 'onMarkHandledClick');
     const offender = oFetch(this.props, 'offender');
-    const [staffMemberId, avatarUrl, fullName, offenceLevel, staffType, venue, markNeeded] = oFetch(
+    const [staffMemberId, avatarUrl, fullName, offenceLevel, staffType, venue, markNeeded, history] = oFetch(
       offender,
       'staffMemberId',
       'avatarUrl',
@@ -14,6 +71,7 @@ export default class OffenderInfo extends Component {
       'staffType',
       'venue',
       'markNeeded',
+      'history',
     );
 
     return (
@@ -42,9 +100,13 @@ export default class OffenderInfo extends Component {
               <li className="boss-user-summary__review-item">
                 <span className="boss-user-summary__review-label">Offences Count: </span>
                 <span className="boss-user-summary__review-val">
-                  <a href="#" className="boss-user-summary__review-link">
+                  <button
+                    type="button"
+                    onClick={() => this.handleOpenHistoryModal(fullName, history, staffMemberId)}
+                    className="boss-user-summary__review-link"
+                  >
                     {offenceLevel}
-                  </a>
+                  </button>
                 </span>
               </li>
             </ul>

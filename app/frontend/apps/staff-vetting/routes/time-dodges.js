@@ -65,6 +65,7 @@ class TimeDodges extends PureComponent {
       const softDodgers = oFetch(res, 'data.softDodgers');
       const hardDodgers = oFetch(res, 'data.hardDodgers');
       const offenders = oFetch(res, 'data.offenders');
+      const offendersHistory = oFetch(res, 'data.offendersHistory');
 
       const imStaffMembersSoftDodgers = Immutable.fromJS(
         softDodgers.map(softDodger => {
@@ -81,6 +82,11 @@ class TimeDodges extends PureComponent {
           };
         }),
       );
+
+      const imGroupedOffendersHistory = Immutable.fromJS(offendersHistory).groupBy(history =>
+        history.get('staffMemberId'),
+      );
+
       const imStaffMembersHardDodgers = Immutable.fromJS(
         hardDodgers.map(hardDodger => {
           const staffMemberId = oFetch(hardDodger, 'staffMemberId');
@@ -96,7 +102,6 @@ class TimeDodges extends PureComponent {
           };
         }),
       );
-
       const imRepeatOffenders = Immutable.fromJS(
         offenders.map(offender => {
           const staffMemberId = oFetch(offender, 'staffMemberId');
@@ -108,6 +113,7 @@ class TimeDodges extends PureComponent {
           const venueId = oFetch(staffMember, 'venueId');
           const staffType = this.props.staffTypes.find(staffType => staffType.get('id') === staffTypeId);
           const venue = this.props.venues.find(venue => venue.get('id') === venueId);
+          const history = imGroupedOffendersHistory.get(staffMemberId);
 
           return {
             ...staffMember,
@@ -115,10 +121,10 @@ class TimeDodges extends PureComponent {
             ...offender,
             staffType: staffType.get('name'),
             venue: venue.get('name'),
+            history,
           };
         }),
       );
-
       return {
         imStaffMembersHardDodgers,
         imStaffMembersSoftDodgers,
