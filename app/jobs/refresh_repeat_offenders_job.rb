@@ -4,12 +4,8 @@ class RefreshRepeatOffendersJob < ActiveJob::Base
       now = Time.current
       today = RotaShiftDate.to_rota_date(now)
 
-      current_week = RotaWeek.new(today)
-      two_week_before_week = RotaWeek.new(current_week.start_date - 2.weeks)
-      one_week_before_week = RotaWeek.new(current_week.start_date - 1.week)
-
-      start_date = two_week_before_week.start_date
-      end_date = one_week_before_week.end_date
+      start_date = RotaWeek.new(today - 2.weeks).start_date
+      end_date = RotaWeek.new(today - 1.weeks).end_date
 
       current_tax_year = MondayTaxYear.new(start_date)
       next_tax_year = nil
