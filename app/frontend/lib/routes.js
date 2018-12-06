@@ -321,6 +321,12 @@ export const appRoutes = {
 }
 
 const apiRoutes = {
+    markRepeatOffender: {
+        getPath() {
+            return `/api/v1/staff_vetting/mark-repeat-offender`;
+        },
+        method: 'POST',
+    },
     addHolidayStaffMembers: {
         getPath: function({query, venueId}) {
             const urlQuery = queryString.stringify({ query, venue_id: venueId });

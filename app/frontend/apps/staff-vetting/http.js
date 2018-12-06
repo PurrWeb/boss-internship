@@ -1,18 +1,11 @@
 import axios from 'axios';
+import globalNotification from '~/components/global-notification';
 
 export default function http({ ...params }) {
   const instance = axios.create();
-  instance.defaults.headers.common['Authorization'] = `Token token="${
-    window.boss.accessToken
-  }"`;
+  instance.defaults.headers.common['Authorization'] = `Token token="${window.boss.accessToken}"`;
 
-  const {
-    successMessage,
-    errorMessage,
-    interval,
-    notify,
-    globalLoader,
-  } = params;
+  const { successMessage, errorMessage, interval, notify, globalLoader } = params;
 
   let loader;
 

@@ -10,13 +10,15 @@ class PageContent extends Component {
       filteredStaffMembers: this.filterByVenues(props.staffMembers),
       searchQuery: '',
       staffMembers: props.staffMembers,
+      isRepeatOffenders: false,
     };
   }
 
   componentWillReceiveProps = nextProps => {
-    const { selectedVenueIds, staffMembers } = nextProps;
+    const { selectedVenueIds, staffMembers, repeatOffenders } = nextProps;
     this.setState(state => {
-      const filteredStaffMembers = this.filterByVenues(staffMembers, selectedVenueIds);
+      const staffMembersFromProps = repeatOffenders && this.state.isRepeatOffenders ? repeatOffenders : staffMembers;
+      const filteredStaffMembers = this.filterByVenues(staffMembersFromProps, selectedVenueIds);
       return {
         filteredStaffMembers,
         staffMembers,
@@ -64,9 +66,12 @@ class PageContent extends Component {
     if (!this.props.staffMemberListRenderer) {
       return null;
     }
-    return React.cloneElement(this.props.staffMemberListRenderer(this.state.filteredStaffMembers), {
-      staffTypes: this.props.staffTypes,
-    });
+    return React.cloneElement(
+      this.props.staffMemberListRenderer(this.state.filteredStaffMembers, this.state.isRepeatOffenders),
+      {
+        staffTypes: this.props.staffTypes,
+      },
+    );
   }
 
   renderContent() {
@@ -76,10 +81,11 @@ class PageContent extends Component {
     return React.cloneElement(this.props.contentRenderer());
   }
 
-  onChangeTab = staffMembers => {
+  onChangeTab = (staffMembers, isRepeatOffenders = false) => {
     this.setState({
       staffMembers,
       filteredStaffMembers: utils.staffMemberFilterFullName(this.state.searchQuery, this.filterByVenues(staffMembers)),
+      isRepeatOffenders,
     });
   };
 

@@ -121,8 +121,30 @@ class TabFilter extends Component {
     return [staffMembersSoftDodgersTab, staffMembersHardDodgersTab];
   }
 
+  getRepeatOffenders() {
+    if (!this.props.repeatOffenders) {
+      return [];
+    }
+
+    const { imRepeatOffenders } = this.props.repeatOffenders;
+    const { imStaffMembers } = this.props.timeDodgers;
+
+    const repeatOffendersTab = {
+      title: `Repeat Offenders (${imRepeatOffenders.size})`,
+      onClick: () => this.props.onChangeTab(imRepeatOffenders, true),
+      onClear: () => this.props.onChangeTab(imStaffMembers),
+    };
+    return [repeatOffendersTab];
+  }
+
   render() {
-    const tabs = [...this.getVenues(), ...this.getPayRates(), ...this.getSecurity(), ...this.getTimeDodges()];
+    const tabs = [
+      ...this.getVenues(),
+      ...this.getPayRates(),
+      ...this.getSecurity(),
+      ...this.getTimeDodges(),
+      ...this.getRepeatOffenders(),
+    ];
     return (
       <div ref={node => (this.ref = node)} className="boss-page-main__controls">
         {tabs.map((tab, index) => (

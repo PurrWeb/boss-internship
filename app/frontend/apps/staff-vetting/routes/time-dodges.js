@@ -11,13 +11,14 @@ import queryString from 'query-string';
 import * as selectors from '../selectors';
 import TabFilter from '../components/tab-filter';
 import StaffMemberList from '../components/staff-member-list';
-import { getStaffMembersWithTimeDodges } from '../requests';
+import RepeatOffendersList from '../components/repeat-offenders-list';
+import OffenderInfo from '../components/offender-info';
+import { getStaffMembersWithTimeDodges, markRepeatOffenderRequest } from '../requests';
 import Page from '../components/page';
 import DashboardFilter from '../components/dashboard-filter';
 import oFetch from 'o-fetch';
-
-const TIME_DODGERS_START_LIMIT = 45;
-const TIME_DODGERS_END_LIMIT = 47;
+import { openContentModal, MODAL_TYPE2 } from '~/components/modals';
+import MarkHandled from '../components/mark-handled';
 
 const getEndDate = uiDate =>
   safeMoment
@@ -37,6 +38,7 @@ class TimeDodges extends PureComponent {
       imStaffMembers: Immutable.List([]),
       imStaffMembersSoftDodgers: Immutable.List([]),
       imStaffMembersHardDodgers: Immutable.List([]),
+      imRepeatOffenders: Immutable.List([]),
       isLoaded: false,
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
       startDate: safeMoment
@@ -60,43 +62,68 @@ class TimeDodges extends PureComponent {
   fetchStaffMembers = date => {
     return getStaffMembersWithTimeDodges(date).then(res => {
       const staffMembers = oFetch(res, 'data.staffMembers');
-      const acceptedHoursData = oFetch(res, 'data.acceptedHours');
-      const paidHolidaysData = oFetch(res, 'data.paidHolidays');
-      const acceptedBreaksData = oFetch(res, 'data.acceptedBreaks');
-      const owedHoursData = oFetch(res, 'data.owedHours');
+      const softDodgers = oFetch(res, 'data.softDodgers');
+      const hardDodgers = oFetch(res, 'data.hardDodgers');
+      const offenders = oFetch(res, 'data.offenders');
 
-      const imStaffMembers = Immutable.fromJS(
-        staffMembers.map(staffMember => {
-          const acceptedHours = acceptedHoursData[staffMember.id] || 0;
-          const paidHolidays = paidHolidaysData[staffMember.id] || 0;
-          const acceptedBreaks = acceptedBreaksData[staffMember.id] || 0;
-          const owedHours = owedHoursData[staffMember.id] || 0;
-          const hours = acceptedHours + paidHolidays + owedHours;
-
+      const imStaffMembersSoftDodgers = Immutable.fromJS(
+        softDodgers.map(softDodger => {
+          const staffMemberId = oFetch(softDodger, 'staffMemberId');
+          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
+          if (!staffMember) {
+            throw new Error('Staff member must be present');
+          }
           return {
             ...staffMember,
             fullName: `${staffMember.firstName} ${staffMember.surname}`,
-            acceptedHours,
-            paidHolidays,
-            acceptedBreaks,
-            owedHours,
-            hours,
+            ...softDodger,
+            hours: oFetch(softDodger, 'minutes'),
+          };
+        }),
+      );
+      const imStaffMembersHardDodgers = Immutable.fromJS(
+        hardDodgers.map(hardDodger => {
+          const staffMemberId = oFetch(hardDodger, 'staffMemberId');
+          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
+          if (!staffMember) {
+            throw new Error('Staff member must be present');
+          }
+          return {
+            ...staffMember,
+            fullName: `${oFetch(staffMember, 'firstName')} ${oFetch(staffMember, 'surname')}`,
+            ...hardDodger,
+            hours: oFetch(hardDodger, 'minutes'),
           };
         }),
       );
 
-      const imStaffMembersSoftDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours');
-        return hours >= TIME_DODGERS_START_LIMIT * 60 && hours <= TIME_DODGERS_END_LIMIT * 60;
-      });
-      const imStaffMembersHardDodgers = imStaffMembers.filter(staffMember => {
-        const hours = staffMember.get('hours');
-        return hours < TIME_DODGERS_START_LIMIT * 60;
-      });
+      const imRepeatOffenders = Immutable.fromJS(
+        offenders.map(offender => {
+          const staffMemberId = oFetch(offender, 'staffMemberId');
+          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
+          if (!staffMember) {
+            throw new Error('Staff member must be present');
+          }
+          const staffTypeId = oFetch(staffMember, 'staffTypeId');
+          const venueId = oFetch(staffMember, 'venueId');
+          const staffType = this.props.staffTypes.find(staffType => staffType.get('id') === staffTypeId);
+          const venue = this.props.venues.find(venue => venue.get('id') === venueId);
+
+          return {
+            ...staffMember,
+            fullName: `${oFetch(staffMember, 'firstName')} ${oFetch(staffMember, 'surname')}`,
+            ...offender,
+            staffType: staffType.get('name'),
+            venue: venue.get('name'),
+          };
+        }),
+      );
+
       return {
         imStaffMembersHardDodgers,
         imStaffMembersSoftDodgers,
-        imStaffMembers,
+        imStaffMembers: imStaffMembersSoftDodgers.concat(imStaffMembersHardDodgers),
+        imRepeatOffenders,
       };
     });
   };
@@ -113,14 +140,17 @@ class TimeDodges extends PureComponent {
       this.changeURL(selectedVenueIds, date);
     }
 
-    this.fetchStaffMembers(date).then(({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers }) => {
-      this.setState({
-        imStaffMembersHardDodgers,
-        imStaffMembersSoftDodgers,
-        imStaffMembers,
-        isLoaded: true,
-      });
-    });
+    this.fetchStaffMembers(date).then(
+      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, imRepeatOffenders }) => {
+        this.setState({
+          imStaffMembersHardDodgers,
+          imStaffMembersSoftDodgers,
+          imStaffMembers,
+          imRepeatOffenders,
+          isLoaded: true,
+        });
+      },
+    );
   }
 
   changeURL = (selectedVenueIds, startDate) => {
@@ -150,11 +180,12 @@ class TimeDodges extends PureComponent {
     });
     this.clearTabFilter();
     this.fetchStaffMembers(urlStartDate).then(
-      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers }) => {
+      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, imRepeatOffenders }) => {
         this.setState({
           imStaffMembersHardDodgers,
           imStaffMembersSoftDodgers,
           imStaffMembers,
+          imRepeatOffenders,
         });
       },
     );
@@ -182,6 +213,31 @@ class TimeDodges extends PureComponent {
     );
   };
 
+  handleMarkHandledClick = (closeModal, values) => {
+    return markRepeatOffenderRequest({ ...values, weekStart: this.state.startDate }).then(response => {
+      const markedOffender = oFetch(response, 'data.offenderLevel');
+      const staffMemberId = oFetch(markedOffender, 'staffMemberId');
+      const index = this.state.imRepeatOffenders.findIndex(
+        repeatOffender => repeatOffender.get('staffMemberId') === staffMemberId,
+      );
+      const imUpdatedOffenders = this.state.imRepeatOffenders.update(index, offender => {
+        return offender
+          .set('markNeeded', oFetch(markedOffender, 'markNeeded'))
+          .set('reviewLevel', oFetch(markedOffender, 'reviewLevel'));
+      });
+      this.setState({ imRepeatOffenders: imUpdatedOffenders });
+      closeModal();
+    });
+  };
+
+  openMarkHandledModal = id => {
+    openContentModal({
+      submit: this.handleMarkHandledClick,
+      config: { title: 'MARK HANDLED', type: MODAL_TYPE2 },
+      props: { id },
+    })(MarkHandled);
+  };
+
   takeClearFunc = clearFunc => {
     this.clearTabFilter = clearFunc;
   };
@@ -190,7 +246,7 @@ class TimeDodges extends PureComponent {
     if (!this.state.isLoaded) {
       return null;
     }
-    const { imStaffMembers, imStaffMembersHardDodgers, imStaffMembersSoftDodgers } = this.state;
+    const { imStaffMembers, imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imRepeatOffenders } = this.state;
     const { venues } = this.props;
     return (
       <Page
@@ -200,6 +256,7 @@ class TimeDodges extends PureComponent {
         count={imStaffMembers.size}
         staffMembers={imStaffMembers}
         staffTypes={this.props.staffTypes}
+        repeatOffenders={imRepeatOffenders}
         tabsFilterRenderer={() => (
           <TabFilter
             getClearFunc={clearFunc => this.takeClearFunc(clearFunc)}
@@ -208,17 +265,30 @@ class TimeDodges extends PureComponent {
               imStaffMembersSoftDodgers,
               imStaffMembers,
             }}
+            repeatOffenders={{ imRepeatOffenders }}
           />
         )}
-        staffMemberListRenderer={staffMembers => (
-          <StaffMemberList
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-            profileLink={false}
-            staffMembers={staffMembers}
-            venues={venues}
-          />
-        )}
+        staffMemberListRenderer={(staffMembers, isRepeatOffendders) => {
+          if (isRepeatOffendders) {
+            return (
+              <RepeatOffendersList
+                items={staffMembers}
+                itemRenderer={repeatOffender => {
+                  return <OffenderInfo offender={repeatOffender} onMarkHandledClick={this.openMarkHandledModal} />;
+                }}
+              />
+            );
+          }
+          return (
+            <StaffMemberList
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+              profileLink={false}
+              staffMembers={staffMembers}
+              venues={venues}
+            />
+          );
+        }}
         dashboardFilterRenderer={this.renderDashboardFilter}
       />
     );

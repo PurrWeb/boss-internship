@@ -1,4 +1,5 @@
 import http from './http';
+import { apiRoutes } from '~/lib/routes';
 
 export const getStaffMembersWithoutAddress = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-without-address`);
@@ -38,4 +39,8 @@ export const getStaffMembersWithTimeDodges = date => {
       date,
     },
   });
+};
+
+export const markRepeatOffenderRequest = params => {
+  return http().post(apiRoutes.markRepeatOffender.getPath(), params);
 };
