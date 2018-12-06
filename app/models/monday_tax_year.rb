@@ -17,7 +17,7 @@ class MondayTaxYear
     if tax_year.end_date.monday?
       tax_year.end_date
     else
-      tax_year.end_date.end_of_week
+      tax_year.end_date.sunday
     end
   end
 
