@@ -101,20 +101,44 @@ module Api
           }, status: 200
       end
 
+      def mark_repeat_offender
+        result = CreateTimeDodgerReviewActionApiService.new(requester: current_user).call(params)
+        if result.success?
+          render json: {
+            offenderLevel: Api::V1::StaffVettings::OffenderSerializer.new(result.review_action.time_dodger_offence_level)
+          }, status: 200
+        else
+          render json: { errors: result.api_errors }, status: 422
+        end
+      end
+
       def time_dodgers
         authorize! :view, :time_dodgers
 
         date = date_from_params
+        monday_tax_year = MondayTaxYear.new(date)
         week = RotaWeek.new(date);
-        time_dodgers_service = TimeDodgersService.new(week: week)
-        dodgers_data = time_dodgers_service.dodgers_data
 
-        staff_members = time_dodgers_service.staff_members
+        dodgers_data = TimeDodgerOffence.dodgers.by_week(week)
+        offenders = TimeDodgerOffenceLevel
+          .where(tax_year_start: monday_tax_year.start_date)
+          .where('offence_level > ?', 0)
+
+        staff_members = StaffMember.on_weekly_pay_rate.where(id: dodgers_data.pluck(:staff_member_id) + offenders.pluck(:staff_member_id))
+
         render json: {
-          acceptedHours: dodgers_data.fetch(:accepted_hours),
-          acceptedBreaks: dodgers_data.fetch(:accepted_breaks),
-          paidHolidays: dodgers_data.fetch(:paid_holidays),
-          owedHours: dodgers_data.fetch(:owed_hours),
+          softDodgers: ActiveModel::Serializer::CollectionSerializer.new(
+            dodgers_data.soft_dodgers,
+            serializer: Api::V1::StaffVettings::TimeDodgerSerializer
+          ),
+          hardDodgers: ActiveModel::Serializer::CollectionSerializer.new(
+            dodgers_data.hard_dodgers,
+            serializer: Api::V1::StaffVettings::TimeDodgerSerializer
+          ),
+          offenders: ActiveModel::Serializer::CollectionSerializer.new(
+            offenders,
+            serializer: Api::V1::StaffVettings::OffenderSerializer
+          ),
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer

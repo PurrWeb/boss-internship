@@ -322,6 +322,7 @@ Rails.application.routes.draw do
             get :staff_with_bounced_email, path: 'staff-with-bounced-email'
             get :time_dodgers, path: 'time-dodgers'
             get :staff_with_same_sage_id, path: 'staff-with-same-sage-id'
+            post :mark_repeat_offender, path: 'mark-repeat-offender'
           end
         end
 
