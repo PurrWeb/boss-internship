@@ -14,7 +14,7 @@ class RefreshRepeatOffendersJob < ActiveJob::Base
         next_tax_year = MondayTaxYear.new(end_date)
       end
 
-      TimeDodgerOffenceService.new(
+      RefreshTimeDodgerOffenceData.new(
         start_date: start_date,
         end_date: end_date,
       ).call

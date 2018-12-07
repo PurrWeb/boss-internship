@@ -7,7 +7,7 @@ class RefreshRepeatOffendersData < ActiveRecord::Migration
       start_date = monday_tax_year.start_date
       end_date = monday_tax_year.end_date
 
-      TimeDodgerOffenceService.new(
+      RefreshTimeDodgerOffenceData.new(
         start_date: start_date,
         end_date: end_date,
       ).call

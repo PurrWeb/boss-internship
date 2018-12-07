@@ -1,4 +1,4 @@
-class TimeDodgerOffenceService
+class RefreshTimeDodgerOffenceData
   def initialize(start_date:, end_date:)
     @start_date = RotaWeek.new(start_date).start_date
     @end_date = RotaWeek.new(end_date).end_date
