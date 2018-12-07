@@ -3,7 +3,14 @@ import oFetch from 'o-fetch';
 import Immutable from 'immutable';
 import _ from 'underscore';
 import safeMoment from '~/lib/safe-moment';
-import { FINANCE_REPORT_SHOW_ALL_FILTER_TYPE, FINANCE_REPORT_SALARY_ONLY_FILTER_TYPE } from '../constants';
+import {
+  FINANCE_REPORT_SHOW_ALL_FILTER_TYPE,
+  FINANCE_REPORT_SALARY_ONLY_FILTER_TYPE,
+  FINANCE_REPORT_WITH_ACCESSORIES_FILTER_TYPE,
+  FINANCE_REPORT_WITH_HOLIDAYS_FILTER_TYPE,
+  FINANCE_REPORT_WITH_OWED_HOURS_FILTER_TYPE,
+  FILTER_TABS,
+} from '../constants';
 
 export const staffTypesSelector = state => state.get('staffTypes');
 export const financeReportsSelector = state => state.get('financeReports');
@@ -12,20 +19,41 @@ export const filterTypeSelector = state => state.getIn(['page', 'filterType']);
 export const startDateSelector = state => state.getIn(['page', 'startDate']);
 export const permissionsSelector = state => state.getIn(['page', 'permissions']);
 
-export const getFilteredFinanceReports = createSelector(
-  financeReportsSelector,
-  filterTypeSelector,
-  (financeReports, filterType) => {
-    if (filterType === FINANCE_REPORT_SHOW_ALL_FILTER_TYPE) {
+const filterFactory = financeReports => {
+  const filter = {
+    [FINANCE_REPORT_SHOW_ALL_FILTER_TYPE]() {
       return financeReports;
-    } else if (filterType === FINANCE_REPORT_SALARY_ONLY_FILTER_TYPE) {
+    },
+    [FINANCE_REPORT_SALARY_ONLY_FILTER_TYPE]() {
       return financeReports.filter(financeReport => {
         const payRateType = _.last(financeReport.get('payRateDescription').split('/')) === 'h' ? 'hourly' : 'weekly';
         return payRateType === 'weekly';
       });
-    } else {
-      throw new Error(`Unsupported filter type ${filterType} encountered`)
+    },
+    [FINANCE_REPORT_WITH_OWED_HOURS_FILTER_TYPE]() {
+      return financeReports.filter(financeReport => financeReport.get('owedHoursMinuteCount') > 0);
+    },
+    [FINANCE_REPORT_WITH_HOLIDAYS_FILTER_TYPE]() {
+      return financeReports.filter(financeReport => financeReport.get('holidayDaysCount') > 0);
+    },
+    [FINANCE_REPORT_WITH_ACCESSORIES_FILTER_TYPE]() {
+      return financeReports.filter(financeReport => financeReport.get('accessoriesCents') !== 0);
+    },
+  };
+
+  return filterType => {
+    return filter[filterType]();
+  };
+};
+
+export const getFilteredFinanceReports = createSelector(
+  financeReportsSelector,
+  filterTypeSelector,
+  (financeReports, filterType) => {
+    if (!FILTER_TABS.includes(filterType)) {
+      throw new Error(`Unsupported filter type ${filterType} encountered in ${JSON.stringify(FILTER_TABS)}`);
     }
+    return filterFactory(financeReports)(filterType);
   },
 );
 
@@ -84,24 +112,24 @@ export const getStaffTypesWithFinanceReports = createSelector(
       );
       const reportsJS = reports.toJS();
       const total = reportsJS.reduce((acc, report) => acc + oFetch(report, 'total'), 0);
-      const readyReportsJS = reportsJS.filter((report) => {
-        return oFetch(report, 'status') === 'ready'
+      const readyReportsJS = reportsJS.filter(report => {
+        return oFetch(report, 'status') === 'ready';
       });
-      const requiringUpdateReportsJS = reportsJS.filter((report) => {
-        return oFetch(report, 'status') === 'requiring_update'
+      const requiringUpdateReportsJS = reportsJS.filter(report => {
+        return oFetch(report, 'status') === 'requiring_update';
       });
 
       const completableReadyReports = [];
       const incompletableReadyReports = [];
-      readyReportsJS.forEach((report) => {
+      readyReportsJS.forEach(report => {
         const completionDateReached = oFetch(report, 'completionDateReached');
         const hoursPending = oFetch(report, 'hoursPending');
         const total = oFetch(report, 'total');
 
-        if (hoursPending || !completionDateReached){
-          incompletableReadyReports.push(report)
+        if (hoursPending || !completionDateReached) {
+          incompletableReadyReports.push(report);
         } else {
-          completableReadyReports.push(report)
+          completableReadyReports.push(report);
         }
       });
 
@@ -114,12 +142,12 @@ export const getStaffTypesWithFinanceReports = createSelector(
         .set('total', total)
         .set('reports', reports)
         .set('allReady', allReady);
-    })
-  }
+    });
+  },
 );
 
-export const getAllReady = createSelector(getStaffTypesWithFinanceReports, (staffTypesWithFinanceReports) => {
-  return staffTypesWithFinanceReports.every((staffType) => {
+export const getAllReady = createSelector(getStaffTypesWithFinanceReports, staffTypesWithFinanceReports => {
+  return staffTypesWithFinanceReports.every(staffType => {
     return staffType.get('allReady') == true;
   });
 });

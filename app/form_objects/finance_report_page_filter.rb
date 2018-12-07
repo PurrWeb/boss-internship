@@ -1,7 +1,10 @@
 class FinanceReportPageFilter
   SHOW_ALL_FILTER_TYPE = 'show_all'
   FILTER_BY_SALARY_ONLY = 'salary_only'
-  FILTER_TYPES = [FILTER_BY_SALARY_ONLY, SHOW_ALL_FILTER_TYPE]
+  FILTER_BY_WITH_OWED_HOURS = 'with_owed_hours'
+  FILTER_BY_WITH_HOLIDAYS = 'with_holidays'
+  FILTER_BY_WITH_ACCESSORIES = 'with_accessories'
+  FILTER_TYPES = [FILTER_BY_SALARY_ONLY, SHOW_ALL_FILTER_TYPE, FILTER_BY_WITH_OWED_HOURS, FILTER_BY_WITH_HOLIDAYS, FILTER_BY_WITH_ACCESSORIES]
 
   def initialize(requester:, params:, now: Time.current)
     @requester = requester
@@ -15,6 +18,18 @@ class FinanceReportPageFilter
 
   def filter_staff_by_weekly_pay_rate?
     filter_type == FILTER_BY_SALARY_ONLY
+  end
+
+  def filter_by_with_holidays?
+    filter_type == FILTER_BY_WITH_HOLIDAYS
+  end
+
+  def filter_by_with_owed_hours?
+    filter_type == FILTER_BY_WITH_OWED_HOURS
+  end
+
+  def filter_by_with_accessories?
+    filter_type == FILTER_BY_WITH_ACCESSORIES
   end
 
   def required_params_present?

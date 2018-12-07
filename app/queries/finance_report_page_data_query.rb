@@ -26,6 +26,23 @@ class FinanceReportPageDataQuery
         staff_member: staff_members
       )
 
+    if !use_frontend_filtering
+      if finance_report_page_filter.filter_by_with_holidays?
+        finance_reports = finance_reports.
+          where('holiday_days_count > 0')
+      end
+
+      if finance_report_page_filter.filter_by_with_owed_hours?
+        finance_reports = finance_reports.
+          where('owed_hours_minute_count > 0')
+      end
+
+      if finance_reports.filter_by_with_accessories?
+          finance_reports = finance_reports.
+            where('accessories_cents > 0')
+      end
+    end
+
     staff_types = StaffType.
       joins(:staff_members).
       merge(staff_members).
