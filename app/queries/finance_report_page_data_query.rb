@@ -37,7 +37,7 @@ class FinanceReportPageDataQuery
           where('owed_hours_minute_count > 0')
       end
 
-      if finance_reports.filter_by_with_accessories?
+      if finance_report_page_filter.filter_by_with_accessories?
           finance_reports = finance_reports.
             where('accessories_cents > 0')
       end
