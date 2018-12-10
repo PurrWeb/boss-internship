@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 
@@ -26,7 +25,6 @@ class CardList extends Component {
 
   renderMarkAllComplete() {
     const onMarkAllPageCompleted = oFetch(this.props, 'onMarkAllPageCompleted');
-    const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
 
     return (
       <div className="boss-page-main__note boss-page-main__note_role_info">
@@ -39,11 +37,7 @@ class CardList extends Component {
           Do not click unless you are sure the numbers are correct.
         </p>
         <div className="boss-page-main__note-actions">
-          <button
-            onClick={onMarkAllPageCompleted}
-            type="button"
-            className="boss-button boss-button_role_confirm"
-          >
+          <button onClick={onMarkAllPageCompleted} type="button" className="boss-button boss-button_role_confirm">
             Mark All Complete
           </button>
         </div>
@@ -54,13 +48,13 @@ class CardList extends Component {
   render() {
     const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
     const allReady = oFetch(this.props, 'allReady');
+    const reports = this.renderItems(staffTypesWithFinanceReports);
+    const hasReports = reports.filter(report => report !== null).size !== 0;
     return (
       <div className="boss-page-main__content">
         <div className="boss-page-main__inner">
-          {staffTypesWithFinanceReports.size === 0
-            ? this.renderEmptyReports()
-            : this.renderItems(staffTypesWithFinanceReports)}
-          {allReady && this.renderMarkAllComplete()}
+          {hasReports ? reports : this.renderEmptyReports()}
+          {allReady && hasReports && this.renderMarkAllComplete()}
         </div>
       </div>
     );

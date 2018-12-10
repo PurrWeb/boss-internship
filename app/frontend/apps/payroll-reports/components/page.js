@@ -9,7 +9,6 @@ import CardList from './card-list';
 import ReportList from './report-list';
 import ReportItem from './report-item';
 
-
 class Page extends Component {
   handleDateChange = selection => {
     this.goToPayrollReportsPage({
@@ -41,14 +40,26 @@ class Page extends Component {
 
     const staffMemberIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.get('status') === 'ready').map(report => report.get('staffMemberId'))),
+        (acc, staffType) =>
+          acc.concat(
+            staffType
+              .get('reports')
+              .filter(report => report.get('status') === 'ready')
+              .map(report => report.get('staffMemberId')),
+          ),
         Immutable.List(),
       )
       .toJS();
 
     const reportsIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.get('status') === 'ready').map(report => report.get('frontendId'))),
+        (acc, staffType) =>
+          acc.concat(
+            staffType
+              .get('reports')
+              .filter(report => report.get('status') === 'ready')
+              .map(report => report.get('frontendId')),
+          ),
         Immutable.List(),
       )
       .toJS();
@@ -86,14 +97,7 @@ class Page extends Component {
                 itemRenderer={report => {
                   const staffMemberId = oFetch(report, 'staffMemberId');
                   const reportsId = oFetch(report, 'frontendId');
-                  return (
-                    <ReportItem
-                      weekDates={weekDates}
-                      report={report}
-                      startDate={startDate}
-                      endDate={endDate}
-                    />
-                  );
+                  return <ReportItem weekDates={weekDates} report={report} startDate={startDate} endDate={endDate} />;
                 }}
               />
             );
