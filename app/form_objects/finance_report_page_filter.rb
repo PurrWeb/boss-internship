@@ -32,6 +32,10 @@ class FinanceReportPageFilter
     filter_type == FILTER_BY_WITH_ACCESSORIES
   end
 
+  def filter_by_show_all?
+    filter_type == SHOW_ALL_FILTER_TYPE
+  end
+
   def required_params_present?
     venue.present? &&
       date.present?

@@ -11,12 +11,12 @@ class FinanceReportPDF
     @report_title = report_title
     @venue = finance_report_page_filter.venue
     @week = finance_report_page_filter.week
-    @filter_by_weekly_pay_rate = finance_report_page_filter.filter_staff_by_weekly_pay_rate?
+    @finance_report_page_filter = finance_report_page_filter
     @display_pay_rate_type = display_pay_rate_type
     @display_totals = display_totals
     @reports_by_staff_type = {}
   end
-  attr_reader :report_title, :week, :venue, :filter_by_weekly_pay_rate, :display_pay_rate_type, :display_totals, :reports_by_staff_type
+  attr_reader :report_title, :week, :venue, :display_pay_rate_type, :display_totals, :reports_by_staff_type, :finance_report_page_filter
 
   def add_report(staff_type:, report:)
     reports_by_staff_type[staff_type] ||= []
@@ -105,10 +105,18 @@ class FinanceReportPDF
   end
 
   def filter_information
-    if filter_by_weekly_pay_rate
-     "Filter: weekly pay rates only"
+    if finance_report_page_filter.filter_staff_by_weekly_pay_rate?
+      "Filter: Salary only"
+    elsif finance_report_page_filter.filter_by_with_holidays?
+      "Filter: With holidays only"
+    elsif finance_report_page_filter.filter_by_with_accessories?
+      "Filter: With accessories only"
+    elsif finance_report_page_filter.filter_by_with_owed_hours?
+      "Filter: With owed hours only"
+    elsif finance_report_page_filter.filter_by_show_all?
+      "Filter: Show all"
     else
-     "Filter: All records"
+      raise 'unsupported filter state encountered'
     end
   end
 
