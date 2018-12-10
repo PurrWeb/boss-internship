@@ -147,7 +147,11 @@ export const getStaffTypesWithFinanceReports = createSelector(
 );
 
 export const getAllReady = createSelector(getStaffTypesWithFinanceReports, staffTypesWithFinanceReports => {
-  return staffTypesWithFinanceReports.every(staffType => {
-    return staffType.get('allReady') == true;
+  const allReportsEmpty = staffTypesWithFinanceReports.toJS().every(staffType => {
+    return oFetch(staffType, 'reports.length') == 0;
+  });
+
+  return !allReportsEmpty && staffTypesWithFinanceReports.toJS().every(staffType => {
+    return oFetch(staffType, 'allReady') == true;
   });
 });
