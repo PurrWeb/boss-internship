@@ -22,7 +22,7 @@ const mapStateToProps = state => {
     staffTypesWithFinanceReports: getStaffTypesWithFinanceReports(state),
     weekDates: getWeekDates(state),
     allReady: getAllReady(state),
-    payRateFilter: oFetch(page, 'payRateFilter')
+    filterType: oFetch(page, 'filterType')
   };
 };
 

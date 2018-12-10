@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import oFetch from 'o-fetch';
 
@@ -41,13 +40,12 @@ class CardList extends Component {
 
   render() {
     const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
+    const reports = this.renderItems(staffTypesWithFinanceReports);
+    const hasReports = reports.filter(report => report !== null).size !== 0;
+
     return (
       <div className="boss-page-main__content">
-        <div className="boss-page-main__inner">
-          {staffTypesWithFinanceReports.size === 0
-            ? this.renderEmptyReports()
-            : this.renderItems(staffTypesWithFinanceReports)}
-        </div>
+        <div className="boss-page-main__inner">{hasReports ? reports : this.renderEmptyReports()}</div>
       </div>
     );
   }

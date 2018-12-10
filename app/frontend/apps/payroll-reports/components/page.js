@@ -9,7 +9,6 @@ import CardList from './card-list';
 import ReportList from './report-list';
 import ReportItem from './report-item';
 
-
 class Page extends Component {
   handleDateChange = selection => {
     this.goToPayrollReportsPage({
@@ -25,7 +24,7 @@ class Page extends Component {
     });
   }
 
-  handlePayRateChange = filter => {
+  handleFilterChange = filter => {
     const changePayRateFilter = oFetch(this.props, 'changePayRateFilter');
     changePayRateFilter({ filter });
   };
@@ -35,20 +34,32 @@ class Page extends Component {
     const endDate = oFetch(this.props, 'endDate');
     const date = oFetch(this.props, 'date');
     const venueId = oFetch(this.props, 'venueId');
-    const payRateFilter = oFetch(this.props, 'payRateFilter');
+    const filterType = oFetch(this.props, 'filterType');
     const weekDates = oFetch(this.props, 'weekDates');
     const staffTypesWithFinanceReports = oFetch(this.props, 'staffTypesWithFinanceReports');
 
     const staffMemberIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.get('status') === 'ready').map(report => report.get('staffMemberId'))),
+        (acc, staffType) =>
+          acc.concat(
+            staffType
+              .get('reports')
+              .filter(report => report.get('status') === 'ready')
+              .map(report => report.get('staffMemberId')),
+          ),
         Immutable.List(),
       )
       .toJS();
 
     const reportsIds = staffTypesWithFinanceReports
       .reduce(
-        (acc, staffType) => acc.concat(staffType.get('reports').filter(report => report.get('status') === 'ready').map(report => report.get('frontendId'))),
+        (acc, staffType) =>
+          acc.concat(
+            staffType
+              .get('reports')
+              .filter(report => report.get('status') === 'ready')
+              .map(report => report.get('frontendId')),
+          ),
         Immutable.List(),
       )
       .toJS();
@@ -61,9 +72,9 @@ class Page extends Component {
           startDate={startDate}
           endDate={endDate}
           venueId={venueId}
-          payRateFilter={payRateFilter}
+          filterType={filterType}
           onDateChange={this.handleDateChange}
-          onPayRateChange={this.handlePayRateChange}
+          onFilterChange={this.handleFilterChange}
         />
         <CardList
           staffTypesWithFinanceReports={staffTypesWithFinanceReports}
@@ -86,14 +97,7 @@ class Page extends Component {
                 itemRenderer={report => {
                   const staffMemberId = oFetch(report, 'staffMemberId');
                   const reportsId = oFetch(report, 'frontendId');
-                  return (
-                    <ReportItem
-                      weekDates={weekDates}
-                      report={report}
-                      startDate={startDate}
-                      endDate={endDate}
-                    />
-                  );
+                  return <ReportItem weekDates={weekDates} report={report} startDate={startDate} endDate={endDate} />;
                 }}
               />
             );
@@ -109,7 +113,7 @@ Page.propTypes = {
   startDate: PropTypes.string.isRequired,
   endDate: PropTypes.string.isRequired,
   venueId: PropTypes.number.isRequired,
-  payRateFilter: PropTypes.string.isRequired,
+  filterType: PropTypes.string.isRequired,
   staffTypesWithFinanceReports: ImmutablePropTypes.list.isRequired,
   weekDates: ImmutablePropTypes.list.isRequired,
   changePayRateFilter: PropTypes.func.isRequired,

@@ -80,20 +80,20 @@ export const appRoutes = {
     financeReportsPdfDownload: function(options){
         var date = oFetch(options, "date");
         var venueId = oFetch(options, "venueId");
-        var payRateFilter = oFetch(options, "payRateFilter");
-        return `/finance_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
+        var filterType = oFetch(options, "filterType");
+        return `/finance_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&filter_type=${filterType}`;
     },
     financeReportsCSVExport: function(options){
       var date = oFetch(options, "date");
       var venueId = oFetch(options, "venueId");
-      var payRateFilter = oFetch(options, "payRateFilter");
-      return `/finance_reports/${utils.formatRotaUrlDate(date)}.csv?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
+      var filterType = oFetch(options, "filterType");
+      return `/finance_reports/${utils.formatRotaUrlDate(date)}.csv?venue_id=${venueId}&filter_type=${filterType}`;
     },
     payrollReportsPdfDownload: function(options){
         var date = oFetch(options, "date");
         var venueId = oFetch(options, "venueId");
-        var payRateFilter = oFetch(options, "payRateFilter");
-        return `/payroll_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&pay_rate_filter=${payRateFilter}`;
+        var filterType = oFetch(options, "filterType");
+        return `/payroll_reports/${utils.formatRotaUrlDate(date)}.pdf?venue_id=${venueId}&filter_type=${filterType}`;
     },
     securityRotaOverview: (options) => {
         const startDate = oFetch(options, "startDate");
