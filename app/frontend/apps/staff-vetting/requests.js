@@ -41,6 +41,10 @@ export const getStaffMembersWithTimeDodges = date => {
   });
 };
 
+export const getRepeatOffendersRequest = () => {
+  return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/repeat-offenders`);
+};
+
 export const markRepeatOffenderRequest = params => {
   return http().post(apiRoutes.markRepeatOffender.getPath(), params);
 };

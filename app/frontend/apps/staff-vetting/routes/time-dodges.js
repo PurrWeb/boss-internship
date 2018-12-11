@@ -11,14 +11,10 @@ import queryString from 'query-string';
 import * as selectors from '../selectors';
 import TabFilter from '../components/tab-filter';
 import StaffMemberList from '../components/staff-member-list';
-import RepeatOffendersList from '../components/repeat-offenders-list';
-import OffenderInfo from '../components/offender-info';
-import { getStaffMembersWithTimeDodges, markRepeatOffenderRequest } from '../requests';
+import { getStaffMembersWithTimeDodges } from '../requests';
 import Page from '../components/page';
 import DashboardFilter from '../components/dashboard-filter';
 import oFetch from 'o-fetch';
-import { openContentModal, MODAL_TYPE2 } from '~/components/modals';
-import MarkHandled from '../components/mark-handled';
 
 const getEndDate = uiDate =>
   safeMoment
@@ -40,6 +36,7 @@ class TimeDodges extends PureComponent {
       imStaffMembersHardDodgers: Immutable.List([]),
       imRepeatOffenders: Immutable.List([]),
       isLoaded: false,
+      currentTab: 'hard',
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
       startDate: safeMoment
         .uiDateParse(weekStartDate || this.timeDodgesDate)
@@ -64,8 +61,7 @@ class TimeDodges extends PureComponent {
       const staffMembers = oFetch(res, 'data.staffMembers');
       const softDodgers = oFetch(res, 'data.softDodgers');
       const hardDodgers = oFetch(res, 'data.hardDodgers');
-      const offenders = oFetch(res, 'data.offenders');
-      const offendersHistory = oFetch(res, 'data.offendersHistory');
+      const offendersCount = oFetch(res, 'data.offendersCount');
 
       const imStaffMembersSoftDodgers = Immutable.fromJS(
         softDodgers.map(softDodger => {
@@ -83,10 +79,6 @@ class TimeDodges extends PureComponent {
         }),
       );
 
-      const imGroupedOffendersHistory = Immutable.fromJS(offendersHistory).groupBy(history =>
-        history.get('staffMemberId'),
-      );
-
       const imStaffMembersHardDodgers = Immutable.fromJS(
         hardDodgers.map(hardDodger => {
           const staffMemberId = oFetch(hardDodger, 'staffMemberId');
@@ -102,34 +94,11 @@ class TimeDodges extends PureComponent {
           };
         }),
       );
-      const imRepeatOffenders = Immutable.fromJS(
-        offenders.map(offender => {
-          const staffMemberId = oFetch(offender, 'staffMemberId');
-          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
-          if (!staffMember) {
-            throw new Error('Staff member must be present');
-          }
-          const staffTypeId = oFetch(staffMember, 'staffTypeId');
-          const venueId = oFetch(staffMember, 'venueId');
-          const staffType = this.props.staffTypes.find(staffType => staffType.get('id') === staffTypeId);
-          const venue = this.props.venues.find(venue => venue.get('id') === venueId);
-          const history = imGroupedOffendersHistory.get(staffMemberId);
-
-          return {
-            ...staffMember,
-            fullName: `${oFetch(staffMember, 'firstName')} ${oFetch(staffMember, 'surname')}`,
-            ...offender,
-            staffType: staffType.get('name'),
-            venue: venue.get('name'),
-            history,
-          };
-        }),
-      );
       return {
         imStaffMembersHardDodgers,
         imStaffMembersSoftDodgers,
         imStaffMembers: imStaffMembersSoftDodgers.concat(imStaffMembersHardDodgers),
-        imRepeatOffenders,
+        repeatOffendersCount: offendersCount,
       };
     });
   };
@@ -147,12 +116,12 @@ class TimeDodges extends PureComponent {
     }
 
     this.fetchStaffMembers(date).then(
-      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, imRepeatOffenders }) => {
+      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, repeatOffendersCount }) => {
         this.setState({
           imStaffMembersHardDodgers,
           imStaffMembersSoftDodgers,
           imStaffMembers,
-          imRepeatOffenders,
+          repeatOffendersCount,
           isLoaded: true,
         });
       },
@@ -174,24 +143,23 @@ class TimeDodges extends PureComponent {
     this.changeURL(selectedVenueIds, startDate);
   };
 
-  handleChangeDateFilter = ({ startDate, endDate }) => {
+  handleChangeDateFilter = ({ startDate, endDate }, tab) => {
     const { selectedVenueIds } = this.state;
-
     const urlStartDate = utils.formatRotaUrlDate(startDate);
     const urlEndDate = utils.formatRotaUrlDate(endDate);
-    this.changeURL(selectedVenueIds, urlStartDate);
+    this.changeURL(selectedVenueIds, urlStartDate, tab);
     this.setState({
       startDate: urlStartDate,
       endDate: urlEndDate,
     });
     this.clearTabFilter();
     this.fetchStaffMembers(urlStartDate).then(
-      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, imRepeatOffenders }) => {
+      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, repeatOffendersCount }) => {
         this.setState({
           imStaffMembersHardDodgers,
           imStaffMembersSoftDodgers,
           imStaffMembers,
-          imRepeatOffenders,
+          repeatOffendersCount,
         });
       },
     );
@@ -219,40 +187,25 @@ class TimeDodges extends PureComponent {
     );
   };
 
-  handleMarkHandledClick = (closeModal, values) => {
-    return markRepeatOffenderRequest({ ...values, weekStart: this.state.startDate }).then(response => {
-      const markedOffender = oFetch(response, 'data.offenderLevel');
-      const staffMemberId = oFetch(markedOffender, 'staffMemberId');
-      const index = this.state.imRepeatOffenders.findIndex(
-        repeatOffender => repeatOffender.get('staffMemberId') === staffMemberId,
-      );
-      const imUpdatedOffenders = this.state.imRepeatOffenders.update(index, offender => {
-        return offender
-          .set('markNeeded', oFetch(markedOffender, 'markNeeded'))
-          .set('reviewLevel', oFetch(markedOffender, 'reviewLevel'));
-      });
-      this.setState({ imRepeatOffenders: imUpdatedOffenders });
-      closeModal();
-    });
-  };
-
-  openMarkHandledModal = id => {
-    openContentModal({
-      submit: this.handleMarkHandledClick,
-      config: { title: 'MARK HANDLED', type: MODAL_TYPE2 },
-      props: { id },
-    })(MarkHandled);
-  };
-
   takeClearFunc = clearFunc => {
     this.clearTabFilter = clearFunc;
+  };
+
+  handleChangeTab = name => {
+    this.setState({ currentTab: name });
+  };
+
+  handleOffendersClick = () => {
+    this.props.history.replace({
+      pathname: `/repeat_offenders`,
+    });
   };
 
   render() {
     if (!this.state.isLoaded) {
       return null;
     }
-    const { imStaffMembers, imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imRepeatOffenders } = this.state;
+    const { imStaffMembers, imStaffMembersHardDodgers, imStaffMembersSoftDodgers, repeatOffendersCount } = this.state;
     const { venues } = this.props;
     return (
       <Page
@@ -262,7 +215,6 @@ class TimeDodges extends PureComponent {
         count={imStaffMembers.size}
         staffMembers={imStaffMembers}
         staffTypes={this.props.staffTypes}
-        repeatOffenders={imRepeatOffenders}
         tabsFilterRenderer={() => (
           <TabFilter
             getClearFunc={clearFunc => this.takeClearFunc(clearFunc)}
@@ -271,20 +223,13 @@ class TimeDodges extends PureComponent {
               imStaffMembersSoftDodgers,
               imStaffMembers,
             }}
-            repeatOffenders={{ imRepeatOffenders }}
+            onTabClick={this.handleChangeTab}
+            onOffendersClick={this.handleOffendersClick}
+            selectedTab={this.state.currentTab}
+            repeatOffendersCount={repeatOffendersCount}
           />
         )}
-        staffMemberListRenderer={(staffMembers, isRepeatOffendders) => {
-          if (isRepeatOffendders) {
-            return (
-              <RepeatOffendersList
-                items={staffMembers}
-                itemRenderer={repeatOffender => {
-                  return <OffenderInfo offender={repeatOffender} onMarkHandledClick={this.openMarkHandledModal} />;
-                }}
-              />
-            );
-          }
+        staffMemberListRenderer={staffMembers => {
           return (
             <StaffMemberList
               startDate={this.state.startDate}

@@ -10,8 +10,13 @@ momentDurationFormatSetup(moment);
 
 class OffenderHistoryModalContent extends Component {
   render() {
-    const [staffMemberId, history] = oFetch(this.props, 'staffMemberId', 'history');
-
+    const [staffMemberId, history, onHistoryDetailsClick, onClose] = oFetch(
+      this.props,
+      'staffMemberId',
+      'history',
+      'onHistoryDetailsClick',
+      'onClose',
+    );
     return (
       <div className="boss-modal-window__overview">
         <div className="boss-overview">
@@ -28,9 +33,16 @@ class OffenderHistoryModalContent extends Component {
                     <p className="boss-overview__text">
                       {formattedDate} - <span className="boss-overview__text-marked">{formattedTime}</span>
                     </p>
-                    <a href="#" className="boss-overview__link boss-overview__link_role_details">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onHistoryDetailsClick(weekStart);
+                        onClose();
+                      }}
+                      className="boss-overview__link boss-overview__link_role_details"
+                    >
                       Details
-                    </a>
+                    </button>
                   </li>
                 );
               })}
@@ -43,9 +55,9 @@ class OffenderHistoryModalContent extends Component {
 }
 
 export default class OffenderInfo extends Component {
-  handleOpenHistoryModal = (fullName, history, staffMemberId) => {
+  handleOpenHistoryModal = (fullName, history, staffMemberId, onHistoryDetailsClick) => {
     openContentModal({
-      submit: this.handleMarkHandledClick,
+      submit: () => {},
       config: {
         title: (
           <span>
@@ -55,25 +67,28 @@ export default class OffenderInfo extends Component {
         type: MODAL_TYPE1,
         modalClassName: 'boss-modal-window_role_offences',
       },
-      props: { history, staffMemberId },
+      props: { history, staffMemberId, onHistoryDetailsClick },
     })(OffenderHistoryModalContent);
   };
 
   render() {
-    const onMarkHandledClick = oFetch(this.props, 'onMarkHandledClick');
+    const [onMarkHandledClick, onHistoryDetailsClick] = oFetch(
+      this.props,
+      'onMarkHandledClick',
+      'onHistoryDetailsClick',
+    );
     const offender = oFetch(this.props, 'offender');
-    const [staffMemberId, avatarUrl, fullName, offenceLevel, staffType, venue, markNeeded, history] = oFetch(
+    const [staffMemberId, avatarUrl, fullName, staffType, venue, markNeeded, history] = oFetch(
       offender,
       'staffMemberId',
       'avatarUrl',
       'fullName',
-      'offenceLevel',
       'staffType',
       'venue',
       'markNeeded',
       'history',
     );
-
+    const offencesCount = history.length;
     return (
       <div className="boss-users__flow-item">
         <div className="boss-user-summary boss-user-summary_role_review-short">
@@ -102,10 +117,10 @@ export default class OffenderInfo extends Component {
                 <span className="boss-user-summary__review-val">
                   <button
                     type="button"
-                    onClick={() => this.handleOpenHistoryModal(fullName, history, staffMemberId)}
+                    onClick={() => this.handleOpenHistoryModal(fullName, history, staffMemberId, onHistoryDetailsClick)}
                     className="boss-user-summary__review-link"
                   >
-                    {offenceLevel}
+                    {offencesCount}
                   </button>
                 </span>
               </li>

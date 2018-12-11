@@ -28,6 +28,7 @@ class StaffVetting extends Component {
     const canViewWithBouncedEmails = oFetch(this.props, 'permissions.staffWithBouncedEmails.canView');
     const canViewWithTimeDodges = oFetch(this.props, 'permissions.staffWithWithTimeDodges.canView');
     const canViewSameSageId = true;
+    const canViewRepeatOffenders = true;
 
     const blocks = {
       withoutEmail: {
@@ -76,6 +77,11 @@ class StaffVetting extends Component {
         title: 'Time Dodgers',
         href: `/time_dodges`,
         canView: canViewWithTimeDodges,
+      },
+      repeatOffenders: {
+        title: 'Repeat Offenders',
+        href: `/repeat_offenders`,
+        canView: canViewRepeatOffenders,
       },
       withSameSageId: {
         title: 'Staff with Duplicated Sage ID',

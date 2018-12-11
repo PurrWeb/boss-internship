@@ -433,6 +433,22 @@ var utils =  {
         }, initial);
       }, staffMembers);
     },
+    staffMemberFilterFullNameJS(searchQuery, staffMembers) {
+      const searchQueryFilters = searchQuery.split(' ').filter(i => i);
+
+      return searchQueryFilters.reduce((staffMembers, filter) => {
+        const lowerFilter = filter.toLowerCase();
+        const initial = [];
+        return staffMembers.reduce((result, staffMember) => {
+          const fullName = oFetch(staffMember, 'fullName');
+          if (fullName.toLowerCase().indexOf(lowerFilter) >= 0) {
+            result.push(staffMember)
+            return result;
+          }
+          return result;
+        }, initial);
+      }, staffMembers);
+    },
     round(number, precision) {
       const shift = (number, precision, reverseShift) => {
         if (reverseShift) {

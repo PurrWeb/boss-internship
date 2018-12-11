@@ -14,6 +14,7 @@ import StaffMembersWithExpiredSiaBadge from './routes/staff-members-with-expired
 import StaffMembersWithBouncedEmails from './routes/staff-members-with-bounced-emails';
 import StaffMembersWithSameSageId from './routes/staff-members-with-same-sage-id';
 import TimeDodges from './routes/time-dodges';
+import RepeatOffenders from './routes/repeat-offenders';
 
 class StaffVettingApp extends React.Component {
   componentWillMount() {
@@ -63,6 +64,7 @@ class StaffVettingApp extends React.Component {
     const canViewWithExpiredSiaBadge = oFetch(permissions, 'staffWithExpiredSiaBadge.canView');
     const canViewWithBouncedEmails = oFetch(permissions, 'staffWithBouncedEmails.canView');
     const canViewWithTimeDodges = oFetch(permissions, 'staffWithWithTimeDodges.canView');
+    const canViewRepeatOffenders = true; // oFetch(permissions, 'staffWithWithTimeDodges.canView');
 
     return (
       <Router>
@@ -170,6 +172,12 @@ class StaffVettingApp extends React.Component {
             path="/time_dodges/:weekStartDate?"
             canView={canViewWithTimeDodges}
             render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodgers" />}
+          />
+          <PrivateRoute
+            exact
+            path="/repeat_offenders"
+            canView={canViewRepeatOffenders}
+            render={props => <RepeatOffenders venues={imVenues} staffTypes={imStaffTypes} title="Repeat Offenders" />}
           />
           <PrivateRoute
             exact

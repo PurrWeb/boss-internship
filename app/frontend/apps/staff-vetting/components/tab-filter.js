@@ -4,9 +4,13 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { selectStaffMembersByStaffType, selectSecurityStaffMembers, selectStaffMembersByVenue } from '../utils';
 
 class TabFilter extends Component {
-  state = {
-    activeTabIndex: -1,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTabIndex: props,
+      tabs: [],
+    };
+  }
 
   componentDidMount = () => {
     this.props.getClearFunc && this.props.getClearFunc(this.clearFilter);
@@ -107,37 +111,43 @@ class TabFilter extends Component {
     }
 
     const { imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers } = this.props.timeDodgers;
-
+    const hardTabName = 'hard';
     const staffMembersHardDodgersTab = {
       title: `Hard Dodgers - under 45h (${imStaffMembersHardDodgers.size})`,
-      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers),
+      name: 'hard',
+      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers, hardTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
+    const softTabName = 'soft';
     const staffMembersSoftDodgersTab = {
       title: `Soft Dodgers 45-47h (${imStaffMembersSoftDodgers.size})`,
-      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers),
+      name: 'soft',
+      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers, softTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
     return [staffMembersSoftDodgersTab, staffMembersHardDodgersTab];
   }
 
   getRepeatOffenders() {
-    if (!this.props.repeatOffenders) {
+    if (!this.props.onOffendersClick) {
       return [];
     }
 
-    const { imRepeatOffenders } = this.props.repeatOffenders;
-    const { imStaffMembers } = this.props.timeDodgers;
-
+    const { repeatOffendersCount } = this.props;
     const repeatOffendersTab = {
-      title: `Repeat Offenders (${imRepeatOffenders.size})`,
-      onClick: () => this.props.onChangeTab(imRepeatOffenders, true),
-      onClear: () => this.props.onChangeTab(imStaffMembers),
+      title: `Repeat Offenders (${repeatOffendersCount})`,
+      onClick: () => this.props.onOffendersClick(),
+      onClear: () => this.props.onOffendersClick(),
     };
     return [repeatOffendersTab];
   }
 
-  render() {
+  handleChangeTab = (items, name) => {
+    this.props.onTabClick(name);
+    this.props.onChangeTab(items);
+  };
+
+  setTabs = selectedTab => {
     const tabs = [
       ...this.getVenues(),
       ...this.getPayRates(),
@@ -145,9 +155,35 @@ class TabFilter extends Component {
       ...this.getTimeDodges(),
       ...this.getRepeatOffenders(),
     ];
+    let activeTabIndex = this.state.activeTabIndex;
+    if (selectedTab) {
+      activeTabIndex = tabs.findIndex(tab => tab.name === selectedTab);
+      if (activeTabIndex !== -1) {
+        tabs[activeTabIndex].onClick();
+      }
+    }
+    this.setState({ tabs, activeTabIndex });
+  };
+
+  componentDidMount = () => {
+    this.setTabs(this.props.selectedTab);
+  };
+
+  componentWillReceiveProps = nextProps => {
+    nextProps.getClearFunc && nextProps.getClearFunc(this.clearFilter);
+    if (this.props.selectedTab !== nextProps.selectedTab) {
+      this.setTabs(nextProps.selectedTab);
+    }
+  };
+
+  render() {
+    if (this.state.tabs.length === 0) {
+      return null;
+    }
+
     return (
       <div ref={node => (this.ref = node)} className="boss-page-main__controls">
-        {tabs.map((tab, index) => (
+        {this.state.tabs.map((tab, index) => (
           <button
             key={index}
             onClick={() => {
