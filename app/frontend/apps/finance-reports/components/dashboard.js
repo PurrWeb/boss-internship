@@ -43,7 +43,6 @@ class Dashboard extends Component {
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
     });
     const showPDFDownloadLink = oFetch(this.props, 'showPDFDownloadLink');
-    const canExportToCSV = oFetch(this.props, 'canExportToCSV');
 
     return (
       <div className="boss-page-main__dashboard">
@@ -51,13 +50,13 @@ class Dashboard extends Component {
           <div className="boss-page-dashboard boss-page-dashboard_updated">
             <div className="boss-page-dashboard__group">
               <h1 className="boss-page-dashboard__title">{title}</h1>
-              { (canExportToCSV || showPDFDownloadLink) && <div className="boss-page-dashboard__buttons-group">
+              { <div className="boss-page-dashboard__buttons-group">
 
                 { showPDFDownloadLink && <a href={appRoutes.financeReportsPdfDownload({ date, venueId, filterType })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button" >
                   Download PDF
                 </a> }
-                { canExportToCSV && <a href={appRoutes.financeReportsCSVExport({ date, venueId, filterType })}
+                { <a href={appRoutes.financeReportsCSVExport({ date, venueId, filterType })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
                   Export CSV

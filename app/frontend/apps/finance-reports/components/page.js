@@ -96,10 +96,6 @@ class Page extends Component {
       .catch(hideModal);
   };
 
-  canExportToCSV(options) {
-    return true;
-  }
-
   render() {
     const startDate = oFetch(this.props, 'startDate');
     const endDate = oFetch(this.props, 'endDate');
@@ -137,8 +133,6 @@ class Page extends Component {
     );
     const isNegativeTotal = !!reportsTotals.find(total => total < 0);
 
-    const canExportToCSV = this.canExportToCSV({ staffTypesWithFinanceReports });
-
     return (
       <div className="boss-page-main boss-page-main_adjust_finance-reports">
         <Dashboard
@@ -150,7 +144,6 @@ class Page extends Component {
           filterType={filterType}
           onDateChange={this.handleDateChange}
           onFilterChange={this.handleFilterChange}
-          canExportToCSV={canExportToCSV}
           showPDFDownloadLink={showPDFDownloadLink}
         />
         <CardList
