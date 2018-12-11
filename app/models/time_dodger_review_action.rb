@@ -9,6 +9,8 @@ class TimeDodgerReviewAction < ActiveRecord::Base
   validates :disabled_at, :disabled_by_user, presence: true, if: :disabled?
   validates :note, presence: true
 
+  scope :enabled, -> { where({disabled_at: nil, disabled_by_user: nil}) }
+
   def disabled?
     disabled_at.present? && disabled_by_user.present?
   end
