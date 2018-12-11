@@ -6,4 +6,6 @@ class TimeDodgerOffenceLevel < ActiveRecord::Base
   validates :offence_level, presence: true
   validates :review_level, presence: true
   validates :tax_year_start, presence: true
+
+  scope :mark_needed, -> { where('`time_dodger_offence_levels`.`offence_level` > `time_dodger_offence_levels`.`review_level`') }
 end
