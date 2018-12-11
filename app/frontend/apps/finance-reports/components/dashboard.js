@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import Popover from 'react-popover';
 import BossWeekPicker from '~/components/react-dates/boss-week-picker';
 import FinanceReportsFilter from './finance-reports-filter';
+import { FINANCE_REPORT_SHOW_ALL_FILTER_TYPE } from '../constants';
+import { openWarningModal } from '~/components/modals';
 import { appRoutes } from '~/lib/routes';
 
 class Dashboard extends Component {
@@ -17,6 +19,18 @@ class Dashboard extends Component {
   togglePopover = () => {
     this.setState({ isCalendarOpen: !this.state.isCalendarOpen });
   };
+
+  showWrongFilterCSVDownloadModal = e => {
+    e.preventDefault();
+    openWarningModal({
+      submit: (closeModal) => { closeModal(); },
+        config: {
+        title: 'Action Disabled',
+        text: 'You must be filtering by "Show All" to export data as CSV.',
+        buttonText: 'Dismiss',
+      },
+    });
+  }
 
   renderCalendar() {
     return (
@@ -43,6 +57,7 @@ class Dashboard extends Component {
       'boss-page-dashboard__meta-item_state_opened': this.state.isCalendarOpen,
     });
     const showPDFDownloadLink = oFetch(this.props, 'showPDFDownloadLink');
+    const disableExportToCSVDueToFilterType = filterType !== FINANCE_REPORT_SHOW_ALL_FILTER_TYPE;
 
     return (
       <div className="boss-page-main__dashboard">
@@ -56,11 +71,21 @@ class Dashboard extends Component {
                   className="boss-button boss-button_role_download boss-page-dashboard__button" >
                   Download PDF
                 </a> }
-                { <a href={appRoutes.financeReportsCSVExport({ date, venueId, filterType })}
+                { !disableExportToCSVDueToFilterType && <a href={appRoutes.financeReportsCSVExport({ date, venueId, filterType })}
                   className="boss-button boss-button_role_download boss-page-dashboard__button"
                 >
                   Export CSV
                 </a> }
+                {
+                  disableExportToCSVDueToFilterType &&
+                  <a
+                    disabled="disabled"
+                    onClick={this.showWrongFilterCSVDownloadModal}
+                    className="boss-button boss-button_role_download boss-page-dashboard__button"
+                  >
+                    Export CSV
+                  </a>
+                }
               </div> }
             </div>
             <div className="boss-page-dashboard__group">
