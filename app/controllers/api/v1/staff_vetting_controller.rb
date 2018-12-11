@@ -117,7 +117,10 @@ module Api
 
         now = Time.current
         today = RotaShiftDate.to_rota_date(now)
+        previous_week = RotaWeek.new(today - 1.week);
         current_tax_year = MondayTaxYear.new(today)
+
+        dodgers_data = TimeDodgerOffence.dodgers.by_week(previous_week)
 
         offenders = TimeDodgerOffenceLevel
           .where(tax_year_start: current_tax_year.start_date)
@@ -154,6 +157,11 @@ module Api
             serializer: Api::V1::StaffVettings::StaffMemberSerializer,
           ),
           lastUpdate: UIRotaDate.format(last_updated_level.updated_at),
+          taxYearStartDate: UIRotaDate.format(current_tax_year.start_date),
+          taxYearEndDate: UIRotaDate.format(current_tax_year.end_date),
+          softDodgersCount: dodgers_data.soft_dodgers.count,
+          hardDodgersCount: dodgers_data.hard_dodgers.count,
+          previousWeekStartDate: UIRotaDate.format(previous_week.start_date),
         }, status: 200
       end
 
@@ -182,6 +190,7 @@ module Api
             serializer: Api::V1::StaffVettings::TimeDodgerSerializer
           ),
           offendersCount: offenders.count,
+          markNeededOffendersCount: offenders.mark_needed.count,
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer
