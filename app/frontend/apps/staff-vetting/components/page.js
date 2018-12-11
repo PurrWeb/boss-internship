@@ -10,7 +10,16 @@ import StaffMemberFilter from './staff-member-filter';
 
 class Page extends Component {
   render() {
-    const { count, title, venues, staffMembers, staffTypes, dashboardFilterRenderer, filter } = this.props;
+    const {
+      count,
+      title,
+      venues,
+      staffMembers,
+      staffTypes,
+      dashboardFilterRenderer,
+      filter,
+      repeatOffenders,
+    } = this.props;
     document.title = this.props.title;
     if (staffMembers.size === 0) {
       return (
@@ -43,6 +52,7 @@ class Page extends Component {
             tabsFilterRenderer={this.props.tabsFilterRenderer}
             staffMembers={staffMembers}
             venues={venues}
+            repeatOffenders={repeatOffenders}
             simpleLayout={this.props.simpleLayout}
             selectedVenueIds={this.props.selectedVenueIds}
             staffTypes={staffTypes}

@@ -233,6 +233,10 @@ class UserAbility
         can_view_main_vettings_page?(user)
       end
 
+      can :view, :repeat_offenders do
+        can_view_main_vettings_page?(user)
+      end
+
       can :view, :time_dodgers do
         can_view_main_vettings_page?(user)
       end

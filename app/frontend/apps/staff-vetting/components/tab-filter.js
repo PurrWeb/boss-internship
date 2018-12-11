@@ -4,9 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { selectStaffMembersByStaffType, selectSecurityStaffMembers, selectStaffMembersByVenue } from '../utils';
 
 class TabFilter extends Component {
-  state = {
-    activeTabIndex: -1,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTabIndex: -1,
+    };
+  }
 
   componentDidMount = () => {
     this.props.getClearFunc && this.props.getClearFunc(this.clearFilter);
@@ -107,47 +110,88 @@ class TabFilter extends Component {
     }
 
     const { imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers } = this.props.timeDodgers;
-
+    const hardTabName = 'hard';
     const staffMembersHardDodgersTab = {
       title: `Hard Dodgers - under 45h (${imStaffMembersHardDodgers.size})`,
-      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers),
+      name: hardTabName,
+      onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers, hardTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
+    const softTabName = 'soft';
     const staffMembersSoftDodgersTab = {
       title: `Soft Dodgers 45-47h (${imStaffMembersSoftDodgers.size})`,
-      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers),
+      name: softTabName,
+      onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers, softTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
     return [staffMembersSoftDodgersTab, staffMembersHardDodgersTab];
   }
 
+  getRepeatOffenders() {
+    if (!this.props.onOffendersClick) {
+      return [];
+    }
+
+    const { repeatOffendersCount } = this.props;
+    const repeatOffendersTab = {
+      title: `Repeat Offenders (${repeatOffendersCount})`,
+      onClick: () => this.props.onOffendersClick(),
+      onClear: () => this.props.onOffendersClick(),
+    };
+    return [repeatOffendersTab];
+  }
+
+  handleChangeTab = (items, name) => {
+    this.props.onTabClick(name);
+    this.props.onChangeTab(items);
+  };
+
+  // componentWillReceiveProps = nextProps => {
+  //   // nextProps.getClearFunc && nextProps.getClearFunc(this.clearFilter);
+  // };
+
+  getTabs = () => {
+    return [
+      ...this.getVenues(),
+      ...this.getPayRates(),
+      ...this.getSecurity(),
+      ...this.getTimeDodges(),
+      ...this.getRepeatOffenders(),
+    ];
+  };
+
   render() {
-    const tabs = [...this.getVenues(), ...this.getPayRates(), ...this.getSecurity(), ...this.getTimeDodges()];
+    if (this.getTabs().length === 0) {
+      return null;
+    }
+
     return (
       <div ref={node => (this.ref = node)} className="boss-page-main__controls">
-        {tabs.map((tab, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              if (this.state.activeTabIndex === index) {
-                this.setState({ activeTabIndex: -1 }, () => {
-                  tab.onClear();
-                });
-              } else {
-                this.setState({ activeTabIndex: index }, () => {
-                  tab.onClick();
-                });
-              }
-            }}
-            className={`boss-page-main__control ${
-              tab.icon === 'venue'
-                ? 'boss-page-main__control_role_venue'
-                : tab.icon === 'security' ? 'boss-page-main__control_role_staff-type' : ''
-            } ${index === this.state.activeTabIndex ? 'boss-page-main__control_state_active' : ''}`}
-          >
-            {tab.title}
-          </button>
-        ))}
+        {this.getTabs().map((tab, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (this.state.activeTabIndex === index) {
+                  this.setState({ activeTabIndex: -1 }, () => {
+                    tab.onClear();
+                  });
+                } else {
+                  this.setState({ activeTabIndex: index }, () => {
+                    tab.onClick();
+                  });
+                }
+              }}
+              className={`boss-page-main__control ${
+                tab.icon === 'venue'
+                  ? 'boss-page-main__control_role_venue'
+                  : tab.icon === 'security' ? 'boss-page-main__control_role_staff-type' : ''
+              } ${index === this.state.activeTabIndex ? 'boss-page-main__control_state_active' : ''}`}
+            >
+              {tab.title}
+            </button>
+          );
+        })}
       </div>
     );
   }

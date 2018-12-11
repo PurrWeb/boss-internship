@@ -26,7 +26,7 @@ class ContentModal extends React.Component {
         contentLabel="Modal"
         className={{
           base: `ReactModal__Content ReactModal__Content--after-open boss-modal-window ${
-            MODAL_TYPE_CLASSNAMES[type || MODAL_TYPE1]
+            modalClassName === undefined ? MODAL_TYPE_CLASSNAMES[type || MODAL_TYPE1] : modalClassName
           }`,
         }}
       >
@@ -39,7 +39,7 @@ class ContentModal extends React.Component {
 }
 
 function openContentModal(
-  { title: title = 'Content Modal', type: type = MODAL_TYPE1, modalClassName: modalClassName = 'boss-modal-window_role_edit' },
+  { title: title = 'Content Modal', type: type = MODAL_TYPE1, modalClassName },
   props = {},
   onSubmit,
   onClose,

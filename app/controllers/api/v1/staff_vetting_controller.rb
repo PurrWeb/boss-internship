@@ -101,20 +101,96 @@ module Api
           }, status: 200
       end
 
+      def mark_repeat_offender
+        result = CreateTimeDodgerReviewActionApiService.new(requester: current_user).call(params)
+        if result.success?
+          render json: {
+            offenderLevel: Api::V1::StaffVettings::OffenderSerializer.new(result.review_action.time_dodger_offence_level)
+          }, status: 200
+        else
+          render json: { errors: result.api_errors }, status: 422
+        end
+      end
+
+      def repeat_offenders
+        authorize! :view, :repeat_offenders
+
+        now = Time.current
+        today = RotaShiftDate.to_rota_date(now)
+        previous_week = RotaWeek.new(today - 1.week);
+        current_tax_year = MondayTaxYear.new(today)
+
+        dodgers_data = TimeDodgerOffence.dodgers.by_week(previous_week)
+
+        offenders = TimeDodgerOffenceLevel
+          .where(tax_year_start: current_tax_year.start_date)
+          .where('offence_level > ?', 0)
+
+        last_updated_level = TimeDodgerOffenceLevel.order(updated_at: :asc).last
+
+        offenders_history = InRangeQuery.new(
+          relation: TimeDodgerOffence.hard_dodgers.where(staff_member_id: offenders.select("staff_member_id")),
+          start_value: current_tax_year.start_date,
+          end_value: current_tax_year.end_date,
+          start_column_name: "week_start",
+          end_column_name: "week_start",
+        ).all
+
+        reviews_history = TimeDodgerReviewAction.enabled.where(time_dodger_offence_level_id: offenders.select(:id))
+        staff_members = StaffMember.on_weekly_pay_rate.where(id: offenders.select(:staff_member_id))
+
+        render json: {
+          offendersHistory: ActiveModel::Serializer::CollectionSerializer.new(
+            offenders_history,
+            serializer: Api::V1::StaffVettings::OffenderHistorySerializer,
+          ),
+          reviewsHistory: ActiveModel::Serializer::CollectionSerializer.new(
+            reviews_history,
+            serializer: Api::V1::StaffVettings::ReviewsHistorySerializer,
+          ),
+          offenders: ActiveModel::Serializer::CollectionSerializer.new(
+            offenders,
+            serializer: Api::V1::StaffVettings::OffenderSerializer,
+          ),
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
+            staff_members,
+            serializer: Api::V1::StaffVettings::StaffMemberSerializer,
+          ),
+          lastUpdate: UIRotaDate.format(last_updated_level.updated_at),
+          taxYearStartDate: UIRotaDate.format(current_tax_year.start_date),
+          taxYearEndDate: UIRotaDate.format(current_tax_year.end_date),
+          softDodgersCount: dodgers_data.soft_dodgers.count,
+          hardDodgersCount: dodgers_data.hard_dodgers.count,
+          previousWeekStartDate: UIRotaDate.format(previous_week.start_date),
+        }, status: 200
+      end
+
       def time_dodgers
         authorize! :view, :time_dodgers
 
         date = date_from_params
+        monday_tax_year = MondayTaxYear.new(date)
         week = RotaWeek.new(date);
-        time_dodgers_service = TimeDodgersService.new(week: week)
-        dodgers_data = time_dodgers_service.dodgers_data
 
-        staff_members = time_dodgers_service.staff_members
+        dodgers_data = TimeDodgerOffence.dodgers.by_week(week)
+
+        offenders = TimeDodgerOffenceLevel
+          .where(tax_year_start: monday_tax_year.start_date)
+          .where('offence_level > ?', 0)
+
+        staff_members = StaffMember.on_weekly_pay_rate.where(id: dodgers_data.pluck(:staff_member_id))
+
         render json: {
-          acceptedHours: dodgers_data.fetch(:accepted_hours),
-          acceptedBreaks: dodgers_data.fetch(:accepted_breaks),
-          paidHolidays: dodgers_data.fetch(:paid_holidays),
-          owedHours: dodgers_data.fetch(:owed_hours),
+          softDodgers: ActiveModel::Serializer::CollectionSerializer.new(
+            dodgers_data.soft_dodgers,
+            serializer: Api::V1::StaffVettings::TimeDodgerSerializer
+          ),
+          hardDodgers: ActiveModel::Serializer::CollectionSerializer.new(
+            dodgers_data.hard_dodgers,
+            serializer: Api::V1::StaffVettings::TimeDodgerSerializer
+          ),
+          offendersCount: offenders.count,
+          markNeededOffendersCount: offenders.mark_needed.count,
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffVettings::StaffMemberSerializer

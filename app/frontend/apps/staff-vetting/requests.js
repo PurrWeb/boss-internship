@@ -1,4 +1,5 @@
 import http from './http';
+import { apiRoutes } from '~/lib/routes';
 
 export const getStaffMembersWithoutAddress = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-without-address`);
@@ -32,10 +33,18 @@ export const getStaffMembersWithBouncedEmails = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-with-bounced-email`);
 };
 
-export const getStaffMembersWithTimeDodges = date => {
+export const getTimeDodgersRequest = date => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/time-dodgers`, {
     params: {
       date,
     },
   });
+};
+
+export const getRepeatOffendersRequest = () => {
+  return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/repeat-offenders`);
+};
+
+export const markRepeatOffenderRequest = params => {
+  return http().post(apiRoutes.markRepeatOffender.getPath(), params);
 };
