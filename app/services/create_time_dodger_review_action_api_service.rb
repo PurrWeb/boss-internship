@@ -12,12 +12,10 @@ class CreateTimeDodgerReviewActionApiService
   def call(params)
     staff_member_id = params.fetch(:staffMemberId)
     note = params.fetch(:note)
-    week_start = UIRotaDate.parse(params.fetch(:weekStart))
 
     result = CreateTimeDodgerReviewAction.new(requester: requester).call({
       staff_member_id: staff_member_id,
       note: note,
-      week_start: week_start,
     })
 
     api_errors = nil

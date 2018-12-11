@@ -15,10 +15,11 @@ class CreateTimeDodgerReviewAction
 
     staff_member_id = params.fetch(:staff_member_id)
     note = params.fetch(:note)
-    week_start = params.fetch(:week_start)
-    monday_tax_year = MondayTaxYear.new(week_start)
+    now = Time.current
+    today = RotaShiftDate.to_rota_date(now)
+    current_tax_year = MondayTaxYear.new(today)
 
-    related_offence_level = TimeDodgerOffenceLevel.find_by(tax_year_start: monday_tax_year.start_date, staff_member_id: staff_member_id)
+    related_offence_level = TimeDodgerOffenceLevel.find_by(tax_year_start: current_tax_year.start_date, staff_member_id: staff_member_id)
     ActiveRecord::Base.transaction do
       current_offence_level = related_offence_level.offence_level
       current_review_level = related_offence_level.review_level
