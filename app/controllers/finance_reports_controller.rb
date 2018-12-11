@@ -92,6 +92,10 @@ class FinanceReportsController < ApplicationController
   def render_finance_reports_csv(finance_report_page_filter:)
     authorize!(:view, :finance_reports)
 
+    if !finance_report_page_filter.filter_by_show_all?
+      raise 'Invalid filter supplied for csv download'
+    end
+
     csv = SageFinanceReportExportCSV.new({
       finance_report_page_filter: finance_report_page_filter
     })
