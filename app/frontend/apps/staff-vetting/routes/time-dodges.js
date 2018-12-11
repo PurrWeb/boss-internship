@@ -1,20 +1,25 @@
-import React, { PureComponent } from 'react';
-import Immutable from 'immutable';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import VenueSelect from '~/components/security-rota/venue-select';
-import utils from '~/lib/utils';
-import safeMoment from '~/lib/safe-moment';
-import moment from 'moment';
-import queryString from 'query-string';
-import * as selectors from '../selectors';
-import TabFilter from '../components/tab-filter';
-import StaffMemberList from '../components/staff-member-list';
-import { getStaffMembersWithTimeDodges } from '../requests';
-import Page from '../components/page';
-import DashboardFilter from '../components/dashboard-filter';
+import React, { Component } from 'react';
 import oFetch from 'o-fetch';
+import { withRouter, Link } from 'react-router-dom';
+import queryString from 'query-string';
+import moment from 'moment';
+
+import { openContentModal, MODAL_TYPE2, MODAL_TYPE1 } from '~/components/modals';
+import safeMoment from '~/lib/safe-moment';
+import utils from '~/lib/utils';
+import { getTimeDodgersRequest, markRepeatOffenderRequest } from '../requests';
+import * as selectors from '../selectors';
+import StaffDashboard from '../components/staff-dashboard';
+import { OffenderInfo, VenueSelectFilter } from '../components/offenders';
+import { Tabs, TimeDodgerInfo } from '../components/time-dodgers';
+import {
+  TextFilter,
+  StaffMembersListWrapper,
+  StaffMembersList,
+  StaffMemberItem,
+  DashboardFilter,
+} from '../components/common';
+import MarkHandled from '../components/mark-handled';
 
 const getEndDate = uiDate =>
   safeMoment
@@ -22,234 +27,293 @@ const getEndDate = uiDate =>
     .endOf('isoWeek')
     .format(utils.commonDateFormat);
 
-class TimeDodges extends PureComponent {
+class TimeDodgers extends Component {
   constructor(props) {
     super(props);
-    const { weekStartDate } = props.match.params;
-    this.timeDodgesDate = moment()
-      .subtract(1, 'week')
+
+    const currentDate = this.getCurrentDateFromQuery();
+    const weekStartDate = safeMoment
+      .uiDateParse(currentDate)
+      .startOf('isoWeek')
+      .format(utils.commonDateFormat);
+
+    const weekEndDate = safeMoment
+      .uiDateParse(currentDate)
+      .endOf('isoWeek')
       .format(utils.commonDateFormat);
 
     this.state = {
-      imStaffMembers: Immutable.List([]),
-      imStaffMembersSoftDodgers: Immutable.List([]),
-      imStaffMembersHardDodgers: Immutable.List([]),
-      imRepeatOffenders: Immutable.List([]),
-      isLoaded: false,
-      currentTab: 'hard',
+      fetching: true,
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
-      startDate: safeMoment
-        .uiDateParse(weekStartDate || this.timeDodgesDate)
-        .startOf('isoWeek')
-        .format(utils.commonDateFormat),
-      endDate: weekStartDate
-        ? getEndDate(weekStartDate)
-        : safeMoment
-            .uiDateParse(this.timeDodgesDate)
-            .endOf('isoWeek')
-            .format(utils.commonDateFormat),
+      filterValue: this.getFilterFromQuery(),
+      startDate: weekStartDate,
+      endDate: weekEndDate,
+      currentDate: currentDate,
+      offendersCount: null,
+      markNeededOffendersCount: null,
+      hardDodgers: [],
+      softDodgers: [],
+      selectedTab: this.getTabFromQuery(),
     };
   }
+
+  getCurrentDateFromQuery = () => {
+    const { currentDate } = this.props.match.params;
+    if (!currentDate) {
+      return moment()
+        .subtract(1, 'week')
+        .startOf('isoWeek')
+        .format(utils.commonDateFormat);
+    }
+    return currentDate;
+  };
+
+  getTabFromQuery = () => {
+    const tabFromQuery = queryString.parse(this.props.location.search).tab;
+    if (!tabFromQuery) {
+      return 'hard';
+    }
+    return queryString.parse(this.props.location.search).tab;
+  };
+
+  getFilterFromQuery = () => {
+    return queryString.parse(this.props.location.search).filter || '';
+  };
+
+  applyDodgerData = (dodger, staffMembers) => {
+    const staffMemberId = oFetch(dodger, 'staffMemberId');
+    const staffTypes = oFetch(this.props, 'staffTypes').toJS();
+    const venues = oFetch(this.props, 'venues').toJS();
+    const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
+    const staffTypeId = oFetch(staffMember, 'staffTypeId');
+    const venueId = oFetch(staffMember, 'venueId');
+    const staffType = staffTypes.find(staffType => oFetch(staffType, 'id') === staffTypeId);
+    const venue = venues.find(venue => oFetch(venue, 'id') === venueId);
+    if (!staffMember) {
+      throw new Error('Staff member must be present');
+    }
+    return {
+      ...staffMember,
+      fullName: `${staffMember.firstName} ${staffMember.surname}`,
+      ...dodger,
+      hours: oFetch(dodger, 'minutes'),
+      staffType,
+      venue: oFetch(venue, 'name'),
+    };
+  };
+
+  fetchTimeDodgers = async date => {
+    const response = await getTimeDodgersRequest(date);
+    const [hardDodgers, softDodgers, offendersCount, staffMembers, markNeededOffendersCount] = oFetch(
+      response.data,
+      'hardDodgers',
+      'softDodgers',
+      'offendersCount',
+      'staffMembers',
+      'markNeededOffendersCount',
+    );
+    const mappedSoftDodgers = softDodgers.map(dodger => {
+      return this.applyDodgerData(dodger, staffMembers);
+    });
+    const mappedHardDodgers = hardDodgers.map(dodger => {
+      return this.applyDodgerData(dodger, staffMembers);
+    });
+
+    this.setState({
+      fetching: false,
+      softDodgers: mappedSoftDodgers,
+      hardDodgers: mappedHardDodgers,
+      offendersCount,
+      markNeededOffendersCount,
+    });
+  };
+
+  componentDidMount = async () => {
+    const startDate = oFetch(this.state, 'startDate');
+    await this.fetchTimeDodgers(startDate);
+  };
+
+  changeURL = (selectedVenueIds, date, tab, filter) => {
+    const venuesQueryString = queryString.stringify(
+      { venues: selectedVenueIds, tab, filter: filter === '' ? undefined : filter },
+      { arrayFormat: 'bracket' },
+    );
+    this.props.history.replace({
+      pathname: `/time_dodges/${date}`,
+      search: `?${venuesQueryString}`,
+    });
+  };
 
   getSelectedVenueIdsFromURL = () => {
     const selectedVenueIdsArray = queryString.parse(this.props.location.search, { arrayFormat: 'bracket' }).venues;
     return selectedVenueIdsArray ? selectedVenueIdsArray.map(id => Number(id)) : [];
   };
 
-  fetchStaffMembers = date => {
-    return getStaffMembersWithTimeDodges(date).then(res => {
-      const staffMembers = oFetch(res, 'data.staffMembers');
-      const softDodgers = oFetch(res, 'data.softDodgers');
-      const hardDodgers = oFetch(res, 'data.hardDodgers');
-      const offendersCount = oFetch(res, 'data.offendersCount');
-
-      const imStaffMembersSoftDodgers = Immutable.fromJS(
-        softDodgers.map(softDodger => {
-          const staffMemberId = oFetch(softDodger, 'staffMemberId');
-          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
-          if (!staffMember) {
-            throw new Error('Staff member must be present');
-          }
-          return {
-            ...staffMember,
-            fullName: `${staffMember.firstName} ${staffMember.surname}`,
-            ...softDodger,
-            hours: oFetch(softDodger, 'minutes'),
-          };
-        }),
-      );
-
-      const imStaffMembersHardDodgers = Immutable.fromJS(
-        hardDodgers.map(hardDodger => {
-          const staffMemberId = oFetch(hardDodger, 'staffMemberId');
-          const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
-          if (!staffMember) {
-            throw new Error('Staff member must be present');
-          }
-          return {
-            ...staffMember,
-            fullName: `${oFetch(staffMember, 'firstName')} ${oFetch(staffMember, 'surname')}`,
-            ...hardDodger,
-            hours: oFetch(hardDodger, 'minutes'),
-          };
-        }),
-      );
-      return {
-        imStaffMembersHardDodgers,
-        imStaffMembersSoftDodgers,
-        imStaffMembers: imStaffMembersSoftDodgers.concat(imStaffMembersHardDodgers),
-        repeatOffendersCount: offendersCount,
-      };
-    });
-  };
-
-  componentDidMount() {
-    const { weekStartDate } = this.props.match.params;
-    const { selectedVenueIds } = this.state;
-
-    const date = safeMoment
-      .uiDateParse(weekStartDate || this.timeDodgesDate)
-      .startOf('isoWeek')
-      .format(utils.commonDateFormat);
-    if (!weekStartDate) {
-      this.changeURL(selectedVenueIds, date);
+  filterByVenues = (staffMembers, selectedVenueIds) => {
+    if (!selectedVenueIds) {
+      return staffMembers;
     }
+    if (selectedVenueIds.length === 0) {
+      return staffMembers;
+    }
+    return staffMembers.filter(staffMember => selectedVenueIds.includes(oFetch(staffMember, 'venueId')));
+  };
 
-    this.fetchStaffMembers(date).then(
-      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, repeatOffendersCount }) => {
-        this.setState({
-          imStaffMembersHardDodgers,
-          imStaffMembersSoftDodgers,
-          imStaffMembers,
-          repeatOffendersCount,
-          isLoaded: true,
-        });
-      },
-    );
-  }
-
-  changeURL = (selectedVenueIds, startDate) => {
-    const venuesQueryString = queryString.stringify({ venues: selectedVenueIds }, { arrayFormat: 'bracket' });
-    this.props.history.replace({
-      pathname: `/time_dodges/${startDate}`,
-      search: `?${venuesQueryString}`,
+  handleFilter = value => {
+    this.setState({ filterValue: value }, () => {
+      const [currentDate, selectedTab, selectedVenueIds, filterValue] = oFetch(
+        this.state,
+        'currentDate',
+        'selectedTab',
+        'selectedVenueIds',
+        'filterValue',
+      );
+      this.changeURL(selectedVenueIds, currentDate, selectedTab, filterValue);
     });
   };
 
-  handleChangeVenuesFilter = selectedVenueIds => {
-    const { startDate } = this.state;
-
-    this.setState({ selectedVenueIds });
-    this.changeURL(selectedVenueIds, startDate);
+  handleVenueFilterChange = venuesIds => {
+    this.setState({
+      selectedVenueIds: venuesIds,
+    });
+    const [currentDate, selectedTab, filterValue] = oFetch(this.state, 'currentDate', 'selectedTab', 'filterValue');
+    this.changeURL(venuesIds, currentDate, selectedTab, filterValue);
   };
 
-  handleChangeDateFilter = ({ startDate, endDate }, tab) => {
-    const { selectedVenueIds } = this.state;
+  handleTabClick = tabName => {
+    this.setState({ selectedTab: tabName }, () => {
+      const [currentDate, selectedTab, selectedVenueIds, filterValue] = oFetch(
+        this.state,
+        'currentDate',
+        'selectedTab',
+        'selectedVenueIds',
+        'filterValue',
+      );
+      this.changeURL(selectedVenueIds, currentDate, selectedTab, filterValue);
+    });
+  };
+
+  getCurrentDodgersList = () => {
+    const [selectedTab, selectedVenueIds, filterValue, softDodgers, hardDodgers] = oFetch(
+      this.state,
+      'selectedTab',
+      'selectedVenueIds',
+      'filterValue',
+      'softDodgers',
+      'hardDodgers',
+    );
+    const dodgersByTab = selectedTab === 'hard' ? hardDodgers : softDodgers;
+    return utils.staffMemberFilterFullNameJS(filterValue, this.filterByVenues(dodgersByTab, selectedVenueIds));
+  };
+
+  handleDateChange = ({ startDate, endDate }) => {
     const urlStartDate = utils.formatRotaUrlDate(startDate);
     const urlEndDate = utils.formatRotaUrlDate(endDate);
-    this.changeURL(selectedVenueIds, urlStartDate, tab);
+    const [selectedTab, selectedVenueIds, filterValue] = oFetch(
+      this.state,
+      'selectedTab',
+      'selectedVenueIds',
+      'filterValue',
+    );
+    this.changeURL(selectedVenueIds, urlStartDate, selectedTab, filterValue);
     this.setState({
       startDate: urlStartDate,
       endDate: urlEndDate,
+      currentDate: urlStartDate,
     });
-    this.clearTabFilter();
-    this.fetchStaffMembers(urlStartDate).then(
-      ({ imStaffMembersHardDodgers, imStaffMembersSoftDodgers, imStaffMembers, repeatOffendersCount }) => {
-        this.setState({
-          imStaffMembersHardDodgers,
-          imStaffMembersSoftDodgers,
-          imStaffMembers,
-          repeatOffendersCount,
-        });
-      },
-    );
-  };
 
-  renderDashboardFilter = () => {
-    const { startDate, endDate, selectedVenueIds } = this.state;
-    const venueTypes = selectors.getVenueTypes(this.props.venues);
-    return (
-      <DashboardFilter onDateChange={this.handleChangeDateFilter} startDate={startDate} endDate={endDate}>
-        <div className="boss-page-dashboard__controls-group">
-          <form action="#" className="boss-form">
-            <div className="boss-form__field boss-form__field_role_control">
-              <p className="boss-form__label boss-form__label_type_icon-venue boss-form__label_type_icon-single" />
-              <VenueSelect
-                className="boss-form__select_role_dashboard-multi"
-                selectedTypes={selectedVenueIds}
-                venueTypes={venueTypes}
-                onChange={this.handleChangeVenuesFilter}
-              />
-            </div>
-          </form>
-        </div>
-      </DashboardFilter>
-    );
-  };
-
-  takeClearFunc = clearFunc => {
-    this.clearTabFilter = clearFunc;
-  };
-
-  handleChangeTab = name => {
-    this.setState({ currentTab: name });
-  };
-
-  handleOffendersClick = () => {
-    this.props.history.replace({
-      pathname: `/repeat_offenders`,
-    });
+    this.fetchTimeDodgers(urlStartDate);
   };
 
   render() {
-    if (!this.state.isLoaded) {
+    const fetching = oFetch(this.state, 'fetching');
+    const [title, venues] = oFetch(this.props, 'title', 'venues');
+
+    if (fetching) {
       return null;
     }
-    const { imStaffMembers, imStaffMembersHardDodgers, imStaffMembersSoftDodgers, repeatOffendersCount } = this.state;
-    const { venues } = this.props;
+    const [
+      softDodgers,
+      hardDodgers,
+      selectedVenueIds,
+      startDate,
+      endDate,
+      filterValue,
+      markNeededOffendersCount,
+      offendersCount,
+      selectedTab,
+    ] = oFetch(
+      this.state,
+      'softDodgers',
+      'hardDodgers',
+      'selectedVenueIds',
+      'startDate',
+      'endDate',
+      'filterValue',
+      'markNeededOffendersCount',
+      'offendersCount',
+      'selectedTab',
+    );
+    const softDodgersCount = softDodgers.length;
+    const hardDodgersCount = hardDodgers.length;
+    const venueTypes = selectors.getVenueTypes(venues);
+    const fullCount = softDodgersCount + hardDodgersCount;
+
     return (
-      <Page
-        title={this.props.title}
-        venues={this.props.venues}
-        selectedVenueIds={this.state.selectedVenueIds}
-        count={imStaffMembers.size}
-        staffMembers={imStaffMembers}
-        staffTypes={this.props.staffTypes}
-        tabsFilterRenderer={() => (
-          <TabFilter
-            getClearFunc={clearFunc => this.takeClearFunc(clearFunc)}
-            timeDodgers={{
-              imStaffMembersHardDodgers,
-              imStaffMembersSoftDodgers,
-              imStaffMembers,
-            }}
-            onTabClick={this.handleChangeTab}
-            onOffendersClick={this.handleOffendersClick}
-            selectedTab={this.state.currentTab}
-            repeatOffendersCount={repeatOffendersCount}
-          />
-        )}
-        staffMemberListRenderer={staffMembers => {
-          return (
-            <StaffMemberList
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-              profileLink={false}
-              staffMembers={staffMembers}
-              venues={venues}
+      <div>
+        <StaffDashboard
+          filterRenderer={() => (
+            <VenueSelectFilter
+              venueTypes={venueTypes}
+              leftSide={() => (
+                <DashboardFilter startDate={startDate} endDate={endDate} onDateChange={this.handleDateChange} />
+              )}
+              selectedVenueIds={selectedVenueIds}
+              onChangeVenuesFilter={this.handleVenueFilterChange}
             />
-          );
-        }}
-        dashboardFilterRenderer={this.renderDashboardFilter}
-      />
+          )}
+          title={() => (
+            <h1 className="boss-page-dashboard__title">
+              <span className="boss-page-dashboard__title-text">{title}</span>
+              <span className="boss-page-dashboard__title-info">{fullCount > 0 ? `+${fullCount}` : 0}</span>
+            </h1>
+          )}
+        />
+        <div className="boss-page-main__content">
+          <div className="boss-page-main__inner">
+            <Tabs
+              softDodgersCount={softDodgersCount}
+              hardDodgersCount={hardDodgersCount}
+              markNeededOffendersCount={markNeededOffendersCount}
+              offendersCount={offendersCount}
+              selectedTab={selectedTab}
+              onTabClick={this.handleTabClick}
+            />
+            <TextFilter value={filterValue} onChange={this.handleFilter} />
+            <div className="boss-page-main__group boss-page-main__group_adjust_staff-vetting boss-page-main__group_context_stack">
+              <div className="boss-users">
+                <div className="boss-users__flow boss-users__flow_type_no-space">
+                  <StaffMembersList
+                    items={this.getCurrentDodgersList()}
+                    itemRenderer={dodger => {
+                      return (
+                        <StaffMemberItem
+                          staffMember={dodger}
+                          content={dodger => {
+                            return <TimeDodgerInfo dodger={dodger} startDate={startDate} endDate={endDate} />;
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
-TimeDodges.propTypes = {
-  venues: ImmutablePropTypes.list,
-  staffTypes: ImmutablePropTypes.list,
-  title: PropTypes.string.isRequired,
-};
-
-export default withRouter(TimeDodges);
+export default withRouter(TimeDodgers);

@@ -33,7 +33,7 @@ export const getStaffMembersWithBouncedEmails = () => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/staff-with-bounced-email`);
 };
 
-export const getStaffMembersWithTimeDodges = date => {
+export const getTimeDodgersRequest = date => {
   return http({ notify: false, globalLoader: true }).get(`/api/v1/staff_vetting/time-dodgers`, {
     params: {
       date,

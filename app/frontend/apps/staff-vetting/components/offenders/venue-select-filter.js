@@ -4,15 +4,20 @@ import VenueSelect from '~/components/security-rota/venue-select';
 
 export default class VenueSelectFilter extends Component {
   render() {
-    const [venueTypes, selectedVenueIds, onChangeVenuesFilter] = oFetch(
+    const [venueTypes, selectedVenueIds, onChangeVenuesFilter, leftSide] = oFetch(
       this.props,
       'venueTypes',
       'selectedVenueIds',
       'onChangeVenuesFilter',
+      'leftSide',
     );
     return (
       <div className="boss-page-dashboard__group">
-        <div className="boss-page-dashboard__meta" />
+        <div className="boss-page-dashboard__meta">
+          <h1 className="boss-page-dashboard__title">
+            <span className="boss-page-dashboard__title-text_faded">{leftSide()}</span>
+          </h1>
+        </div>
         <div className="boss-page-dashboard__controls-group">
           <div className="boss-form">
             <div className="boss-form__field boss-form__field_role_control">
@@ -30,3 +35,7 @@ export default class VenueSelectFilter extends Component {
     );
   }
 }
+
+VenueSelectFilter.defaultProps = {
+  leftSide: () => {},
+};

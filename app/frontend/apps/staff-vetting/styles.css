@@ -1,3 +1,16 @@
+.boss-red-badge {
+  border-radius: 50%;
+  background-color: red;
+  color: #FFF;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+  top: 5px;
+  left: 5px;
+}
+
 .loading {
   position: fixed;
   z-index: 999;

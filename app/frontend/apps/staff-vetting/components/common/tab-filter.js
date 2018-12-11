@@ -11,9 +11,9 @@ export default class TabFilter extends Component {
         'boss-page-main__control_state_active': selectedValue === tabKey,
       });
       return (
-        <a key={index} onClick={() => onTabClick(tabKey)} href="javascript:;" className={tabClassName}>
+        <button key={index} onClick={() => onTabClick(tabKey)} href="javascript:;" className={tabClassName}>
           {tabs[tabKey]}
-        </a>
+        </button>
       );
     });
   };

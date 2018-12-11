@@ -7,8 +7,7 @@ class TabFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTabIndex: props,
-      tabs: [],
+      activeTabIndex: -1,
     };
   }
 
@@ -114,14 +113,14 @@ class TabFilter extends Component {
     const hardTabName = 'hard';
     const staffMembersHardDodgersTab = {
       title: `Hard Dodgers - under 45h (${imStaffMembersHardDodgers.size})`,
-      name: 'hard',
+      name: hardTabName,
       onClick: () => this.props.onChangeTab(imStaffMembersHardDodgers, hardTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
     const softTabName = 'soft';
     const staffMembersSoftDodgersTab = {
       title: `Soft Dodgers 45-47h (${imStaffMembersSoftDodgers.size})`,
-      name: 'soft',
+      name: softTabName,
       onClick: () => this.props.onChangeTab(imStaffMembersSoftDodgers, softTabName),
       onClear: () => this.props.onChangeTab(imStaffMembers),
     };
@@ -147,65 +146,52 @@ class TabFilter extends Component {
     this.props.onChangeTab(items);
   };
 
-  setTabs = selectedTab => {
-    const tabs = [
+  // componentWillReceiveProps = nextProps => {
+  //   // nextProps.getClearFunc && nextProps.getClearFunc(this.clearFilter);
+  // };
+
+  getTabs = () => {
+    return [
       ...this.getVenues(),
       ...this.getPayRates(),
       ...this.getSecurity(),
       ...this.getTimeDodges(),
       ...this.getRepeatOffenders(),
     ];
-    let activeTabIndex = this.state.activeTabIndex;
-    if (selectedTab) {
-      activeTabIndex = tabs.findIndex(tab => tab.name === selectedTab);
-      if (activeTabIndex !== -1) {
-        tabs[activeTabIndex].onClick();
-      }
-    }
-    this.setState({ tabs, activeTabIndex });
-  };
-
-  componentDidMount = () => {
-    this.setTabs(this.props.selectedTab);
-  };
-
-  componentWillReceiveProps = nextProps => {
-    nextProps.getClearFunc && nextProps.getClearFunc(this.clearFilter);
-    if (this.props.selectedTab !== nextProps.selectedTab) {
-      this.setTabs(nextProps.selectedTab);
-    }
   };
 
   render() {
-    if (this.state.tabs.length === 0) {
+    if (this.getTabs().length === 0) {
       return null;
     }
 
     return (
       <div ref={node => (this.ref = node)} className="boss-page-main__controls">
-        {this.state.tabs.map((tab, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              if (this.state.activeTabIndex === index) {
-                this.setState({ activeTabIndex: -1 }, () => {
-                  tab.onClear();
-                });
-              } else {
-                this.setState({ activeTabIndex: index }, () => {
-                  tab.onClick();
-                });
-              }
-            }}
-            className={`boss-page-main__control ${
-              tab.icon === 'venue'
-                ? 'boss-page-main__control_role_venue'
-                : tab.icon === 'security' ? 'boss-page-main__control_role_staff-type' : ''
-            } ${index === this.state.activeTabIndex ? 'boss-page-main__control_state_active' : ''}`}
-          >
-            {tab.title}
-          </button>
-        ))}
+        {this.getTabs().map((tab, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (this.state.activeTabIndex === index) {
+                  this.setState({ activeTabIndex: -1 }, () => {
+                    tab.onClear();
+                  });
+                } else {
+                  this.setState({ activeTabIndex: index }, () => {
+                    tab.onClick();
+                  });
+                }
+              }}
+              className={`boss-page-main__control ${
+                tab.icon === 'venue'
+                  ? 'boss-page-main__control_role_venue'
+                  : tab.icon === 'security' ? 'boss-page-main__control_role_staff-type' : ''
+              } ${index === this.state.activeTabIndex ? 'boss-page-main__control_state_active' : ''}`}
+            >
+              {tab.title}
+            </button>
+          );
+        })}
       </div>
     );
   }

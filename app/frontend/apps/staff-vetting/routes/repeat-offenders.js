@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import oFetch from 'o-fetch';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import queryString from 'query-string';
 
 import { openContentModal, MODAL_TYPE2, MODAL_TYPE1 } from '~/components/modals';
@@ -14,7 +14,6 @@ import {
   OffenderReviewHistoryModalContent,
   VenueSelectFilter,
 } from '../components/offenders';
-import StaffDashboardTitle from '../components/staff-dashboard-title';
 import { TextFilter, StaffMembersListWrapper, StaffMembersList, StaffMemberItem } from '../components/common';
 import MarkHandled from '../components/mark-handled';
 
@@ -29,18 +28,39 @@ class RepeatOffenders extends Component {
       filterValue: '',
       lastUpdate: null,
       selectedVenueIds: this.getSelectedVenueIdsFromURL(),
+      taxYearStartDate: null,
+      taxYearEndDate: null,
+      softDodgersCount: null,
+      hardDodgersCount: null,
+      previousWeekStartDate: null,
     };
   }
 
   componentDidMount = async () => {
     const response = await getRepeatOffendersRequest();
-    const [offenders, offendersHistory, staffMembers, reviewsHistory, lastUpdate] = oFetch(
+    const [
+      offenders,
+      offendersHistory,
+      staffMembers,
+      reviewsHistory,
+      lastUpdate,
+      taxYearStartDate,
+      taxYearEndDate,
+      softDodgersCount,
+      hardDodgersCount,
+      previousWeekStartDate,
+    ] = oFetch(
       response.data,
       'offenders',
       'offendersHistory',
       'staffMembers',
       'reviewsHistory',
       'lastUpdate',
+      'taxYearStartDate',
+      'taxYearEndDate',
+      'softDodgersCount',
+      'hardDodgersCount',
+      'previousWeekStartDate',
     );
 
     const mappedOffenders = offenders.map(offender => {
@@ -72,6 +92,11 @@ class RepeatOffenders extends Component {
       offendersHistory,
       staffMembers,
       lastUpdate,
+      taxYearStartDate,
+      taxYearEndDate,
+      softDodgersCount,
+      hardDodgersCount,
+      previousWeekStartDate,
     });
   };
 
@@ -177,12 +202,27 @@ class RepeatOffenders extends Component {
       return null;
     }
 
-    const [offenders, filterValue, selectedVenueIds, lastUpdate] = oFetch(
+    const [
+      offenders,
+      filterValue,
+      selectedVenueIds,
+      lastUpdate,
+      taxYearStartDate,
+      taxYearEndDate,
+      softDodgersCount,
+      hardDodgersCount,
+      previousWeekStartDate,
+    ] = oFetch(
       this.state,
       'offenders',
       'filterValue',
       'selectedVenueIds',
       'lastUpdate',
+      'taxYearStartDate',
+      'taxYearEndDate',
+      'softDodgersCount',
+      'hardDodgersCount',
+      'previousWeekStartDate',
     );
     const filteredOffenders = utils.staffMemberFilterFullNameJS(
       filterValue,
@@ -201,6 +241,7 @@ class RepeatOffenders extends Component {
           filterRenderer={() => (
             <VenueSelectFilter
               venueTypes={venueTypes}
+              leftSide={() => `Tax year: ${taxYearStartDate} \u2014 ${taxYearEndDate}`}
               selectedVenueIds={selectedVenueIds}
               onChangeVenuesFilter={this.handleVenueFilterChange}
             />
@@ -215,6 +256,21 @@ class RepeatOffenders extends Component {
         />
         <div className="boss-page-main__content">
           <div className="boss-page-main__inner">
+            <div className="boss-page-main__controls">
+              <Link to={`/time_dodges/${previousWeekStartDate}?tab=soft`} className="boss-page-main__control">
+                Soft Dodgers - 45-47h or more ({softDodgersCount})
+              </Link>
+              <Link to={`/time_dodges/${previousWeekStartDate}?tab=hard`} className="boss-page-main__control">
+                Hard Dodgers - under 45 ({hardDodgersCount})
+              </Link>
+              <button
+                type="button"
+                style={{ position: 'relative' }}
+                className="boss-page-main__control boss-page-main__control_state_active"
+              >
+                <span className="boss-red-badge">20</span> Repeat Offenders ({offendersCount})
+              </button>
+            </div>
             <TextFilter value={filterValue} onChange={this.handleFilter} />
             {!hasMarkedOffenders && !hasMarkNeededOffenders && <h1>No result found</h1>}
             {hasMarkNeededOffenders && (

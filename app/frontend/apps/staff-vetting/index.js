@@ -169,7 +169,7 @@ class StaffVettingApp extends React.Component {
           />
           <PrivateRoute
             exact
-            path="/time_dodges/:weekStartDate?"
+            path="/time_dodges/:currentDate?"
             canView={canViewWithTimeDodges}
             render={props => <TimeDodges venues={imVenues} staffTypes={imStaffTypes} title="Time Dodgers" />}
           />
