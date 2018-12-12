@@ -177,7 +177,7 @@ class RepeatOffenders extends Component {
       config: {
         title: (
           <span>
-            <span className="boss-modal-window__marked">{fullName}</span> Offences
+            <span className="boss-modal-window__marked">{fullName}</span> Offence History
           </span>
         ),
         type: MODAL_TYPE1,
@@ -230,10 +230,11 @@ class RepeatOffenders extends Component {
     );
     const markedOffenders = filteredOffenders.filter(offender => oFetch(offender, 'markNeeded') === false);
     const markNeededOffenders = filteredOffenders.filter(offender => oFetch(offender, 'markNeeded') === true);
-    const hasMarkedOffenders = markedOffenders.length !== 0;
-    const hasMarkNeededOffenders = markNeededOffenders.length !== 0;
+    const offendersCount = oFetch(offenders, 'length');
+    const hasMarkedOffenders = oFetch(markedOffenders, 'length') !== 0;
+    const markNeededOffendersCount = oFetch(markNeededOffenders, 'length');
+    const hasMarkNeededOffenders = markNeededOffendersCount !== 0;
     const venueTypes = selectors.getVenueTypes(venues);
-    const offendersCount = offenders.length;
 
     return (
       <div>
@@ -268,7 +269,7 @@ class RepeatOffenders extends Component {
                 style={{ position: 'relative' }}
                 className="boss-page-main__control boss-page-main__control_state_active"
               >
-                <span className="boss-red-badge">20</span> Repeat Offenders ({offendersCount})
+                <span className="boss-red-badge">{markNeededOffendersCount}</span> Repeat Offenders ({offendersCount})
               </button>
             </div>
             <TextFilter value={filterValue} onChange={this.handleFilter} />

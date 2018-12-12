@@ -9,7 +9,7 @@ class Api::V1::StaffVettings::OffenderHistorySerializer < ActiveModel::Serialize
   end
 
   def dodgedMinutes
-    TimeDodgerOffence::SOFT_DODGER_MINUTE_THRESHOLD - object.minutes
+    object.minutes
   end
 
   def weekStart

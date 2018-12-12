@@ -131,7 +131,7 @@ module Api
         offenders_history = InRangeQuery.new(
           relation: TimeDodgerOffence.hard_dodgers.where(staff_member_id: offenders.select("staff_member_id")),
           start_value: current_tax_year.start_date,
-          end_value: current_tax_year.end_date,
+          end_value: previous_week.start_date,
           start_column_name: "week_start",
           end_column_name: "week_start",
         ).all
