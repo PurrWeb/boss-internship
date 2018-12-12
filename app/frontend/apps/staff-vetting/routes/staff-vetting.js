@@ -78,11 +78,6 @@ class StaffVetting extends Component {
         href: `/time_dodges`,
         canView: canViewWithTimeDodges,
       },
-      repeatOffenders: {
-        title: 'Repeat Offenders',
-        href: `/repeat_offenders`,
-        canView: canViewRepeatOffenders,
-      },
       withSameSageId: {
         title: 'Staff with Duplicated Sage ID',
         href: `/duplicated_sage_id`,
