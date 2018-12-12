@@ -17,7 +17,9 @@ export default class OffenderHistoryModalContent extends Component {
             <ul className="boss-overview__activity">
               {history.map((item, index) => {
                 const [dodgedMinutes, weekStart] = oFetch(item, 'dodgedMinutes', 'weekStart');
-                const formattedDate = safeMoment.uiDateParse(weekStart).format(utils.commonDateFormatWithDay());
+                const mWeekStart = safeMoment.uiDateParse(weekStart);
+                const mWeekEnd = moment(mWeekStart).add(6, 'days');
+                const formattedDate = `${mWeekStart.format(utils.commonDateFormat)} - ${mWeekEnd.format(utils.commonDateFormat)}`;
                 const formattedTime = moment
                   .duration(dodgedMinutes, 'minutes')
                   .format('*h[h] m[m]', { trim: 'both', useGrouping: false });
