@@ -177,7 +177,7 @@ class RepeatOffenders extends Component {
       config: {
         title: (
           <span>
-            <span className="boss-modal-window__marked">{fullName}</span> Offences
+            <span className="boss-modal-window__marked">{fullName}</span> Offence History
           </span>
         ),
         type: MODAL_TYPE1,
