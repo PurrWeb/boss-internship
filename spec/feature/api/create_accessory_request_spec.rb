@@ -81,7 +81,8 @@ RSpec.describe "Staff member create accessory requests API endpoint", :accessori
           "requestFrozen" => accessory_request.frozen?,
           "payslipDate" => nil,
           "refundFrozen" => nil,
-          "refundPayslipDate" => nil
+          "refundPayslipDate" => nil,
+          "venueName" => accessory_request.accessory.venue.name
         })
 
         expect(timeline_json.count).to eq(1)

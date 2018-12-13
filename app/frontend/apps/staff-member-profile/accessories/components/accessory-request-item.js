@@ -142,6 +142,7 @@ class AccessoryRequestItem extends React.Component {
     const refundStatusClassPrefix = REFUND_REQUEST_STATUS_CLASS_PREFIXES[refundRequestStatus];
     const requestStatusClassPrefix = REQUEST_STATUS_CLASS_PREFIXES[status];
     const statusClassPrefix = hasRefundRequest ? refundStatusClassPrefix : requestStatusClassPrefix;
+    const venueName = oFetch(accessoryRequest, 'venueName');
     const requestFrozen = oFetch(accessoryRequest, 'requestFrozen');
     const sPayslipDate = oFetch(accessoryRequest, 'payslipDate');
     const sPayslipDateText = sPayslipDate ? safeMoment.uiDateParse(sPayslipDate).format(utils.commonDateFormat) : null;
@@ -153,7 +154,12 @@ class AccessoryRequestItem extends React.Component {
     return (
       <li className="boss-requests__item">
         <div className="boss-requests__meta">
-          <div className="boss-requests__date">{requestDate}</div>
+          <div className="boss-requests__meta-info">
+            <div className="boss-requests__meta-text">{requestDate}</div>
+            <div className="boss-requests__meta-text">
+              <span className="boss-requests__meta-text-bold">{venueName}</span>
+            </div>
+          </div>
           {!this.state.processing && (
             <div className={`boss-requests__status boss-requests__status_role_${statusClassPrefix}`}>
               {hasRefundRequest

@@ -87,6 +87,7 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
         "refundFrozen" => false,
         "refundPayslipDate" => nil,
         "requestFrozen" => false,
+        "venueName" => accessory_request.accessory.venue.name
       })
       expect(timeline_json.count).to eq(4)
       expected_states = ["pending", 'accepted', 'completed', 'pending']
@@ -135,7 +136,8 @@ RSpec.describe "Staff member refund accessory requests API endpoint", :accessori
           "requestFrozen" => accessory_request.frozen?,
           "payslipDate" => UIRotaDate.format(accessory_request.payslip_date),
           "refundFrozen" => false,
-          "refundPayslipDate" => nil
+          "refundPayslipDate" => nil,
+          "venueName" => accessory_request.accessory.venue.name
         })
 
         expect(timeline_json.count).to eq(4)
