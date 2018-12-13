@@ -12,7 +12,12 @@ class Api::V1::StaffMemberProfile::AccessoryRequestSerializer < ActiveModel::Ser
     :requestFrozen,
     :refundFrozen,
     :payslipDate,
-    :refundPayslipDate
+    :refundPayslipDate,
+    :venueName
+
+  def venueName
+    object.accessory.venue.name
+  end
 
   def updatedAt
     last_refund_state_change = if object.has_refund_request?

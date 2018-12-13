@@ -73,6 +73,7 @@ RSpec.describe "Staff member cancel accessory requests API endpoint", :accessori
         "refundPayslipDate" => nil,
         "refundRequestStatus" => nil,
         "requestFrozen" => false,
+        "venueName" => accessory_request.accessory.venue.name
       })
 
       time_line_json = accessory_request_json.fetch("timeline")
