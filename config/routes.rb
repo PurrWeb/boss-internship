@@ -204,6 +204,14 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :id_scanner_app, path: 'id-scanner-app' do
+        namespace :v1 do
+          resource :tests, only: [] do
+            get :get
+          end
+        end
+      end
+
       namespace :security_app, path: "security-app" do
         namespace :v1 do
           resources :init, only: :index
