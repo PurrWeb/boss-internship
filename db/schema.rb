@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181217181503) do
+ActiveRecord::Schema.define(version: 20181218104848) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -607,6 +607,18 @@ ActiveRecord::Schema.define(version: 20181217181503) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "id_scanner_scan_attempts", force: :cascade do |t|
+    t.integer  "id_scanner_app_api_key_id", limit: 4,   null: false
+    t.string   "guid",                      limit: 255, null: false
+    t.string   "status",                    limit: 255, null: false
+    t.integer  "linked_staff_member_id",    limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "id_scanner_scan_attempts", ["guid", "id_scanner_app_api_key_id"], name: "guid_scanner_key_history", using: :btree
+  add_index "id_scanner_scan_attempts", ["status", "id_scanner_app_api_key_id"], name: "status_scanner_key_history", using: :btree
 
   create_table "incident_reports", force: :cascade do |t|
     t.integer  "user_id",                    limit: 4,     null: false
