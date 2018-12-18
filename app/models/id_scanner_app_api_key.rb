@@ -1,13 +1,12 @@
 class IdScannerAppApiKey < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordQueries
-
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_user_id'
-  has_many :api_key_transitions, autosave: false
+  belongs_to :disabled_by_user, class_name: 'User', foreign_key: 'disabled_by_user_id'
 
   validates :creator, presence: true
   validates :key, presence: true
   validates :name, presence: true
   validate  :protect_from_duplicates
+  validate :disabled_fields
 
   before_validation :generate_key
 
@@ -29,25 +28,24 @@ class IdScannerAppApiKey < ActiveRecord::Base
     end
   end
 
+  # validation
+  def disabled_fields
+    if disabled_at.present? ^ disabled_by_user.present?
+      if !disabled_at.present?
+        errors.add(:disabled_at, 'is required')
+      end
+
+      if !disabled_by_user.present?
+        errors.add(:disabled_by_user, 'is_required')
+      end
+    end
+  end
+
   def self.active
-    in_state(:active)
+    where(disabled_at: nil)
   end
 
-  def state_machine
-    @state_machine ||= IdScannerAppApiKeyStateMachine.new(
-      self,
-      transition_class: IdScannerAppApiKeyTransition,
-      association_name: :api_key_transitions
-    )
-  end
-
-  private
-  # Needed for statesman
-  def self.transition_class
-    IdScannerAppApiKeyTransition
-  end
-
-  def self.initial_state
-    IdScannerAppApiKeyStateMachine.initial_state
+  def enabled?
+    !disabled_at
   end
 end
