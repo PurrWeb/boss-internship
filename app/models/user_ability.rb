@@ -156,6 +156,10 @@ class UserAbility
         user.security_manager? || user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :view, :id_scanner_keys_page do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :view, :accessory_requests_page do
         user.food_ops_manager? ||
         user.has_effective_access_level?(AccessLevel.ops_manager_access_level)
