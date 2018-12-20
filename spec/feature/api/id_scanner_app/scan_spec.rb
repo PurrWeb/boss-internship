@@ -3,13 +3,19 @@ require 'rails_helper'
 RSpec.describe 'Id Scanner scan spec' do
   include Rack::Test::Methods
   include HeaderHelpers
+  include ActiveSupport::Testing::TimeHelpers
 
   let(:now) { Time.current }
   let(:rota_shift_date) { RotaShiftDate.new(now) }
-  let(:start_of_day) { rota_shift_date.start_of_day }
+  let(:start_of_day) { rota_shift_date.start_time }
   let(:user) { FactoryGirl.create(:user) }
   let(:url) { url_helpers.api_id_scanner_app_v1_scan_path }
-  let(:response) { post(url, params) }
+  let(:scan_time) { start_of_day + 10.hours }
+  let(:response) do
+    travel_to scan_time do
+      post(url, params)
+    end
+  end
   let(:params) do
     {}
   end
@@ -184,17 +190,18 @@ RSpec.describe 'Id Scanner scan spec' do
         creator: user
       )
     end
-    let(:scan_time) do
-    end
     let(:original_scan_time) do
+      scan_time - 2.hours
     end
     let(:existing_scan_attempt) do
-      IdScannerScanAttempt.create!(
-        api_key: api_key,
-        guid: staff_member.id_scanner_guid,
-        status: IdScannerScanAttempt::SUCCESS_STATUS,
-        linked_staff_member: staff_member
-      )
+      travel_to original_scan_time do
+        IdScannerScanAttempt.create!(
+          api_key: api_key,
+          guid: staff_member.id_scanner_guid,
+          status: IdScannerScanAttempt::SUCCESS_STATUS,
+          linked_staff_member: staff_member
+        )
+      end
     end
 
     before do
