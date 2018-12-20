@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181218104848) do
+ActiveRecord::Schema.define(version: 20181220111738) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -1297,6 +1297,7 @@ ActiveRecord::Schema.define(version: 20181218104848) do
     t.integer  "marked_retake_avatar_user_id",          limit: 4
     t.boolean  "override_retake_avatar_restrictions",                 default: false, null: false
     t.boolean  "allow_no_sage_id",                                    default: false, null: false
+    t.string   "id_scanner_guid",                       limit: 255
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree
