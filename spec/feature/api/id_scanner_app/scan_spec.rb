@@ -225,6 +225,61 @@ RSpec.describe 'Id Scanner scan spec' do
     end
   end
 
+  # This case was introduced because of a bug where one staff member's
+  # scan was counted as another
+  context 'second staff member scans' do
+    let(:staff_member) do
+      FactoryGirl.create(:staff_member)
+    end
+    let(:other_staff_member) do
+      FactoryGirl.create(:staff_member)
+    end
+    let(:params) do
+      {
+        guid: other_staff_member.id_scanner_guid
+      }
+    end
+    let(:api_key) do
+      IdScannerAppApiKey.create!(
+        name: 'My Key',
+        creator: user
+      )
+    end
+    let(:original_scan_time) do
+      scan_time - 2.hours
+    end
+    let(:existing_scan_attempt) do
+      travel_to original_scan_time do
+        IdScannerScanAttempt.create!(
+          api_key: api_key,
+          guid: staff_member.id_scanner_guid,
+          status: IdScannerScanAttempt::SUCCESS_STATUS,
+          linked_staff_member: staff_member
+        )
+      end
+    end
+
+    before do
+      set_authorization_header(api_key.key)
+      existing_scan_attempt
+    end
+
+    specify 'should succeed' do
+      expect(response.status).to eq(ok_status)
+    end
+
+    specify 'return staff member data' do
+      json_response = JSON.parse(response.body)
+      expect(json_response).to eq({
+        "staffMember" => {
+          "name" => other_staff_member.full_name,
+          "masterVenueName" => other_staff_member.master_venue.name,
+          "avatarUrl" => other_staff_member.avatar_url,
+        }
+      })
+    end
+  end
+
   def app
     Rails.application
   end

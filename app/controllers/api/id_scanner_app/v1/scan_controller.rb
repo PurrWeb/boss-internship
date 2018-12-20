@@ -5,14 +5,16 @@ module Api
         def scan
           now = Time.current
           rota_shift_date = RotaShiftDate.new(now)
-          staff_member = StaffMember.find_by(id_scanner_guid: params.fetch(:guid))
+          guid = params.fetch(:guid)
+          staff_member = StaffMember.find_by(id_scanner_guid: guid)
 
           if staff_member.present? && staff_member.disabled?
             render json: {}, status: 401
           elsif staff_member.present?
             all_successful_scan_attempts = IdScannerScanAttempt.where(
               status: IdScannerScanAttempt::SUCCESS_STATUS,
-              api_key: current_api_key
+              api_key: current_api_key,
+              guid: guid,
             )
 
             scan_already_exists = InRangeQuery.new(
