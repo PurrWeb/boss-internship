@@ -23,6 +23,7 @@ class IdScannerAppApiKey < ActiveRecord::Base
   end
 
   def protect_from_duplicates
+    return if persisted?
     if name.present? && IdScannerAppApiKey.find_by(name: name).present?
       errors.add(:base, "key already exists with this name")
     end
