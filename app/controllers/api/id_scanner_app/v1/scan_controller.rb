@@ -6,9 +6,15 @@ module Api
           now = Time.current
           rota_shift_date = RotaShiftDate.new(now)
           guid = params.fetch(:guid)
-          staff_member = StaffMember.find_by(id_scanner_guid: guid)
+          staff_member = StaffMember.includes([:name]).find_by(id_scanner_guid: guid)
 
           if staff_member.present? && staff_member.disabled?
+            IdScannerScanAttempt.create!(
+              api_key: current_api_key,
+              status: IdScannerScanAttempt::ACCESS_DENIED_STATUS,
+              guid: guid,
+            )
+
             render json: {}, status: 401
           elsif staff_member.present?
             all_successful_scan_attempts = IdScannerScanAttempt.where(
@@ -27,15 +33,35 @@ module Api
             ).all.first.present?
 
             if scan_already_exists
+              IdScannerScanAttempt.create!(
+                api_key: current_api_key,
+                linked_staff_member: staff_member,
+                status: IdScannerScanAttempt::RESCAN_STATUS,
+                guid: guid,
+              )
+
               render json: {
                 staffMember: Api::IdScannerApp::V1::StaffMemberSerializer.new(staff_member)
               }, status: 403
             else
+              IdScannerScanAttempt.create!(
+                api_key: current_api_key,
+                linked_staff_member: staff_member,
+                status: IdScannerScanAttempt::SUCCESS_STATUS,
+                guid: guid,
+              )
+
               render json: {
                 staffMember: Api::IdScannerApp::V1::StaffMemberSerializer.new(staff_member)
               }
             end
           else
+            IdScannerScanAttempt.create!(
+              api_key: current_api_key,
+              status: IdScannerScanAttempt::ACCESS_DENIED_STATUS,
+              guid: guid,
+            )
+
             render json: {}, status: 401
           end
         end

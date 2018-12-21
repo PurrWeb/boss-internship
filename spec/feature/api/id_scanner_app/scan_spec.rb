@@ -16,6 +16,7 @@ RSpec.describe 'Id Scanner scan spec' do
       post(url, params)
     end
   end
+  let(:perform_call) { response }
   let(:params) do
     {}
   end
@@ -31,15 +32,31 @@ RSpec.describe 'Id Scanner scan spec' do
       key
     end
 
-    specify 'should not succeed' do
-      expect(response.status).to eq(unauthorised_status)
+    context 'before call' do
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
     end
 
-    specify 'return empty response' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq(
-        "errors" =>  Api::IdScannerApp::V1::IdScannerAppController.not_authenticated_error_json
-      )
+    context 'after call' do
+      before do
+        perform_call
+      end
+
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
+
+      specify 'should not succeed' do
+        expect(response.status).to eq(unauthorised_status)
+      end
+
+      specify 'return empty response' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq(
+          "errors" =>  Api::IdScannerApp::V1::IdScannerAppController.not_authenticated_error_json
+        )
+      end
     end
   end
 
@@ -53,19 +70,35 @@ RSpec.describe 'Id Scanner scan spec' do
       )
     end
 
-    specify 'api key should be disabled' do
-      expect(api_key.enabled?).to eq(false)
+    context 'before call' do
+      specify 'api key should be disabled' do
+        expect(api_key.enabled?).to eq(false)
+      end
+
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
     end
 
-    specify 'should not succeed' do
-      expect(response.status).to eq(unauthorised_status)
-    end
+    context 'after call' do
+      before do
+        perform_call
+      end
 
-    specify 'return empty response' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq(
-        "errors" =>  Api::IdScannerApp::V1::IdScannerAppController.not_authenticated_error_json
-      )
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
+
+      specify 'should not succeed' do
+        expect(response.status).to eq(unauthorised_status)
+      end
+
+      specify 'return empty response' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq(
+          "errors" =>  Api::IdScannerApp::V1::IdScannerAppController.not_authenticated_error_json
+        )
+      end
     end
   end
 
@@ -89,31 +122,53 @@ RSpec.describe 'Id Scanner scan spec' do
       set_authorization_header(api_key.key)
     end
 
-    specify 'should succeed' do
-      expect(response.status).to eq(ok_status)
+    context 'before call' do
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
     end
 
-    specify 'return staff member data' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq({
-        "staffMember" => {
-          "name" => staff_member.full_name,
-          "masterVenueName" => staff_member.master_venue.name,
-          "avatarUrl" => staff_member.avatar_url,
-        }
-      })
-    end
-
-    context 'when staff member is security staff' do
-      let(:staff_member) do
-        FactoryGirl.create(:staff_member, :security)
+    context 'after call' do
+      before do
+        perform_call
       end
 
-      specify 'master venue name should be listed as N/A' do
+      specify 'should succeed' do
+        expect(response.status).to eq(ok_status)
+      end
+
+      specify 'return staff member data' do
         json_response = JSON.parse(response.body)
-        expect(
-          json_response.fetch("staffMember").fetch("masterVenueName")
-        ).to eq('N/A')
+        expect(json_response).to eq({
+          "staffMember" => {
+            "name" => staff_member.full_name,
+            "masterVenueName" => staff_member.master_venue.name,
+            "avatarUrl" => staff_member.avatar_url,
+          }
+        })
+      end
+
+      specify 'scanner attempt should be created' do
+        expect(IdScannerScanAttempt.count).to eq(1)
+        scan_attempt = IdScannerScanAttempt.last
+        expect(scan_attempt.api_key).to eq(api_key)
+        expect(scan_attempt.linked_staff_member).to eq(staff_member)
+        expect(scan_attempt.guid).to eq(staff_member.id_scanner_guid)
+        expect(scan_attempt.status).to eq(IdScannerScanAttempt::SUCCESS_STATUS)
+        expect(scan_attempt.created_at).to eq(scan_time)
+      end
+
+      context 'when staff member is security staff' do
+        let(:staff_member) do
+          FactoryGirl.create(:staff_member, :security)
+        end
+
+        specify 'master venue name should be listed as N/A' do
+          json_response = JSON.parse(response.body)
+          expect(
+            json_response.fetch("staffMember").fetch("masterVenueName")
+          ).to eq('N/A')
+        end
       end
     end
   end
@@ -138,20 +193,43 @@ RSpec.describe 'Id Scanner scan spec' do
       set_authorization_header(api_key.key)
     end
 
-    specify 'should succeed' do
-      expect(response.status).to eq(unauthorised_status)
+    context 'before call' do
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
     end
 
-    specify 'return empty response' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq({})
+    context 'after call' do
+      before do
+        perform_call
+      end
+
+      specify 'should succeed' do
+        expect(response.status).to eq(unauthorised_status)
+      end
+
+      specify 'return empty response' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq({})
+      end
+
+      specify 'scanner attempt should be created' do
+        expect(IdScannerScanAttempt.count).to eq(1)
+        scan_attempt = IdScannerScanAttempt.last
+        expect(scan_attempt.api_key).to eq(api_key)
+        expect(scan_attempt.linked_staff_member).to eq(nil)
+        expect(scan_attempt.guid).to eq(staff_member.id_scanner_guid)
+        expect(scan_attempt.status).to eq(IdScannerScanAttempt::ACCESS_DENIED_STATUS)
+        expect(scan_attempt.created_at).to eq(scan_time)
+      end
     end
   end
 
   context 'guid does not exist' do
+    let(:supplied_guid) { '123ea-23-23223-2233' }
     let(:params) do
       {
-        guid: '123ea-23-23223-2233'
+        guid: supplied_guid
       }
     end
     let(:api_key) do
@@ -165,13 +243,35 @@ RSpec.describe 'Id Scanner scan spec' do
       set_authorization_header(api_key.key)
     end
 
-    specify 'should succeed' do
-      expect(response.status).to eq(unauthorised_status)
+    context 'before call' do
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(0)
+      end
     end
 
-    specify 'return empty response' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq({})
+    context 'after call' do
+      before do
+        perform_call
+      end
+
+      specify 'should not succeed' do
+        expect(response.status).to eq(unauthorised_status)
+      end
+
+      specify 'return empty response' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq({})
+      end
+
+      specify 'scanner attempt should be created' do
+        expect(IdScannerScanAttempt.count).to eq(1)
+        scan_attempt = IdScannerScanAttempt.last
+        expect(scan_attempt.api_key).to eq(api_key)
+        expect(scan_attempt.linked_staff_member).to eq(nil)
+        expect(scan_attempt.guid).to eq(supplied_guid)
+        expect(scan_attempt.status).to eq(IdScannerScanAttempt::ACCESS_DENIED_STATUS)
+        expect(scan_attempt.created_at).to eq(scan_time)
+      end
     end
   end
 
@@ -209,19 +309,42 @@ RSpec.describe 'Id Scanner scan spec' do
       existing_scan_attempt
     end
 
-    specify 'should give bad request status' do
-      expect(response.status).to eq(bad_request_status)
+    context 'before call' do
+      specify '1 attempt record should exist' do
+        expect(IdScannerScanAttempt.count).to eq(1)
+      end
     end
 
-    specify 'return empty response' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq({
-        "staffMember" => {
-          "name" => staff_member.full_name,
-          "masterVenueName" => staff_member.master_venue.name,
-          "avatarUrl" => staff_member.avatar_url,
-        }
-      })
+    context 'after call' do
+      before do
+        perform_call
+      end
+
+      specify 'new attempt record should be created' do
+        expect(IdScannerScanAttempt.count).to eq(2)
+
+        scan_attempt = IdScannerScanAttempt.last
+        expect(scan_attempt.api_key).to eq(api_key)
+        expect(scan_attempt.guid).to eq(staff_member.id_scanner_guid)
+        expect(scan_attempt.status).to eq(IdScannerScanAttempt::RESCAN_STATUS)
+        expect(scan_attempt.linked_staff_member).to eq(staff_member)
+        expect(scan_attempt.created_at).to eq(scan_time)
+      end
+
+      specify 'should give bad request status' do
+        expect(response.status).to eq(bad_request_status)
+      end
+
+      specify 'return empty response' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq({
+          "staffMember" => {
+            "name" => staff_member.full_name,
+            "masterVenueName" => staff_member.master_venue.name,
+            "avatarUrl" => staff_member.avatar_url,
+          }
+        })
+      end
     end
   end
 
@@ -264,19 +387,42 @@ RSpec.describe 'Id Scanner scan spec' do
       existing_scan_attempt
     end
 
-    specify 'should succeed' do
-      expect(response.status).to eq(ok_status)
+    context 'before call' do
+      specify 'no attempt records should exist' do
+        expect(IdScannerScanAttempt.count).to eq(1)
+      end
     end
 
-    specify 'return staff member data' do
-      json_response = JSON.parse(response.body)
-      expect(json_response).to eq({
-        "staffMember" => {
-          "name" => other_staff_member.full_name,
-          "masterVenueName" => other_staff_member.master_venue.name,
-          "avatarUrl" => other_staff_member.avatar_url,
-        }
-      })
+    context 'after call' do
+      before do
+        perform_call
+      end
+
+      specify 'should succeed' do
+        expect(response.status).to eq(ok_status)
+      end
+
+      specify 'return staff member data' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq({
+          "staffMember" => {
+            "name" => other_staff_member.full_name,
+            "masterVenueName" => other_staff_member.master_venue.name,
+            "avatarUrl" => other_staff_member.avatar_url,
+          }
+        })
+      end
+
+      specify 'new success scann attempt should be created' do
+        expect(IdScannerScanAttempt.count).to eq(2)
+
+        scan_attempt = IdScannerScanAttempt.last
+        expect(scan_attempt.api_key).to eq(api_key)
+        expect(scan_attempt.linked_staff_member).to eq(other_staff_member)
+        expect(scan_attempt.guid).to eq(other_staff_member.id_scanner_guid)
+        expect(scan_attempt.status).to eq(IdScannerScanAttempt::SUCCESS_STATUS)
+        expect(scan_attempt.created_at).to eq(scan_time)
+      end
     end
   end
 
