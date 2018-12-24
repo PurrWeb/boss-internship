@@ -24,6 +24,33 @@ class IdScannerKeysController < ApplicationController
     }
   end
 
+  def new
+    authorize! :view, :id_scanner_keys_page
+
+    id_scanner_app_api_key = IdScannerAppApiKey.new
+
+    render locals: {
+      id_scanner_app_api_key: id_scanner_app_api_key
+    }
+  end
+
+  def create
+    authorize! :create, :id_scanner_app_api_keys
+
+    id_scanner_app_api_key = IdScannerAppApiKey.new(
+      creator: current_user,
+      name: id_scanner_app_api_key_params.fetch(:name)
+    )
+
+    if id_scanner_app_api_key.save
+      flash[:success] = 'Key Created'
+      redirect_to action: :index
+    else
+
+      render action: :new, locals: { id_scanner_app_api_key: id_scanner_app_api_key }
+    end
+  end
+
   def disable
     id_scanner_app_api_key = IdScannerAppApiKey.find_by(id: params.fetch(:id))
 
@@ -36,6 +63,10 @@ class IdScannerKeysController < ApplicationController
 
     flash[:success] = "Key Disabled Successfully"
     redirect_to action: :index
+  end
+
+  def id_scanner_app_api_key_params
+    params.fetch(:id_scanner_app_api_key)
   end
 
   def index_redirect_params

@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
     resources :payment_uploads, only: [:index]
 
-    resources :id_scanner_keys, only: [:index] do
+    resources :id_scanner_keys, only: [:index, :new, :create] do
       member do
         post :disable
       end

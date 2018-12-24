@@ -160,6 +160,10 @@ class UserAbility
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
 
+      can :create, :id_scanner_app_api_keys do
+        user.has_effective_access_level?(AccessLevel.admin_access_level)
+      end
+
       can :disable, IdScannerAppApiKey do |id_scanner_app_api_key|
         user.has_effective_access_level?(AccessLevel.admin_access_level)
       end
