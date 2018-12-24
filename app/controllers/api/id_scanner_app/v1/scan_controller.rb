@@ -19,7 +19,6 @@ module Api
           elsif staff_member.present?
             all_successful_scan_attempts = IdScannerScanAttempt.where(
               status: IdScannerScanAttempt::SUCCESS_STATUS,
-              api_key: current_api_key,
               guid: guid,
             )
 
