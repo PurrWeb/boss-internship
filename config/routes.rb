@@ -206,6 +206,7 @@ Rails.application.routes.draw do
 
       namespace :id_scanner_app, path: 'id-scanner-app' do
         namespace :v1 do
+          post :auth, to: 'auth#auth'
           post :scan, to: 'scan#scan'
           resource :tests, only: [] do
             get :get
