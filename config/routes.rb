@@ -33,7 +33,11 @@ Rails.application.routes.draw do
 
     resources :payment_uploads, only: [:index]
 
-    resources :id_scanner_keys, only: [:index]
+    resources :id_scanner_keys, only: [:index] do
+      member do
+        post :disable
+      end
+    end
 
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
