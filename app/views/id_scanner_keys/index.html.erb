@@ -13,15 +13,20 @@
       <div class="boss-page-dashboard__group">
         <div class="boss-page-dashboard__controls-group">
           <!-- Form start -->
-          <form class="boss-form">
+          <div class="boss-form">
+            <script>
+              var onFilterRadioChange = function(e){
+                window.location.href = $('input:checked').first().data("dest-href")
+              };
+            </script>
             <div class="boss-form__field boss-form__field_layout_fluid">
               <div class="boss-form__switcher boss-form__switcher_role_dashboard">
                 <label class="boss-form__switcher-label">
-                  <input type="radio" name="display" value="1" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'active_only' %> >
+                  <input type="radio" name="display" value="1" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'active_only' %> onchange="onFilterRadioChange()" data-dest-href="<%= id_scanner_keys_path(filter: 'active_only') %>" >
                   <span class="boss-form__switcher-label-text">Active Only</span>
                 </label>
                 <label class="boss-form__switcher-label">
-                  <input type="radio" name="display" value="2" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'show_all' %> >
+                  <input type="radio" name="display" value="2" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'show_all' %> onchange="onFilterRadioChange()" data-dest-href="<%= id_scanner_keys_path(filter: 'show_all') %>" >
                   <span class="boss-form__switcher-label-text">Show All</span>
                 </label>
               </div>
