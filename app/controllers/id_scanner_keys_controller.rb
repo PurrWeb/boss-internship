@@ -51,6 +51,20 @@ class IdScannerKeysController < ApplicationController
     end
   end
 
+  def enable
+    id_scanner_app_api_key = IdScannerAppApiKey.find_by(id: params.fetch(:id))
+
+    authorize!(:enable, id_scanner_app_api_key)
+
+    id_scanner_app_api_key.update_attributes!(
+      disabled_at: nil,
+      disabled_by_user: nil,
+    )
+
+    flash[:success] = "Key Enabled Successfully"
+    redirect_to action: :index
+  end
+
   def disable
     id_scanner_app_api_key = IdScannerAppApiKey.find_by(id: params.fetch(:id))
 

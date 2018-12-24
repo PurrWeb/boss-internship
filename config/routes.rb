@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
     resources :id_scanner_keys, only: [:index, :new, :create] do
       member do
+        post :enable
         post :disable
       end
     end

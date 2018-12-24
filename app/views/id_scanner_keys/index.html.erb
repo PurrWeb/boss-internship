@@ -80,6 +80,10 @@
                     <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
                       <button type="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-table__action">Disable</button>
                     <% end %>
+                  <% else %>
+                    <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                      <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
+                    <% end %>
                   <% end %>
                 </div>
               </div>
@@ -107,6 +111,10 @@
               <% if id_scanner_app_api_key.enabled? %>
                 <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
                   <button submit="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-check__button">Disable</button>
+                <% end %>
+              <% else %>
+                <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                  <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
                 <% end %>
               <% end %>
             </div>
