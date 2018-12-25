@@ -20,12 +20,12 @@ class EditHolidayContent extends React.PureComponent {
     } = this.props;
 
     let holidayData = holiday.toJS();
-
+    const payslipDate = oFetch(holidayData, 'payslip_date');
     const initialValues = {
       note: oFetch(holidayData, 'note'),
       startDate: safeMoment.uiDateParse(oFetch(holidayData, 'start_date')),
       endDate: safeMoment.uiDateParse(oFetch(holidayData, 'end_date')),
-      payslipDate: safeMoment.uiDateParse(oFetch(holidayData, 'payslip_date')),
+      payslipDate: payslipDate ? safeMoment.uiDateParse(payslipDate) : payslipDate,
       holidayType: oFetch(holidayData, 'holiday_type'),
       id: oFetch(holidayData, 'id')
     }
