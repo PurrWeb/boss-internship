@@ -28,6 +28,8 @@ class ReviveStaffMember
 
       StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
+      staff_member.id_scanner_guid = SecureRandom.uuid unless staff_member.id_scanner_guid.present?
+
       result = staff_member.save && starts_at_changed
 
       if !starts_at_changed
