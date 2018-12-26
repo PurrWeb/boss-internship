@@ -137,7 +137,7 @@ module Api
         ).all
 
         reviews_history = TimeDodgerReviewAction.enabled.where(time_dodger_offence_level_id: offenders.select(:id))
-        staff_members = StaffMember.on_weekly_pay_rate.where(id: offenders.select(:staff_member_id))
+        staff_members = StaffMember.where(id: offenders.select(:staff_member_id))
 
         render json: {
           offendersHistory: ActiveModel::Serializer::CollectionSerializer.new(
