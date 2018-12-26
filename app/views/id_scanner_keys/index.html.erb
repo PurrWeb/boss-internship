@@ -50,10 +50,9 @@
         <div class="boss-table boss-table_page_id-scanner-keys">
           <div class="boss-table__row boss-table__row_role_header">
             <div class="boss-table__cell boss-table__cell_role_header">Name</div>
-              <div class="boss-table__cell boss-table__cell_role_header">Key</div>
-              <div class="boss-table__cell boss-table__cell_role_header">Status</div>
-              <div class="boss-table__cell boss-table__cell_role_header"></div>
-            </div>
+            <div class="boss-table__cell boss-table__cell_role_header">Key</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Status</div>
+            <div class="boss-table__cell boss-table__cell_role_header"></div>
           </div>
 
           <% id_scanner_app_api_keys.each do |id_scanner_app_api_key| %>
@@ -64,27 +63,28 @@
                 </div>
               </div>
               <div class="boss-table__cell">
-              <div class="boss-table__info">
-                <p class="boss-table__text boss-table__text_adjust_wrap"><%= id_scanner_app_api_key.key %></p>
+                <div class="boss-table__info">
+                  <p class="boss-table__text boss-table__text_adjust_wrap"><%= id_scanner_app_api_key.key %></p>
+                </div>
               </div>
-            </div>
-            <div class="boss-table__cell">
-              <div class="boss-table__info">
-                <p class="boss-table__text boss-table__text_role_active-status"><%= IdScannerAppApiKeyStatusDescription.new(id_scanner_app_api_key: id_scanner_app_api_key).call %></p>
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <p class="boss-table__text boss-table__text_role_active-status"><%= IdScannerAppApiKeyStatusDescription.new(id_scanner_app_api_key: id_scanner_app_api_key).call %></p>
+                </div>
               </div>
-            </div>
-            <div class="boss-table__cell">
-              <div class="boss-table__info">
-                <div class="boss-table__actions">
-                  <% if id_scanner_app_api_key.enabled? %>
-                    <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
-                      <button type="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-table__action">Disable</button>
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <div class="boss-table__actions">
+                    <% if id_scanner_app_api_key.enabled? %>
+                      <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                        <button type="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-table__action">Disable</button>
+                      <% end %>
+                    <% else %>
+                      <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                        <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
+                      <% end %>
                     <% end %>
-                  <% else %>
-                    <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
-                      <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
-                    <% end %>
-                  <% end %>
+                  </div>
                 </div>
               </div>
             </div>
