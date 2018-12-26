@@ -1,0 +1,135 @@
+<div class="boss-page-main__dashboard">
+  <div class="boss-page-main__inner">
+    <!-- Page dashboard start -->
+    <div class="boss-page-dashboard boss-page-dashboard_updated boss-page-dashboard_page_id-scanner-keys">
+      <div class="boss-page-dashboard__group">
+        <h1 class="boss-page-dashboard__title">ID Scanner Keys</h1>
+        <div class="boss-page-dashboard__buttons-group">
+          <a href="<%= new_id_scanner_key_path %>">
+            <button type="button" class="boss-button boss-button_role_add boss-page-dashboard__button">Add New</button>
+          </a>
+        </div>
+      </div>
+      <div class="boss-page-dashboard__group">
+        <div class="boss-page-dashboard__controls-group">
+          <!-- Form start -->
+          <div class="boss-form">
+            <script>
+              var onFilterRadioChange = function(e){
+                window.location.href = $('input:checked').first().data("dest-href")
+              };
+            </script>
+            <div class="boss-form__field boss-form__field_layout_fluid">
+              <div class="boss-form__switcher boss-form__switcher_role_dashboard">
+                <label class="boss-form__switcher-label">
+                  <input type="radio" name="display" value="1" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'active_only' %> onchange="onFilterRadioChange()" data-dest-href="<%= id_scanner_keys_path(filter: 'active_only') %>" >
+                  <span class="boss-form__switcher-label-text">Active Only</span>
+                </label>
+                <label class="boss-form__switcher-label">
+                  <input type="radio" name="display" value="2" class="boss-form__switcher-radio" <%= 'checked="checked"' if filter_type == 'show_all' %> onchange="onFilterRadioChange()" data-dest-href="<%= id_scanner_keys_path(filter: 'show_all') %>" >
+                  <span class="boss-form__switcher-label-text">Show All</span>
+                </label>
+              </div>
+            </div>
+          </form>
+          <!-- Form end -->
+        </div>
+      </div>
+    </div>
+    <!-- Page dashboard end -->
+  </div>
+</div>
+
+<div class="boss-page-main__content">
+  <div class="boss-page-main__inner">
+    <% if id_scanner_app_api_keys.count < 1 %>
+      <p>No Keys Found</p>
+    <% else %>
+      <div class="boss-page-main__group boss-page-main__group_adjust_id-scanner-keys-table">
+        <!-- Table start -->
+        <div class="boss-table boss-table_page_id-scanner-keys">
+          <div class="boss-table__row boss-table__row_role_header">
+            <div class="boss-table__cell boss-table__cell_role_header">Name</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Key</div>
+            <div class="boss-table__cell boss-table__cell_role_header">Status</div>
+            <div class="boss-table__cell boss-table__cell_role_header"></div>
+          </div>
+
+          <% id_scanner_app_api_keys.each do |id_scanner_app_api_key| %>
+            <div class="boss-table__row">
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <p class="boss-table__text"><%= id_scanner_app_api_key.name %></p>
+                </div>
+              </div>
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <p class="boss-table__text boss-table__text_adjust_wrap"><%= id_scanner_app_api_key.key %></p>
+                </div>
+              </div>
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <p class="boss-table__text boss-table__text_role_active-status"><%= IdScannerAppApiKeyStatusDescription.new(id_scanner_app_api_key: id_scanner_app_api_key).call %></p>
+                </div>
+              </div>
+              <div class="boss-table__cell">
+                <div class="boss-table__info">
+                  <div class="boss-table__actions">
+                    <% if id_scanner_app_api_key.enabled? %>
+                      <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                        <button type="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-table__action">Disable</button>
+                      <% end %>
+                    <% else %>
+                      <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                        <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- Table end -->
+
+        <% id_scanner_app_api_keys.each do |id_scanner_app_api_key|  %>
+          <div class="boss-check boss-check_role_board boss-check_page_id-scanner-keys">
+            <div class="boss-check__row">
+              <div class="boss-check__cell">
+                <h3 class="boss-check__title"><%= id_scanner_app_api_key.name %></h3>
+              </div>
+            </div>
+            <div class="boss-check__row boss-check__row_marked">
+              <div class="boss-check__cell">
+                <p class="boss-check__text boss-check__text_adjust_wrap"><%= id_scanner_app_api_key.key %></p>
+                <div class="boss-indicator boss-indicator_status_active">
+                  <div class="boss-indicator__label"><%= IdScannerAppApiKeyStatusDescription.new(id_scanner_app_api_key: id_scanner_app_api_key).call %></div>
+                </div>
+              </div>
+            </div>
+            <div class="boss-check__row boss-check__row_role_buttons">
+              <% if id_scanner_app_api_key.enabled? %>
+                <%= bootstrap_form_for(id_scanner_app_api_key, url: disable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                  <button submit="submit" class="boss-button boss-button_type_small boss-button_role_cancel boss-check__button">Disable</button>
+                <% end %>
+              <% else %>
+                <%= bootstrap_form_for(id_scanner_app_api_key, url: enable_id_scanner_key_path(id_scanner_app_api_key), method: 'POST') do |form| %>
+                  <button type="submit" class="boss-button boss-button_type_small boss-button_role_enable boss-check__button">Enable</button>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="boss-page-main__count boss-page-main__count_space_large">
+          <span class="boss-page-main__count-text">Showing</span>
+          <span class="boss-page-main__count-text boss-page-main__count-text_marked"><%= id_scanner_app_api_keys.count %></span>
+          <span class="boss-page-main__count-text">of</span>
+          <span class="boss-page-main__count-text boss-page-main__count-text_marked"><%= id_scanner_app_api_keys.total_entries %></span>
+        </div>
+
+        <%= will_paginate(id_scanner_app_api_keys, renderer: FoundationPagination::Rails) %>
+      </div>
+    <% end %>
+  </div>
+</div>

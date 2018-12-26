@@ -450,7 +450,7 @@ class StaffMember < ActiveRecord::Base
 
   def check_rollbar_guid
     unless rollbar_guid.present?
-      generate_rollbar_guid
+      generate_rollbar_guid if enabled?
     end
   end
 

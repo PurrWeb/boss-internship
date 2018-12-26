@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181204142011) do
+ActiveRecord::Schema.define(version: 20181220111738) do
 
   create_table "accessories", force: :cascade do |t|
     t.integer  "venue_id",         limit: 4
@@ -581,6 +581,7 @@ ActiveRecord::Schema.define(version: 20181204142011) do
     t.integer  "finance_report_id",                   limit: 4
     t.datetime "accepted_at"
     t.integer  "accepted_by_id",                      limit: 4
+    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
     t.datetime "processed_for_legacy_validation_at"
     t.boolean  "legacy_validation_process_issue"
     t.boolean  "allow_invalid_breaks",                            default: false,     null: false
@@ -589,7 +590,6 @@ ActiveRecord::Schema.define(version: 20181204142011) do
     t.boolean  "allow_legacy_overlap_accepted_hours",             default: false,     null: false
     t.boolean  "allow_legacy_conflicting_holiday",                default: false,     null: false
     t.boolean  "allow_legacy_conflicting_owed_hours",             default: false,     null: false
-    t.boolean  "allow_legacy_seconds_in_times",                   default: false,     null: false
   end
 
   add_index "hours_acceptance_periods", ["accepted_by_id"], name: "fk_rails_bbdabe9946", using: :btree
@@ -597,6 +597,28 @@ ActiveRecord::Schema.define(version: 20181204142011) do
   add_index "hours_acceptance_periods", ["processed_for_legacy_validation_at"], name: "legacy_validation", using: :btree
   add_index "hours_acceptance_periods", ["status", "clock_in_day_id"], name: "index_hours_acceptance_periods_on_status_and_clock_in_day_id", using: :btree
   add_index "hours_acceptance_periods", ["status"], name: "index_hours_acceptance_periods_on_status", using: :btree
+
+  create_table "id_scanner_app_api_keys", force: :cascade do |t|
+    t.integer  "creator_user_id",     limit: 4,   null: false
+    t.string   "key",                 limit: 255, null: false
+    t.string   "name",                limit: 255, null: false
+    t.datetime "disabled_at"
+    t.integer  "disabled_by_user_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "id_scanner_scan_attempts", force: :cascade do |t|
+    t.integer  "id_scanner_app_api_key_id", limit: 4,   null: false
+    t.string   "guid",                      limit: 255, null: false
+    t.string   "status",                    limit: 255, null: false
+    t.integer  "linked_staff_member_id",    limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "id_scanner_scan_attempts", ["guid", "id_scanner_app_api_key_id"], name: "guid_scanner_key_history", using: :btree
+  add_index "id_scanner_scan_attempts", ["status", "id_scanner_app_api_key_id"], name: "status_scanner_key_history", using: :btree
 
   create_table "incident_reports", force: :cascade do |t|
     t.integer  "user_id",                    limit: 4,     null: false
@@ -1275,6 +1297,7 @@ ActiveRecord::Schema.define(version: 20181204142011) do
     t.integer  "marked_retake_avatar_user_id",          limit: 4
     t.boolean  "override_retake_avatar_restrictions",                 default: false, null: false
     t.boolean  "allow_no_sage_id",                                    default: false, null: false
+    t.string   "id_scanner_guid",                       limit: 255
   end
 
   add_index "staff_members", ["creator_id"], name: "index_staff_members_on_creator_id", using: :btree

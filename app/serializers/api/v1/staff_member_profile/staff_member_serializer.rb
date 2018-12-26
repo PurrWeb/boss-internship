@@ -43,7 +43,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :is_weekly_payrate,
              :sageId,
              :allowNoSageId,
-             :markedRetakeAvatar
+             :markedRetakeAvatar,
+             :idScannerAppGuid
 
   def allowNoSageId
     object.allow_no_sage_id
@@ -181,5 +182,9 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
 
   def sageId
     object.sage_id
+  end
+
+  def idScannerAppGuid
+    object.id_scanner_guid
   end
 end

@@ -227,6 +227,11 @@ class PermissionsPageData
           path: @path.api_keys_path,
         },
         {
+          description: "Id Scanner Keys",
+          permitted: role.can?(:view, :id_scanner_keys_page),
+          path: @path.id_scanner_keys_path,
+        },
+        {
           description: "Dashboard Messages",
           permitted: role.can?(:view, :dashboard_messages_page),
           path: @path.message_board_path,

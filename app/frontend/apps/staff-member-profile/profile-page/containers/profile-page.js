@@ -93,6 +93,7 @@ class ProfilePage extends React.PureComponent {
 
     let masterVenueId = staffMember["master_venue"];
     let masterVenueValue = masterVenueId ? oFetch(findById(venues, masterVenueId), 'name') : 'N/A';
+    const idScannerAppGuid = oFetch(staffMember, 'idScannerAppGuid');
     const sageIdValue = sageId ? sageId : !sageId && !allowNoSageId ? 'Not Set' : 'N/A';
     return (
       <ProfileWrapper
@@ -114,6 +115,7 @@ class ProfilePage extends React.PureComponent {
         <DetailsList key={2} categoryName="Account Details" sectionNumber={2}>
           <DetailsListItem item={{name: "Created", value: safeMoment.iso8601Parse(oFetch(staffMember, 'created_at')).format('HH:mm DD MMMM YYYY')}} />
           <DetailsListItem item={{name: "Modified", value: safeMoment.iso8601Parse(oFetch(staffMember, 'updated_at')).format('HH:mm DD MMMM YYYY')}} />
+          <DetailsListItem item={{name: "Id Scanner App Guid", value: idScannerAppGuid || 'N/A'}} />
           <PasswordInformationListItem
             key="passwordInformation"
             staffMember={staffMember}

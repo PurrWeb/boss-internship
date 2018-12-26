@@ -33,6 +33,13 @@ Rails.application.routes.draw do
 
     resources :payment_uploads, only: [:index]
 
+    resources :id_scanner_keys, only: [:index, :new, :create] do
+      member do
+        post :enable
+        post :disable
+      end
+    end
+
     resources :change_orders, only: [:index, :show, :edit, :update, :destroy] do
       collection do
         get :submitted
@@ -201,6 +208,17 @@ Rails.application.routes.draw do
       namespace :wtl do
         namespace :v1 do
           resources :wtl_clients, only: [:create], path: "clients"
+        end
+      end
+
+      namespace :id_scanner_app, path: 'id-scanner-app' do
+        namespace :v1 do
+          post :auth, to: 'auth#auth'
+          post :scan, to: 'scan#scan'
+          resource :tests, only: [] do
+            get :get
+          end
+          resources :history, only: [:index]
         end
       end
 
