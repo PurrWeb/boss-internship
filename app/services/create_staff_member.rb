@@ -17,7 +17,9 @@ class CreateStaffMember
     staff_member = StaffMember.new
 
     ActiveRecord::Base.transaction(requires_new: nested) do
-      staff_member.assign_attributes(params)
+      staff_member.assign_attributes(params.merge(
+        id_scanner_guid: SecureRandom.uuid
+      ))
 
       StaffMemberPostAssignAccessiblePayRateValidation.new(requester: requester).call(staff_member: staff_member)
 
