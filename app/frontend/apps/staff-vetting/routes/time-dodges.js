@@ -85,13 +85,17 @@ class TimeDodgers extends Component {
     const staffTypes = oFetch(this.props, 'staffTypes').toJS();
     const venues = oFetch(this.props, 'venues').toJS();
     const staffMember = staffMembers.find(staffMember => oFetch(staffMember, 'id') === staffMemberId);
+    if (!staffMember) {
+      throw new Error(`
+      Staff member must be present.
+      Dodger: ${JSON.stringify(dodger)}
+      StaffMembers: ${JSON.stringify(staffMembers)}
+      `);
+    }
     const staffTypeId = oFetch(staffMember, 'staffTypeId');
     const venueId = oFetch(staffMember, 'venueId');
     const staffType = staffTypes.find(staffType => oFetch(staffType, 'id') === staffTypeId);
     const venue = venues.find(venue => oFetch(venue, 'id') === venueId);
-    if (!staffMember) {
-      throw new Error('Staff member must be present');
-    }
     return {
       ...staffMember,
       fullName: `${staffMember.firstName} ${staffMember.surname}`,

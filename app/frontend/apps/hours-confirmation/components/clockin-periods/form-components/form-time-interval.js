@@ -53,7 +53,7 @@ class FromTimeInterval extends React.Component {
   };
 
   updateStartsTime(newValue, shiftRotaDate) {
-    if (!newValue.value) {
+    if (!newValue || !newValue.value) {
       return;
     }
     let startsAt;
@@ -70,7 +70,7 @@ class FromTimeInterval extends React.Component {
   }
 
   updateEndsTime(newValue, shiftRotaDate) {
-    if (!newValue.value) {
+    if (!newValue || !newValue.value) {
       return;
     }
     let endsAt;
