@@ -128,6 +128,7 @@ RSpec.describe GetNewYearHours do
     specify do
       expect(result).to eq([{
         staff_member_id: staff_member.id,
+        date: last_nye,
         payable_minutes: expected_payable_minutes_worked,
         minutes_worked: expected_minutes_worked,
         break_minutes: breaktime_in_theshold_minutes,

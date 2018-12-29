@@ -1,3 +1,4 @@
+# Generates data for time and a half hours on new years
 class GetNewYearHours
   def initialize(year:)
     @year = year
@@ -68,6 +69,7 @@ class GetNewYearHours
 
       result << {
         staff_member_id: staff_member_id,
+        date: end_of_year_date,
         payable_minutes: total_payable_minutes_worked,
         minutes_worked: total_overlaping_minutes_worked,
         break_minutes: total_overlapping_break_minutes,
