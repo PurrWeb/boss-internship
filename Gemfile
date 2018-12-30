@@ -57,6 +57,7 @@ gem 'sendgrid-ruby'
 gem 'ably-rest', '~> 1.0'
 gem 'search_cop'
 gem 'forecast_io'
+gem 'rqrcode'
 gem 'rack-cors', require: 'rack/cors'
 
 group :production, :development do
