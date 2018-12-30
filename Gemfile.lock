@@ -403,6 +403,8 @@ GEM
     rmagick (2.16.0)
     rollbar (2.18.0)
       multi_json
+    rqrcode (0.10.1)
+      chunky_png (~> 1.0)
     rspec-core (3.2.1)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.0)
@@ -559,6 +561,7 @@ DEPENDENCIES
   require_all
   rmagick (= 2.16.0)
   rollbar
+  rqrcode
   rspec-rails
   sass-rails (>= 3.2.8)
   search_cop
