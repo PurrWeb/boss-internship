@@ -14,6 +14,8 @@ class PartyEmailMailer < ApplicationMailer
       size: 200,
       file: nil,
     )
+    qr_code_attachement_name = 'qr_code.png'
+    attachments.inline[qr_code_attachement_name] = qr_code_png.to_blob
 
     mail(
       to: staff_member.email,
@@ -22,7 +24,7 @@ class PartyEmailMailer < ApplicationMailer
       format.html do
         render locals: {
           first_name: first_name,
-          qr_code_data_url: qr_code_png.to_data_url,
+          qr_code_attachement_name: qr_code_attachement_name,
         }
       end
     end
