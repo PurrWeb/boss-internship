@@ -2,69 +2,130 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
   include Rails.application.routes.url_helpers
 
   attributes :id,
-             :url,
-             :avatar,
-             :first_name,
+             :avatarUrl,
+             :firstName,
              :surname,
              :age,
              :email,
-             :phone_number,
-             :master_venue,
-             :other_venues,
-             :staff_type,
-             :pay_rate,
-             :hours_preference,
-             :day_preference,
-             :national_insurance_number,
-             :disabled,
-             :disabled_at,
-             :disable_reason,
-             :disabled_by_user,
+             :phoneNumber,
+             :masterVenueId,
+             :otherVenueIds,
+             :staffTypeId,
+             :payRateId,
+             :hoursPreferenceNote,
+             :dayPreferenceNote,
+             :nationalInsuranceNumber,
+             :isDisabled,
+             :disabledAt,
+             :disableReason,
+             :disabledByUser,
              :gender,
-             :date_of_birth,
-             :starts_at,
+             :dateOfBirth,
+             :startsAt,
              :address,
              :country,
              :postcode,
              :county,
-             :status_statement,
-             :updated_at,
-             :sia_badge_number,
-             :sia_badge_expiry_date,
-             :updated_at,
-             :is_security_staff,
-             :created_at,
-             :has_user,
-             :bounced_email,
-             :verification_sent_at,
-             :verified_at,
-             :password_set_at,
-             :is_flagged,
-             :is_weekly_payrate,
-             :sageId,
-             :idScannerAppGuid
+             :statusStatement,
+             :updatedAt,
+             :siaBadgeNumber,
+             :siaBadgeExpiryDate,
+             :isSecurityStaff,
+             :createdAt,
+             :hasUser,
+             :bouncedEmail,
+             :verificationSentAt,
+             :verifiedAt,
+             :passwordSetAt,
+             :isFlagged,
+             :isWeeklyPayrate,
+             :sageId
 
-  def age
-    object.age
-  end
-
-  def date_of_birth
-    UIRotaDate.format(object.date_of_birth) if object.date_of_birth.present?
-  end
-
-  def avatar
+  def avatarUrl
     object.avatar_url
   end
 
-  def starts_at
+  def firstName
+    object.name.first_name
+  end
+
+  def surname
+    object.name.surname
+  end
+
+  def phoneNumber
+    object.phone_number
+  end
+
+  def masterVenueId
+    object.master_venue.andand.id
+  end
+
+  def otherVenueIds
+    object.work_venues.map(&:id)
+  end
+
+  def staffTypeId
+    object.staff_type.andand.id
+  end
+
+  def payRateId
+    object.pay_rate.andand.id
+  end
+
+  def hoursPreferenceNote
+    object.hours_preference_note
+  end
+
+  def dayPreferenceNote
+    object.day_perference_note
+  end
+
+  def nationalInsuranceNumber
+    object.national_insurance_number
+  end
+
+  def isDisabled
+    object.disabled?
+  end
+
+  def disabledAt
+    object.disabled_at.andand.iso8601
+  end
+
+  def disableReason
+    object.disable_reason
+  end
+
+  def disabledByUser
+    object.disabled_by_user.andand.full_name.andand.titlecase
+  end
+
+  def dateOfBirth
+    UIRotaDate.safe_format(object.date_of_birth)
+  end
+
+  def startsAt
     UIRotaDate.format(object.starts_at)
   end
 
-  def url
-    api_v1_staff_member_url(object)
+  def address
+    object.address.andand.address
   end
 
-  def status_statement
+  def postcode
+    object.address.andand.postcode
+  end
+
+  def country
+    object.address.andand.country
+  end
+
+  def county
+    object.address.andand.county
+  end
+
+  def statusStatement
     [:employment_status_a,
      :employment_status_b,
      :employment_status_c,
@@ -74,107 +135,55 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
     end
   end
 
-  def address
-    object.address && object.address.address
-  end
-
-  def postcode
-    object.address && object.address.postcode
-  end
-
-  def country
-    object.address && object.address.country
-  end
-
-  def county
-    object.address && object.address.county
-  end
-
-  def disabled_by_user
-    if object.disabled_by_user.present?
-      object.disabled_by_user.full_name.titlecase
-    end
-  end
-
-  def disabled
-    object.disabled?
-  end
-
-  def is_flagged
-    object.flagged?
-  end
-
-  def day_preference
-    object.day_perference_note
-  end
-
-  def hours_preference
-    object.hours_preference_note
-  end
-
-  def pay_rate
-    object.pay_rate.id if object.pay_rate.present?
-  end
-
-  def staff_type
-    object.staff_type.id if object.staff_type.present?
-  end
-
-  def master_venue
-    object.master_venue.id if object.master_venue.present?
-  end
-
-  def first_name
-    object.name && object.name.first_name
-  end
-
-  def surname
-    object.name && object.name.surname
-  end
-
-  def other_venues
-    object.work_venues.map do |venue|
-      venue.id
-    end
-  end
-
-  def sia_badge_number
-    object.sia_badge_number
-  end
-
-  def sia_badge_expiry_date
-    UIRotaDate.format(object.sia_badge_expiry_date) if object.sia_badge_expiry_date.present?
-  end
-
-  def updated_at
+  def updatedAt
     object.updated_at.iso8601
   end
 
-  def created_at
-    object.created_at.iso8601
+  def siaBadgeNumber
+    object.sia_badge_number
   end
 
-  def is_security_staff
+  def siaBadgeExpiryDate
+    UIRotaDate.safe_format(object.sia_badge_expiry_date)
+  end
+
+  def isSecurityStaff
     object.security?
   end
 
-  def has_user
+  def createdAt
+    object.created_at.iso8601
+  end
+
+  def hasUser
     object.has_user?
   end
 
-  def bounced_email
+  def bouncedEmail
     object.email_address.andand.bounced_data
   end
 
-  def is_weekly_payrate
+  def verificationSentAt
+    object.verification_sent_at.andand.iso8601
+  end
+
+  def verifiedAt
+    object.verified_at.andand.iso8601
+  end
+
+  def passwordSetAt
+    object.password_set_at.andand.iso8601
+  end
+
+  def isFlagged
+    object.flagged?
+  end
+
+  def isWeeklyPayrate
     object.pay_rate.weekly?
   end
 
   def sageId
     object.sage_id
-  end
-
-  def idScannerAppGuid
-    object.id_scanner_guid
   end
 end

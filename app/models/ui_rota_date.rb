@@ -26,6 +26,17 @@ class UIRotaDate
     date.strftime(URL_DATE_FORMAT)
   end
 
+  def self.safe_format(date)
+    return nil unless date.present?
+    result = nil
+    begin
+      date.strftime(URL_DATE_FORMAT)
+    rescue
+      #do nothing
+    end
+    result
+  end
+
   def self.assert_date_range_valid(start_date, end_date)
     day_delta = ((start_date - end_date) / 1.day).abs
     if (day_delta > 7)
