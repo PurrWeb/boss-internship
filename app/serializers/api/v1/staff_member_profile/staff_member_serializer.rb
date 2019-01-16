@@ -42,13 +42,8 @@ class Api::V1::StaffMemberProfile::StaffMemberSerializer < ActiveModel::Serializ
              :is_flagged,
              :is_weekly_payrate,
              :sageId,
-             :allowNoSageId,
              :markedRetakeAvatar,
              :idScannerAppGuid
-
-  def allowNoSageId
-    object.allow_no_sage_id
-  end
 
   def age
     object.age

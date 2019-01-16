@@ -24,6 +24,29 @@ module Api
         }, status: 200
       end
 
+      def show
+        staff_member = StaffMember.find_by(id: params[:id])
+        accessible_pay_rate_ids = UserAccessiblePayRatesQuery.new(
+          user: current_user,
+          pay_rate: staff_member.pay_rate,
+        ).page_pay_rates.map(&:id)
+
+        render json: {
+          staffMember: Api::V1::StaffMemberProfile::StaffMemberSerializer.new(staff_member),
+          staffTypes: StaffType.all,
+          venues: ActiveModel::Serializer::CollectionSerializer.new(
+            Venue.all,
+            serializer: Api::V1::StaffMemberProfile::VenueSerializer,
+          ),
+          payRates: ActiveModel::Serializer::CollectionSerializer.new(
+            PayRate.all,
+            serializer: Api::V1::StaffMemberProfile::PayRateSerializer,
+            scope: current_user,
+          ),
+          genderValues: StaffMember::GENDERS,
+        }
+      end
+
       def set_password
         password = params.fetch(:password)
         password_confirmation = params.fetch(:passwordConfirmation)
@@ -133,13 +156,6 @@ module Api
         staff_member = MarkRetakeAvatar.new(requester: current_user, staff_member: staff_member).call
 
         render json: staff_member, serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer, status: 200
-      end
-
-      def show
-        staff_member = StaffMember.find(params.fetch(:id))
-        authorize! :edit, staff_member
-
-        render locals: {staff_member: staff_member}
       end
 
       def create
@@ -385,6 +401,7 @@ module Api
       end
 
       private
+
       def accessible_venues
         AccessibleVenuesQuery.new(current_user).all
       end
