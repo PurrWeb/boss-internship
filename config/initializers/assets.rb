@@ -8,7 +8,7 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w( d3.completeness-chart.js d3.score-chart.js d3.failures-chart.js privacy-policy-styles.css)
+Rails.application.config.assets.precompile = []
 
 # Include the SourcemapHelper in the asset context class so we can generate
 # the sourcemap version in rollbar.js.erb
