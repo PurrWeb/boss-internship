@@ -1,14 +1,12 @@
 class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
 
-  if Rails.env.staging? || Rails.env.production?
-    configure do |config|
-      config.fog_directory = ENV.fetch("S3_ASSETS_BUCKET")
-      config.fog_public    = true
-    end
+  configure do |config|
+    config.fog_directory = ENV.fetch("S3_ASSETS_BUCKET")
+    config.fog_public = true
   end
 
-  process :convert => 'jpg'
+  process :convert => "jpg"
 
   version :small do
     process :resize_to_fit => [250, 250]

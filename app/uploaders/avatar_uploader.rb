@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 class AvatarUploader < CarrierWave::Uploader::Base
-  if Rails.env.staging? || Rails.env.production?
-    configure do |config|
-      config.fog_directory = ENV.fetch("S3_ASSETS_BUCKET")
-      config.fog_public    = true
-    end
+  configure do |config|
+    config.fog_directory = ENV.fetch("S3_ASSETS_BUCKET")
+    config.fog_public = true
   end
 
   include CarrierWave::RMagick
@@ -17,7 +15,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def default_url(*args)
-    ActionController::Base.helpers.asset_path("fallback/" + [version_name, "avatar_default.jpg"].compact.join('_'))
+    ActionController::Base.helpers.asset_path("fallback/" + [version_name, "avatar_default.jpg"].compact.join("_"))
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -25,7 +23,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
   # end
 
-  process :convert => 'jpg'
+  process :convert => "jpg"
 
   version :small do
     process :resize_to_fit => [100, 100]
@@ -52,6 +50,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   protected
+
   def secure_token
     var = :"@#{mounted_as}_secure_token"
     model.instance_variable_get(var) || model.instance_variable_set(var, SecureRandom.uuid)
