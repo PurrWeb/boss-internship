@@ -3,12 +3,15 @@ class Api::V1::StaffMemberProfile::StaffMembersListSerializer < ActiveModel::Ser
 
     attributes \
       :id,
-      :url,
       :avatarUrl,
       :staffTypeId,
       :firstName,
       :surname,
       :masterVenueId
+
+    def avatarUrl
+      object.avatar_url
+    end
 
     def staffTypeId
       object.staff_type_id
