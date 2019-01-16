@@ -7,7 +7,12 @@ class Api::V1::StaffMemberProfile::StaffMembersListSerializer < ActiveModel::Ser
       :staffTypeId,
       :firstName,
       :surname,
+      :status,
       :masterVenueId
+
+    def status
+      object.state_machine.current_state
+    end
 
     def avatarUrl
       object.avatar_url
