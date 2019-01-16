@@ -10,32 +10,3 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery-ui
-//= require react_integration
-//= require foundation
-//= require jquery_ujs
-//= require chosen-jquery
-//= require paloma
-//= require spectrum
-//= require_tree ./page_controllers
-//= require tablesaw.jquery
-//= require tablesaw-init
-//= require asset_pipeline_error
-
-$(function(){
-  $(document).foundation();
-
-  $('.chosen-select').chosen({ allow_single_deselect: true, width: '100%' });
-
-  $('.pick-a-color').spectrum({
-    preferredFormat: "hex",
-    showInput: true,
-    showInitial: true
-  });
-
-  $('.date-picker').datepicker({
-    dateFormat: "dd-mm-yy",
-    firstDay: 1
-  });
-});
