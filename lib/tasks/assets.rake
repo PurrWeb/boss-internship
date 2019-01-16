@@ -1,7 +1,6 @@
 # The webpack must compile assets before assets:environment task.
 # Otherwise Sprockets sees no changes and doesn't precompile assets.
-Rake::Task['assets:precompile'].
-  enhance(['assets:webpack'])
+Rake::Task['assets:precompile']
 
 namespace :assets do
   desc 'Generate Webpack assets'
