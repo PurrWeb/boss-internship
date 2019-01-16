@@ -8,7 +8,20 @@ module Api
       def index
         staff_members = StaffMember.enabled
 
-        render json: staff_members, each_serializer: Api::V1::StaffMemberProfile::StaffMembersListSerializer, status: 200
+        render json: {
+          staffMembers: Serializer::CollectionSerializer.new(
+            staff_members,
+            serializer: Api::V1::StaffMemberProfile::StaffMembersListSerializer,
+          ),
+          staffTypes: Serializer::CollectionSerializer.new(
+            StaffType.all,
+            serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
+          ),
+          venues: Serializer::CollectionSerializer.new(
+            Venue.all,
+            serializer: Api::V1::StaffMemberProfile::VenueSerializer,
+          ),
+        }, status: 200
       end
 
       def set_password
