@@ -6,12 +6,9 @@ module Api
       skip_before_filter :parse_access_tokens, only: [:set_password, :reset_password]
 
       def index
-        staff_members = StaffMemberSearchQuery.new(
-          query: params[:query],
-          venue: venue_from_params
-        ).search
+        staff_members = StaffMembers.enabled
 
-        render json: staff_members, each_serializer: Api::V1::Holidays::StaffMemberSearchSerializer, status: 200
+        render json: staff_members, each_serializer: Api::V1::StaffMemberProfile::StaffMembersListSerializer, status: 200
       end
 
       def set_password
