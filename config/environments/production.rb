@@ -76,16 +76,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  config.action_mailer.default_url_options = { host: "boss.jsmbars.co.uk" }
-
-  ActionMailer::Base.smtp_settings = {
-    :user_name => ENV.fetch("SMTP_USERNAME"),
-    :password => ENV.fetch("SMTP_PASSWORD"),
-    :domain => 'jsmbars.co.uk',
-    :address => 'smtp.sendgrid.net',
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true
-  }
+  config.action_mailer.delivery_method = :letter_opener
+  Rails.application.routes.default_url_options[:host] = 'localhost'
 end
