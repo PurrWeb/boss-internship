@@ -9,15 +9,15 @@ module Api
         staff_members = StaffMember.enabled
 
         render json: {
-          staffMembers: Serializer::CollectionSerializer.new(
+          staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
             staff_members,
             serializer: Api::V1::StaffMemberProfile::StaffMembersListSerializer,
           ),
-          staffTypes: Serializer::CollectionSerializer.new(
+          staffTypes: ActiveModel::Serializer::CollectionSerializer.new(
             StaffType.all,
             serializer: Api::V1::StaffMemberProfile::StaffTypeSerializer,
           ),
-          venues: Serializer::CollectionSerializer.new(
+          venues: ActiveModel::Serializer::CollectionSerializer.new(
             Venue.all,
             serializer: Api::V1::StaffMemberProfile::VenueSerializer,
           ),
