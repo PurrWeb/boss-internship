@@ -307,12 +307,12 @@ module Api
           requester: current_user,
           frontend_updates: frontend_updates,
         ).update_contact_details({
-          phone_number: params.fetch("phone_number"),
+          phone_number: params.fetch("phoneNumber"),
           address: params.fetch("address"),
           postcode: params.fetch("postcode"),
           country: params.fetch("country"),
           county: params.fetch("county"),
-          email_address: params.fetch("email_address") || "",
+          email_address: params.fetch("emailAddress"),
         })
 
         if result.success?
@@ -337,8 +337,8 @@ module Api
           frontend_updates: frontend_updates,
         ).update_personal_details({
           gender: params.fetch(:gender),
-          date_of_birth: params.fetch(:date_of_birth),
-          first_name: params.fetch(:first_name),
+          date_of_birth: params.fetch(:dateOfBirth),
+          first_name: params.fetch(:firstName),
           surname: params.fetch(:surname),
         })
 
@@ -363,19 +363,19 @@ module Api
           requester: current_user,
           frontend_updates: frontend_updates,
         ).update_employment_details({
-          national_insurance_number: params["national_insurance_number"],
-          sage_id: params.fetch("sage_id"),
-          hours_preference_note: params["hours_preference_note"],
-          day_preference_note: params["day_preference_note"],
-          starts_at: params.fetch("starts_at"),
-          employment_status: params.fetch("employment_status"),
-          pay_rate_id: params.fetch("pay_rate_id"),
-          master_venue_id: params.fetch("master_venue_id"),
-          other_venue_ids: params.fetch("other_venue_ids") || [],
-          staff_type_id: params.fetch("staff_type_id"),
-          allow_no_sage_id: params.fetch("allow_no_sage_id"),
-          sia_badge_number: params["sia_badge_number"],
-          sia_badge_expiry_date: params["sia_badge_expiry_date"],
+          national_insurance_number: params["nationalInsuranceNumber"],
+          sage_id: params.fetch("sageId"),
+          hours_preference_note: params["hoursPreferenceNote"],
+          day_preference_note: params["dayPreferenceNote"],
+          starts_at: params.fetch("startsAt"),
+          employment_status: params.fetch("employmentStatus"),
+          pay_rate_id: params.fetch("payRateId"),
+          master_venue_id: params.fetch("masterVenue"),
+          other_venue_ids: params.fetch("otherVenues"),
+          staff_type_id: params.fetch("staffType"),
+          allow_no_sage_id: true,
+          sia_badge_number: params["siaBadgeNumber"],
+          sia_badge_expiry_date: params["siaBadgeExpiryDate"],
         })
 
         if result.success?

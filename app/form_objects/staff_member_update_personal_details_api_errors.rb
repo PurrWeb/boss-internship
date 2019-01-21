@@ -9,10 +9,10 @@ class StaffMemberUpdatePersonalDetailsApiErrors
 
     result[:base] = staff_member.errors[:base] if staff_member.errors[:base].present?
     result[:gender] = staff_member.errors[:gender] if staff_member.errors[:gender].present?
-    result[:date_of_birth] = staff_member.errors[:date_of_birth] if staff_member.errors[:date_of_birth].present?
+    result[:dateOfBirth] = staff_member.errors[:date_of_birth] if staff_member.errors[:date_of_birth].present?
 
     name = staff_member.name
-    result[:first_name] = name.errors[:first_name] if name.errors[:first_name].present?
+    result[:firstName] = name.errors[:first_name] if name.errors[:first_name].present?
     result[:surname] = name.errors[:surname] if name.errors[:surname].present?
 
     result
