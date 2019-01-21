@@ -139,8 +139,8 @@ class StaffMemberApiUpdateService
       work_venues: other_venues,
     }
     if ability.can?(:edit, :sage_id)
-      update_params[:allow_no_sage_id] = params.fetch(:allow_no_sage_id)
-      update_params[:sage_id] = params.fetch(:sage_id)
+      # update_params[:allow_no_sage_id] = params.fetch(:allow_no_sage_id)
+      # update_params[:sage_id] = params.fetch(:sage_id)
     end
     update_params[:national_insurance_number] = params[:national_insurance_number] if params[:national_insurance_number].present?
     update_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?

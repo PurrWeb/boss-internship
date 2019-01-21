@@ -100,7 +100,7 @@ class StaffMember < ActiveRecord::Base
   validates :marked_retake_avatar_user, absence: true, unless: :marked_retake_avatar?
   validates :marked_retake_avatar_user, presence: true, if: :marked_retake_avatar?
 
-  validates :allow_no_sage_id, inclusion: { in: [true, false], message: 'is required' }
+  # validates :allow_no_sage_id, inclusion: { in: [true, false], message: 'is required' }
 
   validate do |staff_member|
     StaffMemberVenueValidator.new(staff_member).validate
@@ -250,7 +250,8 @@ class StaffMember < ActiveRecord::Base
   end
 
   def marked_retake_avatar?
-    marked_retake_avatar_at.present?
+    # marked_retake_avatar_at.present?
+    false
   end
 
   def flagged?

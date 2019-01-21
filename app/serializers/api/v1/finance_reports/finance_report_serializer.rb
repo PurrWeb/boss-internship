@@ -171,7 +171,7 @@ class Api::V1::FinanceReports::FinanceReportSerializer < ActiveModel::Serializer
   end
 
   def staffMemberAllowNoSageId
-    object.staff_member.allow_no_sage_id
+    true
   end
 
   def containsTimeShiftedOwedHours
