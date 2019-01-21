@@ -20,7 +20,7 @@ class UpdateStaffMemberPersonalDetails
       result = staff_member.save
 
       if result && staff_member_updates_email.send?
-        StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_now
+        # StaffMemberUpdatesMailer.staff_member_updated(staff_member_updates_email.data).deliver_now
       end
     end
 
