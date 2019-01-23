@@ -6,7 +6,7 @@ module Api
       skip_before_filter :parse_access_tokens, only: [:set_password, :reset_password]
 
       def index
-        staff_members = StaffMember.enabled.limit(20)
+        staff_members = StaffMember.regular.enabled.limit(100)
 
         render json: {
           staffMembers: ActiveModel::Serializer::CollectionSerializer.new(
