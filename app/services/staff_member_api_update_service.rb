@@ -9,14 +9,13 @@ class StaffMemberApiUpdateService
     end
   end
 
-  def initialize(staff_member:, requester:, frontend_updates:)
+  def initialize(staff_member:, requester:)
     @staff_member = staff_member
     @requester = requester
     @ability = UserAbility.new(requester)
-    @frontend_updates = frontend_updates
   end
 
-  attr_reader :staff_member, :requester, :ability, :frontend_updates
+  attr_reader :staff_member, :requester, :ability
 
   def disable(params)
     assert_action_permitted(:disable)
@@ -34,15 +33,12 @@ class StaffMemberApiUpdateService
         staff_member: staff_member,
         would_rehire: form.would_rehire,
         disable_reason: form.disable_reason,
-        frontend_updates: frontend_updates,
       ).call
       success = true
     end
 
     api_errors = nil
-    if success
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
-    else
+    unless success
       api_errors = DisableStaffMembersApiErrors.new(disable_staff_member_form: form)
     end
 
@@ -59,9 +55,7 @@ class StaffMemberApiUpdateService
     ).call
 
     api_errors = nil
-    if model_service_result.success?
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
-    else
+    unless model_service_result.success?
       api_errors = EnableStaffMemberApiErrors.new(staff_member: staff_member)
     end
 
@@ -85,9 +79,7 @@ class StaffMemberApiUpdateService
     ).call
 
     api_errors = nil
-    if model_service_result.success?
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
-    else
+    unless model_service_result.success?
       api_errors = StaffMemberUpdateContactDetailsApiErrors.new(staff_member: staff_member)
     end
 
@@ -111,9 +103,8 @@ class StaffMemberApiUpdateService
     ).call
 
     api_errors = nil
-    if model_service_result.success?
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
-    else
+
+    unless model_service_result.success?
       api_errors = StaffMemberUpdatePersonalDetailsApiErrors.new(staff_member: staff_member)
     end
 
@@ -138,18 +129,13 @@ class StaffMemberApiUpdateService
       master_venue: master_venue,
       work_venues: other_venues,
     }
-    if ability.can?(:edit, :sage_id)
-      # update_params[:allow_no_sage_id] = params.fetch(:allow_no_sage_id)
-      # update_params[:sage_id] = params.fetch(:sage_id)
-    end
+    update_params[:sage_id] = params.fetch(:sage_id)
     update_params[:national_insurance_number] = params[:national_insurance_number] if params[:national_insurance_number].present?
     update_params[:hours_preference_note] = params[:hours_preference_note] if params[:hours_preference_note].present?
     update_params[:day_perference_note] = params[:day_preference_note] if params[:day_preference_note].present?
     EmploymentStatusApiEnum.new(value: params.fetch(:employment_status)).to_params.each do |param, value|
       update_params[param] = value
     end
-    update_params[:sia_badge_number] = params[:sia_badge_number] if params[:sia_badge_number].present?
-    update_params[:sia_badge_expiry_date] = UIRotaDate.parse(params[:sia_badge_expiry_date]) if params[:sia_badge_expiry_date].present?
 
     model_service_result = UpdateStaffMemberEmploymentDetails.new(
       requester: requester,
@@ -159,9 +145,7 @@ class StaffMemberApiUpdateService
 
     api_errors = nil
 
-    if model_service_result.success?
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
-    else
+    unless model_service_result.success?
       api_errors = StaffMemberUpdateEmploymentDetailsApiErrors.new(staff_member: staff_member)
     end
 
@@ -180,8 +164,6 @@ class StaffMemberApiUpdateService
       if staff_member.marked_retake_avatar?
         staff_member.clear_update_avatar!
       end
-
-      frontend_updates.update_staff_member_profile(staff_member: staff_member)
     else
       api_errors = StaffMemberUpdateAvatarApiErrors.new(staff_member: staff_member)
     end

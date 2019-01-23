@@ -194,19 +194,16 @@ module Api
 
       def disable
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).disable({
           disable_reason: params.fetch("disable_reason"),
           never_rehire: params.fetch("never_rehire"),
         })
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -219,16 +216,13 @@ module Api
 
       def enable
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).enable(starts_at: params.fetch("startsAt"))
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -276,18 +270,15 @@ module Api
 
       def update_avatar
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).update_avatar({
           avatar_base64: params.fetch("avatar_base64"),
         })
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -300,12 +291,10 @@ module Api
 
       def update_contact_details
         staff_member = StaffMember.find(params.fetch(:id))
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).update_contact_details({
           phone_number: params.fetch("phoneNumber"),
           address: params.fetch("address"),
@@ -316,7 +305,6 @@ module Api
         })
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -329,12 +317,10 @@ module Api
 
       def update_personal_details
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).update_personal_details({
           gender: params.fetch(:gender),
           date_of_birth: params.fetch(:dateOfBirth),
@@ -343,7 +329,6 @@ module Api
         })
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
@@ -356,12 +341,10 @@ module Api
 
       def update_employment_details
         staff_member = StaffMember.find(params[:id])
-        frontend_updates = FrontendUpdates.new
 
         result = StaffMemberApiUpdateService.new(
           staff_member: staff_member,
           requester: current_user,
-          frontend_updates: frontend_updates,
         ).update_employment_details({
           national_insurance_number: params["nationalInsuranceNumber"],
           sage_id: params.fetch("sageId"),
@@ -374,12 +357,9 @@ module Api
           other_venue_ids: params.fetch("otherVenues"),
           staff_type_id: params.fetch("staffType"),
           allow_no_sage_id: true,
-          sia_badge_number: params["siaBadgeNumber"],
-          sia_badge_expiry_date: params["siaBadgeExpiryDate"],
         })
 
         if result.success?
-          frontend_updates.dispatch
           render(
             json: result.staff_member,
             serializer: Api::V1::StaffMemberProfile::StaffMemberSerializer,
