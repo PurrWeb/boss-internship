@@ -116,7 +116,7 @@ class StaffMemberApiUpdateService
 
     master_venue = Venue.find_by(id: params.fetch(:master_venue_id))
 
-    other_venues = params.fetch(:other_venue_ids).map do |id|
+    other_venues = params.fetch(:other_venue_ids, []).map do |id|
       Venue.find_by!(id: id)
     end
     pay_rate = PayRate.find_by!(id: params.fetch(:pay_rate_id))
