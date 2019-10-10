@@ -1,10 +1,3 @@
-development:
-  REDIS_DB: "0"
-  ROLLBAR_API_ACCESS_TOKEN: "xxx-placeholder-rollbar-api-token-xxx"
-  ABLY_API_KEY: "vpodeg.2ry9lg:ZDrSurrr9el4nha-"
-  RERAISE_SSE_ERRORS: "true"
-  USE_SUBDOMAINS: "false"
-  WTL_VERIFY_EMAIL_ROOT_URL: ""
 test:
   REDIS_DB: "1"
   ROLLBAR_API_ACCESS_TOKEN: "xxx-placeholder-rollbar-api-token-xxx"
