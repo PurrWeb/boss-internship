@@ -1,11 +1,11 @@
 Rails.application.configure do
-  Bullet.enable = true
-  Bullet.alert = true
-  Bullet.unused_eager_loading_enable = false
-  Bullet.console = true
+  # Bullet.enable = true
+  # Bullet.alert = true
+  # Bullet.unused_eager_loading_enable = false
+  # Bullet.console = true
 
-  # Ignore bullet error caused by paper_trail 5.3.0
-  Bullet.add_whitelist type: :counter_cache, class_name: "HoursAcceptanceBreak", association: :versions
+  # # Ignore bullet error caused by paper_trail 5.3.0
+  # Bullet.add_whitelist type: :counter_cache, class_name: "HoursAcceptanceBreak", association: :versions
 
   # Settings specified here will take precedence over those in config/application.rb.
 
