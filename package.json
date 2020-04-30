@@ -72,7 +72,7 @@
     "immutable": "^3.8.1",
     "iscroll": "^5.2.0",
     "jest": "^21.2.1",
-    "jquery": "^2.2.0",
+    "jquery": "^3.5.0",
     "jquery-ui": "1.10.5",
     "lodash": "^4.17.4",
     "memoize-one": "^4.0.2",
